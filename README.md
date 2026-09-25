@@ -14,11 +14,12 @@ I am seeking junior penetration testing and application security roles, with a l
 | Project | What you can inspect |
 | --- | --- |
 | [**Offensive Security Labs**](https://github.com/0xFarag/offensive-security-labs) | Nine exploit/fix pairs covering OAuth, MCP, SSRF, CI, AI tooling and API security; 49 regression tests, case studies and reproducible evidence. |
+| [**TryHackMe Learning Reports**](https://github.com/0xFarag/tryhackme-writeups) | Eight completed-room retrospectives with technical reasoning, remediation and proposed retest criteria; clear evidence provenance and no solution spoilers. |
 | [**API Authorization Lab**](https://github.com/0xFarag/api-authorization-lab) | A local invoice API with a reproducible object-level access control defect, an ownership check and 14 recorded before/after HTTP cases. |
 | [**Nmap Evidence Report**](https://github.com/0xFarag/nmap-evidence-report) | An offline Python CLI that turns Nmap XML into readable Markdown/JSON, preserves observed states and separates service observations from vulnerability claims. |
 | [**Pentest Case Study**](https://github.com/0xFarag/pentest-case-study) | A concise sample assessment with scope, impact, request/response evidence, remediation and retest results from the API lab. |
 
-The portfolio samples use synthetic data. They were prepared with AI assistance and tested locally; the source code and evidence make the results reproducible.
+The runnable labs and sample assessment use synthetic data. They were prepared with AI assistance and tested locally; the source code and evidence make the results reproducible. The separate TryHackMe reports document learning themes from verified room completions and study notes; their proposed retests are not presented as executed results.
 
 ## Collaborate
 
