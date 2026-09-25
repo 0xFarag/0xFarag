@@ -13,11 +13,16 @@ I am seeking junior penetration testing and application security roles, with a l
 
 | Project | What you can inspect |
 | --- | --- |
+| [**Offensive Security Labs**](https://github.com/0xFarag/offensive-security-labs) | Nine exploit/fix pairs covering OAuth, MCP, SSRF, CI, AI tooling and API security; 49 regression tests, case studies and reproducible evidence. |
 | [**API Authorization Lab**](https://github.com/0xFarag/api-authorization-lab) | A local invoice API with a reproducible object-level access control defect, an ownership check and 14 recorded before/after HTTP cases. |
 | [**Nmap Evidence Report**](https://github.com/0xFarag/nmap-evidence-report) | An offline Python CLI that turns Nmap XML into readable Markdown/JSON, preserves observed states and separates service observations from vulnerability claims. |
 | [**Pentest Case Study**](https://github.com/0xFarag/pentest-case-study) | A concise sample assessment with scope, impact, request/response evidence, remediation and retest results from the API lab. |
 
 The portfolio samples use synthetic data. They were prepared with AI assistance and tested locally; the source code and evidence make the results reproducible.
+
+## Collaborate
+
+I welcome peer review, reproducible edge cases and collaboration on focused security labs. Start with the [community challenges](https://github.com/0xFarag/offensive-security-labs/blob/main/CHALLENGES.md), propose a [roadmap contribution](https://github.com/0xFarag/offensive-security-labs/blob/main/ROADMAP.md), or contact me on [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/).
 
 ## Focus
 
