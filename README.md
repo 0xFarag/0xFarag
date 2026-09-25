@@ -1,5 +1,3 @@
-![Web and API security banner](banner.png)
-
 # Nasser Aldin Farag
 
 **Web & API Security · Penetration Testing · Offensive Security**  
@@ -7,7 +5,7 @@ Dietikon / Zürich, Switzerland
 
 I bring a background in system engineering and web security to practical security assessment: understanding the system, validating the finding, explaining the impact and checking the fix.
 
-I am open to junior penetration testing and application security roles, and clearly scoped web/API security engagements.
+I am seeking junior penetration testing and application security roles, with a long-term development focus on red teaming.
 
 [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [TryHackMe: 0xFarag](https://tryhackme.com/p/0xFarag)
 
@@ -15,9 +13,9 @@ I am open to junior penetration testing and application security roles, and clea
 
 | Project | What you can inspect |
 | --- | --- |
-| [**API Authorization Lab**](https://github.com/fsec1337/api-authorization-lab) | A local invoice API with a reproducible object-level access control defect, an ownership check and 14 recorded before/after HTTP cases. |
-| [**Nmap Evidence Report**](https://github.com/fsec1337/nmap-evidence-report) | An offline Python CLI that turns Nmap XML into readable Markdown/JSON, preserves observed states and separates service observations from vulnerability claims. |
-| [**Pentest Case Study**](https://github.com/fsec1337/pentest-case-study) | A concise sample assessment with scope, impact, request/response evidence, remediation and retest results from the API lab. |
+| [**API Authorization Lab**](https://github.com/0xFarag/api-authorization-lab) | A local invoice API with a reproducible object-level access control defect, an ownership check and 14 recorded before/after HTTP cases. |
+| [**Nmap Evidence Report**](https://github.com/0xFarag/nmap-evidence-report) | An offline Python CLI that turns Nmap XML into readable Markdown/JSON, preserves observed states and separates service observations from vulnerability claims. |
+| [**Pentest Case Study**](https://github.com/0xFarag/pentest-case-study) | A concise sample assessment with scope, impact, request/response evidence, remediation and retest results from the API lab. |
 
 The portfolio samples use synthetic data. They were prepared with AI assistance and tested locally; the source code and evidence make the results reproducible.
 
