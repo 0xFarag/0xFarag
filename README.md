@@ -13,6 +13,8 @@ I am seeking junior penetration testing and application security roles, with a l
 
 **Understand the attack. Prove the finding. Verify the fix.**
 
+Watch the [SHOW THE PROOF playlist](https://www.youtube.com/playlist?list=PLeWBMZAfR2Wg) for the episodes in order.
+
 Follow the [YouTube channel](https://www.youtube.com/@0xFarag), [TikTok](https://www.tiktok.com/@0xfarag), and [Instagram](https://www.instagram.com/0xfarag/) for web and API security explanations, join the professional discussion on [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/), and inspect the code and evidence in the projects below.
 
 ## Selected work
