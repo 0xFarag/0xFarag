@@ -7,13 +7,13 @@ I bring a background in system engineering and web security to practical securit
 
 I am seeking junior penetration testing and application security roles, with a long-term development focus on red teaming.
 
-[YouTube: 0xFarag](https://www.youtube.com/@0xFarag) · [TikTok](https://www.tiktok.com/@omarf4206) · [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [TryHackMe: 0xFarag](https://tryhackme.com/p/0xFarag)
+[YouTube: 0xFarag](https://www.youtube.com/@0xFarag) · [TikTok](https://www.tiktok.com/@0xfarag) · [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [TryHackMe: 0xFarag](https://tryhackme.com/p/0xFarag)
 
 ## 0xFarag — SHOW THE PROOF
 
 **Understand the attack. Prove the finding. Verify the fix.**
 
-Follow the [YouTube channel](https://www.youtube.com/@0xFarag) and [TikTok](https://www.tiktok.com/@omarf4206) for web and API security explanations, join the professional discussion on [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/), and inspect the code and evidence in the projects below.
+Follow the [YouTube channel](https://www.youtube.com/@0xFarag) and [TikTok](https://www.tiktok.com/@0xfarag) for web and API security explanations, join the professional discussion on [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/), and inspect the code and evidence in the projects below.
 
 ## Selected work
 
