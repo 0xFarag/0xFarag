@@ -17,7 +17,7 @@ My focus is application security, authorization testing and security automation.
 
 **[Download AuthzLedger v0.3.4 →](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4)** · [Source and installation guide](https://github.com/0xFarag/0xFarag/tree/authzledger-v0.3.4)
 
-[Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v0.3.4/authzledger-0.3.4-source.zip) · [Installable wheel](https://github.com/0xFarag/0xFarag/releases/download/v0.3.4/authzledger-0.3.4-py3-none-any.whl) · [55-second release video](https://github.com/0xFarag/0xFarag/blob/authzledger-v0.3.4/media/AuthzLedger_v0.3.4_Release_wide.mp4) · [Release notes](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4)
+[Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v0.3.4/authzledger-0.3.4-source.zip) · [Installable wheel](https://github.com/0xFarag/0xFarag/releases/download/v0.3.4/authzledger-0.3.4-py3-none-any.whl) · [55-second release video](https://www.youtube.com/shorts/SJrvbBdybFo) · [Release notes](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4)
 
 The GitHub pre-release includes the source-visible distribution, downloads and wide/vertical videos. Source and test evidence are on the dedicated `authzledger-v0.3.4` branch. [GitHub verification passed](https://github.com/0xFarag/0xFarag/actions/runs/37856154307). Pre-release; all rights reserved. [Earlier 36-second product preview](https://www.youtube.com/shorts/Svr7Jhb_FNc).
 
