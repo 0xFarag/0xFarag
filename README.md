@@ -11,6 +11,14 @@ My focus is application security, authorization testing and security automation.
 
 [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [GitHub projects](https://github.com/0xFarag?tab=repositories) · [YouTube](https://www.youtube.com/@0xFarag) · [TryHackMe](https://tryhackme.com/p/0xFarag)
 
+## Building AuthzLedger
+
+**An authorization engineering workbench: explicit policy → controlled HTTP tests → explainable evidence.**
+
+AuthzLedger compiles actor/resource access matrices into checks with positive-control dependencies, traces outcomes to their rules, and keeps proposed policy changes separate from remediation results. Its local fault corpus exercises ownership, tenant and role boundaries, protected data in denial responses, invalid credentials and stale fixtures.
+
+The current pre-release includes a local Studio, an offline OpenAPI importer, a CLI and JSON/HTML/JUnit evidence. Validation uses authored synthetic fixtures; independent customer evaluation and commercial validation are the next gates.
+
 ## Selected engineering work
 
 | Project | Purpose | What to inspect |
