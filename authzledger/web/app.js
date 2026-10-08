@@ -1,0 +1,161 @@
+"use strict";
+const $ = id => document.getElementById(id);
+const sessionToken = location.hash.slice(1) || sessionStorage.getItem("authzledger-session") || "";
+if(sessionToken) sessionStorage.setItem("authzledger-session",sessionToken);
+history.replaceState(null, "", location.pathname);
+const state = {review:null, document:null, catalog:null, operation:null, selections:[], report:null, baseline:null, comparison:null, busy:false};
+const initial = {version:1,name:"API authorization contract",target:"http://127.0.0.1:8080",identities:{owner:{headers:{Authorization:{env:"AUTHZ_OWNER_TOKEN"}}},other:{headers:{Authorization:{env:"AUTHZ_OTHER_TOKEN"}}}},cases:[{id:"owner-access",identity:"owner",method:"GET",path:"/invoices/owner-1",expect:{status:[200]}},{id:"other-access",identity:"other",method:"GET",path:"/invoices/other-1",expect:{status:[200]}},{id:"cross-user-denied",identity:"other",method:"GET",path:"/invoices/owner-1",requires:["owner-access","other-access"],expect:{status:[403,404]}}]};
+const pretty = value => JSON.stringify(value,null,2);
+$("contract").value=pretty(initial); $("identities").value=pretty(initial.identities);
+function element(tag,text,cls){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;return node;}
+function notify(message,error=false){const node=$("notice");node.hidden=false;node.className=error?"error":"";node.textContent=message;}
+function panel(name){document.querySelectorAll(".panel").forEach(node=>node.classList.toggle("active",node.id===name));document.querySelectorAll(".nav").forEach(node=>node.classList.toggle("active",node.dataset.panel===name));}
+document.querySelectorAll(".nav").forEach(button=>button.onclick=()=>panel(button.dataset.panel));
+document.querySelector(".brand").onclick=event=>{event.preventDefault();panel("matrix");};
+async function api(path,body,blob=false){
+ const options={headers:{Authorization:"Bearer "+sessionToken}};
+ if(body!==undefined){options.method="POST";options.headers["Content-Type"]="application/json";options.body=JSON.stringify(body);}
+ const response=await fetch(path,options);
+ if(!response.ok){const data=await response.json();throw Error(data.error||"Request failed.");}
+ return blob?response.blob():response.json();
+}
+async function strictJSON(text){return (await api("/api/parse",{text})).value;}
+function guarded(fn){return async()=>{try{await fn();}catch(error){notify(error.message,true);}};}
+async function readFile(input){const file=input.files[0];if(!file)throw Error("Select a JSON file.");if(file.size>4*1024*1024)throw Error("Files must be smaller than 4 MiB.");const value=await strictJSON(await file.text());if(!value||typeof value!=="object"||Array.isArray(value))throw Error("Expected a JSON object.");input.value="";return value;}
+function download(value,name,type="application/json"){const blob=value instanceof Blob?value:new Blob([typeof value==="string"?value:pretty(value)+"\n"],{type});const url=URL.createObjectURL(blob);const link=element("a");link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function invalidate(){state.executionMatrix=null;state.review=null;$("run").disabled=true;$("authorized").checked=false;$("plan").textContent="Contract changed. Preview the updated execution plan.";$("plan").className="plan empty";}
+$("contract").addEventListener("input",invalidate);$("mutations").addEventListener("change",invalidate);
+$("authorized").onchange=()=>{$("run").disabled=!state.review||!$("authorized").checked||state.busy;};
+$("contract-file").onchange=guarded(async()=>{$("contract").value=pretty(await readFile($("contract-file")));invalidate();notify("Contract imported. Review its scope before running.");});
+$("download-contract").onclick=guarded(async()=>download(await strictJSON($("contract").value),"authorization.json"));
+async function preview(){
+ const data=await api("/api/plan",{contract:await strictJSON($("contract").value),allow_mutations:$("mutations").checked});
+ state.review=data.review;$("authorized").checked=false;$("run").disabled=true;
+ const p=data.plan,node=$("plan");node.className="plan";node.replaceChildren(element("strong",p.request_count+" explicit requests"),element("div",p.target),element("div",p.mutating_requests+" mutating · concurrency "+p.limits.concurrency));
+ const list=element("ul");p.cases.forEach(c=>{const row=element("li",c.method+" "+c.path+" · "+c.identity);if(c.requires.length)row.append(element("div","Requires: "+c.requires.join(", "),"subtle"));list.append(row);});node.append(list);
+ data.credentials.forEach(c=>node.append(element("div",(c.present?"Ready: ":"Missing: ")+c.env,c.present?"ready":"missing")));
+ node.append(element("p","Contract SHA-256 · "+p.contract_sha256,"anchor"));
+ notify(data.credentials.some(c=>!c.present)?"Plan ready. Set missing environment variables before starting Studio again; then preview and run.":"Plan ready. Review the scope and confirm your authorization.");
+}
+$("preview").onclick=guarded(preview);
+function busy(value){state.busy=value;$("demo").disabled=value;$("benchmark").disabled=value;$("run").disabled=value||!state.review||!$("authorized").checked;}
+async function watch(job){
+ busy(true);panel("evidence");$("run-state").textContent=job.kind==="benchmark"?"Executing eight controlled fault scenarios and status-only reference checks…":job.kind==="demo"?"Running the vulnerable and fixed loopback fixture…":"Executing the reviewed contract…";
+ try{
+  for(;;){const result=await api("/api/jobs/"+job.id);if(result.state==="error")throw Error(result.error);if(result.state==="complete"){
+   state.report=result.report;if(result.baseline)state.baseline=result.baseline;state.corpus=result.scenarios?result:null;state.evidenceProject=result.project||job.matrix||null;renderReport();renderCorpus();await compare();await renderTrace();
+   $("run-state").textContent=result.kind==="benchmark"?"Eight local scenarios completed. Select a scenario and a result cell to inspect its rule and controls.":result.kind==="demo"?"Local demonstration complete. These results come from an intentionally vulnerable fixture and its fixed version.":"Execution complete. Results apply to the configured checks and target at the time shown.";
+   notify("Evidence ready. Export the results before closing Studio.");break;
+  }await new Promise(resolve=>setTimeout(resolve,600));}
+ }catch(error){$("run-state").textContent="The job could not complete. No complete result has been substituted.";throw error;}finally{busy(false);}
+}
+$("demo").onclick=guarded(async()=>{const job=await api("/api/demo",{});job.kind="demo";await watch(job);});
+$("run").onclick=guarded(async()=>{const matrix=state.executionMatrix;const job=await api("/api/run",{contract:await strictJSON($("contract").value),allow_mutations:$("mutations").checked,authorized:$("authorized").checked,review:state.review});job.matrix=matrix;await watch(job);});
+function renderReport(){
+ const r=state.report;if(!r)return;$("stats").replaceChildren();for(const key of ["pass","fail","error","inconclusive"]){const box=element("div",undefined,"stat "+key);box.append(element("b",r.summary[key]),element("span",key));$("stats").append(box);}
+ $("report-name").textContent=r.name;$("report-meta").textContent=r.target+" · "+r.summary.total+" checks · "+r.finished_at;
+ renderResults();
+ $("anchor").textContent="EVIDENCE ANCHOR / SHA-256 · "+r.evidence.root_sha256;
+ ["pin-baseline","export-json","export-html","export-junit"].forEach(id=>$(id).disabled=false);
+}
+function renderResults(){
+ const r=state.report;if(!r)return;const filter=$("result-filter").value;
+ const cases=r.results.filter(c=>filter==="all"||(filter==="review"?c.outcome!=="pass":c.outcome===filter));
+ $("results").replaceChildren();
+ cases.forEach(c=>{const row=element("tr"),scope=element("td",c.id);row.dataset.caseId=c.id;scope.append(element("small",c.method+" "+c.path));if(c.reason)scope.append(element("small",c.reason));const outcome=element("td");outcome.append(element("span",c.outcome.toUpperCase(),"badge "+c.outcome));row.append(scope,element("td",c.identity),outcome,element("td",c.status===null?"—":c.status),element("td",c.duration_ms+" ms"));$("results").append(row);});
+ if(!cases.length){const row=element("tr"),cell=element("td","No checks match this filter. Select All checks to inspect the complete report.","empty");cell.colSpan=5;row.append(cell);$("results").append(row);}
+ $("result-count").textContent=cases.length+" of "+r.results.length+" checks shown · exports always include the complete report";
+}
+$("result-filter").onchange=renderResults;
+async function compare(){
+ state.comparison=null;$("export-diff").disabled=true;
+ $("baseline-label").textContent=state.baseline?"Baseline: "+state.baseline.finished_at+" · "+state.baseline.evidence.root_sha256:"Load a baseline report or use the current report as a baseline.";
+ $("comparison").textContent="A baseline and current report are required.";
+ if(!state.baseline||!state.report)return;
+ try{const data=await api("/api/compare",{baseline:state.baseline,current:state.report});state.comparison=data.comparison;const grid=element("div",undefined,"delta-grid");
+  for(const [key,label] of [["resolved","Resolved"],["regressions","Regressions"],["inconclusive","Inconclusive transitions"]]){const box=element("div",undefined,"delta");box.append(element("b",data.comparison[key].length),element("span",label));if(data.comparison[key].length){const list=element("ul");data.comparison[key].forEach(item=>{const id=typeof item==="string"?item:item.id;const transition=data.comparison.transitions.find(t=>t.id===id);list.append(element("li",key==="inconclusive"&&transition?id+" · "+transition.baseline+" → "+transition.current:id));});box.append(list);}grid.append(box);}
+  $("comparison").replaceChildren(grid);$("export-diff").disabled=false;
+ }catch(error){$("comparison").textContent="Comparison unavailable: "+error.message;}
+}
+$("pin-baseline").onclick=guarded(async()=>{state.baseline=state.report;await compare();notify("Current report selected as baseline. Run the same contract after applying your fix.");});
+$("baseline-file").onchange=guarded(async()=>{const data=await api("/api/verify",{report:await readFile($("baseline-file"))});state.baseline=data.report;await compare();notify("Baseline integrity checked and loaded.");});
+$("report-file").onchange=guarded(async()=>{const data=await api("/api/verify",{report:await readFile($("report-file"))});state.report=data.report;state.evidenceProject=state.matrix;state.corpus=null;renderReport();renderCorpus();await compare();await renderTrace();$("run-state").textContent="Imported report · internal integrity checked; no external anchor supplied.";notify("Current report integrity checked and loaded.");});
+$("export-json").onclick=()=>download(state.report,"authzledger-report.json");
+for(const kind of ["html","junit"]){$("export-"+kind).onclick=guarded(async()=>download(await api("/api/export",{kind,report:state.report},true),kind==="html"?"authzledger-report.html":"authzledger-junit.xml"));}
+$("export-diff").onclick=guarded(async()=>download(await api("/api/export",{kind:"comparison",baseline:state.baseline,current:state.report},true),"authzledger-retest.html"));
+$("spec-file").onchange=guarded(async()=>{const document=await readFile($("spec-file"));const data=await api("/api/catalog",{document});state.document=document;state.catalog=data;state.selections=[];state.operation=null;$("selected-operation").textContent="Select an operation from the catalog.";$("parameters").replaceChildren();$("add-case").disabled=true;renderSelections();$("catalog-title").textContent=data.title+" · "+data.operation_count+" operations";renderCatalog();notify("API imported locally. Select an operation and define an expected access rule.");});
+function renderCatalog(){const node=$("catalog");node.replaceChildren();const query=$("filter").value.toLowerCase();for(const op of state.catalog?.operations||[]){if(!(op.key+" "+op.summary).toLowerCase().includes(query))continue;const button=element("button",undefined,"op"+(state.operation?.key===op.key?" active":""));button.append(element("code",op.method),document.createTextNode(op.path),element("span",op.summary));button.onclick=()=>selectOperation(op);node.append(button);}if(!node.children.length)node.textContent="No matching operations.";}
+$("filter").oninput=renderCatalog;
+function selectOperation(op){
+ state.operation=op;renderCatalog();$("selected-operation").textContent=op.key+(op.mutating?" · requires mutation authorization":"");$("case-id").value="";$("statuses").value="";$("body").value="";$("parameters").replaceChildren();
+ for(const [index,p] of op.parameters.entries()){const label=element("label"),title=element("div",undefined,"parameter-label");title.append(document.createTextNode(p.in+" / "+p.name),element("span",p.required?"required":"optional"));label.append(title);const input=element("input");input.id="param-"+index;input.placeholder=p.type+(p.supported?"":" · manual contract required");input.disabled=!p.supported;input.dataset.location=p.in;input.dataset.name=p.name;input.dataset.type=p.type;input.dataset.required=String(p.required);label.append(input);$("parameters").append(label);}
+ $("add-case").disabled=op.parameters.some(p=>p.required&&!p.supported)||(op.body_required&&!op.json_body_supported);
+ if($("add-case").disabled)notify("This operation requires a parameter or body format outside the importer. Use a hand-reviewed contract for it.",true);
+}
+$("add-case").onclick=guarded(async()=>{
+ if(!state.operation)throw Error("Select an operation.");const id=$("case-id").value.trim();if(!id)throw Error("Enter a unique case identifier.");if(state.selections.some(c=>c.id===id))throw Error("This case identifier is already used.");
+ const raw=$("statuses").value.trim();if(!/^\d{3}(\s*,\s*\d{3})*$/.test(raw))throw Error("Specify expected HTTP statuses, for example 200 or 403, 404.");const assertions=await strictJSON($("assertions").value||"{}");if(!assertions||Array.isArray(assertions)||typeof assertions!=="object"||Object.keys(assertions).some(k=>!['json','json_absent'].includes(k)))throw Error("Body assertions accept json and json_absent only.");
+ const c={operation:state.operation.key,id,identity:$("identity").value.trim(),expect:{status:raw.split(",").map(Number),...assertions},parameters:{path:{},query:{}},requires:$("requires").value.split(",").map(s=>s.trim()).filter(Boolean)};
+ for(const input of $("parameters").querySelectorAll("input")){if(!input.value&&input.dataset.required!=="true")continue;if(input.disabled)throw Error("Unsupported required parameter.");let value=input.value;if(["integer","number"].includes(input.dataset.type)){if(!value.trim()||!Number.isFinite(Number(value)))throw Error("Numeric parameters require a finite number.");value=Number(value);}else if(input.dataset.type==="boolean"){if(!["true","false"].includes(value))throw Error("Boolean parameters require true or false.");value=value==="true";}c.parameters[input.dataset.location][input.dataset.name]=value;}
+ if($("body").value.trim())c.body=await strictJSON($("body").value);if(state.operation.body_required&&!('body' in c))throw Error("This operation requires a JSON request body.");
+ state.selections.push(c);renderSelections();notify("Case added. Add related controls, then build the contract for validation.");
+});
+function renderSelections(){const node=$("selections");node.replaceChildren();state.selections.forEach((c,index)=>{const row=element("div",undefined,"selection-item");row.append(element("span",c.id+" · "+c.identity+" · "+c.operation+" → "+c.expect.status.join("/")));const remove=element("button","Remove");remove.onclick=()=>{state.selections.splice(index,1);renderSelections();};row.append(remove);node.append(row);});if(!state.selections.length)node.textContent="No cases added.";$("compile").disabled=!state.selections.length;}
+$("compile").onclick=guarded(async()=>{const data=await api("/api/compile",{document:state.document,allow_mutations:$("mutations").checked,config:{name:$("project-name").value,target:$("target").value,base_path:$("base-path").value,identities:await strictJSON($("identities").value),selections:state.selections}});$("contract").value=pretty(data.contract);invalidate();panel("workspace");await preview();$("contract").scrollIntoView({behavior:"smooth",block:"start"});});
+api("/api/session").then(data=>{$("session").textContent="● Local session · "+data.version;$("version").textContent=data.version;}).catch(error=>{$("session").textContent="Session unavailable";notify(error.message+" Reopen the complete original CLI URL.",true);document.querySelectorAll("button").forEach(button=>button.disabled=true);});
+
+// Explicit policy workbench. No role-based policy inference or automatic target execution.
+state.matrix=null;state.matrixRevision=0;state.matrixAnalysis=null;state.selectedRule=null;state.executionMatrix=null;state.evidenceProject=null;state.corpus=null;state.migration=null;
+function matrixChanged(){state.matrixRevision++;state.matrixAnalysis=null;state.executionMatrix=null;state.migration=null;$("manifest-save").disabled=true;$("policy-save").disabled=true;$("policy-changes").textContent="Project changed. Reload the previous project to compare again.";$("matrix-gaps").textContent="Changes pending validation. No requests have been sent.";invalidate();renderMatrix();}
+function renderMatrix(){
+ const p=state.matrix;if(!p)return;
+ const counts={total:p.actors.length*p.resources.length,allow:0,deny:0,unknown:0};
+ const table=$("access-matrix");table.replaceChildren();const head=element("tr");head.append(element("th","Identity / role"));
+ p.resources.forEach(r=>{const th=element("th",r.label||r.id);th.append(element("small",r.tenant||"unspecified"));head.append(th);});const thead=element("thead");thead.append(head);table.append(thead);const body=element("tbody");
+ p.actors.forEach(a=>{const row=element("tr"),name=element("th",a.label||a.id);name.scope="row";name.append(element("small",(a.tenant||"unspecified")+" · "+(a.role||"unspecified")));row.append(name);p.resources.forEach(r=>{const decision=p.decisions[a.id]?.[r.id]||"unknown";counts[decision]++;const td=element("td"),button=element("button",decision==="unknown"?"?":decision.toUpperCase(),"matrix-cell "+decision+(state.selectedRule?.actor===a.id&&state.selectedRule?.resource===r.id?" selected":""));button.setAttribute("aria-label",a.id+" accessing "+r.id+": "+decision);button.onclick=()=>{state.selectedRule={actor:a.id,resource:r.id};renderMatrix();$("rule-decision").focus();};td.append(button);row.append(td);});body.append(row);});table.append(body);
+ $("matrix-counts").replaceChildren();for(const [key,label] of [["total","declared relationships"],["allow","positive access rules"],["deny","isolation rules"],["unknown","unresolved rules"]]){const box=element("div",undefined,"coverage-item");box.append(element("b",counts[key]),element("span",label));$("matrix-counts").append(box);}renderRule();
+}
+function renderRule(){
+ const p=state.matrix,k=state.selectedRule,a=p?.actors.find(x=>x.id===k?.actor),r=p?.resources.find(x=>x.id===k?.resource);if(!a||!r){$("rule-decision").disabled=true;$("rule-title").textContent="Select a relationship";return;}
+ $("rule-title").textContent=a.id+" → "+r.id;$("rule-meta").textContent="GET "+r.path+" · "+(a.tenant||"unspecified")+" → "+(r.tenant||"unspecified");$("rule-decision").disabled=false;$("rule-decision").value=p.decisions[a.id]?.[r.id]||"unknown";
+ const t=state.matrixAnalysis?.manifest.trace.find(x=>x.actor===a.id&&x.resource===r.id),node=$("rule-proof");node.replaceChildren();
+ if(!t){node.textContent="Validate coverage to inspect generated control dependencies for this rule.";return;}
+ node.append(element("strong",t.decision.toUpperCase()+" · "+t.boundary));
+ if(t.blocked.length)t.blocked.forEach(x=>node.append(element("p",x)));
+ else if(t.decision==="allow"){node.append(element("p","The response must be HTTP 200 and match the resource's configured JSON identity assertions. This check may serve as a positive control."));}
+ else{node.append(element("p","Before this denial request can run:"),element("span","1. Actor can access a permitted object"),element("code",t.actor_control),element("span","2. This object can be accessed by a permitted actor"),element("code",t.resource_control),element("p","Only then: require HTTP "+r.deny_status.join(" / ")+" and absence of the configured protected fields."));}
+ node.append(element("code",t.case_id));
+}
+$("rule-decision").onchange=()=>{const k=state.selectedRule;state.matrix.decisions[k.actor][k.resource]=$("rule-decision").value;matrixChanged();};
+for(const [id,key] of [["matrix-name","name"],["matrix-target","target"]])$(id).oninput=()=>{if(state.matrix){state.matrix[key]=$(id).value;matrixChanged();}};
+function setMatrix(project){state.matrix=project;state.selectedRule=null;$("matrix-name").value=project.name;$("matrix-target").value=project.target;matrixChanged();renderEntities();}
+async function analyzeMatrix(){if(!state.matrix)throw Error("Load a matrix project first.");const revision=state.matrixRevision;const data=await api("/api/matrix/analyze",{project:state.matrix});if(revision!==state.matrixRevision)throw Error("The matrix changed during validation. Validate the current version again.");state.matrix=data.project;state.matrixAnalysis=data;renderEntities();renderMatrix();$("manifest-save").disabled=false;const node=$("matrix-gaps");node.replaceChildren();if(data.manifest.complete){node.textContent="Coverage complete for these declared relationships. "+data.manifest.coverage.total+" checks ready; no target requests sent.";}else{node.append(element("strong",data.gaps.length+" relationships need attention."));const list=element("ul");data.gaps.forEach(g=>list.append(element("li",g.actor+" → "+g.resource+": "+g.blocked.join(" "))));node.append(list);}return data;}
+$("matrix-analyze").onclick=guarded(analyzeMatrix);
+$("matrix-build").onclick=guarded(async()=>{const data=await analyzeMatrix();if(!data.contract)throw Error("Resolve the listed unknown decisions and missing controls before generating tests.");$("contract").value=pretty(data.contract);$("mutations").checked=false;invalidate();state.executionMatrix=JSON.parse(pretty(data.project));panel("workspace");await preview();document.querySelector("main").scrollIntoView({behavior:"smooth"});});
+$("matrix-file").onchange=guarded(async()=>{const data=await api("/api/matrix/analyze",{project:await readFile($("matrix-file"))});setMatrix(data.project);await analyzeMatrix();notify("Matrix project loaded. Credentials remain environment references.");});
+$("matrix-save").onclick=guarded(async()=>{const data=await analyzeMatrix();download(data.project,"authzledger-project.json");notify("Project exported. Its labels, paths and fixture assertions may contain private project information.");});
+$("manifest-save").onclick=()=>download(state.matrixAnalysis.manifest,"authzledger-trace-manifest.json");
+function entityField(parent,label,value,change){const box=element("label",label),input=element("input");input.value=value||"";input.onchange=()=>{change(input.value);matrixChanged();};box.append(input);parent.append(box);}
+function renderEntities(){
+ const p=state.matrix;if(!p)return;$("actor-list").replaceChildren();$("resource-list").replaceChildren();
+ p.actors.forEach(a=>{const row=element("div",undefined,"entity"),fields=element("div",undefined,"entity-fields");fields.append(element("strong",a.id));entityField(fields,"Credential environment",a.env,x=>a.env=x);entityField(fields,"Tenant",a.tenant,x=>a.tenant=x);entityField(fields,"Role",a.role,x=>a.role=x);const remove=element("button","Remove");remove.onclick=()=>{p.actors=p.actors.filter(x=>x!==a);delete p.decisions[a.id];p.resources.forEach(r=>{if(r.owner===a.id)r.owner="";});matrixChanged();renderEntities();};row.append(fields,remove);$("actor-list").append(row);});
+ p.resources.forEach(r=>{const row=element("div",undefined,"entity"),fields=element("div",undefined,"entity-fields");fields.append(element("strong",r.id));entityField(fields,"Exact GET path",r.path,x=>r.path=x);entityField(fields,"Owner actor",r.owner,x=>r.owner=x);entityField(fields,"Tenant",r.tenant,x=>r.tenant=x);const assertions=element("label","Response identity assertions · JSON pointers"),input=element("textarea");input.value=pretty(r.assertions);input.rows=2;input.onchange=guarded(async()=>{r.assertions=await strictJSON(input.value);matrixChanged();});assertions.append(input);fields.append(assertions);const remove=element("button","Remove");remove.onclick=()=>{p.resources=p.resources.filter(x=>x!==r);p.actors.forEach(a=>delete p.decisions[a.id][r.id]);matrixChanged();renderEntities();};row.append(fields,remove);$("resource-list").append(row);});
+}
+function validNewID(id,items){if(!/^[A-Za-z0-9][A-Za-z0-9_.-]{0,39}$/.test(id))throw Error("Use an ID of 1–40 letters, digits, dots, hyphens or underscores, starting with a letter or digit.");if(items.some(x=>x.id===id))throw Error("This ID already exists.");if(items.length>=30)throw Error("This matrix supports up to 30 actors and 30 resources.");}
+$("actor-add").onclick=guarded(async()=>{const p=state.matrix,id=$("new-actor-id").value.trim();validNewID(id,p.actors);const env=$("new-actor-env").value.trim();if(!/^[A-Za-z_][A-Za-z0-9_]{0,127}$/.test(env))throw Error("Enter an environment variable name, not a credential value.");p.actors.push({id,label:id,env,tenant:$("new-actor-tenant").value||"unspecified",role:$("new-actor-role").value||"unspecified"});p.decisions[id]=Object.fromEntries(p.resources.map(r=>[r.id,"unknown"]));matrixChanged();renderEntities();});
+$("resource-add").onclick=guarded(async()=>{const p=state.matrix,id=$("new-resource-id").value.trim();validNewID(id,p.resources);const pointer=$("new-resource-pointer").value,value=await strictJSON($("new-resource-value").value);p.resources.push({id,label:id,path:$("new-resource-path").value,owner:$("new-resource-owner").value,tenant:$("new-resource-tenant").value||"unspecified",assertions:{[pointer]:value},deny_status:[403,404],absent:[pointer]});p.actors.forEach(a=>p.decisions[a.id][id]="unknown");matrixChanged();renderEntities();});
+$("policy-before").onchange=guarded(async()=>{const data=await api("/api/matrix/diff",{before:await readFile($("policy-before")),after:state.matrix});state.migration=data;$("policy-save").disabled=false;const node=$("policy-changes");node.replaceChildren(element("strong",data.changes.length+" changed relationships · proposed migration"),element("p",data.interpretation));if(data.scope_changed)node.append(element("p","Target origin changed. The assessment scope requires renewed review."));const list=element("ul");data.changes.forEach(c=>list.append(element("li",c.actor+" → "+c.resource+": "+(c.before||"absent")+" → "+(c.after||"absent")+" · "+c.reasons.join(", "))));node.append(list);});
+$("policy-save").onclick=()=>download(state.migration,"authzledger-proposed-policy-migration.json");
+$("benchmark").onclick=guarded(async()=>{const job=await api("/api/benchmark",{});job.kind="benchmark";await watch(job);});
+$("corpus-save").onclick=()=>download(state.corpus,"authzledger-fault-corpus.json");
+function renderCorpus(selected="clean"){
+ $("corpus-panel").hidden=!state.corpus;if(!state.corpus)return;const node=$("corpus-scenarios");node.replaceChildren();
+ state.corpus.scenarios.forEach(s=>{const button=element("button",undefined,"scenario"+(s.scenario===selected?" selected":""));button.append(element("b",s.scenario),element("span",s.accepted?"EXPECTED OUTCOME":"REVIEW REQUIRED","badge "+(s.accepted?"pass":"fail")),element("small",s.summary.fail+" failed · "+s.summary.inconclusive+" inconclusive"));if(s.naive_status_only_false_passes_on_unresolved)button.append(element("small",s.naive_status_only_false_passes_on_unresolved+" unresolved denials would appear to pass a status-only check"));if(s.status_only_missed_denial_violations)button.append(element("small",s.status_only_missed_denial_violations+" leak missed by status-only checks"));button.onclick=guarded(async()=>{state.report=state.corpus.evidence[s.scenario].report;state.evidenceProject=state.corpus.project;renderReport();renderCorpus(s.scenario);await compare();await renderTrace();$("run-state").textContent="Local corpus / "+s.scenario+" · fixture has stopped; report remains inspectable.";});node.append(button);});
+}
+async function renderTrace(){
+ const box=$("trace-panel");box.hidden=true;$("trace-matrix").replaceChildren();$("trace-detail").textContent="Select a result for its evidence path.";if(!state.evidenceProject||!state.report)return;
+ let data;try{data=await api("/api/matrix/explain",{project:state.evidenceProject,report:state.report});}catch(error){return;}
+ box.hidden=false;const p=state.evidenceProject,table=element("table",undefined,"access-matrix"),head=element("tr");head.append(element("th","Observed results"));p.resources.forEach(r=>head.append(element("th",r.label||r.id)));const thead=element("thead");thead.append(head);table.append(thead);const tbody=element("tbody");
+ p.actors.forEach(a=>{const row=element("tr");row.append(element("th",a.label||a.id));p.resources.forEach(r=>{const item=data.trace.find(t=>t.actor===a.id&&t.resource===r.id),td=element("td"),button=element("button",item.outcome.toUpperCase(),"matrix-cell "+item.outcome);button.setAttribute("aria-label",a.id+" to "+r.id+": "+item.outcome);button.onclick=()=>{const node=$("trace-detail");node.replaceChildren(element("strong",a.id+" → "+r.id+" · expected "+item.decision),element("p",item.explanation),element("code",item.case_id+" · HTTP "+(item.status??"not sent")));if(item.requires.length){node.append(element("p","Required controls:"));item.requires.forEach(id=>{const result=state.report.results.find(c=>c.id===id);node.append(element("code",id+" · "+result.outcome));});}const result=state.report.results.find(c=>c.id===item.case_id);if(result.reason)node.append(element("p",result.reason));result.checks.forEach(check=>node.append(element("code",check.type+": "+(check.passed?"pass":"fail"))));};td.append(button);row.append(td);});tbody.append(row);});table.append(tbody);$("trace-matrix").append(table);
+}
+api("/api/matrix/example").then(async data=>{setMatrix(data.project);await analyzeMatrix();}).catch(error=>notify(error.message,true));

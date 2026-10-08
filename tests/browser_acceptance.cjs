@@ -1,0 +1,64 @@
+const fs=require('fs'),path=require('path'),assert=require('assert'),{spawn}=require('child_process');
+const work=path.resolve(__dirname,'..');
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const out=path.resolve(process.env.AUTHZ_BROWSER_ARTIFACTS||path.join(work,'artifacts/browser'));
+fs.mkdirSync(out,{recursive:true});
+let server,browser;
+async function download(page,id,name){const event=page.waitForEvent('download');await page.locator(id).click();const d=await event;await d.saveAs(path.join(out,name));return fs.readFileSync(path.join(out,name),'utf8');}
+(async()=>{
+ server=spawn(process.env.PYTHON||'python3',['-u','-m','authzledger','studio'],{cwd:work});
+ const url=await new Promise((resolve,reject)=>{let text='';server.stdout.on('data',b=>{text+=b;const m=text.match(/http:\/\/127\.0\.0\.1:\d+\/#[A-Za-z0-9_-]+/);if(m)resolve(m[0]);});server.on('error',reject);setTimeout(()=>reject(Error('Studio startup timeout')),10000).unref();});
+ browser=await chromium.launch({headless:true,...(process.env.CHROME_EXECUTABLE?{executablePath:process.env.CHROME_EXECUTABLE}:{})});
+ const context=await browser.newContext({viewport:{width:1600,height:1050},acceptDownloads:true});
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(url);await page.locator('#access-matrix .matrix-cell').nth(23).waitFor();
+ assert.equal(await page.locator('#access-matrix .matrix-cell').count(),24);
+ await page.locator('#benchmark').click();
+ await page.waitForFunction(()=>document.getElementById('run-state').textContent.startsWith('Eight local scenarios completed'),{},{timeout:60000});
+ assert.equal(await page.locator('.scenario').count(),8);
+ const choose=async name=>{await page.locator('.scenario').filter({has:page.locator('b',{hasText:new RegExp('^'+name+'$')})}).click();await page.waitForFunction(n=>document.getElementById('run-state').textContent.startsWith('Local corpus / '+n),name);};
+ await choose('expired-credential');
+ assert.equal(await page.locator('#stats .inconclusive b').innerText(),'7');
+ assert.equal(await page.locator('#stats .fail b').innerText(),'1');
+ await page.locator('#pin-baseline').click();
+ const pinned=await page.locator('#baseline-label').innerText();
+ await choose('clean');const after=await page.locator('#baseline-label').innerText();
+ if(process.argv.includes('--reproduce')){
+  const r={bug:'Explicitly pinned baseline is overwritten when selecting another corpus scenario',reproduced:pinned!==after,pinned,after};fs.writeFileSync(path.join(out,'baseline-before-fix.json'),JSON.stringify(r,null,2));assert(r.reproduced);console.log('Reproduced: selected baseline was overwritten.');
+ }else{
+  assert.equal(after,pinned,'A selected baseline must survive a scenario change.');
+  assert.equal(await page.locator('#stats .pass b').innerText(),'24');
+  assert.match(await page.locator('#comparison').innerText(),/1\s+Resolved/);
+  assert.match(await page.locator('#comparison').innerText(),/7\s+Inconclusive transitions/);
+  await choose('expired-credential');
+  await page.locator('#result-filter').selectOption('review');assert.equal(await page.locator('#results tr[data-case-id]').count(),8);
+  await page.locator('#result-filter').selectOption('inconclusive');assert.equal(await page.locator('#results tr[data-case-id]').count(),7);
+  const report=JSON.parse(await download(page,'#export-json','expired-report.json'));assert.equal(report.results.length,24,'Export must retain every case, independently of the UI filter.');
+  assert.equal(report.summary.inconclusive,7);
+  await page.locator('#result-filter').selectOption('all');
+  await page.locator('#trace-matrix button.inconclusive').first().click();
+  assert.match(await page.locator('#trace-detail').innerText(),/Prerequisite did not pass|control/i);
+  await page.locator('#trace-panel').screenshot({path:path.join(out,'expired-controls.png')});
+  await page.locator('.results-card').screenshot({path:path.join(out,'expired-results.png')});
+  await page.locator('#result-filter').selectOption('review');
+  await page.locator('.results-card').screenshot({path:path.join(out,'review-filter.png')});
+  const corpusDownload=await download(page,'#corpus-save','fresh-corpus.json');const corpus=JSON.parse(corpusDownload);assert(corpus.accepted);
+  await choose('clean');
+  assert.equal(await page.locator('#results tr[data-case-id]').count(),0);assert.match(await page.locator('#results').innerText(),/No checks match/);
+  await page.locator('#result-filter').selectOption('all');
+  await page.locator('.retest').screenshot({path:path.join(out,'retest.png')});
+  const html=await download(page,'#export-html','current-report.html');assert.match(html,/AuthzLedger/);
+  const junit=await download(page,'#export-junit','current-junit.xml');assert.match(junit,/<testsuite/);
+  const diff=await download(page,'#export-diff','retest.html');assert.match(diff,/AuthzLedger/);
+  await page.locator('.nav[data-panel="matrix"]').click();await page.locator('#access-matrix .matrix-cell').first().click();
+  await page.locator('#rule-decision').selectOption('unknown');await page.locator('#matrix-build').click();
+  await page.locator('#notice.error').waitFor();assert(await page.locator('#matrix').evaluate(el=>el.classList.contains('active')));
+  await page.setViewportSize({width:390,height:844});
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);assert(!overflow,'Mobile page should not overflow its viewport; tables may scroll internally.');
+  await page.screenshot({path:path.join(out,'mobile.png'),fullPage:true});
+  assert.deepEqual(errors,[]);
+  const result={passed:true,browser:await browser.version(),workflows:['matrix: 24 declared relationships','live local eight-scenario execution','expired identity: 1 failed control and 7 inconclusive checks','pinned baseline survives scenario changes','filter does not remove cases from exported evidence','dependency trace inspection','same-contract retest','JSON / HTML / JUnit / comparison exports','unknown policy blocks generation','390px viewport has no document overflow'],page_errors:errors};
+  fs.writeFileSync(path.join(out,'acceptance.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
+ }
+ await context.close();await browser.close();server.kill();
+})().catch(async e=>{console.error(e);if(browser)await browser.close();if(server)server.kill();process.exit(1)});

@@ -1,0 +1,65 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Invoice API \u2014 synthetic example",
+    "version": "1.0.0"
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "parameters": {
+      "invoiceId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/invoices/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/invoiceId"
+        }
+      ],
+      "get": {
+        "operationId": "readInvoice",
+        "summary": "Read one invoice within the caller\u2019s access policy",
+        "responses": {
+          "200": {
+            "description": "Invoice"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/admin/audit": {
+      "get": {
+        "operationId": "readAudit",
+        "summary": "Read the administrator audit view",
+        "responses": {
+          "200": {
+            "description": "Audit view"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    }
+  }
+}

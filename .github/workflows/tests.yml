@@ -1,0 +1,38 @@
+name: Verify AuthzLedger
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Unit and local HTTP tests
+        run: python -m unittest discover -s tests -v
+      - name: Local demo and evidence integrity
+        run: |
+          python -m authzledger demo --out artifacts/demo
+          python -m authzledger verify artifacts/demo/vulnerable/report.json
+          python -m authzledger verify artifacts/demo/fixed/report.json
+      - name: Build wheel
+        run: python -m pip wheel --no-deps --wheel-dir dist .
+      - name: Verify the installed distribution outside the checkout
+        shell: bash
+        run: |
+          python -m venv "$RUNNER_TEMP/authzledger-verify"
+          "$RUNNER_TEMP/authzledger-verify/bin/python" -m pip install --no-index --no-deps dist/authzledger-0.3.4-py3-none-any.whl
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/authzledger-verify/bin/authzledger" demo --out installed-demo
+          "$RUNNER_TEMP/authzledger-verify/bin/authzledger" verify installed-demo/fixed/report.json

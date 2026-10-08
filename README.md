@@ -1,64 +1,126 @@
-![0xFarag — SHOW THE PROOF.](assets/profile-header.svg)
+# AuthzLedger
 
-# Nasser Aldin Farag · 0xFarag
+**Explicit access policy. Controlled tests. Explainable retests.**
 
-**Penetration Testing · Web & API Security · System Engineering**  
-Zürich, Switzerland
+![AuthzLedger by 0xFarag — SHOW THE PROOF.](brand/hero.svg)
 
-I bring more than ten years of system engineering experience and a background in web security to practical security assessment. My work follows a clear standard: understand the system, reproduce the finding, explain its impact and verify the fix.
+AuthzLedger is a local authorization engineering workbench. Define an actor/resource access matrix, generate HTTP checks with positive-control dependencies, and trace each result back to its access rule. Compare the same tests after a fix; review policy changes separately so a relaxed permission cannot masquerade as remediation.
 
-My focus is application security, authorization testing and security automation. I build reproducible working examples that make technical reasoning and remediation inspectable.
+The v0.3 local corpus covers four actors, six resources and eight authored scenarios, including ownership, tenant and role bypasses, data leakage in HTTP 403 responses, expired credentials and stale fixtures. [Inspect the engineering evidence and limits](docs/validation.md).
 
-[LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [GitHub projects](https://github.com/0xFarag?tab=repositories) · [YouTube](https://www.youtube.com/@0xFarag) · [TryHackMe](https://tryhackme.com/p/0xFarag)
+**Status: 0.3.4 pre-release. All rights reserved.** This is a source-visible preview, not an open-source licence. See [rights and permissions](LICENSE) before using or redistributing it. GitHub platform rights remain unaffected.
 
-## AuthzLedger — product preview
+Copyright © 2026 Nasser Aldin Farag. Applicable statutory and hosting-platform rights remain unaffected. See [NOTICE.txt](NOTICE.txt).
 
-**An authorization engineering workbench: explicit policy → controlled HTTP tests → explainable evidence.**
+**[Download the source ZIP](https://github.com/0xFarag/0xFarag/raw/refs/heads/authzledger-v0.3.4/release/authzledger-0.3.4-source.zip)** · [Installable wheel](https://github.com/0xFarag/0xFarag/raw/refs/heads/authzledger-v0.3.4/release/authzledger-0.3.4-py3-none-any.whl) · [SHA-256 checksums](release/SHA256SUMS.txt)
 
-**[Watch the 36-second preview: Access denied. Data leaked. →](https://www.youtube.com/shorts/Svr7Jhb_FNc)**
+**[Watch the 55-second release walkthrough](https://github.com/0xFarag/0xFarag/raw/refs/heads/authzledger-v0.3.4/media/AuthzLedger_v0.3.4_Release_wide.mp4)** · [Vertical video](https://github.com/0xFarag/0xFarag/raw/refs/heads/authzledger-v0.3.4/media/AuthzLedger_v0.3.4_Release_vertical.mp4) · [Release notes](RELEASE_NOTES.md) · [Validation](docs/validation.md)
 
-A controlled local API returns HTTP 403 while leaking a protected field. The preview follows the failed body check, legitimate-access controls and the same-contract retest: 24 checks pass and one finding is recorded as resolved. Synthetic data; actual Studio captures.
+This distribution is published on the dedicated `authzledger-v0.3.4` branch of `0xFarag/0xFarag`. The profile remains on `main`. No separate GitHub Releases entry has been created.
 
-AuthzLedger compiles actor/resource access matrices into checks with positive-control dependencies, traces outcomes to their rules, and keeps proposed policy changes separate from remediation results. Its local fault corpus exercises ownership, tenant and role boundaries, protected data in denial responses, invalid credentials and stale fixtures.
+## Start with Studio
 
-The current pre-release includes a local Studio, an offline OpenAPI importer, a CLI and JSON/HTML/JUnit evidence. Validation uses authored synthetic fixtures; independent customer evaluation and commercial validation are the next gates.
+Requires Python 3.10 or later. The runtime uses the Python standard library. Linux with CPython 3.12 is the locally verified environment. For a copy you are authorised to use:
 
-## Selected engineering work
+```sh
+git clone --branch authzledger-v0.3.4 --single-branch https://github.com/0xFarag/0xFarag.git authzledger
+cd authzledger
+python3 -m authzledger studio --open
+```
 
-| Project | Purpose | What to inspect |
-| :--- | :--- | :--- |
-| [**API Authorization Lab**](https://github.com/0xFarag/api-authorization-lab) | Make object-level authorization failures reproducible. | Local invoice API, ownership enforcement and before/after HTTP evidence. |
-| [**Nmap Evidence Report**](https://github.com/0xFarag/nmap-evidence-report) | Turn scan output into usable assessment evidence. | Offline XML processing, Markdown/JSON reports and preservation of observed states. |
-| [**Pentest Case Study**](https://github.com/0xFarag/pentest-case-study) | Connect a technical finding to a clear remediation decision. | Scope, impact, request/response evidence, fix and retest. |
-| [**Offensive Security Labs**](https://github.com/0xFarag/offensive-security-labs) | Explore security boundaries through executable examples. | Exploit/fix pairs across OAuth, SSRF, CI and API security, with regression checks. |
-| [**TryHackMe Reports**](https://github.com/0xFarag/tryhackme-writeups) | Document technical reasoning and lessons from completed rooms. | Learning retrospectives, remediation analysis and proposed retest criteria. |
+The default **Access matrix** workspace provides editable permissions, coverage gaps and a rule inspector. Choose **Run eight-scenario lab** for actual local HTTP execution, then inspect each scenario and its control dependencies in **Evidence**. No account, credentials or paid service are required for this local corpus.
 
-The runnable labs and sample assessment use synthetic data in local environments. They are separate from client engagements. TryHackMe reports distinguish completed learning activities from proposed retests.
+For your own authorized API, configure actors/resources, explicitly review each permission, generate the checks and review the exact scope before execution. Credential values stay in environment variables. Save projects and export evidence before stopping Studio; it holds session state in memory. [Matrix guide](docs/matrix.md) · [Studio guide](docs/studio.md).
 
-## Technical focus
+In Evidence, filter checks by outcome or choose **Needs review** to focus on failures, errors and inconclusive results. Exports always retain the full report. A baseline you select remains pinned when switching lab scenarios.
 
-**Web & API security** — HTTP, authentication boundaries, object-level access control, finding validation and retesting.  
-**Systems** — Windows/Linux, networking, operations and system engineering.  
-**Security engineering** — Python automation, structured evidence, reproducible tests and clear technical reporting.  
-**Continuing development** — Active Directory security, offensive security methodology and red teaming.
+The offline OpenAPI importer and advanced JSON contract workflow remain available. An optional release wheel supports isolated installation; see [INSTALL.md](INSTALL.md). No sudo, cloud account or runtime package download is needed for the source-tree launch.
 
-## Credentials
+## Run the demonstration from the CLI
 
-| Credential | Issuer | Earned |
-| :--- | :--- | :--- |
-| **PNPT** — Practical Network Penetration Tester | TCM Security | 2024 |
-| **PenTest+** | CompTIA | 2024 |
-| **OPST** — OSSTMM Professional Security Tester | ISECOM | 2024 |
-| **PJPT** | TCM Security | 2023 |
-| **eJPT** | INE | 2023 |
-| **CC** — Certified in Cybersecurity | ISC² | 2024 |
-| **ICCA** — INE Certified Cloud Associate | INE | 2023 |
-| **Google Cybersecurity Professional Certificate** | Google | 2023 |
+```sh
+python -m authzledger demo --out artifacts/demo
+```
 
-## Work with me
+The demo starts a loopback-only fixture with synthetic identities and records. It runs one contract against a vulnerable implementation, applies the fixture's corrected authorization behaviour, then runs the same contract again. No remote target or credentials are needed.
 
-I welcome conversations about penetration testing and application security roles, focused security automation, reproducible edge cases and practical technical collaboration.
+Open `artifacts/demo/diff.html` for the comparison, or `artifacts/demo/vulnerable/report.html` and `artifacts/demo/fixed/report.html` for the individual runs. The demo also writes `contract.json`, `plan.json`, `diff.json` and each run's JSON/JUnit evidence.
 
-**[Contact me on LinkedIn →](https://www.linkedin.com/in/nasser-aldin-farag-974697412/)**
+This is a demonstration of the configured checks against a local fixture, not an assessment of an external service.
 
-<sub>Understand the attack. Prove the finding. Verify the fix.</sub>
+## What the workflow provides
+
+| Capability | Behaviour |
+| --- | --- |
+| Access matrix compiler | Complete declared-pair accounting, explicit unknowns and generated controls. |
+| Policy migration review | Distinguish changed permissions/fixtures and removed coverage from actual fixes. |
+| Explicit contract | Fixed target, named identities, exact paths and expected outcomes. |
+| Local Studio | Guided planning, execution, evidence inspection and retest exports. |
+| Offline OpenAPI import | Catalog operations and compile selected cases with explicit fixture values and permissions. |
+| Positive controls | Dependent checks execute only after their prerequisites pass. |
+| Bounded execution | Request, concurrency, timeout and response-size limits. |
+| Evidence bundle | JSON results, standalone HTML and JUnit XML. |
+| Retest comparison | Regressions, resolved failures and inconclusive results remain distinct. |
+| Integrity verification | Check the report's hashes; optionally compare with a separately trusted anchor. |
+
+## Run a contract
+
+Generate a starter contract for your authorised API origin:
+
+```sh
+python -m authzledger init --target http://127.0.0.1:8765 --out authorization.json
+```
+
+`init` creates three cases: a successful owner request, a successful request for the other identity's own resource, and a cross-user denial check that requires both controls to pass. It sends no requests and refuses to overwrite an existing file. Replace the placeholder resource paths, add response assertions and adapt the identities using the [contract guide](docs/contract.md). Set the named credential environment variables through your shell or CI secret store, then:
+
+```sh
+python -m authzledger plan authorization.json
+python -m authzledger run authorization.json --out artifacts/current
+python -m authzledger verify artifacts/current/report.json
+```
+
+Use an explicitly authorised target and test identities. AuthzLedger executes the contract you supply; it can index operations from a supplied specification but does not discover live endpoints or determine your authority to test them.
+
+Each run writes:
+
+```text
+artifacts/current/
+  report.json
+  report.html
+  junit.xml
+```
+
+To compare two runs of the same contract:
+
+```sh
+python -m authzledger diff artifacts/baseline/report.json artifacts/current/report.json --out artifacts/comparison
+```
+
+The comparison writes `diff.json` and `diff.html`.
+
+GET, HEAD and OPTIONS are enabled by default. POST, PUT, PATCH and DELETE require `run --allow-mutations`. Even an otherwise read-only endpoint can have side effects; use controlled test data.
+
+## Interpret the result
+
+| Run exit code | Meaning |
+| --- | --- |
+| `0` | Every configured case passed. |
+| `1` | One or more assertions failed, with no configuration/runtime/inconclusive condition taking precedence. |
+| `2` | Configuration problem, runtime error or inconclusive case. |
+
+A pass establishes the configured assertions for that run. Coverage depends on the identities, resources and assertions in the contract. A skipped prerequisite is not a successful access-denial test.
+
+Reports omit response bodies, response headers, resolved credentials and expected/observed assertion values. They retain operational metadata such as the target, paths and case identifiers. Review that metadata before sharing evidence.
+
+## Documentation
+
+- [Access matrix, controls and policy migration](docs/matrix.md)
+- [v0.3 engineering review and measured evidence](docs/validation.md)
+
+- [Contract format and examples](docs/contract.md)
+- [Studio workflow](docs/studio.md)
+- [OpenAPI import and explicit policy](docs/openapi.md)
+- [Security model and evidence boundaries](docs/security-model.md)
+- [CI integration and retesting](docs/ci.md)
+- [Contributing](CONTRIBUTING.md) · [Security reporting](SECURITY.md) · [Rights and permissions](LICENSE)
+

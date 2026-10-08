@@ -1,0 +1,8 @@
+AuthzLedger by 0xFarag
+Copyright (c) 2026 Nasser Aldin Farag. All rights reserved.
+
+Use and redistribution are subject to the accompanying LICENSE,
+applicable law, applicable hosting-platform terms and any separately
+agreed written licence. Third-party rights and licences are preserved.
+
+Permissions: https://github.com/0xFarag

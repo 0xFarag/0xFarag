@@ -1,0 +1,159 @@
+test_bad_json_returns_configuration_error (test_cli.EndToEndTests.test_bad_json_returns_configuration_error) ... ok
+test_demo_and_cli_integrity_gate (test_cli.EndToEndTests.test_demo_and_cli_integrity_gate) ... ok
+test_init_requires_both_actors_controls_and_preserves_existing_file (test_cli.EndToEndTests.test_init_requires_both_actors_controls_and_preserves_existing_file) ... ok
+test_address_candidates_share_one_deadline (test_engine.AddressCandidateDeadlineTests.test_address_candidates_share_one_deadline) ... ok
+test_ambient_proxy_is_ignored (test_engine.EngineTests.test_ambient_proxy_is_ignored) ... ok
+test_compressed_and_truncated_responses_are_errors (test_engine.EngineTests.test_compressed_and_truncated_responses_are_errors) ... ok
+test_concurrency_never_exceeds_limit (test_engine.EngineTests.test_concurrency_never_exceeds_limit) ... ok
+test_failed_control_blocks_transitive_requests_and_preserves_order (test_engine.EngineTests.test_failed_control_blocks_transitive_requests_and_preserves_order) ... ok
+test_invalid_credential_prevents_all_requests (test_engine.EngineTests.test_invalid_credential_prevents_all_requests) ... ok
+test_invalid_json_never_satisfies_absence_checks (test_engine.EngineTests.test_invalid_json_never_satisfies_absence_checks) ... ok
+test_json_body_for_explicitly_authorized_mutation (test_engine.EngineTests.test_json_body_for_explicitly_authorized_mutation) ... ok
+test_json_pointer_escapes_array_and_boolean_type (test_engine.EngineTests.test_json_pointer_escapes_array_and_boolean_type) ... ok
+test_missing_any_credential_prevents_all_requests (test_engine.EngineTests.test_missing_any_credential_prevents_all_requests) ... ok
+test_redirect_not_followed_even_when_redirect_is_expected (test_engine.EngineTests.test_redirect_not_followed_even_when_redirect_is_expected) ... ok
+test_response_size_exact_boundary_and_overflow (test_engine.EngineTests.test_response_size_exact_boundary_and_overflow) ... ok
+test_success_denial_evidence_and_secret_redaction (test_engine.EngineTests.test_success_denial_evidence_and_secret_redaction) ... ok
+test_timeout_is_sanitized (test_engine.EngineTests.test_timeout_is_sanitized) ... ok
+test_total_deadline_interrupts_trickling_headers (test_engine.EngineTests.test_total_deadline_interrupts_trickling_headers) ... ok
+test_added_removed_and_renamed_ids_contradict_same_contract (test_evidence.ComparisonTests.test_added_removed_and_renamed_ids_contradict_same_contract) ... ok
+test_all_meaningful_transitions (test_evidence.ComparisonTests.test_all_meaningful_transitions) ... ok
+test_each_input_must_verify_before_comparison (test_evidence.ComparisonTests.test_each_input_must_verify_before_comparison) ... ok
+test_resealed_changed_case_structure_is_refused (test_evidence.ComparisonTests.test_resealed_changed_case_structure_is_refused) ... ok
+test_resealed_contradictory_report_metadata_is_refused (test_evidence.ComparisonTests.test_resealed_contradictory_report_metadata_is_refused) ... ok
+test_same_contract_is_required (test_evidence.ComparisonTests.test_same_contract_is_required) ... ok
+test_stable_ids_ignore_case_order (test_evidence.ComparisonTests.test_stable_ids_ignore_case_order) ... ok
+test_algorithm_root_and_evidence_shape_are_checked (test_evidence.EvidenceTests.test_algorithm_root_and_evidence_shape_are_checked) ... ok
+test_assessed_outcomes_require_an_http_status (test_evidence.EvidenceTests.test_assessed_outcomes_require_an_http_status) ... ok
+test_canonical_mapping_order_does_not_change_root (test_evidence.EvidenceTests.test_canonical_mapping_order_does_not_change_root) ... ok
+test_case_removal_with_adjusted_summary_is_detected (test_evidence.EvidenceTests.test_case_removal_with_adjusted_summary_is_detected) ... ok
+test_empty_report_still_binds_metadata (test_evidence.EvidenceTests.test_empty_report_still_binds_metadata) ... ok
+test_evidence_order_is_bound (test_evidence.EvidenceTests.test_evidence_order_is_bound) ... ok
+test_falsified_outcome_and_consistent_summary_still_fail (test_evidence.EvidenceTests.test_falsified_outcome_and_consistent_summary_still_fail) ... ok
+test_metadata_fields_and_unknown_metadata_are_bound (test_evidence.EvidenceTests.test_metadata_fields_and_unknown_metadata_are_bound) ... ok
+test_missing_evidence_and_malformed_top_level_fail_cleanly (test_evidence.EvidenceTests.test_missing_evidence_and_malformed_top_level_fail_cleanly) ... ok
+test_non_finite_numbers_and_duplicate_ids_are_rejected (test_evidence.EvidenceTests.test_non_finite_numbers_and_duplicate_ids_are_rejected) ... ok
+test_outcome_assertion_invariants_cannot_be_resealed (test_evidence.EvidenceTests.test_outcome_assertion_invariants_cannot_be_resealed) ... ok
+test_removing_result_and_corresponding_chain_record_is_detected (test_evidence.EvidenceTests.test_removing_result_and_corresponding_chain_record_is_detected) ... ok
+test_resealing_is_possible_and_changes_external_anchor (test_evidence.EvidenceTests.test_resealing_is_possible_and_changes_external_anchor) ... ok
+test_result_fields_cannot_be_changed_under_existing_seal (test_evidence.EvidenceTests.test_result_fields_cannot_be_changed_under_existing_seal) ... ok
+test_result_order_is_bound (test_evidence.EvidenceTests.test_result_order_is_bound) ... ok
+test_roundtrip_and_no_input_mutation (test_evidence.EvidenceTests.test_roundtrip_and_no_input_mutation) ... ok
+test_summary_must_match_actual_results (test_evidence.EvidenceTests.test_summary_must_match_actual_results) ... ok
+test_boolean_is_not_equal_to_numeric_permission (test_independent.AssertionBoundaryTests.test_boolean_is_not_equal_to_numeric_permission) ... ok
+test_credentials_and_reflected_response_never_reach_artifacts (test_independent.AssertionBoundaryTests.test_credentials_and_reflected_response_never_reach_artifacts) ... ok
+test_duplicate_json_members_cannot_satisfy_authorization_check (test_independent.AssertionBoundaryTests.test_duplicate_json_members_cannot_satisfy_authorization_check) ... ok
+test_failed_positive_control_prevents_denial_request (test_independent.AssertionBoundaryTests.test_failed_positive_control_prevents_denial_request) ... ok
+test_deep_untrusted_report_returns_controlled_cli_error (test_independent.EvidenceBoundaryTests.test_deep_untrusted_report_returns_controlled_cli_error) ... ok
+test_duplicate_report_keys_are_not_silently_normalized (test_independent.EvidenceBoundaryTests.test_duplicate_report_keys_are_not_silently_normalized) ... ok
+test_inconsistent_pass_record_cannot_be_sealed_or_verified (test_independent.EvidenceBoundaryTests.test_inconsistent_pass_record_cannot_be_sealed_or_verified) ... ok
+test_same_digest_but_different_target_is_not_a_valid_comparison (test_independent.EvidenceBoundaryTests.test_same_digest_but_different_target_is_not_a_valid_comparison) ... ok
+test_content_length_truncation_is_error_even_when_json_prefix_is_complete (test_independent.TransportBoundaryTests.test_content_length_truncation_is_error_even_when_json_prefix_is_complete) ... ok
+test_nested_percent_delimiter_and_traversal_rejected_before_network (test_independent.TransportBoundaryTests.test_nested_percent_delimiter_and_traversal_rejected_before_network) ... ok
+test_redirect_never_sends_credentials_to_another_origin (test_independent.TransportBoundaryTests.test_redirect_never_sends_credentials_to_another_origin) ... ok
+test_total_deadline_covers_slow_trickling_response_headers (test_independent.TransportBoundaryTests.test_total_deadline_covers_slow_trickling_response_headers) ... ok
+test_all_authored_fault_outcomes_and_clean_retest_match (test_matrix.FaultCorpusTests.test_all_authored_fault_outcomes_and_clean_retest_match) ... ok
+test_all_evidence_verifies_and_temporary_credentials_are_removed (test_matrix.FaultCorpusTests.test_all_evidence_verifies_and_temporary_credentials_are_removed) ... ok
+test_browser_integer_number_roundtrip_preserves_report_seals (test_matrix.FaultCorpusTests.test_browser_integer_number_roundtrip_preserves_report_seals) ... ok
+test_explanations_bind_contract_identity_and_integrity (test_matrix.FaultCorpusTests.test_explanations_bind_contract_identity_and_integrity) ... ok
+test_same_hash_does_not_override_case_scope_mismatch (test_matrix.FaultCorpusTests.test_same_hash_does_not_override_case_scope_mismatch) ... ok
+test_status_only_misses_data_leak_and_masks_invalid_controls (test_matrix.FaultCorpusTests.test_status_only_misses_data_leak_and_masks_invalid_controls) ... ok
+test_cli_generates_reviewable_artifacts_without_overwriting (test_matrix.MatrixTests.test_cli_generates_reviewable_artifacts_without_overwriting) ... AuthzLedger could not complete: FileExistsError. Check input, credentials and output permissions.
+ok
+test_complete_cartesian_coverage_and_two_control_obligations (test_matrix.MatrixTests.test_complete_cartesian_coverage_and_two_control_obligations) ... ok
+test_duplicate_actors_resources_paths_and_environment_refs_rejected (test_matrix.MatrixTests.test_duplicate_actors_resources_paths_and_environment_refs_rejected) ... ok
+test_fixture_and_scope_changes_are_explicit (test_matrix.MatrixTests.test_fixture_and_scope_changes_are_explicit) ... ok
+test_limits_and_mutating_or_redirect_paths_rejected (test_matrix.MatrixTests.test_limits_and_mutating_or_redirect_paths_rejected) ... ok
+test_missing_actor_control_blocks_its_denials (test_matrix.MatrixTests.test_missing_actor_control_blocks_its_denials) ... ok
+test_missing_resource_control_blocks_all_denials_to_it (test_matrix.MatrixTests.test_missing_resource_control_blocks_all_denials_to_it) ... ok
+test_no_authentication_failure_can_count_as_matrix_denial (test_matrix.MatrixTests.test_no_authentication_failure_can_count_as_matrix_denial) ... ok
+test_offline_compile_does_not_resolve_credentials_or_send_requests (test_matrix.MatrixTests.test_offline_compile_does_not_resolve_credentials_or_send_requests) ... ok
+test_order_invariant_compilation_and_hashes (test_matrix.MatrixTests.test_order_invariant_compilation_and_hashes) ... ok
+test_policy_change_is_not_a_resolved_vulnerability (test_matrix.MatrixTests.test_policy_change_is_not_a_resolved_vulnerability) ... ok
+test_positive_controls_require_body_identity_assertions (test_matrix.MatrixTests.test_positive_controls_require_body_identity_assertions) ... ok
+test_removed_coverage_remains_in_migration (test_matrix.MatrixTests.test_removed_coverage_remains_in_migration) ... ok
+test_unknown_is_a_gap_and_never_defaults_to_deny (test_matrix.MatrixTests.test_unknown_is_a_gap_and_never_defaults_to_deny) ... ok
+test_unknown_schema_keys_and_decision_references_rejected (test_matrix.MatrixTests.test_unknown_schema_keys_and_decision_references_rejected) ... ok
+test_dependency_validation (test_model.ModelTests.test_dependency_validation) ... ok
+test_duplicate_file_keys_and_oversized_file (test_model.ModelTests.test_duplicate_file_keys_and_oversized_file) ... ok
+test_header_validation (test_model.ModelTests.test_header_validation) ... ok
+test_invalid_json_checks_and_values (test_model.ModelTests.test_invalid_json_checks_and_values) ... ok
+test_limit_validation_and_request_budget (test_model.ModelTests.test_limit_validation_and_request_budget) ... ok
+test_matrix_expansion_and_collision_detection (test_model.ModelTests.test_matrix_expansion_and_collision_detection) ... ok
+test_mutating_methods_need_opt_in (test_model.ModelTests.test_mutating_methods_need_opt_in) ... ok
+test_normalization_defaults_stable_digest_and_no_mutation (test_model.ModelTests.test_normalization_defaults_stable_digest_and_no_mutation) ... ok
+test_origin_validation_and_default_port_normalization (test_model.ModelTests.test_origin_validation_and_default_port_normalization) ... ok
+test_plan_does_not_resolve_or_expose_credentials_headers_or_expected_values (test_model.ModelTests.test_plan_does_not_resolve_or_expose_credentials_headers_or_expected_values) ... ok
+test_traversal_and_parser_escapes_are_rejected (test_model.ModelTests.test_traversal_and_parser_escapes_are_rejected) ... ok
+test_unknown_fields_fail_at_every_level (test_model.ModelTests.test_unknown_fields_fail_at_every_level) ... ok
+test_catalog_local_refs_and_operation_security_override (test_openapi.OpenAPITests.test_catalog_local_refs_and_operation_security_override) ... ok
+test_compile_preserves_explicit_policy_and_does_not_use_spec_server (test_openapi.OpenAPITests.test_compile_preserves_explicit_policy_and_does_not_use_spec_server) ... ok
+test_fixture_cannot_inject_path_routing_or_traversal (test_openapi.OpenAPITests.test_fixture_cannot_inject_path_routing_or_traversal) ... ok
+test_malformed_security_template_and_nonfinite_values_rejected (test_openapi.OpenAPITests.test_malformed_security_template_and_nonfinite_values_rejected) ... ok
+test_missing_unknown_or_wrong_type_parameter_is_rejected (test_openapi.OpenAPITests.test_missing_unknown_or_wrong_type_parameter_is_rejected) ... ok
+test_mutating_import_requires_explicit_opt_in (test_openapi.OpenAPITests.test_mutating_import_requires_explicit_opt_in) ... ok
+test_no_permission_inference (test_openapi.OpenAPITests.test_no_permission_inference) ... ok
+test_operation_parameter_overrides_path_parameter (test_openapi.OpenAPITests.test_operation_parameter_overrides_path_parameter) ... ok
+test_query_value_cannot_add_an_extra_parameter (test_openapi.OpenAPITests.test_query_value_cannot_add_an_extra_parameter) ... ok
+test_remote_reference_cycle_and_ambiguous_siblings_are_rejected (test_openapi.OpenAPITests.test_remote_reference_cycle_and_ambiguous_siblings_are_rejected) ... ok
+test_required_body_and_non_json_media_types (test_openapi.OpenAPITests.test_required_body_and_non_json_media_types) ... ok
+test_required_complex_parameter_blocks_compilation (test_openapi.OpenAPITests.test_required_complex_parameter_blocks_compilation) ... ok
+test_changed_cases_and_inconclusive_semantics_are_clear (test_reports.DiffHtmlTests.test_changed_cases_and_inconclusive_semantics_are_clear) ... ok
+test_diff_untrusted_metadata_ids_and_labels_are_escaped (test_reports.DiffHtmlTests.test_diff_untrusted_metadata_ids_and_labels_are_escaped) ... ok
+test_control_type_cannot_inject_class_or_markup (test_reports.HtmlTests.test_control_type_cannot_inject_class_or_markup) ... ok
+test_empty_report_does_not_claim_success (test_reports.HtmlTests.test_empty_report_does_not_claim_success) ... ok
+test_every_displayed_untrusted_string_is_escaped (test_reports.HtmlTests.test_every_displayed_untrusted_string_is_escaped) ... ok
+test_inconclusive_is_not_success (test_reports.HtmlTests.test_inconclusive_is_not_success) ... ok
+test_modified_metadata_shows_integrity_failure (test_reports.HtmlTests.test_modified_metadata_shows_integrity_failure) ... ok
+test_non_rendered_extra_fields_do_not_leak (test_reports.HtmlTests.test_non_rendered_extra_fields_do_not_leak) ... ok
+test_self_contained_responsive_report_and_scope (test_reports.HtmlTests.test_self_contained_responsive_report_and_scope) ... ok
+test_empty_junit_is_valid_and_has_zero_cases (test_reports.JunitTests.test_empty_junit_is_valid_and_has_zero_cases) ... ok
+test_outcomes_have_distinct_ci_meaning (test_reports.JunitTests.test_outcomes_have_distinct_ci_meaning) ... ok
+test_tampered_junit_is_refused (test_reports.JunitTests.test_tampered_junit_is_refused) ... ok
+test_xml_injection_is_data_and_illegal_controls_are_replaced (test_reports.JunitTests.test_xml_injection_is_data_and_illegal_controls_are_replaced) ... ok
+test_benchmark_job_and_bound_explanations (test_studio.StudioTests.test_benchmark_job_and_bound_explanations) ... ok
+test_browser_import_rejects_silently_rounded_integer_identifiers (test_studio.StudioTests.test_browser_import_rejects_silently_rounded_integer_identifiers) ... ok
+test_capability_required_even_for_job_and_session_reads (test_studio.StudioTests.test_capability_required_even_for_job_and_session_reads) ... ok
+test_changed_mutation_setting_requires_new_review (test_studio.StudioTests.test_changed_mutation_setting_requires_new_review) ... ok
+test_cross_origin_and_rebinding_host_rejected (test_studio.StudioTests.test_cross_origin_and_rebinding_host_rejected) ... ok
+test_duplicate_host_and_content_length_headers_are_rejected (test_studio.StudioTests.test_duplicate_host_and_content_length_headers_are_rejected) ... ok
+test_duplicate_keys_nonfinite_and_oversized_bodies_fail_closed (test_studio.StudioTests.test_duplicate_keys_nonfinite_and_oversized_bodies_fail_closed) ... ok
+test_full_import_preview_run_export_uses_real_http_and_redacts_credentials (test_studio.StudioTests.test_full_import_preview_run_export_uses_real_http_and_redacts_credentials) ... ok
+test_local_demo_returns_actual_before_after_and_retest (test_studio.StudioTests.test_local_demo_returns_actual_before_after_and_retest) ... ok
+test_matrix_analysis_is_offline_and_unknown_policy_stays_unresolved (test_studio.StudioTests.test_matrix_analysis_is_offline_and_unknown_policy_stays_unresolved) ... ok
+test_public_shell_contains_no_capability_and_restricts_browser_execution (test_studio.StudioTests.test_public_shell_contains_no_capability_and_restricts_browser_execution) ... ok
+test_run_requires_exact_recent_plan_and_affirmative_authorization (test_studio.StudioTests.test_run_requires_exact_recent_plan_and_affirmative_authorization) ... ok
+test_single_active_job_and_bounded_history (test_studio.StudioTests.test_single_active_job_and_bounded_history) ... ok
+test_traversal_and_unknown_assets_do_not_read_files (test_studio.StudioTests.test_traversal_and_unknown_assets_do_not_read_files) ... ok
+
+----------------------------------------------------------------------
+Ran 126 tests in 11.136s
+
+OK
+Compiled 24 explicit checks. No requests sent.
+0 affected relationships; proposed policy migration, not a remediation result.
+
+BEFORE · vulnerable local fixture
+AuthzLedger 0.3.4 | 6 configured checks
+PASS 4  FAIL 2  ERROR 0  INCONCLUSIVE 0
+  PASS         owner-own-invoice
+  PASS         peer-own-invoice
+  FAIL         peer-cannot-read-owner
+  PASS         anonymous-cannot-read
+  PASS         admin-can-read-audit
+  FAIL         owner-cannot-read-audit
+Evidence anchor: c9dbce927ce4a111d0019837c59f9339e1db20be731b845b4e654336eefe1598
+
+AFTER · fixed local fixture
+AuthzLedger 0.3.4 | 6 configured checks
+PASS 6  FAIL 0  ERROR 0  INCONCLUSIVE 0
+  PASS         owner-own-invoice
+  PASS         peer-own-invoice
+  PASS         peer-cannot-read-owner
+  PASS         anonymous-cannot-read
+  PASS         admin-can-read-audit
+  PASS         owner-cannot-read-audit
+Evidence anchor: e020281d126901d48d41e510f66bde42ddbad3d86f448d43b0723486adb79f5f
+
+Demo verified: 2 resolved; synthetic loopback fixture only.
+Reports: /tmp/authzledger-demo-pbilswqm

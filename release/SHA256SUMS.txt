@@ -1,0 +1,2 @@
+97dff824e7ae8bb973f00b38c8765e1a6723a426a745ee3e935868c02956570d  authzledger-0.3.4-source.zip
+a7f8679878036e4e178bbdba0e22b58873a11b021bf5e1a9811a4de4ee03e01d  authzledger-0.3.4-py3-none-any.whl

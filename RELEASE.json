@@ -1,0 +1,53 @@
+{
+  "version": "0.3.4",
+  "status": "pre-release",
+  "date": "2026-10-09",
+  "repository": "https://github.com/0xFarag/0xFarag",
+  "distribution_branch": "authzledger-v0.3.4",
+  "distribution_url": "https://github.com/0xFarag/0xFarag/tree/authzledger-v0.3.4",
+  "github_releases_entry": false,
+  "license": "LicenseRef-Proprietary",
+  "runtime_dependencies": [],
+  "tests_passed": 126,
+  "verified_runtime": "Linux / CPython 3.12.14",
+  "browser": {
+    "passed": true,
+    "browser": "155.0.8059.39",
+    "workflows": [
+      "matrix: 24 declared relationships",
+      "live local eight-scenario execution",
+      "expired identity: 1 failed control and 7 inconclusive checks",
+      "pinned baseline survives scenario changes",
+      "filter does not remove cases from exported evidence",
+      "dependency trace inspection",
+      "same-contract retest",
+      "JSON / HTML / JUnit / comparison exports",
+      "unknown policy blocks generation",
+      "390px viewport has no document overflow"
+    ],
+    "page_errors": []
+  },
+  "installed_wheel": "Installed in isolated venv; demo, report integrity and eight-scenario corpus passed outside checkout",
+  "engine_unchanged_from": "0.3.3",
+  "billing_enabled": false,
+  "known_limits": [
+    "Full screen-reader acceptance",
+    "Other operating systems and browsers",
+    "Independent security and comparative review",
+    "External customer validation"
+  ],
+  "evidence": {
+    "evidence/0.3.4/browser.json": {
+      "sha256": "0a45cb8e2b08a362f85c1dc4fc64582cef85a6d1839ee2ac952a0410eda5aac6",
+      "bytes": 550
+    },
+    "evidence/0.3.4/corpus.json": {
+      "sha256": "b11826ee1551fea3328e5f3c2c6966c6abd7bc7de6a2c2a28fc0047fc9523325",
+      "bytes": 514503
+    },
+    "evidence/0.3.4/tests.txt": {
+      "sha256": "56bcbded18b5d7ec8c9d1e18c2632605d3b5148fa7553e430a1e4e8f3b58d2ff",
+      "bytes": 18582
+    }
+  }
+}

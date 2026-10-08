@@ -1,0 +1,28 @@
+[
+  {
+    "file": "AuthzLedger_v0.3.4_Release_wide.mp4",
+    "duration": 55,
+    "width": 1920,
+    "height": 1080,
+    "frames": "1375",
+    "audio": "aac",
+    "sample_rate": "48000",
+    "bytes": 2962661,
+    "full_decode": "passed",
+    "sha256": "6b6ec0b4fd48274a2b9cdf5ae86c6a7e1945d22c4492b9e2d5aa5e962f6b3611",
+    "final_card": "github.com/0xFarag"
+  },
+  {
+    "file": "AuthzLedger_v0.3.4_Release_vertical.mp4",
+    "duration": 55,
+    "width": 1080,
+    "height": 1920,
+    "frames": "1375",
+    "audio": "aac",
+    "sample_rate": "48000",
+    "bytes": 1907486,
+    "full_decode": "passed",
+    "sha256": "cf9dd50467dc112d8594f7f2d2ffc94853a1c510fe3011e4bfc666f4a590d713",
+    "final_card": "github.com/0xFarag"
+  }
+]

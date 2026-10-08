@@ -1,0 +1,146 @@
+{
+  "name": "Invoice API authorization policy",
+  "target": "http://127.0.0.1:8765",
+  "identities": {
+    "owner": {
+      "headers": {
+        "Authorization": {
+          "env": "AUTHZ_OWNER_TOKEN"
+        }
+      }
+    },
+    "peer": {
+      "headers": {
+        "Authorization": {
+          "env": "AUTHZ_PEER_TOKEN"
+        }
+      }
+    },
+    "admin": {
+      "headers": {
+        "Authorization": {
+          "env": "AUTHZ_ADMIN_TOKEN"
+        }
+      }
+    },
+    "anonymous": {
+      "headers": {}
+    }
+  },
+  "selections": [
+    {
+      "id": "owner-own-invoice",
+      "identity": "owner",
+      "expect": {
+        "status": [
+          200
+        ],
+        "json": {
+          "/owner": "owner",
+          "/amount": 120
+        }
+      },
+      "operation": "GET /invoices/{id}",
+      "parameters": {
+        "path": {
+          "id": "owner-1"
+        }
+      }
+    },
+    {
+      "id": "peer-own-invoice",
+      "identity": "peer",
+      "expect": {
+        "status": [
+          200
+        ],
+        "json": {
+          "/owner": "peer",
+          "/amount": 240
+        }
+      },
+      "operation": "GET /invoices/{id}",
+      "parameters": {
+        "path": {
+          "id": "peer-1"
+        }
+      }
+    },
+    {
+      "id": "peer-cannot-read-owner",
+      "identity": "peer",
+      "requires": [
+        "owner-own-invoice",
+        "peer-own-invoice"
+      ],
+      "expect": {
+        "status": [
+          403,
+          404
+        ],
+        "json_absent": [
+          "/amount",
+          "/owner"
+        ]
+      },
+      "operation": "GET /invoices/{id}",
+      "parameters": {
+        "path": {
+          "id": "owner-1"
+        }
+      }
+    },
+    {
+      "id": "anonymous-cannot-read",
+      "identity": "anonymous",
+      "requires": [
+        "owner-own-invoice"
+      ],
+      "expect": {
+        "status": [
+          401,
+          403
+        ],
+        "json_absent": [
+          "/amount"
+        ]
+      },
+      "operation": "GET /invoices/{id}",
+      "parameters": {
+        "path": {
+          "id": "owner-1"
+        }
+      }
+    },
+    {
+      "id": "admin-can-read-audit",
+      "identity": "admin",
+      "expect": {
+        "status": [
+          200
+        ],
+        "json": {
+          "/access": "admin"
+        }
+      },
+      "operation": "GET /admin/audit"
+    },
+    {
+      "id": "owner-cannot-read-audit",
+      "identity": "owner",
+      "requires": [
+        "admin-can-read-audit",
+        "owner-own-invoice"
+      ],
+      "expect": {
+        "status": [
+          403
+        ],
+        "json_absent": [
+          "/access"
+        ]
+      },
+      "operation": "GET /admin/audit"
+    }
+  ]
+}

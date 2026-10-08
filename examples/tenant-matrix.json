@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "name": "Tenant boundaries \u00b7 invoice and audit API",
+  "target": "http://127.0.0.1:8080",
+  "actors": [
+    {
+      "id": "north_member",
+      "label": "North \u00b7 Member",
+      "tenant": "north",
+      "role": "member",
+      "env": "AUTHZ_NORTH_MEMBER_TOKEN"
+    },
+    {
+      "id": "north_admin",
+      "label": "North \u00b7 Admin",
+      "tenant": "north",
+      "role": "admin",
+      "env": "AUTHZ_NORTH_ADMIN_TOKEN"
+    },
+    {
+      "id": "south_member",
+      "label": "South \u00b7 Member",
+      "tenant": "south",
+      "role": "member",
+      "env": "AUTHZ_SOUTH_MEMBER_TOKEN"
+    },
+    {
+      "id": "south_admin",
+      "label": "South \u00b7 Admin",
+      "tenant": "south",
+      "role": "admin",
+      "env": "AUTHZ_SOUTH_ADMIN_TOKEN"
+    }
+  ],
+  "resources": [
+    {
+      "id": "invoice-a",
+      "label": "Invoice A",
+      "path": "/invoice/invoice-a",
+      "owner": "north_member",
+      "tenant": "north",
+      "assertions": {
+        "/id": "invoice-a",
+        "/tenant": "north"
+      },
+      "absent": [
+        "/id",
+        "/tenant",
+        "/amount"
+      ]
+    },
+    {
+      "id": "invoice-b",
+      "label": "Invoice B",
+      "path": "/invoice/invoice-b",
+      "owner": "north_admin",
+      "tenant": "north",
+      "assertions": {
+        "/id": "invoice-b",
+        "/tenant": "north"
+      },
+      "absent": [
+        "/id",
+        "/tenant",
+        "/amount"
+      ]
+    },
+    {
+      "id": "invoice-c",
+      "label": "Invoice C",
+      "path": "/invoice/invoice-c",
+      "owner": "south_member",
+      "tenant": "south",
+      "assertions": {
+        "/id": "invoice-c",
+        "/tenant": "south"
+      },
+      "absent": [
+        "/id",
+        "/tenant",
+        "/amount"
+      ]
+    },
+    {
+      "id": "invoice-d",
+      "label": "Invoice D",
+      "path": "/invoice/invoice-d",
+      "owner": "south_admin",
+      "tenant": "south",
+      "assertions": {
+        "/id": "invoice-d",
+        "/tenant": "south"
+      },
+      "absent": [
+        "/id",
+        "/tenant",
+        "/amount"
+      ]
+    },
+    {
+      "id": "audit-north",
+      "label": "Audit North",
+      "path": "/audit/audit-north",
+      "owner": "north_admin",
+      "tenant": "north",
+      "assertions": {
+        "/id": "audit-north",
+        "/tenant": "north"
+      },
+      "absent": [
+        "/id",
+        "/tenant",
+        "/amount"
+      ]
+    },
+    {
+      "id": "audit-south",
+      "label": "Audit South",
+      "path": "/audit/audit-south",
+      "owner": "south_admin",
+      "tenant": "south",
+      "assertions": {
+        "/id": "audit-south",
+        "/tenant": "south"
+      },
+      "absent": [
+        "/id",
+        "/tenant",
+        "/amount"
+      ]
+    }
+  ],
+  "decisions": {
+    "north_member": {
+      "invoice-a": "allow",
+      "invoice-b": "deny",
+      "invoice-c": "deny",
+      "invoice-d": "deny",
+      "audit-north": "deny",
+      "audit-south": "deny"
+    },
+    "north_admin": {
+      "invoice-a": "allow",
+      "invoice-b": "allow",
+      "invoice-c": "deny",
+      "invoice-d": "deny",
+      "audit-north": "allow",
+      "audit-south": "deny"
+    },
+    "south_member": {
+      "invoice-a": "deny",
+      "invoice-b": "deny",
+      "invoice-c": "allow",
+      "invoice-d": "deny",
+      "audit-north": "deny",
+      "audit-south": "deny"
+    },
+    "south_admin": {
+      "invoice-a": "deny",
+      "invoice-b": "deny",
+      "invoice-c": "allow",
+      "invoice-d": "allow",
+      "audit-north": "deny",
+      "audit-south": "allow"
+    }
+  },
+  "limits": {
+    "max_requests": 32,
+    "timeout_seconds": 3,
+    "max_response_bytes": 16384,
+    "concurrency": 4
+  }
+}

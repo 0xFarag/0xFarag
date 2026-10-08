@@ -1,0 +1,39 @@
+1
+00:00:00,400 --> 00:00:03,170
+Von Zugriffsregeln zu nachvollziehbaren Nachweisen.
+
+2
+00:00:05,000 --> 00:00:08,441
+AuthzLedger, Version 0.3.4.
+
+3
+00:00:10,200 --> 00:00:13,348
+Lokal starten. Festlegen, wer auf welche Ressource zugreifen darf.
+
+4
+00:00:15,500 --> 00:00:19,621
+Kontrolliert testen: mit gültigen Identitäten und ausdrücklichen Berechtigungen.
+
+5
+00:00:21,000 --> 00:00:24,833
+Die Statusprüfung besteht. Ein geschütztes Feld wird trotzdem offengelegt.
+
+6
+00:00:27,000 --> 00:00:31,566
+Den Befund öffnen. Regel, Kontrollen und fehlgeschlagene Inhaltsprüfung nachvollziehen.
+
+7
+00:00:34,000 --> 00:00:37,046
+Die API korrigieren. Denselben Vertrag erneut prüfen.
+
+8
+00:00:39,000 --> 00:00:42,231
+24 Prüfungen bestehen. Ein Befund ist behoben.
+
+9
+00:00:44,000 --> 00:00:46,831
+Die Nachweise prüfen. Mit der lokalen Demo beginnen.
+
+10
+00:00:49,000 --> 00:00:50,861
+AuthzLedger. Show the proof.

@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "status": "pre_release",
+  "billing_enabled": false,
+  "license_enforcement_enabled": false,
+  "notice": "This pre-release does not provide paid tiers or subscriptions. The repository LICENSE governs permissions.",
+  "plans": []
+}

@@ -1,0 +1,39 @@
+1
+00:00:00,400 --> 00:00:03,170
+From access rules to evidence you can inspect.
+
+2
+00:00:05,000 --> 00:00:08,441
+Meet AuthzLedger, version zero point three point four.
+
+3
+00:00:10,200 --> 00:00:13,348
+Start locally. Define who can access each resource.
+
+4
+00:00:15,500 --> 00:00:19,621
+Run controlled tests, with working identities and explicit permissions.
+
+5
+00:00:21,000 --> 00:00:24,833
+Here, the status check passes. A protected field still leaks.
+
+6
+00:00:27,000 --> 00:00:31,566
+Open the finding. Follow the rule, the controls, and the failed response check.
+
+7
+00:00:34,000 --> 00:00:37,046
+Fix the API. Run the same contract again.
+
+8
+00:00:39,000 --> 00:00:42,231
+Twenty four checks pass. One finding is resolved.
+
+9
+00:00:44,000 --> 00:00:46,831
+Inspect the evidence. Start with the local demo.
+
+10
+00:00:49,000 --> 00:00:50,861
+AuthzLedger. Show the proof.

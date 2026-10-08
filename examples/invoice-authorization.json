@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "name": "Invoice API \u00b7 local authorization fixture",
+  "target": "http://127.0.0.1:8765",
+  "limits": {
+    "max_requests": 20,
+    "timeout_seconds": 3,
+    "max_response_bytes": 16384,
+    "concurrency": 3
+  },
+  "identities": {
+    "owner": {
+      "headers": {
+        "Authorization": {
+          "env": "AUTHZLEDGER_DEMO_OWNER_TOKEN"
+        }
+      }
+    },
+    "peer": {
+      "headers": {
+        "Authorization": {
+          "env": "AUTHZLEDGER_DEMO_PEER_TOKEN"
+        }
+      }
+    },
+    "admin": {
+      "headers": {
+        "Authorization": {
+          "env": "AUTHZLEDGER_DEMO_ADMIN_TOKEN"
+        }
+      }
+    },
+    "anonymous": {
+      "headers": {}
+    }
+  },
+  "cases": [
+    {
+      "id": "owner-own-invoice",
+      "identity": "owner",
+      "method": "GET",
+      "path": "/invoices/owner-1",
+      "requires": [],
+      "expect": {
+        "status": [
+          200
+        ],
+        "json": {
+          "/owner": "owner",
+          "/amount": 120
+        }
+      },
+      "headers": {}
+    },
+    {
+      "id": "peer-own-invoice",
+      "identity": "peer",
+      "method": "GET",
+      "path": "/invoices/peer-1",
+      "requires": [],
+      "expect": {
+        "status": [
+          200
+        ],
+        "json": {
+          "/owner": "peer",
+          "/amount": 240
+        }
+      },
+      "headers": {}
+    },
+    {
+      "id": "peer-cannot-read-owner",
+      "identity": "peer",
+      "method": "GET",
+      "path": "/invoices/owner-1",
+      "requires": [
+        "owner-own-invoice",
+        "peer-own-invoice"
+      ],
+      "expect": {
+        "status": [
+          403,
+          404
+        ],
+        "json_absent": [
+          "/amount",
+          "/owner"
+        ]
+      },
+      "headers": {}
+    },
+    {
+      "id": "anonymous-cannot-read",
+      "identity": "anonymous",
+      "method": "GET",
+      "path": "/invoices/owner-1",
+      "requires": [
+        "owner-own-invoice"
+      ],
+      "expect": {
+        "status": [
+          401,
+          403
+        ],
+        "json_absent": [
+          "/amount"
+        ]
+      },
+      "headers": {}
+    },
+    {
+      "id": "admin-can-read-audit",
+      "identity": "admin",
+      "method": "GET",
+      "path": "/admin/audit",
+      "requires": [],
+      "expect": {
+        "status": [
+          200
+        ],
+        "json": {
+          "/access": "admin"
+        }
+      },
+      "headers": {}
+    },
+    {
+      "id": "owner-cannot-read-audit",
+      "identity": "owner",
+      "method": "GET",
+      "path": "/admin/audit",
+      "requires": [
+        "admin-can-read-audit",
+        "owner-own-invoice"
+      ],
+      "expect": {
+        "status": [
+          403
+        ],
+        "json_absent": [
+          "/access"
+        ]
+      },
+      "headers": {}
+    }
+  ]
+}
