@@ -5,7 +5,7 @@ Dietikon / Zürich, Switzerland
 
 I bring a background in system engineering and web security to practical security assessment: understanding the system, validating the finding, explaining the impact and checking the fix.
 
-I am seeking junior penetration testing and application security roles, with a long-term development focus on red teaming.
+My focus is penetration testing and application security: precise testing, actionable evidence and verified remediation. I am building toward advanced offensive security and red teaming.
 
 [YouTube: 0xFarag](https://www.youtube.com/@0xFarag) · [TikTok](https://www.tiktok.com/@0xfarag) · [Instagram](https://www.instagram.com/0xfarag/) · [Facebook](https://www.facebook.com/profile.php?id=61594691289806) · [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [TryHackMe: 0xFarag](https://tryhackme.com/p/0xFarag)
 
@@ -27,7 +27,7 @@ Follow the [YouTube channel](https://www.youtube.com/@0xFarag), [TikTok](https:/
 | [**Nmap Evidence Report**](https://github.com/0xFarag/nmap-evidence-report) | An offline Python CLI that turns Nmap XML into readable Markdown/JSON, preserves observed states and separates service observations from vulnerability claims. |
 | [**Pentest Case Study**](https://github.com/0xFarag/pentest-case-study) | A concise sample assessment with scope, impact, request/response evidence, remediation and retest results from the API lab. |
 
-The runnable labs and sample assessment use synthetic data. They were prepared with AI assistance and tested locally; the source code and evidence make the results reproducible. The separate TryHackMe reports document learning themes from verified room completions and study notes; their proposed retests are not presented as executed results.
+The runnable labs and sample assessment use synthetic data. They are tested locally; the source code and evidence make the results reproducible. The separate TryHackMe reports document learning themes from verified room completions and study notes; their proposed retests are not presented as executed results.
 
 ## Collaborate
 
@@ -47,7 +47,7 @@ I welcome peer review, reproducible edge cases and collaboration on focused secu
 | Practical Network Penetration Tester (PNPT) | TCM Security | 2024 |
 | PenTest+ | CompTIA | 2024 |
 | OSSTMM Professional Security Tester (OPST) | ISECOM | 2024 |
-| Practical Junior Penetration Tester (PJPT) | TCM Security | 2023 |
+| PJPT | TCM Security | 2023 |
 | eJPT | INE | 2023 |
 | Certified in Cybersecurity (CC) | ISC2 | 2024 |
 | INE Certified Cloud Associate (ICCA) | INE | 2023 |
