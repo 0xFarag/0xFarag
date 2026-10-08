@@ -1,60 +1,52 @@
-# Nasser Aldin Farag
+![0xFarag — SHOW THE PROOF.](assets/profile-header.svg)
 
-**Web & API Security · Penetration Testing · Offensive Security**  
-Dietikon / Zürich, Switzerland
+# Nasser Aldin Farag · 0xFarag
 
-I bring a background in system engineering and web security to practical security assessment: understanding the system, validating the finding, explaining the impact and checking the fix.
+**Penetration Testing · Web & API Security · System Engineering**  
+Zürich, Switzerland
 
-My focus is penetration testing and application security: precise testing, actionable evidence and verified remediation. I am building toward advanced offensive security and red teaming.
+I bring more than ten years of system engineering experience and a background in web security to practical security assessment. My work follows a clear standard: understand the system, reproduce the finding, explain its impact and verify the fix.
 
-[YouTube: 0xFarag](https://www.youtube.com/@0xFarag) · [TikTok](https://www.tiktok.com/@0xfarag) · [Instagram](https://www.instagram.com/0xfarag/) · [Facebook](https://www.facebook.com/profile.php?id=61594691289806) · [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [TryHackMe: 0xFarag](https://tryhackme.com/p/0xFarag)
+My focus is application security, authorization testing and security automation. I build reproducible working examples that make technical reasoning and remediation inspectable.
 
-## 0xFarag — SHOW THE PROOF
+[LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [GitHub projects](https://github.com/0xFarag?tab=repositories) · [YouTube](https://www.youtube.com/@0xFarag) · [TryHackMe](https://tryhackme.com/p/0xFarag)
 
-**Understand the attack. Prove the finding. Verify the fix.**
+## Selected engineering work
 
-Watch the [SHOW THE PROOF playlist](https://www.youtube.com/playlist?list=PLeWBMZAfR2Wg) for the episodes in order.
+| Project | Purpose | What to inspect |
+| :--- | :--- | :--- |
+| [**API Authorization Lab**](https://github.com/0xFarag/api-authorization-lab) | Make object-level authorization failures reproducible. | Local invoice API, ownership enforcement and before/after HTTP evidence. |
+| [**Nmap Evidence Report**](https://github.com/0xFarag/nmap-evidence-report) | Turn scan output into usable assessment evidence. | Offline XML processing, Markdown/JSON reports and preservation of observed states. |
+| [**Pentest Case Study**](https://github.com/0xFarag/pentest-case-study) | Connect a technical finding to a clear remediation decision. | Scope, impact, request/response evidence, fix and retest. |
+| [**Offensive Security Labs**](https://github.com/0xFarag/offensive-security-labs) | Explore security boundaries through executable examples. | Exploit/fix pairs across OAuth, SSRF, CI and API security, with regression checks. |
+| [**TryHackMe Reports**](https://github.com/0xFarag/tryhackme-writeups) | Document technical reasoning and lessons from completed rooms. | Learning retrospectives, remediation analysis and proposed retest criteria. |
 
-Follow the [YouTube channel](https://www.youtube.com/@0xFarag), [TikTok](https://www.tiktok.com/@0xfarag), and [Instagram](https://www.instagram.com/0xfarag/) for web and API security explanations, join the professional discussion on [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/), and inspect the code and evidence in the projects below.
+The runnable labs and sample assessment use synthetic data in local environments. They are separate from client engagements. TryHackMe reports distinguish completed learning activities from proposed retests.
 
-## Selected work
+## Technical focus
 
-| Project | What you can inspect |
-| --- | --- |
-| [**Offensive Security Labs**](https://github.com/0xFarag/offensive-security-labs) | Nine exploit/fix pairs covering OAuth, MCP, SSRF, CI, AI tooling and API security; 49 regression tests, case studies and reproducible evidence. |
-| [**TryHackMe Learning Reports**](https://github.com/0xFarag/tryhackme-writeups) | Eight completed-room retrospectives with technical reasoning, remediation and proposed retest criteria; clear evidence provenance and no solution spoilers. |
-| [**API Authorization Lab**](https://github.com/0xFarag/api-authorization-lab) | A local invoice API with a reproducible object-level access control defect, an ownership check and 14 recorded before/after HTTP cases. |
-| [**Nmap Evidence Report**](https://github.com/0xFarag/nmap-evidence-report) | An offline Python CLI that turns Nmap XML into readable Markdown/JSON, preserves observed states and separates service observations from vulnerability claims. |
-| [**Pentest Case Study**](https://github.com/0xFarag/pentest-case-study) | A concise sample assessment with scope, impact, request/response evidence, remediation and retest results from the API lab. |
+**Web & API security** — HTTP, authentication boundaries, object-level access control, finding validation and retesting.  
+**Systems** — Windows/Linux, networking, operations and system engineering.  
+**Security engineering** — Python automation, structured evidence, reproducible tests and clear technical reporting.  
+**Continuing development** — Active Directory security, offensive security methodology and red teaming.
 
-The runnable labs and sample assessment use synthetic data. They are tested locally; the source code and evidence make the results reproducible. The separate TryHackMe reports document learning themes from verified room completions and study notes; their proposed retests are not presented as executed results.
+## Credentials
 
-## Collaborate
+| Credential | Issuer | Earned |
+| :--- | :--- | :--- |
+| **PNPT** — Practical Network Penetration Tester | TCM Security | 2024 |
+| **PenTest+** | CompTIA | 2024 |
+| **OPST** — OSSTMM Professional Security Tester | ISECOM | 2024 |
+| **PJPT** | TCM Security | 2023 |
+| **eJPT** | INE | 2023 |
+| **CC** — Certified in Cybersecurity | ISC² | 2024 |
+| **ICCA** — INE Certified Cloud Associate | INE | 2023 |
+| **Google Cybersecurity Professional Certificate** | Google | 2023 |
 
-I welcome peer review, reproducible edge cases and collaboration on focused security labs. Start with the [community challenges](https://github.com/0xFarag/offensive-security-labs/blob/main/CHALLENGES.md), propose a [roadmap contribution](https://github.com/0xFarag/offensive-security-labs/blob/main/ROADMAP.md), or contact me on [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/).
+## Work with me
 
-## Focus
+I welcome conversations about penetration testing and application security roles, focused security automation, reproducible edge cases and practical technical collaboration.
 
-- **Web & API:** HTTP, access control, finding validation, remediation and retesting.
-- **Infrastructure:** Windows/Linux, networking and system engineering foundations.
-- **Reporting & automation:** clear evidence, practical recommendations and small Python utilities.
-- **Continuing development:** Active Directory security and offensive security methodology.
+**[Contact me on LinkedIn →](https://www.linkedin.com/in/nasser-aldin-farag-974697412/)**
 
-## Credentials earned
-
-| Credential | Issuer | Awarded |
-| --- | --- | --- |
-| Practical Network Penetration Tester (PNPT) | TCM Security | 2024 |
-| PenTest+ | CompTIA | 2024 |
-| OSSTMM Professional Security Tester (OPST) | ISECOM | 2024 |
-| PJPT | TCM Security | 2023 |
-| eJPT | INE | 2023 |
-| Certified in Cybersecurity (CC) | ISC2 | 2024 |
-| INE Certified Cloud Associate (ICCA) | INE | 2023 |
-| Google Cybersecurity Professional Certificate | Google | 2023 |
-
-## Kurz auf Deutsch
-
-Mein Schwerpunkt liegt auf nachvollziehbaren Web-/API-Sicherheitsprüfungen: Befunde reproduzieren, ihre Auswirkungen einordnen, konkrete Massnahmen beschreiben und die Behebung überprüfen. Die Arbeitsproben zeigen diesen Ablauf an eigenen, lokal ausführbaren Beispielen.
-
-**Kontakt:** [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/)
+<sub>Understand the attack. Prove the finding. Verify the fix.</sub>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="550" viewBox="0 0 1440 550" role="img" aria-labelledby="title desc">
+<title id="title">0xFarag — Show the proof.</title><desc id="desc">Nasser Aldin Farag. Web and API security, penetration testing and system engineering.</desc>
+<rect width="1440" height="550" rx="24" fill="#071722"/>
+<path d="M890 0V550" stroke="#24414f"/>
+<path d="M960 395 L1220 135 L1300 215 L1040 475" fill="none" stroke="#112f3c" stroke-width="56"/>
+<path d="M960 240 L1050 188 L1140 240 V342 L1050 394 L960 342Z" fill="#0c2330" stroke="#C8A66B" stroke-width="2"/>
+<path d="M1009 324V248L1091 324V248" fill="none" stroke="#43D6CF" stroke-width="8"/>
+<circle cx="1009" cy="248" r="7" fill="#C8A66B"/><circle cx="1091" cy="324" r="7" fill="#C8A66B"/>
+<text x="68" y="82" font-family="Arial,sans-serif" font-size="24" letter-spacing="5" fill="#43D6CF">0xFARAG</text>
+<text x="68" y="206" font-family="Arial,sans-serif" font-size="68" font-weight="700" fill="#f2f5f6">SHOW THE</text>
+<text x="68" y="284" font-family="Arial,sans-serif" font-size="68" font-weight="700" fill="#f2f5f6">PROOF.</text>
+<path d="M68 325H178" stroke="#C8A66B" stroke-width="3"/>
+<text x="68" y="380" font-family="Arial,sans-serif" font-size="25" fill="#d2dee4">Understand the system. Validate the finding.</text>
+<text x="68" y="420" font-family="Arial,sans-serif" font-size="25" fill="#d2dee4">Verify the fix.</text>
+<text x="68" y="490" font-family="Arial,sans-serif" font-size="18" letter-spacing="2" fill="#8da6b5">NASSER ALDIN FARAG  /  SWITZERLAND</text>
+<text x="947" y="465" font-family="Arial,sans-serif" font-size="19" letter-spacing="1" fill="#C8A66B">PNPT · PenTest+ · OPST</text>
+</svg>
