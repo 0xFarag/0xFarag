@@ -11,11 +11,15 @@ My focus is application security, authorization testing and security automation.
 
 [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [GitHub projects](https://github.com/0xFarag?tab=repositories) · [YouTube](https://www.youtube.com/@0xFarag) · [TryHackMe](https://tryhackme.com/p/0xFarag)
 
-## AuthzLedger — product preview
+## AuthzLedger 0.3.4 pre-release
 
 **An authorization engineering workbench: explicit policy → controlled HTTP tests → explainable evidence.**
 
-**[Watch the 36-second preview: Access denied. Data leaked. →](https://www.youtube.com/shorts/Svr7Jhb_FNc)**
+**[Open the tool and installation guide →](https://github.com/0xFarag/0xFarag/tree/authzledger-v0.3.4)**
+
+[Source ZIP](https://github.com/0xFarag/0xFarag/raw/refs/heads/authzledger-v0.3.4/release/authzledger-0.3.4-source.zip) · [Installable wheel](https://github.com/0xFarag/0xFarag/raw/refs/heads/authzledger-v0.3.4/release/authzledger-0.3.4-py3-none-any.whl) · [55-second release video](https://github.com/0xFarag/0xFarag/blob/authzledger-v0.3.4/media/AuthzLedger_v0.3.4_Release_wide.mp4) · [Release notes](https://github.com/0xFarag/0xFarag/blob/authzledger-v0.3.4/RELEASE_NOTES.md)
+
+The source-visible distribution, test evidence, downloads and wide/vertical videos are available on the dedicated `authzledger-v0.3.4` branch. Pre-release; all rights reserved. [Earlier 36-second product preview](https://www.youtube.com/shorts/Svr7Jhb_FNc).
 
 A controlled local API returns HTTP 403 while leaking a protected field. The preview follows the failed body check, legitimate-access controls and the same-contract retest: 24 checks pass and one finding is recorded as resolved. Synthetic data; actual Studio captures.
 
