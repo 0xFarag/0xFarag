@@ -5,7 +5,7 @@
   "repository": "https://github.com/0xFarag/0xFarag",
   "distribution_branch": "authzledger-v0.3.4",
   "distribution_url": "https://github.com/0xFarag/0xFarag/tree/authzledger-v0.3.4",
-  "github_releases_entry": false,
+  "release_url": "https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4",
   "license": "LicenseRef-Proprietary",
   "runtime_dependencies": [],
   "tests_passed": 126,

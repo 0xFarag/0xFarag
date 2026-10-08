@@ -36,3 +36,44 @@ jobs:
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/authzledger-verify/bin/authzledger" demo --out installed-demo
           "$RUNNER_TEMP/authzledger-verify/bin/authzledger" verify installed-demo/fixed/report.json
+
+  publish:
+    needs: verify
+    if: github.repository == '0xFarag/0xFarag' && github.event_name == 'push' && github.ref == 'refs/heads/authzledger-v0.3.4'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      group: authzledger-v0.3.4-publication
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify prepared distribution bytes
+        shell: bash
+        run: |
+          (cd release && sha256sum --check SHA256SUMS.txt)
+          (cd media && sha256sum --check SHA256SUMS.txt)
+      - name: Publish the verified pre-release once
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: 0xFarag/0xFarag
+        run: |
+          set -euo pipefail
+          if gh release view v0.3.4 --repo "$GH_REPO" --json tagName >/dev/null 2>&1; then
+            echo 'v0.3.4 already exists; no assets or tag will be overwritten.'
+            exit 0
+          fi
+          release_bundle=$(mktemp -d "$RUNNER_TEMP/authzledger-release.XXXXXX")
+          cp release/authzledger-0.3.4-source.zip release/authzledger-0.3.4-py3-none-any.whl "$release_bundle/"
+          cp media/AuthzLedger_v0.3.4_Release_wide.mp4 media/AuthzLedger_v0.3.4_Release_vertical.mp4 "$release_bundle/"
+          cp media/AuthzLedger_v0.3.4_en.srt media/AuthzLedger_v0.3.4_de.srt "$release_bundle/"
+          (cd "$release_bundle" && sha256sum *.zip *.whl *.mp4 *.srt > SHA256SUMS.txt)
+          gh release create v0.3.4 "$release_bundle/"* \
+            --repo "$GH_REPO" --target "$GITHUB_SHA" \
+            --title 'AuthzLedger 0.3.4 pre-release' \
+            --notes-file RELEASE_NOTES.md --prerelease --latest=false
+          gh release view v0.3.4 --repo "$GH_REPO" --json url,isDraft,isPrerelease,tagName

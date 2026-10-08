@@ -4,7 +4,7 @@ A local authorization engineering workbench: explicit access policy, controlled 
 
 ## Distribution
 
-Version 0.3.4 is published on the dedicated `authzledger-v0.3.4` branch of `0xFarag/0xFarag`. Source, wheel, checksums and the 55-second release walkthrough are included. The public profile links directly to this branch. A separate repository and GitHub Releases entry have not been created.
+Version 0.3.4 is published in `0xFarag/0xFarag`, with source on the dedicated `authzledger-v0.3.4` branch. The GitHub pre-release includes a source ZIP, installable wheel, SHA-256 checksums, the 55-second walkthrough in wide and vertical formats, and English/German subtitle files. The public profile links to the tool. A separate AuthzLedger repository has not been created.
 
 ## Get started
 

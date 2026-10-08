@@ -16,7 +16,7 @@ Copyright © 2026 Nasser Aldin Farag. Applicable statutory and hosting-platform 
 
 **[Watch the 55-second release walkthrough](https://github.com/0xFarag/0xFarag/raw/refs/heads/authzledger-v0.3.4/media/AuthzLedger_v0.3.4_Release_wide.mp4)** · [Vertical video](https://github.com/0xFarag/0xFarag/raw/refs/heads/authzledger-v0.3.4/media/AuthzLedger_v0.3.4_Release_vertical.mp4) · [Release notes](RELEASE_NOTES.md) · [Validation](docs/validation.md)
 
-This distribution is published on the dedicated `authzledger-v0.3.4` branch of `0xFarag/0xFarag`. The profile remains on `main`. No separate GitHub Releases entry has been created.
+This distribution is published on the dedicated `authzledger-v0.3.4` branch of `0xFarag/0xFarag`. The profile remains on `main`. [GitHub pre-release and downloadable assets](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4).
 
 ## Start with Studio
 
