@@ -15,11 +15,11 @@ My focus is application security, authorization testing and security automation.
 
 **An authorization engineering workbench: explicit policy → controlled HTTP tests → explainable evidence.**
 
-**[Open the tool and installation guide →](https://github.com/0xFarag/0xFarag/tree/authzledger-v0.3.4)**
+**[Download AuthzLedger v0.3.4 →](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4)** · [Source and installation guide](https://github.com/0xFarag/0xFarag/tree/authzledger-v0.3.4)
 
-[Source ZIP](https://github.com/0xFarag/0xFarag/raw/refs/heads/authzledger-v0.3.4/release/authzledger-0.3.4-source.zip) · [Installable wheel](https://github.com/0xFarag/0xFarag/raw/refs/heads/authzledger-v0.3.4/release/authzledger-0.3.4-py3-none-any.whl) · [55-second release video](https://github.com/0xFarag/0xFarag/blob/authzledger-v0.3.4/media/AuthzLedger_v0.3.4_Release_wide.mp4) · [Release notes](https://github.com/0xFarag/0xFarag/blob/authzledger-v0.3.4/RELEASE_NOTES.md)
+[Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v0.3.4/authzledger-0.3.4-source.zip) · [Installable wheel](https://github.com/0xFarag/0xFarag/releases/download/v0.3.4/authzledger-0.3.4-py3-none-any.whl) · [55-second release video](https://github.com/0xFarag/0xFarag/blob/authzledger-v0.3.4/media/AuthzLedger_v0.3.4_Release_wide.mp4) · [Release notes](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4)
 
-The source-visible distribution, test evidence, downloads and wide/vertical videos are available on the dedicated `authzledger-v0.3.4` branch. Pre-release; all rights reserved. [Earlier 36-second product preview](https://www.youtube.com/shorts/Svr7Jhb_FNc).
+The GitHub pre-release includes the source-visible distribution, downloads and wide/vertical videos. Source and test evidence are on the dedicated `authzledger-v0.3.4` branch. [GitHub verification passed](https://github.com/0xFarag/0xFarag/actions/runs/37856154307). Pre-release; all rights reserved. [Earlier 36-second product preview](https://www.youtube.com/shorts/Svr7Jhb_FNc).
 
 A controlled local API returns HTTP 403 while leaking a protected field. The preview follows the failed body check, legitimate-access controls and the same-contract retest: 24 checks pass and one finding is recorded as resolved. Synthetic data; actual Studio captures.
 
