@@ -14,6 +14,10 @@ from test_openapi import config, spec
 
 
 class StudioTests(unittest.TestCase):
+    # The eight-scenario corpus took over eight seconds on CI. Allow bounded
+    # scheduling headroom without changing the runner's request deadlines.
+    JOB_TIMEOUT_SECONDS = 30
+
     @classmethod
     def setUpClass(cls):
         cls.server = StudioServer()
@@ -46,6 +50,17 @@ class StudioTests(unittest.TestCase):
         cls.thread.join()
         cls.fixture_thread.join()
 
+    def tearDown(self):
+        # The server is shared across tests. Even after an assertion failure,
+        # drain its worker so an active job does not reject later test jobs.
+        deadline = time.monotonic() + self.JOB_TIMEOUT_SECONDS
+        while time.monotonic() < deadline:
+            with self.server.lock:
+                if not self.server.active:
+                    return
+            time.sleep(.01)
+        self.fail("Studio job remained active after bounded test cleanup")
+
     def request(self, path, body=None, headers=None, method=None, raw=None):
         conn = http.client.HTTPConnection("127.0.0.1", self.server.server_port, timeout=5)
         values = {"Authorization": "Bearer " + self.server.token, "Origin": self.server.origin,
@@ -70,7 +85,7 @@ class StudioTests(unittest.TestCase):
         return value["contract"]
 
     def wait_job(self, job):
-        deadline = time.monotonic() + 6
+        deadline = time.monotonic() + self.JOB_TIMEOUT_SECONDS
         while time.monotonic() < deadline:
             code, value, _ = self.request("/api/jobs/" + job["id"])
             self.assertEqual(code, 200)
@@ -78,7 +93,7 @@ class StudioTests(unittest.TestCase):
                 self.assertEqual(value["state"], "complete", value)
                 return value
             time.sleep(.01)
-        self.fail("Studio job did not complete")
+        self.fail(f"Studio job did not complete within {self.JOB_TIMEOUT_SECONDS} seconds")
 
     def test_full_import_preview_run_export_uses_real_http_and_redacts_credentials(self):
         with patch.dict(os.environ, {"STUDIO_TEST_TOKEN": "Bearer local-studio-secret"}):
@@ -237,9 +252,10 @@ class StudioTests(unittest.TestCase):
             return run(value)
 
         with patch.dict(os.environ, {"STUDIO_TEST_TOKEN": "Bearer local-studio-secret"}), patch("authzledger.studio.run", held):
-            _, job, _ = self.request("/api/run", body)
-            self.assertTrue(entered.wait(2))
+            code, job, _ = self.request("/api/run", body)
             try:
+                self.assertEqual(code, 200)
+                self.assertTrue(entered.wait(2))
                 self.assertEqual(self.request("/api/demo", {})[0], 400)
                 self.assertEqual(self.request("/api/run", body)[0], 400)
             finally:

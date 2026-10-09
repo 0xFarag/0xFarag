@@ -42,7 +42,7 @@ An internal hash chain alone does not detect someone rewriting both the report a
 
 Successful verification establishes consistency with the checked hashes or anchor. It does not authenticate the operator, prove that requests actually occurred or establish the truth of a compromised runner's output. AuthzLedger does not issue digital signatures.
 
-Verification also rejects contradictory declared prerequisites: duplicate or undefined references, dependency cycles, and assessed requests whose required controls did not pass. Records without a `requires` field remain compatible and declare no prerequisites. This is a consistency check on the report, not authentication of its author or proof of network execution.
+Verification also rejects contradictory declared prerequisites: duplicate or undefined references, dependency cycles, and assessed requests whose required controls did not pass. Blocked records must not claim an HTTP status, response digest or nonzero request duration. Records without a `requires` field remain compatible and declare no prerequisites. This is a consistency check on the report, not authentication of its author or proof of network execution.
 
 Comparison verifies both reports and requires matching contract digests, schema versions, tool metadata, contract names and targets. The complete case-ID set must also match, including cases that did not run. Each case must retain the same identity, method, path, prerequisites and control type. Contradictory metadata is rejected even when the supplied contract digests match.
 

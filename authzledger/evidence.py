@@ -163,10 +163,16 @@ def _dependency_errors(report: dict) -> list[str]:
             errors.append(prefix + ": undefined prerequisite")
             continue
         pending[result["id"]] = dependencies
-        if result["outcome"] != "inconclusive" and any(
+        blocked = any(
             results[dependency]["outcome"] != "pass" for dependency in dependencies
-        ):
+        )
+        if blocked and result["outcome"] != "inconclusive":
             errors.append(prefix + ": request assessed after a prerequisite did not pass")
+        elif blocked and (
+            result["status"] is not None or result.get("response_sha256") is not None
+            or result["duration_ms"] != 0
+        ):
+            errors.append(prefix + ": skipped request contains execution metadata")
     if errors:
         return errors
     # Iterative, linear graph traversal: long chains must not exhaust the Python

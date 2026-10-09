@@ -47,7 +47,18 @@ class DependencyEvidenceTests(unittest.TestCase):
         report = report_for({"control": "fail", "intermediate": "inconclusive", "denial": "inconclusive"})
         report["results"][1]["requires"] = ["control"]
         report["results"][2]["requires"] = ["intermediate"]
+        for result in report["results"][1:]:
+            result.update(status=None, duration_ms=0, response_sha256=None)
         self.assertEqual(verify_report(seal_report(report)), [])
+
+    def test_blocked_request_cannot_claim_network_execution_metadata(self):
+        for field, value in (("status", 200), ("duration_ms", 20), ("response_sha256", "b" * 64)):
+            with self.subTest(field=field):
+                report = report_for({"control": "fail", "denial": "inconclusive"})
+                dependent = report["results"][1]
+                dependent.update(requires=["control"], status=None, duration_ms=0, response_sha256=None)
+                dependent[field] = value
+                self.assert_rejected_even_if_rehashed(report, "skipped request contains execution metadata")
 
     def test_duplicate_and_undefined_references_are_rejected(self):
         for requires, message in ((["missing"], "undefined prerequisite"),
