@@ -1,2 +1,2 @@
-"""AuthzLedger: repeatable API authorization checks and scoped evidence."""
-__version__ = "0.3.4"
+"""AuthzLedger — Authorization Intelligence, built on evidence."""
+__version__ = "1.0.0"

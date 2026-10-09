@@ -1,3 +1,17 @@
+# Validation — AuthzLedger 1.0
+
+Measured local acceptance: **233 Python tests passed** under Linux/CPython 3.12.14. The complete graph, independent local-policy, differential retest, explanation, Ed25519 package, external trusted-key verification, standalone verifier, history and dependency-closed retest workflow passed. The authored eight-scenario HTTP corpus passed.
+
+Both Chromium 155 browser suites passed without JavaScript errors, including graph/policy drift, persistent history, signed export, protected retest preparation and a 390px viewport. The built wheel was installed in an isolated venv and executed outside the checkout through demo, graph and source-bound signed verification.
+
+Raw records and synthetic before/after captures: [evidence/1.0.0](../evidence/1.0.0). [RELEASE.json](../RELEASE.json) contains hashes and exact scope. OPA/Ollama integration tests used loopback protocol fixtures. Remote GitHub Actions status is independently observable on the release commit; local test success does not stand in for it.
+
+Controls, decision semantics, signature trust, stale context, corrupted history, changed credentials, graph source binding, malicious annotations, request limits and malformed inputs have targeted regression tests. This is a development-team review, not an external audit or commercial-tool superiority benchmark. Hosted infrastructure, accessibility, other platforms and customer evaluation remain open.
+
+---
+
+## Historical 0.3.4 evidence
+
 # Validation — 0.3.4 release candidate
 
 9 October 2026. These results describe the prepared distribution and its authored local fixtures. GitHub publication and remote CI results are separate from local validation.

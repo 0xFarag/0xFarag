@@ -1,0 +1,64 @@
+{
+  "source": "genuine Studio captures and independently verified synthetic evidence",
+  "duration_seconds": 36,
+  "facts": {
+    "resolved": 2,
+    "contract": "b1f30c18f1d07302d2963f65d7cd30e3e8258a1c0341ed4b3188a9d4400f61fe",
+    "key": "64624f6e503bd8406faa1970e1b9657e3acb56a69f70c8b32bc7c59b8aaae3d1",
+    "verification": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.",
+    "inventory": [
+      "attachments/contract.json",
+      "attachments/explanation.json",
+      "attachments/graph.json",
+      "public.pem",
+      "report.json"
+    ],
+    "checks": 6
+  },
+  "outputs": [
+    {
+      "path": "/workspace/scratch/0b4764a45f4d/authzledger/media/AuthzLedger_1.0_Release_wide.mp4",
+      "sha256": "8a3970f32f2a675355f24ad12f4f9fa1325b24bf54f97d6897599f9fc234d56d",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio"
+          }
+        ],
+        "format": {
+          "duration": "36.000000"
+        }
+      }
+    },
+    {
+      "path": "/workspace/scratch/0b4764a45f4d/authzledger/media/AuthzLedger_1.0_Release_vertical.mp4",
+      "sha256": "91dc8c198043e911236f5247e0c42f500c8a2d77fb2009a9c3dd6a5c1e2f2a9c",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio"
+          }
+        ],
+        "format": {
+          "duration": "36.000000"
+        }
+      }
+    }
+  ]
+}

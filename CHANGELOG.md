@@ -1,3 +1,9 @@
+# AuthzLedger changelog
+
+## 1.0.0 — 2026-10-09
+
+Three-layer authorization graphs, independent policy evaluation, differential drift and source-aware retests, durable history, finite assurance, advisory local reasoning, Ed25519 evidence packages and Studio/CLI workflows. Existing v0.3.4 engine and foundation verifier hardening retained. See RELEASE_NOTES.md and docs/product-1.0.md for exact scope and limits.
+
 # Release notes
 
 ## 0.3.4 — 9 October 2026

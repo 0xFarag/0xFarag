@@ -1,0 +1,39 @@
+1
+00:00:00,000 --> 00:00:04,000
+Policy says deny. Behavior says allow.
+The difference is the evidence.
+
+2
+00:00:04,000 --> 00:00:08,000
+One boundary. Three distinct realities.
+Intended permission, independent policy and observed behavior stay distinct.
+
+3
+00:00:08,000 --> 00:00:12,000
+A failed control never becomes a pass.
+Blocked negative checks remain inconclusive. No request is sent.
+
+4
+00:00:12,000 --> 00:00:17,000
+Same contract. 2 boundaries fixed.
+The local fixture changes. Its authorization expectations stay unchanged.
+
+5
+00:00:17,000 --> 00:00:21,000
+Every run has a history.
+Retain the contract, graph and evidence. Prepare a controlled retest.
+
+6
+00:00:21,000 --> 00:00:26,000
+Sign the evidence. Verify independently.
+Ed25519. Exact inventory. A public key trusted outside the package.
+
+7
+00:00:26,000 --> 00:00:30,000
+Evidence decides. AI only advises.
+Deterministic findings remain authoritative. Optional local AI never changes outcomes.
+
+8
+00:00:30,000 --> 00:00:36,000
+Authorization Intelligence, built on evidence.
+Know who can do what. Prove what changed.

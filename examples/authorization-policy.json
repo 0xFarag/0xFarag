@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "engine": "local",
+  "default": "unknown",
+  "rules": [
+    {"id": "anonymous-denied", "effect": "deny", "identities": ["anonymous"], "paths": ["*"]},
+    {"id": "peer-cross-tenant-denied", "effect": "deny", "identities": ["peer"], "methods": ["GET"], "paths": ["/invoices/owner-1"]},
+    {"id": "nonadmin-audit-denied", "effect": "deny", "identities": ["owner", "peer"], "paths": ["/admin/*"]},
+    {"id": "owner-own-invoice", "effect": "allow", "identities": ["owner"], "methods": ["GET"], "paths": ["/invoices/owner-1"]},
+    {"id": "peer-own-invoice", "effect": "allow", "identities": ["peer"], "methods": ["GET"], "paths": ["/invoices/peer-1"]},
+    {"id": "admin-audit", "effect": "allow", "identities": ["admin"], "methods": ["GET"], "paths": ["/admin/audit"]}
+  ]
+}

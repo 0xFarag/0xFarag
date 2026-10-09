@@ -1,0 +1,32 @@
+AuthzLedger could not complete: FileExistsError. Check input, credentials and output permissions.
+----------------------------------------------------------------------
+Ran 233 tests in 30.554s
+
+OK
+Compiled 24 explicit checks. No requests sent.
+0 affected relationships; proposed policy migration, not a remediation result.
+
+BEFORE · vulnerable local fixture
+AuthzLedger 1.0.0 | 6 configured checks
+PASS 4  FAIL 2  ERROR 0  INCONCLUSIVE 0
+  PASS         owner-own-invoice
+  PASS         peer-own-invoice
+  FAIL         peer-cannot-read-owner
+  PASS         anonymous-cannot-read
+  PASS         admin-can-read-audit
+  FAIL         owner-cannot-read-audit
+Evidence anchor: 5ba99471754bb21e6f3d1e70b73b9aa45074773a47ffcffe0c74207109d4dab2
+
+AFTER · fixed local fixture
+AuthzLedger 1.0.0 | 6 configured checks
+PASS 6  FAIL 0  ERROR 0  INCONCLUSIVE 0
+  PASS         owner-own-invoice
+  PASS         peer-own-invoice
+  PASS         peer-cannot-read-owner
+  PASS         anonymous-cannot-read
+  PASS         admin-can-read-audit
+  PASS         owner-cannot-read-audit
+Evidence anchor: b793f6235cc2c7c1e74a7d10c29a4be269419cfb09ce93356e21460be78223e9
+
+Demo verified: 2 resolved; synthetic loopback fixture only.
+Reports: /tmp/authzledger-demo-pxe7kfn3

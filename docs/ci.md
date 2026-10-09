@@ -77,3 +77,12 @@ Reaching `pass` from `fail` or `error` is reported as resolved; reaching `inconc
 
 The repository includes `.github/workflows/tests.yml` for unit tests, the loopback demo, report verification and package installation. It uses Python 3.12 on Ubuntu, read-only repository permissions and pinned action revisions. This is workflow configuration, not a claim that the remote workflow has already passed. Check actual workflow results before treating a version as verified in your environment.
 
+
+
+## Version 1.0 intelligence gate
+
+`authzledger assure` retains the contract, policy decisions and observations in a graph, optionally appending them to a verified local history. `authzledger watch` reserves aggregate application and OPA requests across finite iterations and stops on unsafe results. Pure policy, intent and context drift fail the intelligence comparison gate; unresolved control/evidence states return code 2. The original `diff` continues to require identical normalized contracts.
+
+Package signing is a separate operator action: supply the report, exact source contract, graph and trusted local private key, then verify with a public key retained outside the bundle. Store private keys through your existing secret manager. Do not put them in repository branches or public artifacts.
+
+Repository publication has a separate contents-write job that depends on passing verification and triggers only for the dedicated authzledger-v1.0.0 branch. It creates v1.0.0 once and refuses to overwrite existing tags/assets. The job's verification uses the loopback corpus and standalone verifier; it never receives target credentials.

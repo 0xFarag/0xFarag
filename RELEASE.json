@@ -1,53 +1,85 @@
 {
-  "version": "0.3.4",
-  "status": "pre-release",
+  "version": "1.0.0",
   "date": "2026-10-09",
+  "status": "verified-local-release-candidate",
   "repository": "https://github.com/0xFarag/0xFarag",
-  "distribution_branch": "authzledger-v0.3.4",
-  "distribution_url": "https://github.com/0xFarag/0xFarag/tree/authzledger-v0.3.4",
-  "release_url": "https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4",
+  "distribution_branch": "authzledger-v1.0.0",
+  "release_url": "https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0",
   "license": "LicenseRef-Proprietary",
   "runtime_dependencies": [],
-  "tests_passed": 126,
-  "verified_runtime": "Linux / CPython 3.12.14",
-  "browser": {
-    "passed": true,
-    "browser": "155.0.8059.39",
-    "workflows": [
-      "matrix: 24 declared relationships",
-      "live local eight-scenario execution",
-      "expired identity: 1 failed control and 7 inconclusive checks",
-      "pinned baseline survives scenario changes",
-      "filter does not remove cases from exported evidence",
-      "dependency trace inspection",
-      "same-contract retest",
-      "JSON / HTML / JUnit / comparison exports",
-      "unknown policy blocks generation",
-      "390px viewport has no document overflow"
-    ],
-    "page_errors": []
+  "signing_requirement": "OpenSSL 3 / Ed25519",
+  "build_tools": {
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
   },
-  "installed_wheel": "Installed in isolated venv; demo, report integrity and eight-scenario corpus passed outside checkout",
-  "engine_unchanged_from": "0.3.3",
+  "tests_passed": 233,
+  "verified_runtime": "Linux / CPython 3.12.14",
+  "browser": "Chromium 155.0.8059.39",
+  "browser_suites_passed": [
+    "preserved v0.3.4 workflows",
+    "new graph/policy/history/reasoning/proof/retest workflows"
+  ],
+  "installed_wheel": "Isolated venv outside checkout: demo, evidence verification, graph, key generation, source-bound signed bundle and trusted-key verification passed",
+  "source_lineage": {
+    "v0.3.4": "a8022b8ca34ea14828151ff97e62cf64260c805a",
+    "foundation": "b9f9892fc411434d78c17185c32b110d115e9c3f"
+  },
+  "protocol_integrations_verified": "OPA and Ollama through loopback protocol fixtures; no external deployment/model certification",
   "billing_enabled": false,
   "known_limits": [
-    "Full screen-reader acceptance",
+    "Hosted multi-user infrastructure and commercial Retest-as-a-Service deployment",
+    "Independent comparative or external security review",
+    "External customer validation",
     "Other operating systems and browsers",
-    "Independent security and comparative review",
-    "External customer validation"
+    "Full accessibility evaluation",
+    "Local history requires separately retained anchors to resist wholesale replacement"
   ],
   "evidence": {
-    "evidence/0.3.4/browser.json": {
+    "evidence/1.0.0/acceptance.json": {
+      "sha256": "2e3e1fa01b613c5d7cbfd6d57323c6e61b14e15c4d5ff45b49a3a8fdf1e8bf09",
+      "bytes": 410
+    },
+    "evidence/1.0.0/browser-intelligence.json": {
+      "sha256": "d2a9457e522bb222fa3314cc572d28aa3c35fe16e7fb2684ab98b38f8b726d66",
+      "bytes": 553
+    },
+    "evidence/1.0.0/browser-legacy.json": {
       "sha256": "0a45cb8e2b08a362f85c1dc4fc64582cef85a6d1839ee2ac952a0410eda5aac6",
       "bytes": 550
     },
-    "evidence/0.3.4/corpus.json": {
-      "sha256": "b11826ee1551fea3328e5f3c2c6966c6abd7bc7de6a2c2a28fc0047fc9523325",
-      "bytes": 514503
+    "evidence/1.0.0/differential.png": {
+      "sha256": "153033762a80f15440dc6eedbcd562fa8210d0f3b4a5d49a9ec2f4a46781fd6a",
+      "bytes": 52611
     },
-    "evidence/0.3.4/tests.txt": {
-      "sha256": "56bcbded18b5d7ec8c9d1e18c2632605d3b5148fa7553e430a1e4e8f3b58d2ff",
-      "bytes": 18582
+    "evidence/1.0.0/graph-after.png": {
+      "sha256": "e04fb0545153c3b34cae7b3a5bd5de10c4d594e2238ee867e4cef39a810b1c19",
+      "bytes": 208503
+    },
+    "evidence/1.0.0/graph-before.png": {
+      "sha256": "ea6a39e2533a1635ba980d3bd4e8837e896cf4df1ee93eab243aac1fa800dbcb",
+      "bytes": 261046
+    },
+    "evidence/1.0.0/tests.txt": {
+      "sha256": "91df0a298c81e9bf3a3d01bb7c01fb5c13088443b72dffbf7913497e46f13bdc",
+      "bytes": 1245
+    },
+    "evidence/1.0.0/film-verification.json": {
+      "sha256": "2b7f1493389714abd645482bdbdd4e976b7dcb2e10827e3ecee80d0d952ce1e8",
+      "bytes": 1786
+    }
+  },
+  "release_media": {
+    "media/AuthzLedger_1.0_Release_vertical.mp4": {
+      "sha256": "91dc8c198043e911236f5247e0c42f500c8a2d77fb2009a9c3dd6a5c1e2f2a9c",
+      "bytes": 2226085
+    },
+    "media/AuthzLedger_1.0_Release_wide.mp4": {
+      "sha256": "8a3970f32f2a675355f24ad12f4f9fa1325b24bf54f97d6897599f9fc234d56d",
+      "bytes": 2316801
+    },
+    "media/AuthzLedger_1.0_en.srt": {
+      "sha256": "e95b1cc652dfbae69a7ef2270664cc2f7b631d5e79fe36c63b5776970448653f",
+      "bytes": 1079
     }
   }
 }

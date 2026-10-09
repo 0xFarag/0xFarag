@@ -40,7 +40,7 @@ Each sealed report hashes its case records and metadata in stable order. Its roo
 
 An internal hash chain alone does not detect someone rewriting both the report and its hashes. Retain the anchor outside the editable artifact bundle, for example in an independently controlled CI record. A hash saved beside the report in the same writable directory is not an independent trust anchor.
 
-Successful verification establishes consistency with the checked hashes or anchor. It does not authenticate the operator, prove that requests actually occurred or establish the truth of a compromised runner's output. AuthzLedger does not issue digital signatures.
+Successful verification establishes consistency with the checked hashes or anchor. It does not authenticate the operator, prove that requests actually occurred or establish the truth of a compromised runner's output. The report seal itself is not a digital signature; version 1.0 can package and sign it separately.
 
 Verification also rejects contradictory declared prerequisites: duplicate or undefined references, dependency cycles, and assessed requests whose required controls did not pass. Blocked records must not claim an HTTP status, response digest or nonzero request duration. Records without a `requires` field remain compatible and declare no prerequisites. This is a consistency check on the report, not authentication of its author or proof of network execution.
 
@@ -66,3 +66,10 @@ The server limits request bodies to 4 MiB, connections to sixteen request handle
 Changing an untrusted contract can redirect its referenced environment credentials to another operator-approved origin. Review origins and credential mappings before execution. No server-generated plan proves ownership of the target. Use isolated test credentials and appropriate network boundaries.
 
 The pre-release subscription catalogue is empty. Studio does not process payments, accept bank details, enforce user seats or provide multi-user isolation.
+
+
+## Version 1.0 evidence and policy boundaries
+
+The original hash-seal limitations above apply to report seals. Signed evidence packages additionally bind exact file bytes to an Ed25519 key. Trust must come from a separately supplied public key; signatures do not establish truthful execution. See [signatures](signatures.md).
+
+Independent policy inputs remain distinct from contract expectations; an OPA decision does not prove that the application uses that policy. Local Ollama annotations receive only pseudonymized state data and cannot modify deterministic findings. See [reasoning](reasoning.md). History and continuous assurance are local, finite and scoped; [assurance](assurance.md) documents storage anchors, credential checks and budgets.

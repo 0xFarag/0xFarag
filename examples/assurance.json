@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "name": "Local tenant boundary assurance",
+  "target": "http://127.0.0.1:8765",
+  "limits": {
+    "max_requests": 3,
+    "timeout_seconds": 3,
+    "max_response_bytes": 16384,
+    "concurrency": 2
+  },
+  "identities": {
+    "owner": {"headers": {"Authorization": {"env": "AUTHZLEDGER_OWNER_TOKEN"}}},
+    "peer": {"headers": {"Authorization": {"env": "AUTHZLEDGER_PEER_TOKEN"}}}
+  },
+  "cases": [
+    {
+      "id": "owner-positive",
+      "identity": "owner",
+      "method": "GET",
+      "path": "/invoices/owner-1",
+      "expect": {"status": [200], "json": {"/owner": "owner", "/amount": 120}}
+    },
+    {
+      "id": "peer-positive",
+      "identity": "peer",
+      "method": "GET",
+      "path": "/invoices/peer-1",
+      "expect": {"status": [200], "json": {"/owner": "peer", "/amount": 240}}
+    },
+    {
+      "id": "peer-denied-owner",
+      "identity": "peer",
+      "method": "GET",
+      "path": "/invoices/owner-1",
+      "requires": ["owner-positive", "peer-positive"],
+      "expect": {"status": [403, 404], "json_absent": ["/owner", "/amount"]}
+    }
+  ]
+}

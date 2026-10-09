@@ -1,4 +1,4 @@
-name: Verify AuthzLedger
+name: Verify and release AuthzLedger
 
 on:
   push:
@@ -8,10 +8,13 @@ on:
 permissions:
   contents: read
 
+env:
+  SOURCE_DATE_EPOCH: '1767225600'
+
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -19,61 +22,59 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
-      - name: Unit and local HTTP tests
+      - name: Unit, adversarial and local HTTP integration tests
         run: python -m unittest discover -s tests -v
-      - name: Local demo and evidence integrity
-        run: |
-          python -m authzledger demo --out artifacts/demo
-          python -m authzledger verify artifacts/demo/vulnerable/report.json
-          python -m authzledger verify artifacts/demo/fixed/report.json
+      - name: Full authorization intelligence and independent proof workflow
+        run: python tools/release_check.py --out artifacts/acceptance
       - name: Build wheel
         run: python -m pip wheel --no-deps --wheel-dir dist .
-      - name: Verify the installed distribution outside the checkout
+      - name: Verify installed distribution outside checkout
         shell: bash
         run: |
           python -m venv "$RUNNER_TEMP/authzledger-verify"
-          "$RUNNER_TEMP/authzledger-verify/bin/python" -m pip install --no-index --no-deps dist/authzledger-0.3.4-py3-none-any.whl
+          "$RUNNER_TEMP/authzledger-verify/bin/python" -m pip install --no-index --no-deps dist/authzledger-1.0.0-py3-none-any.whl
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/authzledger-verify/bin/authzledger" demo --out installed-demo
           "$RUNNER_TEMP/authzledger-verify/bin/authzledger" verify installed-demo/fixed/report.json
+          "$RUNNER_TEMP/authzledger-verify/bin/authzledger" graph installed-demo/contract.json --report installed-demo/fixed/report.json --out installed-graph.json
+          "$RUNNER_TEMP/authzledger-verify/bin/authzledger" keygen --private operator.pem --public trusted.pem
+          "$RUNNER_TEMP/authzledger-verify/bin/authzledger" bundle installed-demo/fixed/report.json --key operator.pem --contract installed-demo/contract.json --graph installed-graph.json --out installed-proof
+          "$RUNNER_TEMP/authzledger-verify/bin/authzledger" verify-bundle installed-proof --public-key trusted.pem
 
   publish:
     needs: verify
-    if: github.repository == '0xFarag/0xFarag' && github.event_name == 'push' && github.ref == 'refs/heads/authzledger-v0.3.4'
+    if: github.repository == '0xFarag/0xFarag' && github.event_name == 'push' && github.ref == 'refs/heads/authzledger-v1.0.0'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
     concurrency:
-      group: authzledger-v0.3.4-publication
+      group: authzledger-v1.0.0-publication
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-      - name: Verify prepared distribution bytes
-        shell: bash
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Build verified release assets
         run: |
-          (cd release && sha256sum --check SHA256SUMS.txt)
-          (cd media && sha256sum --check SHA256SUMS.txt)
-      - name: Publish the verified pre-release once
+          python -m pip wheel --no-deps --wheel-dir dist .
+          python tools/package_release.py
+      - name: Publish AuthzLedger 1.0 once
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: 0xFarag/0xFarag
         run: |
           set -euo pipefail
-          if gh release view v0.3.4 --repo "$GH_REPO" --json tagName >/dev/null 2>&1; then
-            echo 'v0.3.4 already exists; no assets or tag will be overwritten.'
+          if gh release view v1.0.0 --repo "$GH_REPO" --json tagName >/dev/null 2>&1; then
+            echo 'Release exists; tag and assets will not be overwritten.'
             exit 0
           fi
-          release_bundle=$(mktemp -d "$RUNNER_TEMP/authzledger-release.XXXXXX")
-          cp release/authzledger-0.3.4-source.zip release/authzledger-0.3.4-py3-none-any.whl "$release_bundle/"
-          cp media/AuthzLedger_v0.3.4_Release_wide.mp4 media/AuthzLedger_v0.3.4_Release_vertical.mp4 "$release_bundle/"
-          cp media/AuthzLedger_v0.3.4_en.srt media/AuthzLedger_v0.3.4_de.srt "$release_bundle/"
-          (cd "$release_bundle" && sha256sum *.zip *.whl *.mp4 *.srt > SHA256SUMS.txt)
-          gh release create v0.3.4 "$release_bundle/"* \
-            --repo "$GH_REPO" --target "$GITHUB_SHA" \
-            --title 'AuthzLedger 0.3.4 pre-release' \
-            --notes-file RELEASE_NOTES.md --prerelease --latest=false
-          gh release view v0.3.4 --repo "$GH_REPO" --json url,isDraft,isPrerelease,tagName
+          (cd dist && sha256sum --check SHA256SUMS.txt)
+          gh release create v1.0.0 dist/authzledger-1.0.0-source.zip dist/authzledger-1.0.0-py3-none-any.whl dist/verify_bundle.py dist/SHA256SUMS.txt dist/AuthzLedger_1.0_Release_wide.mp4 dist/AuthzLedger_1.0_Release_vertical.mp4 dist/AuthzLedger_1.0_en.srt \
+            --repo "$GH_REPO" --target "$GITHUB_SHA" --title 'AuthzLedger 1.0 — Authorization Intelligence, built on evidence' \
+            --notes-file RELEASE_NOTES.md --latest
+          gh release view v1.0.0 --repo "$GH_REPO" --json url,isDraft,isPrerelease,tagName
