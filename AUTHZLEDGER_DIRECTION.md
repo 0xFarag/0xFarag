@@ -1,42 +1,33 @@
-# AuthzLedger direction
+# AuthzLedger — released 1.0 and next validation gates
 
 **Authorization Intelligence, built on evidence.**  
 Know who can do what. Prove what changed.
 
-## Available today
+AuthzLedger **1.0.0 was released on 9 October 2026** after its GitHub verification pipeline passed.
 
-[v0.3.4](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4) is a source-visible local pre-release. It includes an access-matrix compiler, positive-control dependencies, contract and trace manifests, same-contract retest comparisons, a CLI, local Studio and a synthetic fault corpus. Current evidence uses hashes, not digital signatures. The existing rights notice applies; source visibility is not an open-source licence.
+- [Stable release and seven downloadable assets](https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0)
+- [Product source and installation guide](https://github.com/0xFarag/0xFarag/tree/authzledger-v1.0.0)
+- [Passing release pipeline](https://github.com/0xFarag/0xFarag/actions/runs/37874324250)
+- [Architecture, feature interactions and official-source competitive comparison](https://github.com/0xFarag/0xFarag/blob/authzledger-v1.0.0/docs/product-1.0.md)
+- [Immediate priorities, channel copy and 30-/90-day adoption plan](https://github.com/0xFarag/0xFarag/blob/authzledger-v1.0.0/docs/launch-1.0.md)
 
-## Foundation progress
+## Shipped in 1.0
 
-[The first hardening change](https://github.com/0xFarag/0xFarag/pull/1) is implemented on the development branch and ready for review. It validates evidence control dependencies, rejects contradictory blocked-request metadata and handles malformed anchored reports cleanly. [GitHub CI passed](https://github.com/0xFarag/0xFarag/actions/runs/37869081944), including 135 tests, demo verification, a wheel build and installation outside the checkout. It is not yet part of the published v0.3.4 package.
+The Living Authorization Graph separates intended permission, independently evaluated policy and controlled application observation. Differential intelligence records policy, contract, identity, control and coverage changes. Positive-control prerequisites, selective retests, finite assurance sessions and hash-chained local history retain the validity of evidence.
 
-## The product question
+Studio and CLI expose the same core capabilities. Local rules and opt-in OPA use an explicit evaluator configuration. Ed25519-signed evidence packages bind the source contract, graph and report. The application reconstructs and verifies their semantic relationships; the independent standalone verifier checks authenticity and integrity against an externally trusted public key. Optional local Ollama advice remains separate from deterministic findings and cannot change a verdict.
 
-Who may access which resource under which conditions, and which controlled observation supports that conclusion?
+The release includes the installable wheel, curated source ZIP, independent verifier, checksums, two verified 36-second films and subtitles. **233 automated tests passed locally and in GitHub CI**. Both local Chromium acceptance suites and the installed-distribution workflow passed. The release source tree matches the locally verified tree; wheel, source and film checksums match the published GitHub assets.
 
-The first use case is recurring tenant and role regression testing in B2B SaaS. Intended access, a connected policy engine's decision and the application's actual behavior will remain separate records. A successful request must never silently become the intended permission.
+## Next gates, in order
 
-## Acceptance gates for 1.0
+1. Run controlled pilots on explicitly authorized applications; measure time to a reproducible finding, control validity and retest precision.
+2. Obtain an independent security and authorization-method review. Publish limitations and comparative methodology alongside results.
+3. Expand real policy-engine/model deployment validation and operating-system/browser coverage without weakening unknown/error semantics.
+4. Validate customer demand and team workflows before adding hosted multi-user Retest-as-a-Service, durable remote infrastructure or billing.
 
-| Priority | Capability | Evidence required before release |
-| --- | --- | --- |
-| P0 | Control and verifier correctness | Failed, missing or cyclic prerequisites cannot validate a dependent result; malformed evidence fails cleanly. |
-| P0 | Stable contracts and migrations | Existing fixtures retain their semantics; unknown permissions remain unknown; policy edits are never reported as fixes. |
-| P0 | Safe controlled execution | Target scope, budgets, credentials and mutation behavior remain explicit; failure-path tests and threat model are reviewed. |
-| P1 | Portable signed evidence | Independent offline verification rejects tampering and untrusted keys; legacy integrity and authenticated provenance are distinct. |
-| P1 | Three-layer authorization model | Intent, one supported policy-decision adapter and observed behavior retain source, context and version. Unsupported semantics stay unknown. |
-| P1 | Durable history and differential analysis | Run provenance and immutable baselines explain access changes; a changed contract does not establish remediation. |
-| P1 | Studio and CLI workflow | Import, review, plan, run, explain, retest and verify operate on the same model; supported platforms and accessibility are documented. |
+The current product is a local workbench. Authored synthetic fixtures establish specific reproducible behavior; they do not establish universal scanner superiority, a world-first claim or guaranteed market adoption.
 
-Version 1.0 will be released when its technical acceptance gates pass. Pilot adoption and commercial validation are tracked separately. No release date, market-first claim or enterprise capability is implied by this roadmap.
+## Lineage
 
-## What follows
-
-Control freshness, change-aware retesting and reusable adapters precede hosted team features. Continuous assurance requires authorised runners, revocable scope, bounded execution and explicit handling of stale or incomplete evidence. AI assistance may explain evidence and suggest tests; it does not decide whether access is authorised or whether a finding is valid.
-
-## How progress will be demonstrated
-
-Reproducible fixtures, regression tests, documented limitations and reviewable changes. Synthetic benchmarks will remain clearly distinguished from independent evaluations and customer results.
-
-For technical collaboration or employment conversations: [Nasser Aldin Farag on LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/).
+The released source preserves and extends [v0.3.4](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4) and the hardened [1.0 foundation](https://github.com/0xFarag/0xFarag/tree/authzledger-1.0-foundation). The standard branch remains the public engineering profile; product distributions have their own versioned branches and tags.
