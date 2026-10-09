@@ -1,19 +1,24 @@
-![0xFarag — SHOW THE PROOF.](assets/profile-header.svg)
+![0xFarag — Web and API Security](assets/profile-header.svg)
 
 # Nasser Aldin Farag · 0xFarag
 
-**Penetration Testing · Web & API Security · System Engineering**  
+**Penetration Testing · Web & API Security · Security Engineering**  
 Zürich, Switzerland
 
 I bring more than ten years of system engineering experience and a background in web security to practical security assessment. My work follows a clear standard: understand the system, reproduce the finding, explain its impact and verify the fix.
 
 My focus is application security, authorization testing and security automation. I build reproducible working examples that make technical reasoning and remediation inspectable.
 
+**Open to permanent roles in penetration testing, Web/API security, AppSec and security engineering in Switzerland.** AuthzLedger is a practical engineering project supporting that focus.
+
 [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [GitHub projects](https://github.com/0xFarag?tab=repositories) · [YouTube](https://www.youtube.com/@0xFarag) · [TryHackMe](https://tryhackme.com/p/0xFarag)
 
 ## AuthzLedger 0.3.4 pre-release
 
-**An authorization engineering workbench: explicit policy → controlled HTTP tests → explainable evidence.**
+**Authorization Intelligence, built on evidence.**  
+Know who can do what. Prove what changed.
+
+The available v0.3.4 pre-release is a local authorization engineering workbench: explicit access expectations, controlled HTTP tests and traceable evidence.
 
 **[Download AuthzLedger v0.3.4 →](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4)** · [Source and installation guide](https://github.com/0xFarag/0xFarag/tree/authzledger-v0.3.4)
 
@@ -26,6 +31,14 @@ A controlled local API returns HTTP 403 while leaking a protected field. The pre
 AuthzLedger compiles actor/resource access matrices into checks with positive-control dependencies, traces outcomes to their rules, and keeps proposed policy changes separate from remediation results. Its local fault corpus exercises ownership, tenant and role boundaries, protected data in denial responses, invalid credentials and stale fixtures.
 
 The current pre-release includes a local Studio, an offline OpenAPI importer, a CLI and JSON/HTML/JUnit evidence. Validation uses authored synthetic fixtures; independent customer evaluation and commercial validation are the next gates.
+
+### Toward version 1.0
+
+The next development stage separates **intended access**, **policy-engine decisions** and **observed application behavior**. Differences between these layers should lead to inspectable tests and evidence, with explicit control validity and change history.
+
+The 1.0 priorities are a stable contract model, trustworthy controls, signed portable evidence with independent verification, and reproducible authorization regression workflows. These are development targets; the current release does not yet provide digital signatures, connected policy engines or continuous assurance.
+
+[Development scope and acceptance gates](AUTHZLEDGER_DIRECTION.md)
 
 ## Selected engineering work
 
@@ -61,8 +74,6 @@ The runnable labs and sample assessment use synthetic data in local environments
 
 ## Work with me
 
-I welcome conversations about penetration testing and application security roles, focused security automation, reproducible edge cases and practical technical collaboration.
+I am seeking a permanent cybersecurity role in Switzerland, with a focus on penetration testing, Web/API security, AppSec or security engineering. I welcome technical conversations about the trade-offs, test design and evidence behind these projects.
 
 **[Contact me on LinkedIn →](https://www.linkedin.com/in/nasser-aldin-farag-974697412/)**
-
-<sub>Understand the attack. Prove the finding. Verify the fix.</sub>
