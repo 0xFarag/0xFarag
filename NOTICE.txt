@@ -1,0 +1,7 @@
+Copyright © 2026 Nasser Aldin Farag (0xFarag). Alle Rechte vorbehalten.
+
+Sämtliche Nasser Aldin Farag zustehenden Rechte an den eigenen, rechtlich schutzfähigen Bestandteilen von AuthzLedger und seinem persönlichen Branding bleiben ausschliesslich ihm vorbehalten.
+
+Vervielfältigung, Bearbeitung, Verbreitung, Unterlizenzierung und kommerzielle Verwertung bedürfen seiner vorherigen schriftlichen Zustimmung, soweit nicht zwingendes Recht oder bereits wirksam eingeräumte Berechtigungen entgegenstehen. Die Bereitstellung oder Veröffentlichung überträgt kein Eigentum und erteilt keine allgemeine kommerzielle Lizenz.
+
+Permissions: https://github.com/0xFarag

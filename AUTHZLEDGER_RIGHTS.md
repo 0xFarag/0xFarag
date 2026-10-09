@@ -1,26 +1,51 @@
-# AuthzLedger rights and commercial licensing
+# AuthzLedger Rechte und kommerzielle Lizenzierung
 
-**AuthzLedger by Nasser Aldin Farag / 0xFarag.**  
-Copyright © 2026 Nasser Aldin Farag. All rights reserved.
+Stand: 9. Oktober 2026. Rechteinhaber der ihm zustehenden Rechte: Nasser Aldin Farag (0xFarag).
 
-## Rights retained by Nasser Aldin Farag
+## Copyright und Rechtevorbehalt
 
-All exclusive ownership and exploitation rights in protectable AuthzLedger material that are legally held by Nasser Aldin Farag remain reserved to him. This includes applicable rights in the software, documentation and project media to the extent that those rights exist and are held by him. Publication, delivery of a copy, payment for a licence or access to the product does not itself transfer ownership of those rights.
+Copyright © 2026 Nasser Aldin Farag (0xFarag). Alle Rechte vorbehalten.
 
-## Separate permission for commercial use
+Sämtliche Nasser Aldin Farag zustehenden Rechte an den eigenen, rechtlich schutzfähigen Bestandteilen von AuthzLedger und seinem persönlichen Branding bleiben ausschliesslich ihm vorbehalten.
 
-No general commercial licence is granted by this notice or by public availability of the project. Subject to applicable law, applicable platform terms and any permissions already validly granted, reproduction, modification, redistribution, sublicensing and commercial exploitation require a separate written licence from the relevant rights holder.
+Vervielfältigung, Bearbeitung, Verbreitung, Unterlizenzierung und kommerzielle Verwertung bedürfen seiner vorherigen schriftlichen Zustimmung, soweit nicht zwingendes Recht oder bereits wirksam eingeräumte Berechtigungen entgegenstehen. Die Bereitstellung oder Veröffentlichung überträgt kein Eigentum und erteilt keine allgemeine kommerzielle Lizenz.
 
-Any future customer licence is intended to grant a specifically defined, limited right of use. Licence scope, permitted users, duration, fees, payment terms and rights in commissioned changes must be stated in the agreement. A transfer or exclusive customer licence requires a separate express agreement; it is not the default.
+## Produkt und persönliches Branding
 
-## Fees and ownership
+AuthzLedger ist das Produktprojekt von Nasser Aldin Farag (0xFarag). Er verantwortet die Produktvision, die fachliche Ausrichtung und die massgeblichen Gestaltungsentscheidungen.
 
-Commercial licensing enquiries and agreed licence payments are directed to Nasser Aldin Farag or a licensor expressly authorised by him. This notice is not a payment demand, a signed customer agreement or a guarantee of revenue. No price, payment account or reseller permission is created here.
+Nasser Aldin Farag beansprucht sämtliche ihm zustehenden ausschliesslichen Rechte an seinen schöpferischen Beiträgen zu AuthzLedger und seinem persönlichen Branding. Der Rechtevorbehalt umfasst insbesondere die rechtlich schutzfähigen individuellen Ausgestaltungen von Texten, Spezifikationen, Produktkonzepten, Software, Code-Strukturen, Designs, Dokumentationen und Brandingelementen.
 
-## Rights that remain applicable
+Diese Rechte bleiben bei Nasser Aldin Farag. Eine Veröffentlichung, Präsentation, Bereitstellung oder Lizenzierung bewirkt keine Übertragung des geistigen Eigentums. Nutzungsumfang, Laufzeit, Weitergabe und Vergütung werden ausschliesslich durch eine gesonderte Vereinbarung geregelt.
 
-Statutory exceptions, third-party rights and licences, and GitHub permissions already validly granted remain applicable. This notice does not claim ownership of third-party material, public-domain material, ideas or methods as such, or create rights in material that is not legally protectable.
+Ohne entsprechende Berechtigung ist insbesondere keine kommerzielle Verwertung, Weiterverbreitung, Unterlizenzierung oder Übernahme in andere Produkte gestattet. Zwingendes Recht und bereits wirksam eingeräumte Berechtigungen bleiben unberührt.
 
-The released product's [LICENSE](https://github.com/0xFarag/0xFarag/blob/v1.0.0/LICENSE) and [NOTICE.txt](https://github.com/0xFarag/0xFarag/blob/v1.0.0/NOTICE.txt) remain the applicable distribution notices. This clarification is not a patent or trademark registration, a certificate of exclusive title, or an independently completed rights clearance.
+Copyright © 2026 Nasser Aldin Farag (0xFarag). Alle Rechte vorbehalten.
 
-**Permissions and commercial licensing:** [Nasser Aldin Farag / 0xFarag](https://github.com/0xFarag).
+## Kurze öffentliche Erklärung
+
+AuthzLedger by 0xFarag.
+
+AuthzLedger ist mein Produktprojekt. Ich verantworte die Produktvision, die fachliche Ausrichtung und die Gestaltung meiner Beiträge. Sämtliche mir zustehenden Rechte bleiben ausschliesslich bei mir. Eine Veröffentlichung erteilt keine allgemeine kommerzielle Nutzungserlaubnis; Lizenzierung und Vergütung werden gesondert vereinbart.
+
+© 2026 Nasser Aldin Farag. Alle Rechte vorbehalten.
+
+## Zusammenarbeit und vorbestehende Rechte
+
+AuthzLedger und mein persönliches Branding sind eigenständige Projekte von Nasser Aldin Farag (0xFarag). Meine daran bestehenden ausschliesslichen Rechte und meine vorbestehenden schutzfähigen Beiträge bleiben mir vorbehalten.
+
+Die Übermittlung von Unterlagen, Quellcode, Spezifikationen oder Demonstrationen begründet für sich allein keine Eigentumsübertragung, keine Exklusivlizenz und keine allgemeine Verwertungsberechtigung.
+
+Für eine Zusammenarbeit sind die eingebrachten bestehenden Rechte ausdrücklich zu dokumentieren. Nutzungsrechte, Rechte an Weiterentwicklungen, Vertraulichkeit und Vergütung sind vorab schriftlich festzulegen. Eine pauschale Übertragung meines vorbestehenden geistigen Eigentums ist nicht vorgesehen.
+
+Zwingende gesetzliche Regelungen und bereits wirksame Vereinbarungen bleiben berücksichtigt.
+
+## Rights and permissions
+
+Copyright © 2026 Nasser Aldin Farag (0xFarag). All rights reserved.
+
+All exclusive rights legally held by Nasser Aldin Farag in his own protectable contributions to AuthzLedger and his personal branding remain reserved to him. Publication, presentation, delivery of a copy or payment for a licence does not itself transfer ownership or grant a general commercial licence. Reproduction, modification, redistribution, sublicensing and commercial exploitation require prior written permission, subject to applicable law, applicable platform terms and permissions already validly granted.
+
+The accompanying LICENSE governs the current source distribution. The notices accompanying each previously released version remain applicable to that version. Statutory rights, separately applicable licences and legally required notices remain in force. This statement is a rights reservation; it does not establish a patent or trademark registration or create rights in ideas or methods as such.
+
+Permissions and commercial licensing: [Nasser Aldin Farag / 0xFarag](https://github.com/0xFarag).

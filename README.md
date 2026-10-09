@@ -2,7 +2,7 @@
 
 # Nasser Aldin Farag · 0xFarag
 
-**[AuthzLedger 1.0 is live — release, source and downloads →](https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0)**
+**[AuthzLedger 1.0 — release, source and downloads →](https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0)**
 
 **Penetration Testing · Web & API Security · Security Engineering**  
 Zürich, Switzerland
@@ -26,7 +26,7 @@ AuthzLedger connects three separate layers: intended permission, an independent 
 
 [Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/authzledger-1.0.0-source.zip) · [Installable wheel](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/authzledger-1.0.0-py3-none-any.whl) · [36-second release film](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/AuthzLedger_1.0_Release_wide.mp4) · [Independent verifier](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/verify_bundle.py)
 
-Studio and CLI provide control-aware tests, local policy rules or an opt-in OPA adapter, graph and change analysis, selective retests, bounded assurance and hash-chained local history. Ed25519-signed packages bind the source contract, graph and report. The application validates these relationships; a standalone verifier checks authenticity and integrity against a public key trusted outside the package. Optional local AI explains existing evidence and never changes verdicts.
+Studio and CLI provide control-aware tests, local policy rules or an opt-in OPA adapter, graph and change analysis, selective retests, bounded assurance and hash-chained local history. Ed25519-signed packages bind the source contract, graph and report. The application validates these relationships; a standalone verifier checks authenticity and integrity against a public key trusted outside the package. Optional local reasoning explains existing evidence and never changes verdicts.
 
 **233 automated tests passed locally and in [GitHub CI](https://github.com/0xFarag/0xFarag/actions/runs/37874324250).** Both local Chromium acceptance suites and an isolated installed-wheel proof workflow passed. The release film uses actual Studio captures and synthetic local data: two boundary failures, same-contract remediation, retest and independent verification.
 
@@ -71,3 +71,9 @@ The runnable labs and sample assessment use synthetic data in local environments
 I am seeking a permanent cybersecurity role in Switzerland, with a focus on penetration testing, Web/API security, AppSec or security engineering. I welcome technical conversations about the trade-offs, test design and evidence behind these projects.
 
 **[Contact me on LinkedIn →](https://www.linkedin.com/in/nasser-aldin-farag-974697412/)**
+
+## Rights and permissions
+
+Copyright © 2026 Nasser Aldin Farag (0xFarag). All rights reserved.
+
+All exclusive rights legally held by me in my own protectable contributions to AuthzLedger and my personal branding remain reserved to me. Publication or delivery does not itself transfer ownership or grant a general commercial licence. Commercial reuse requires a separate written agreement, subject to applicable law and permissions already validly granted. [Rights and commercial licensing](AUTHZLEDGER_RIGHTS.md).
