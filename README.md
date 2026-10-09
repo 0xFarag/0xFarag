@@ -2,6 +2,8 @@
 
 # Nasser Aldin Farag · 0xFarag
 
+**[AuthzLedger 1.0 is live — release, source and downloads →](https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0)**
+
 **Penetration Testing · Web & API Security · Security Engineering**  
 Zürich, Switzerland
 
