@@ -119,7 +119,7 @@ def _document(title: str, body: str, *, kind: str) -> str:
 <body><div class="shell"><header class="masthead">
 <div class="brand"><img src="{_logo_uri()}" alt="0xFarag" width="58" height="58"><div>Authz<span>Ledger</span><div class="subtext">by 0xFarag</div></div></div>
 <div class="eyebrow">Authorization regression<br>{_text(kind)}</div>
-</header>{body}<footer class="foot"><span>AuthzLedger · Configured checks, traceable outcomes.</span>
+</header>{body}<footer class="foot"><span>AuthzLedger · Configured checks, traceable outcomes.<br>© 2026 Nasser Aldin Farag (0xFarag). All rights reserved.</span>
 <span>Defined scope · Local integrity chain · No independent authenticity claim</span>
 </footer></div></body></html>'''
 

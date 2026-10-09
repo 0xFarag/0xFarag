@@ -88,4 +88,8 @@ Burp Suite, ZAP and Tenable already provide access-control testing capabilities.
 - [Product architecture](docs/product-1.0.md) · [Launch and adoption plan](docs/launch-1.0.md)
 - [Security model](docs/security-model.md) · [Validation](docs/validation.md) · [Contributing](CONTRIBUTING.md)
 
-Copyright © 2026 Nasser Aldin Farag / 0xFarag. All rights reserved under the existing [LICENSE](LICENSE); source-visible software, not an open-source licence. Platform and statutory rights remain unaffected. Billing is disabled. Independent security review, wider platform coverage, full accessibility and customer validation remain open.
+AuthzLedger is the product project of **Nasser Aldin Farag (0xFarag)**. He directs its product vision, technical scope and principal design decisions. All exclusive rights legally held by him in his own protectable contributions remain reserved to him. Publication, presentation or delivery does not itself transfer ownership or grant a general commercial licence. Commercial reuse requires a separate written agreement, subject to applicable law and permissions already validly granted.
+
+Copyright © 2026 Nasser Aldin Farag (0xFarag). All rights reserved. [Rights and commercial licensing](docs/rights.md) · [LICENSE](LICENSE) · [NOTICE](NOTICE.txt).
+
+Billing is disabled. Independent security review, wider platform coverage, full accessibility and customer validation remain open.
