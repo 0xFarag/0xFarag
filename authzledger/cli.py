@@ -171,7 +171,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "verify":
             report = read_json(args.report)
             errors = verify_report(report)
-            if args.anchor and report.get("evidence", {}).get("root_sha256") != args.anchor:
+            if args.anchor and not errors and report["evidence"]["root_sha256"] != args.anchor:
                 errors.append("Retained anchor does not match report")
             if errors:
                 print("Integrity check FAILED: " + "; ".join(errors), file=sys.stderr)
