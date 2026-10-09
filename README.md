@@ -13,32 +13,24 @@ My focus is application security, authorization testing and security automation.
 
 [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [GitHub projects](https://github.com/0xFarag?tab=repositories) · [YouTube](https://www.youtube.com/@0xFarag) · [TryHackMe](https://tryhackme.com/p/0xFarag)
 
-## AuthzLedger 0.3.4 pre-release
+## AuthzLedger 1.0
 
 **Authorization Intelligence, built on evidence.**  
 Know who can do what. Prove what changed.
 
-The available v0.3.4 pre-release is a local authorization engineering workbench: explicit access expectations, controlled HTTP tests and traceable evidence.
+AuthzLedger connects three separate layers: intended permission, an independent policy decision and controlled application behavior. A Living Authorization Graph makes their differences inspectable; differential intelligence retains policy, identity, prerequisite and coverage changes instead of treating them as proven fixes.
 
-**[Download AuthzLedger v0.3.4 →](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4)** · [Source and installation guide](https://github.com/0xFarag/0xFarag/tree/authzledger-v0.3.4)
+**[Download AuthzLedger 1.0 →](https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0)** · [Source and installation](https://github.com/0xFarag/0xFarag/tree/authzledger-v1.0.0)
 
-[Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v0.3.4/authzledger-0.3.4-source.zip) · [Installable wheel](https://github.com/0xFarag/0xFarag/releases/download/v0.3.4/authzledger-0.3.4-py3-none-any.whl) · [55-second release video](https://www.youtube.com/shorts/SJrvbBdybFo) · [Release notes](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4)
+[Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/authzledger-1.0.0-source.zip) · [Installable wheel](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/authzledger-1.0.0-py3-none-any.whl) · [36-second release film](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/AuthzLedger_1.0_Release_wide.mp4) · [Independent verifier](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/verify_bundle.py)
 
-The GitHub pre-release includes the source-visible distribution, downloads and wide/vertical videos. Source and test evidence are on the dedicated `authzledger-v0.3.4` branch. [GitHub verification passed](https://github.com/0xFarag/0xFarag/actions/runs/37856154307). Pre-release; all rights reserved. [Earlier 36-second product preview](https://www.youtube.com/shorts/Svr7Jhb_FNc).
+Studio and CLI provide control-aware tests, local policy rules or an opt-in OPA adapter, graph and change analysis, selective retests, bounded assurance and hash-chained local history. Ed25519-signed packages bind the source contract, graph and report. The application validates these relationships; a standalone verifier checks authenticity and integrity against a public key trusted outside the package. Optional local AI explains existing evidence and never changes verdicts.
 
-A controlled local API returns HTTP 403 while leaking a protected field. The preview follows the failed body check, legitimate-access controls and the same-contract retest: 24 checks pass and one finding is recorded as resolved. Synthetic data; actual Studio captures.
+**233 automated tests passed locally and in [GitHub CI](https://github.com/0xFarag/0xFarag/actions/runs/37874324250).** Both local Chromium acceptance suites and an isolated installed-wheel proof workflow passed. The release film uses actual Studio captures and synthetic local data: two boundary failures, same-contract remediation, retest and independent verification.
 
-AuthzLedger compiles actor/resource access matrices into checks with positive-control dependencies, traces outcomes to their rules, and keeps proposed policy changes separate from remediation results. Its local fault corpus exercises ownership, tenant and role boundaries, protected data in denial responses, invalid credentials and stale fixtures.
+Source-visible; all rights reserved. This is a local workbench. Hosted team Retest-as-a-Service, external customer evaluation and independent comparative validation are subsequent gates.
 
-The current pre-release includes a local Studio, an offline OpenAPI importer, a CLI and JSON/HTML/JUnit evidence. Validation uses authored synthetic fixtures; independent customer evaluation and commercial validation are the next gates.
-
-### Toward version 1.0
-
-The next development stage separates **intended access**, **policy-engine decisions** and **observed application behavior**. Differences between these layers should lead to inspectable tests and evidence, with explicit control validity and change history.
-
-The 1.0 priorities are a stable contract model, trustworthy controls, signed portable evidence with independent verification, and reproducible authorization regression workflows. These are development targets; the current release does not yet provide digital signatures, connected policy engines or continuous assurance.
-
-[Development scope and acceptance gates](AUTHZLEDGER_DIRECTION.md)
+[Product architecture and competitive position](https://github.com/0xFarag/0xFarag/blob/authzledger-v1.0.0/docs/product-1.0.md) · [Launch and 30-/90-day execution plan](https://github.com/0xFarag/0xFarag/blob/authzledger-v1.0.0/docs/launch-1.0.md) · [Development direction](AUTHZLEDGER_DIRECTION.md)
 
 ## Selected engineering work
 
