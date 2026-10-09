@@ -7,6 +7,10 @@ Know who can do what. Prove what changed.
 
 [v0.3.4](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4) is a source-visible local pre-release. It includes an access-matrix compiler, positive-control dependencies, contract and trace manifests, same-contract retest comparisons, a CLI, local Studio and a synthetic fault corpus. Current evidence uses hashes, not digital signatures. The existing rights notice applies; source visibility is not an open-source licence.
 
+## Foundation progress
+
+[The first hardening change](https://github.com/0xFarag/0xFarag/pull/1) is implemented on the development branch and ready for review. It validates evidence control dependencies, rejects contradictory blocked-request metadata and handles malformed anchored reports cleanly. [GitHub CI passed](https://github.com/0xFarag/0xFarag/actions/runs/37869081944), including 135 tests, demo verification, a wheel build and installation outside the checkout. It is not yet part of the published v0.3.4 package.
+
 ## The product question
 
 Who may access which resource under which conditions, and which controlled observation supports that conclusion?
