@@ -143,6 +143,59 @@ def _seal(report: dict) -> dict:
     }
 
 
+def _dependency_errors(report: dict) -> list[str]:
+    """Reject reports that contradict the scheduler's prerequisite contract.
+
+    Call only after shape validation. Legacy records without ``requires`` keep
+    their original meaning: no declared prerequisite. Hash consistency cannot
+    make an impossible dependency graph or a skipped control valid evidence.
+    """
+    results = {result["id"]: result for result in report["results"]}
+    pending: dict[str, set[str]] = {}
+    errors: list[str] = []
+    for index, result in enumerate(report["results"]):
+        requires = result.get("requires", [])
+        prefix = f"result {index + 1} has contradictory required controls"
+        if len(requires) != len(set(requires)):
+            errors.append(prefix + ": duplicate prerequisite")
+        dependencies = set(requires)
+        if dependencies - results.keys():
+            errors.append(prefix + ": undefined prerequisite")
+            continue
+        pending[result["id"]] = dependencies
+        blocked = any(
+            results[dependency]["outcome"] != "pass" for dependency in dependencies
+        )
+        if blocked and result["outcome"] != "inconclusive":
+            errors.append(prefix + ": request assessed after a prerequisite did not pass")
+        elif blocked and (
+            result["status"] is not None or result.get("response_sha256") is not None
+            or result["duration_ms"] != 0
+        ):
+            errors.append(prefix + ": skipped request contains execution metadata")
+    if errors:
+        return errors
+    # Iterative, linear graph traversal: long chains must not exhaust the Python
+    # stack or repeatedly rescan the complete untrusted result set.
+    dependents: dict[str, list[str]] = {case_id: [] for case_id in pending}
+    outstanding = {case_id: len(dependencies) for case_id, dependencies in pending.items()}
+    for case_id, dependencies in pending.items():
+        for dependency in dependencies:
+            dependents[dependency].append(case_id)
+    ready = [case_id for case_id, count in outstanding.items() if count == 0]
+    resolved_count = 0
+    while ready:
+        case_id = ready.pop()
+        resolved_count += 1
+        for dependent in dependents[case_id]:
+            outstanding[dependent] -= 1
+            if outstanding[dependent] == 0:
+                ready.append(dependent)
+    if resolved_count != len(pending):
+        return ["report has contradictory required controls: dependency cycle"]
+    return []
+
+
 def seal_report(report: dict) -> dict:
     """Return a sealed copy; input and nested result records are not modified.
 
@@ -151,6 +204,8 @@ def seal_report(report: dict) -> dict:
     root is the caller's responsibility.
     """
     errors = _shape_errors(report)
+    if not errors:
+        errors = _dependency_errors(report)
     if errors:
         raise ValueError("cannot seal report: " + "; ".join(errors))
     clean = json.loads(_canonical({key: value for key, value in report.items() if key != "evidence"}))
@@ -171,6 +226,7 @@ def verify_report(report: dict) -> list[str]:
         expected = _seal(report)
     except ValueError:
         return ["report contains unsupported JSON data"]
+    errors.extend(_dependency_errors(report))
     if set(evidence) != set(expected):
         errors.append("unexpected or missing evidence fields")
     if type(evidence.get("version")) is not int or evidence.get("version") != 1:

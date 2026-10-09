@@ -63,13 +63,14 @@ class HtmlTests(unittest.TestCase):
 
     def test_every_displayed_untrusted_string_is_escaped(self):
         payload = '</title><script>alert("x")</script><img src=x onerror="alert(1)">&\''
-        report = make_report(("pass",))
+        report = make_report(("pass", "pass"))
         report.update({"name": payload, "target": payload, "started_at": payload, "finished_at": payload})
         result = report["results"][0]
         for key in ("id", "identity", "method", "path", "reason"):
             result[key] = payload
         result["checks"][0]["type"] = payload
-        result["requires"] = [payload]
+        # Keep a valid DAG while testing untrusted prerequisite labels.
+        report["results"][1]["requires"] = [payload]
         rendered = render_html(seal_report(report))
         parser = TagCollector()
         parser.feed(rendered)
@@ -162,8 +163,14 @@ class JunitTests(unittest.TestCase):
 
 class DiffHtmlTests(unittest.TestCase):
     def test_changed_cases_and_inconclusive_semantics_are_clear(self):
-        old = seal_report(make_report(("pass", "fail", "inconclusive")))
-        new = seal_report(make_report(("fail", "pass", "pass")))
+        before = make_report(("pass", "fail", "inconclusive"))
+        after = make_report(("fail", "pass", "pass"))
+        # These transitions describe independent checks, not dependents of the
+        # first check (which fails in the current run).
+        for report in (before, after):
+            for result in report["results"]:
+                result["requires"] = []
+        old, new = seal_report(before), seal_report(after)
         rendered = render_diff_html(compare_reports(old, new))
         self.assertIn("Outcome transitions", rendered)
         self.assertIn("case-0", rendered)
