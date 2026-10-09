@@ -30,7 +30,7 @@ Studio and CLI provide control-aware tests, local policy rules or an opt-in OPA 
 
 **233 automated tests passed locally and in [GitHub CI](https://github.com/0xFarag/0xFarag/actions/runs/37874324250).** Both local Chromium acceptance suites and an isolated installed-wheel proof workflow passed. The release film uses actual Studio captures and synthetic local data: two boundary failures, same-contract remediation, retest and independent verification.
 
-Source-visible; all rights reserved. This is a local workbench. Hosted team Retest-as-a-Service, external customer evaluation and independent comparative validation are subsequent gates.
+Source-visible; proprietary rights reserved by **Nasser Aldin Farag / 0xFarag**. [Rights and commercial licensing](AUTHZLEDGER_RIGHTS.md). This is a local workbench. Hosted team Retest-as-a-Service, external customer evaluation and independent comparative validation are subsequent gates.
 
 [Product architecture and competitive position](https://github.com/0xFarag/0xFarag/blob/authzledger-v1.0.0/docs/product-1.0.md) · [Launch and 30-/90-day execution plan](https://github.com/0xFarag/0xFarag/blob/authzledger-v1.0.0/docs/launch-1.0.md) · [Development direction](AUTHZLEDGER_DIRECTION.md)
 
