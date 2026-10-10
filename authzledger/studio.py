@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hmac
 import hashlib
+import copy
 import json
 import os
 import secrets
@@ -116,6 +117,7 @@ class StudioServer(ThreadingHTTPServer):
         self.jobs = {}
         self.reviews = {}
         self.review_settings = {}
+        self.retest_reviews = {}
         self.graph_snapshots = {}
         self.history = None
         if history_path is not None:
@@ -218,7 +220,7 @@ class StudioServer(ThreadingHTTPServer):
             raise ContractError("Build the authorization graph again; its retained snapshot is unavailable.")
         return record
 
-    def start_job(self, kind, contract=None, *, policy=None, assurance=None, baseline=None):
+    def start_job(self, kind, contract=None, *, policy=None, assurance=None, baseline=None, selected_ids=None):
         with self.lock:
             if self.active:
                 raise ContractError("A job is already running. Wait for its result.")
@@ -286,13 +288,20 @@ class StudioServer(ThreadingHTTPServer):
                         evaluated = evaluate_policy(contract, policy) if policy is not None else None
                         report = run(contract)
                         graph = build_graph(contract, report, evaluated)
-                        comparison = differential_graphs(previous["graph"], graph) if previous else None
+                        # A strict subset is not graph removal. Its retained full
+                        # source is compared by ComparisonEnvelope instead.
+                        comparison = differential_graphs(previous["graph"], graph) if previous and selected_ids is None else None
                         status, exit_code, stop_reason = assessment_status(report, graph, comparison)
                         current = self.record_run(contract, report, graph, previous_sha256=tail)
                         result = {"report": report, "graph": graph, "history": current,
                                   "graph_comparison": comparison, "cycles_completed": cycle + 1,
                                   "cycles_requested": cycles, "assurance_status": status,
                                   "exit_code": exit_code, "stopped_reason": stop_reason}
+                        if baseline is not None:
+                            from .comparison import create_comparison
+                            result["comparison_envelope"] = create_comparison(
+                                baseline["contract"], baseline["report"], report, selected_ids)
+                            result["baseline"] = baseline["report"]
                         records.append({"id": current.get("id", current.get("run_id")),
                                         "finished_at": report["finished_at"], "summary": report["summary"]})
                         previous = {"graph": graph}
@@ -497,11 +506,30 @@ class StudioHandler(BaseHTTPRequestHandler):
                 if not isinstance(body.get("before"), dict) or not isinstance(body.get("after"), dict):
                     raise ContractError("Two verified graph JSON objects are required.")
                 result = {"comparison": differential_graphs(body["before"], body["after"])}
-            elif self.path == "/api/plan":
-                contract = studio_contract(body.get("contract"), allow)
+            elif self.path in {"/api/plan", "/api/retest/plan"}:
+                retained = None
+                selection = None
+                if self.path == "/api/retest/plan":
+                    if set(body) - {"baseline_id", "selected_ids", "allow_mutations", "policy", "use_server_policy", "assurance"}:
+                        raise ContractError("Retest previews use only the retained source and explicit case selection.")
+                    from .assurance import retest_plan
+                    from .comparison import create_comparison
+                    baseline_id = history_identifier(body.get("baseline_id"))
+                    retained = self.server.get_run(baseline_id)
+                    if retained is None:
+                        raise ContractError("Select an existing retained baseline.")
+                    # This validates source binding and supported semantics
+                    # before any application or remote policy request.
+                    create_comparison(retained["contract"], retained["report"], retained["report"])
+                    selection = retest_plan(retained["contract"], body.get("selected_ids"), allow_mutations=allow)
+                    contract = selection["contract"]
+                else:
+                    contract = studio_contract(body.get("contract"), allow)
                 config = self.server.resolve_policy(body)
                 request_count = len(contract["cases"]) * (2 if config and config["engine"] == "opa" else 1)
                 settings = assurance_settings(body.get("assurance"), request_count)
+                if retained is not None and settings["cycles"] != 1:
+                    raise ContractError("A source-bound selective retest executes exactly one reviewed cycle.")
                 review = secrets.token_urlsafe(24)
                 with self.server.lock:
                     self.server.reviews = {key: value for key, value in self.server.reviews.items() if value[2] > time.monotonic()}
@@ -509,13 +537,26 @@ class StudioHandler(BaseHTTPRequestHandler):
                                                   if key in self.server.reviews}
                     if len(self.server.reviews) >= 16:
                         del self.server.reviews[next(iter(self.server.reviews))]
+                    self.server.retest_reviews = {key: value for key, value in self.server.retest_reviews.items()
+                                                  if key in self.server.reviews}
                     self.server.reviews[review] = (contract_digest(contract), allow, time.monotonic() + 600)
                     self.server.review_settings[review] = settings_digest(config, settings)
+                    if retained is not None:
+                        self.server.retest_reviews[review] = {"baseline_id": baseline_id,
+                            "baseline": copy.deepcopy(retained), "contract": copy.deepcopy(contract),
+                            "selected_ids": selection["selected_ids"]}
                 environment = sorted({v["env"] for i in contract["identities"].values() for v in i["headers"].values() if isinstance(v, dict)})
                 result = {"plan": plan(contract), "review": review,
                           "assurance": {**settings, "maximum_requests": request_count * settings["cycles"],
                                         "policy_engine": config["engine"] if config else None},
                           "credentials": [{"env": name, "present": bool(os.environ.get(name))} for name in environment]}
+                if selection is not None:
+                    result["retest"] = {"baseline_id": baseline_id, "contract": contract,
+                        "source_contract_sha256": selection["source_contract_sha256"],
+                        "baseline_root_sha256": retained["report"]["evidence"]["root_sha256"],
+                        "selected_ids": selection["selected_ids"], "dependency_ids": selection["dependency_ids"],
+                        "not_retested_ids": [case["id"] for case in retained["contract"]["cases"]
+                                              if case["id"] not in {item["id"] for item in contract["cases"]}]}
             elif self.path in {"/api/run", "/api/retest", "/api/assurance"}:
                 contract = studio_contract(body.get("contract"), allow)
                 config = self.server.resolve_policy(body)
@@ -524,39 +565,82 @@ class StudioHandler(BaseHTTPRequestHandler):
                 with self.server.lock:
                     reviewed = self.server.reviews.get(str(body.get("review", "")))
                     reviewed_settings = self.server.review_settings.get(str(body.get("review", "")))
+                    retest_review = self.server.retest_reviews.get(str(body.get("review", "")))
                 if (not reviewed or reviewed[:2] != (contract_digest(contract), allow)
                         or reviewed[2] <= time.monotonic() or reviewed_settings != settings_digest(config, settings)):
                     raise ContractError("Preview this exact contract before running it. Plans expire after ten minutes.")
                 if body.get("authorized") is not True:
                     raise ContractError("Confirm authorization for the displayed target before execution.")
                 baseline = None
+                selected_ids = None
+                if retest_review is not None and self.path != "/api/retest":
+                    raise ContractError("This review is bound to a retained-baseline retest.")
                 if self.path == "/api/retest":
+                    from .comparison import create_comparison
                     run_id = history_identifier(body.get("baseline_id"))
-                    baseline = self.server.get_run(run_id)
+                    if retest_review is not None:
+                        if (run_id != retest_review["baseline_id"]
+                                or body.get("selected_ids") != retest_review["selected_ids"]):
+                            raise ContractError("Preview this exact baseline and case selection again.")
+                        baseline = retest_review["baseline"]
+                        selected_ids = retest_review["selected_ids"]
+                    else:
+                        if body.get("selected_ids") is not None:
+                            raise ContractError("Preview a selective retest before executing selected cases.")
+                        baseline = self.server.get_run(run_id)
                     if not baseline or baseline["contract"]["target"] != contract["target"]:
                         raise ContractError("Retests require an existing baseline for the exact target origin.")
+                    if retest_review is None and contract_digest(baseline["contract"]) != contract_digest(contract):
+                        raise ContractError("A full retest must preserve the retained source contract. Use the selective retest preview.")
+                    create_comparison(baseline["contract"], baseline["report"], baseline["report"])
                 kind = "assurance" if self.path == "/api/assurance" else "retest" if baseline else "run"
-                result = self.server.start_job(kind, contract, policy=config, assurance=settings, baseline=baseline)
+                if retest_review is not None:
+                    with self.server.lock:
+                        # Claim before dispatch. Two requests can have read the
+                        # same valid review above while the first fast job has
+                        # already finished. The retained object identity makes
+                        # the authorization single-use across that race.
+                        if (self.server.retest_reviews.get(body["review"]) is not retest_review
+                                or self.server.reviews.get(body["review"]) != reviewed
+                                or reviewed[2] <= time.monotonic()):
+                            raise ContractError("This retest review was already consumed or expired. Preview again.")
+                        self.server.reviews.pop(body["review"], None)
+                        self.server.review_settings.pop(body["review"], None)
+                        self.server.retest_reviews.pop(body["review"], None)
+                # A concurrently started job can still reject dispatch. A
+                # consumed retest review is deliberately never restored.
+                result = self.server.start_job(kind, contract, policy=config, assurance=settings, baseline=baseline,
+                                               selected_ids=selected_ids)
             elif self.path == "/api/cancel":
                 with self.server.lock:
                     cancel = self.server.cancellations.get(body.get("id"))
                     if cancel is None:
                         raise ContractError("This job is not active.")
                     cancel.set()
-                result = {"state": "cancelling", "message": "The current bounded request completes before stopping."}
+                result = {"state": "cancelling", "message": "The current bounded execution cycle completes; no further cycle starts."}
             elif self.path == "/api/demo":
                 result = self.server.start_job("demo")
             elif self.path == "/api/benchmark":
                 result = self.server.start_job("benchmark")
             elif self.path == "/api/compare":
                 result = {"comparison": compare_reports(body.get("baseline"), body.get("current"))}
+            elif self.path == "/api/comparison":
+                from .comparison import create_comparison
+                result = {"comparison_envelope": create_comparison(body.get("source_contract"),
+                    body.get("baseline_report"), body.get("current_report"), body.get("selected_ids"))}
+            elif self.path == "/api/comparison/verify":
+                from .comparison import verify_comparison
+                envelope = body.get("comparison_envelope")
+                if verify_comparison(envelope):
+                    raise ContractError("Comparison integrity and source binding validation failed.")
+                result = {"comparison_envelope": envelope}
             elif self.path == "/api/verify":
                 report = body.get("report")
                 if not isinstance(report, dict) or verify_report(report):
                     raise ValueError("Report integrity validation failed")
                 result = {"report": report}
             elif self.path == "/api/proof":
-                if set(body) - {"report", "contract", "policy", "allow_mutations", "history_id", "snapshot_id", "use_server_policy"}:
+                if set(body) - {"report", "contract", "policy", "allow_mutations", "history_id", "snapshot_id", "use_server_policy", "comparison_envelope"}:
                     raise ContractError("Signing keys and filesystem paths cannot be supplied through the browser.")
                 if not self.server.signing_key or not self.server.public_key:
                     raise ContractError("Start Studio with --signing-key and --public-key to export signed proof.")
@@ -592,8 +676,18 @@ class StudioHandler(BaseHTTPRequestHandler):
                     contract_path = folder / "contract.json"
                     contract_path.write_text(json.dumps(contract, sort_keys=True, ensure_ascii=True), encoding="utf-8")
                     bundle = folder / "proof"
+                    attachments = {"graph.json": graph_path, "contract.json": contract_path}
+                    if body.get("comparison_envelope") is not None:
+                        from .comparison import verify_comparison
+                        from .reports import render_comparison_html
+                        envelope = body["comparison_envelope"]
+                        if verify_comparison(envelope) or envelope["current_report"] != report:
+                            raise ContractError("The comparison must verify and bind this exact proof report.")
+                        attachments["comparison.json"] = json.dumps(envelope, sort_keys=True,
+                            ensure_ascii=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                        attachments["comparison.html"] = render_comparison_html(envelope).encode("utf-8")
                     create_bundle(report, bundle, self.server.signing_key,
-                                  attachments={"graph.json": graph_path, "contract.json": contract_path})
+                                  attachments=attachments)
                     errors = verify_bundle(bundle, self.server.public_key)
                     if errors:
                         raise ContractError("Independent signature verification failed; no package exported.")
@@ -606,6 +700,11 @@ class StudioHandler(BaseHTTPRequestHandler):
                 return
             elif self.path == "/api/export":
                 kind = body.get("kind")
+                if kind == "comparison-envelope":
+                    from .reports import render_comparison_html
+                    self.respond(200, render_comparison_html(body.get("comparison_envelope")),
+                                 "text/html; charset=utf-8", "authzledger-comparison.html")
+                    return
                 if kind == "comparison":
                     comparison = compare_reports(body.get("baseline"), body.get("current"))
                     self.respond(200, render_diff_html(comparison), "text/html; charset=utf-8", "authzledger-retest.html")

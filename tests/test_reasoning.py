@@ -12,7 +12,7 @@ from contextlib import contextmanager
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from unittest.mock import patch
 
-from authzledger.reasoning import explain_graph
+from authzledger.reasoning import explain_graph, _LocalConnection
 from authzledger.intelligence import build_graph
 from authzledger.model import load_contract, contract_digest
 from authzledger.policy import evaluate_policy
@@ -64,7 +64,7 @@ def model_note(edge_id="e0002", text="Observed access crosses the intended deny 
 
 
 @contextmanager
-def local_model(document=None, *, status=200, mode="normal", extra_headers=None):
+def local_model(document=None, *, status=200, mode="normal", extra_headers=None, body_gate=None):
     requests = []
     outer = {"done": True, "response": json.dumps(document if document is not None else model_note())}
     response_body = json.dumps(outer).encode()
@@ -85,15 +85,19 @@ def local_model(document=None, *, status=200, mode="normal", extra_headers=None)
                 self.send_header(name, value)
             if mode == "oversize-length":
                 self.send_header("Content-Length", "1000000")
-            elif mode != "oversize-stream":
+            elif mode not in {"oversize-stream", "close-normal", "close-slow-body"}:
                 self.send_header("Content-Length", str(len(response_body)))
             else:
                 self.send_header("Connection", "close")
             self.end_headers()
+            if body_gate is not None:
+                self.wfile.flush()
+                if not body_gate.wait(timeout=1):
+                    return
             try:
                 if mode == "oversize-stream":
                     self.wfile.write(b"x" * 1000)
-                elif mode == "slow-body":
+                elif mode in {"slow-body", "close-slow-body"}:
                     # Progress must not reset the process's absolute deadline.
                     for byte in response_body:
                         self.wfile.write(bytes([byte]))
@@ -221,6 +225,55 @@ class LocalAdvisoryTests(unittest.TestCase):
                 result = explain_graph(graph_fixture(), config)
                 self.assertEqual(result["ai"]["error"], "model_response_too_large")
                 self.assertEqual(len(result["explanations"]), 2)
+
+    def test_connection_close_handoff_preserves_delayed_body_and_size_bound(self):
+        # Hold all body bytes until getresponse has performed its will_close
+        # handoff. This deterministically exposes premature socket shutdown,
+        # independent of whether TCP normally coalesces headers with the body.
+        original_getresponse = _LocalConnection.getresponse
+        for mode in ("close-normal", "oversize-stream"):
+            gate, responses = threading.Event(), []
+
+            def handoff(connection):
+                response = original_getresponse(connection)
+                responses.append(response)
+                gate.set()
+                return response
+
+            with self.subTest(mode=mode), local_model(mode=mode, body_gate=gate) as (config, _):
+                if mode == "oversize-stream":
+                    config["max_response_bytes"] = 256
+                with patch.object(_LocalConnection, "getresponse", handoff):
+                    result = explain_graph(graph_fixture(), config)
+                self.assertTrue(gate.is_set())
+                self.assertEqual(len(responses), 1)
+                self.assertTrue(responses[0].isclosed(), "Detached response must be explicitly released")
+                if mode == "close-normal":
+                    self.assertEqual(result["ai"]["status"], "generated")
+                else:
+                    self.assertEqual(result["ai"]["error"], "model_response_too_large")
+
+    def test_absolute_deadline_remains_active_after_connection_close_handoff(self):
+        original_getresponse = _LocalConnection.getresponse
+        gate, responses = threading.Event(), []
+
+        def handoff(connection):
+            response = original_getresponse(connection)
+            responses.append(response)
+            gate.set()
+            return response
+
+        with local_model(mode="close-slow-body", body_gate=gate) as (config, _):
+            config["timeout_seconds"] = 0.05
+            with patch.object(_LocalConnection, "getresponse", handoff):
+                started = time.monotonic()
+                result = explain_graph(graph_fixture(), config)
+                elapsed = time.monotonic() - started
+            self.assertLess(elapsed, 0.5)
+            self.assertEqual(result["ai"]["error"], "model_deadline_exceeded")
+            self.assertTrue(gate.is_set())
+            self.assertEqual(len(responses), 1)
+            self.assertTrue(responses[0].isclosed())
 
     def test_redirect_is_not_followed_and_remote_error_is_not_copied(self):
         with local_model(status=302, extra_headers={"Location": "http://192.0.2.1:9999/secret"}) as (config, requests):

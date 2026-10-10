@@ -84,7 +84,13 @@ class _LocalConnection(http.client.HTTPConnection):
             raise
         self.sock = sock
 
-    def close(self):
+    def finish(self):
+        """End the entire exchange, including a detached close-delimited body.
+
+        HTTPConnection.getresponse() calls close() to hand a will_close socket
+        to HTTPResponse. Its ordinary close must not shutdown that socket or
+        cancel the watchdog: the response file still owns the readable socket.
+        """
         self._timer.cancel()
         with self._lock:
             sock, self._watched_socket = self._watched_socket, None
@@ -242,6 +248,7 @@ def _model_payload(explanations, model):
 
 def _generate(address, port, timeout, maximum, payload):
     connection = _LocalConnection(address, port, timeout)
+    response = None
     connection._timer.start()
     try:
         connection.request("POST", "/api/generate", body=payload,
@@ -278,7 +285,9 @@ def _generate(address, port, timeout, maximum, payload):
         code = "model_deadline_exceeded" if connection.expired or time.monotonic() >= connection._deadline else "model_unavailable"
         raise _ModelError(code) from None
     finally:
-        connection.close()
+        connection.finish()
+        if response is not None:
+            response.close()
 
 
 def _validate_notes(raw, references):
