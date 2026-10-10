@@ -1,0 +1,305 @@
+{
+  "errors": [],
+  "results": [
+    {
+      "panel": "assessment",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "assessment-contrast",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "assessment-investigate",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "assessment-reduce",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "assessment-handover",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "assessment-workflow",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "matrix",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "intelligence",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "workspace",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "operations",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "evidence",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "history",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "panel": "assessment",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "assessment-contrast",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "assessment-investigate",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "assessment-reduce",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "assessment-handover",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "assessment-workflow",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "matrix",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "intelligence",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "workspace",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "operations",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "evidence",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "history",
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "panel": "assessment",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "assessment-contrast",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "assessment-investigate",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "assessment-reduce",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "assessment-handover",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "assessment-workflow",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "matrix",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "intelligence",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "workspace",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "operations",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "evidence",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "history",
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "panel": "assessment",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "assessment-contrast",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "assessment-investigate",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "assessment-reduce",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "assessment-handover",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "assessment-workflow",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "matrix",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "intelligence",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "workspace",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "operations",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "evidence",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "history",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "panel": "assessment",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "assessment-contrast",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "assessment-investigate",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "assessment-reduce",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "assessment-handover",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "assessment-workflow",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "matrix",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "intelligence",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "workspace",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "operations",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "evidence",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "panel": "history",
+      "width": 320,
+      "documentWidth": 320
+    }
+  ]
+}

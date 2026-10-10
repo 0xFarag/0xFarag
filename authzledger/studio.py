@@ -1,6 +1,8 @@
 """Loopback-only workbench. Not a hosted service or multi-user server."""
 from __future__ import annotations
 
+import base64
+import binascii
 import hmac
 import hashlib
 import copy
@@ -352,6 +354,38 @@ class StudioServer(ThreadingHTTPServer):
             store[identifier] = copy.deepcopy(value)
         return identifier
 
+    def assessment_source(self, body, *, trace_kinds=()):
+        """Resolve one session-owned source without accepting caller evidence."""
+        fields = {"execution_id", "trace_id"} & set(body)
+        if len(fields) != 1:
+            raise ContractError("Choose exactly one retained execution or trace.")
+        field = next(iter(fields))
+        identifier = body[field]
+        if (not isinstance(identifier, str) or len(identifier) != 32
+                or any(char not in "0123456789abcdef" for char in identifier)):
+            raise ContractError("Choose an available session evidence record.")
+        store = self.assessment_traces if field == "trace_id" else self.assessment_executions
+        with self.lock:
+            value = copy.deepcopy(store.get(identifier))
+        allowed = set(trace_kinds) if field == "trace_id" else {"experiment-execution"}
+        if not isinstance(value, dict) or value.get("kind") not in allowed:
+            raise ContractError("This retained evidence type is unavailable for this operation.")
+        return field, identifier, value
+
+    def signing_metadata(self):
+        if not self.signing_key or not self.public_key:
+            return {"signed_proof": False, "key_scope": None, "public_key_sha256": None,
+                    "public_key_fingerprint_algorithm": "SHA-256 of DER SubjectPublicKeyInfo"}
+        from .signing import _public_der
+        with self.public_key.open("rb") as source:
+            public = source.read(65537)
+        if len(public) > 65536:
+            raise ValueError("Signing public key exceeds the supported size limit")
+        return {"signed_proof": True, "key_scope": "session" if self.session_key_directory else "configured",
+                "public_key_sha256": hashlib.sha256(_public_der(public)).hexdigest(),
+                "public_key_fingerprint_algorithm": "SHA-256 of DER SubjectPublicKeyInfo",
+                "public_key": public.decode("ascii")}
+
     def assessment_review(self, kind, plan, *, baseline=None, selected_ids=None):
         review = secrets.token_urlsafe(24)
         with self.lock:
@@ -435,7 +469,9 @@ class StudioServer(ThreadingHTTPServer):
                               "history_storage": "persistent" if self.history is not None else "session-only"}
                 elif kind == "reduction":
                     from .minimize import execute_reduction
-                    contract = selected_plan["original_execution"]["contract"]
+                    original = selected_plan["original_execution"]
+                    contract = (original["plan"]["spec"]["contract"] if original["kind"] == "workflow-trace"
+                                else original["contract"])
                     context = ExecutionContext(selected_plan["max_requests"], [contract["target"]],
                         contract["limits"]["timeout_seconds"], 1, cleanup_reserve=selected_plan.get("cleanup_reserve", 0),
                         allow_cleanup_after_cancel=True, stop_event=cancel)
@@ -529,9 +565,14 @@ class StudioHandler(BaseHTTPRequestHandler):
             resource, mime = assets[self.path]
             self.respond(200, files("authzledger").joinpath(resource).read_bytes(), mime)
         elif self.path == "/api/session":
+            try:
+                signing = self.server.signing_metadata()
+            except (ValueError, OSError):
+                self.respond(400, {"error": "The configured signing public key is unavailable or invalid."})
+                return
             self.respond(200, {"version": __version__, "storage": "persistent" if self.server.history else "memory",
                                "max_upload_bytes": MAX_UPLOAD,
-                               "signed_proof": bool(self.server.signing_key and self.server.public_key),
+                               **signing,
                                "local_ai": self.server.reasoning_config is not None,
                                "server_policy_available": self.server.policy_config is not None,
                                "server_policy_engine": self.server.policy_config["engine"] if self.server.policy_config else None,
@@ -571,13 +612,13 @@ class StudioHandler(BaseHTTPRequestHandler):
     def assessment_route(self, body):
         route = self.path.removeprefix("/api/assessment/")
         fields = {
-            "import": {"text", "profile"}, "compile": {"spec", "import_id", "entry_index", "bindings", "mappings"},
+            "import": {"text", "profile", "request_base64", "response_base64", "source_origin"}, "compile": {"spec", "import_id", "entry_index", "bindings", "mappings"},
             "plan": {"spec", "import_id", "entry_index", "bindings", "mappings"},
             "run": {"review", "authorized"}, "credentials": {"env", "value", "identity", "target_origin"},
             "retest": {"execution_id", "selected_ids"}, "workflow/plan": {"spec"}, "workflow-assurance/plan": {"spec"},
-            "reduction/units": {"execution_id"}, "reduction/plan": {"execution_id", "units", "max_requests"},
+            "reduction/units": {"execution_id", "trace_id"}, "reduction/plan": {"execution_id", "trace_id", "units", "max_requests"},
             "freeze": {"execution_ids", "comparisons", "metadata", "trace_ids"},
-            "inspect": {"execution_id", "finding_id"}, "impact": {"execution_id", "changes", "impact_map"},
+            "inspect": {"execution_id", "trace_id", "finding_id"}, "impact": {"execution_id", "changes", "impact_map"},
             "recover": {"job_id"}, "catalog": set(), "export": {"assessment_id", "format"}, "proof": {"assessment_id"}, "signing": {"create_session_key"}}
         if route not in fields or set(body) - fields[route]:
             raise ContractError("Unsupported assessment operation or fields.")
@@ -594,11 +635,35 @@ class StudioHandler(BaseHTTPRequestHandler):
             self.respond(200, {"credential": result})
             return
         if route == "import":
-            from .imports import parse_import
-            source = body.get("text")
-            if not isinstance(source, str):
-                raise ContractError("Choose a supported request export.")
-            imported = parse_import(source.encode("utf-8"), body.get("profile"))
+            from .imports import DEFAULT_LIMITS, parse_import
+            if body.get("profile") == "burp-http-pair-v1":
+                if "text" in body:
+                    raise ContractError("Raw HTTP imports require binary file transport.")
+
+                def decode_message(field):
+                    value = body.get(field)
+                    maximum = DEFAULT_LIMITS["max_file_bytes"]
+                    if not isinstance(value, str) or len(value) > 4 * ((maximum + 2) // 3):
+                        raise ContractError("Choose a bounded raw HTTP file.")
+                    try:
+                        decoded = base64.b64decode(value, validate=True)
+                    except (ValueError, binascii.Error):
+                        raise ContractError("Invalid raw HTTP file encoding.") from None
+                    if len(decoded) > maximum:
+                        raise ContractError("Choose a bounded raw HTTP file.")
+                    return decoded
+
+                source = decode_message("request_base64")
+                response = decode_message("response_base64") if "response_base64" in body else None
+                imported = parse_import(source, body["profile"], source_origin=body.get("source_origin"),
+                                        response_bytes=response)
+            else:
+                if {"request_base64", "response_base64", "source_origin"} & set(body):
+                    raise ContractError("Raw HTTP file fields require the raw-pair import profile.")
+                source = body.get("text")
+                if not isinstance(source, str):
+                    raise ContractError("Choose a supported request export.")
+                imported = parse_import(source.encode("utf-8"), body.get("profile"))
             identifier = self.server.retain_assessment(self.server.assessment_imports, imported)
             result = {"import": imported, "import_id": identifier}
         elif route in {"compile", "plan"}:
@@ -635,11 +700,22 @@ class StudioHandler(BaseHTTPRequestHandler):
                             result["baseline_execution"] = {"id": identifier, "value": copy.deepcopy(execution)}
                             break
         elif route == "inspect":
-            from .assessments import inspect_finding
-            execution = self.server.assessment_executions.get(body.get("execution_id"))
-            if execution is None:
-                raise ContractError("Select an available execution.")
-            result = inspect_finding(execution, body.get("finding_id"))
+            field, identifier, execution = self.server.assessment_source(body,
+                trace_kinds={"workflow-trace", "reduction-trace", "workflow-assurance-result"})
+            if field == "trace_id":
+                if "finding_id" in body:
+                    raise ContractError("A trace inspector does not accept a finding selection.")
+                from .workflows import verify_workflow
+                from .minimize import verify_reduction
+                from .workflow_assurance import verify_workflow_assurance
+                verifier = {"workflow-trace": verify_workflow, "reduction-trace": verify_reduction,
+                            "workflow-assurance-result": verify_workflow_assurance}[execution["kind"]]
+                if verifier(execution):
+                    raise ContractError("Retained trace verification failed.")
+                result = {"trace": execution, "trace_id": identifier, "verification": "retained_semantics_verified"}
+            else:
+                from .assessments import inspect_finding
+                result = inspect_finding(execution, body.get("finding_id"))
         elif route == "impact":
             from .assessments import plan_impacted_retest
             from .experiments import plan_experiment_retest
@@ -655,17 +731,16 @@ class StudioHandler(BaseHTTPRequestHandler):
                     baseline=execution, selected_ids=[variant["case_id"] for variant in compiled["variants"]]))
         elif route == "retest":
             from .assurance import retest_plan
-            from .experiments import compile_experiment
+            from .experiments import plan_experiment_retest
             execution = self.server.assessment_executions.get(body.get("execution_id"))
             if execution is None:
                 raise ContractError("Select an available baseline execution.")
             selection = retest_plan(execution["contract"], body.get("selected_ids"), allow_mutations=True)
-            spec = copy.deepcopy(execution["plan"]["spec"])
-            spec["contract"] = selection["contract"]
-            spec["variants"] = [variant for variant in spec["variants"] if variant["case_id"] in selection["selected_ids"]]
-            if not spec["variants"]:
+            variants = [variant["id"] for variant in execution["plan"]["variants"]
+                        if variant["case_id"] in selection["selected_ids"]]
+            if not variants:
                 raise ContractError("Select at least one experiment variant for retest.")
-            compiled = compile_experiment(spec)
+            compiled = plan_experiment_retest(execution, variants)
             result = {"plan": compiled, "retest": {key: value for key, value in selection.items() if key != "contract"},
                 "review": self.server.assessment_review("experiment", compiled, baseline=execution,
                     selected_ids=selection["selected_ids"])}
@@ -680,9 +755,7 @@ class StudioHandler(BaseHTTPRequestHandler):
                       "history_storage": "persistent" if self.server.history is not None else "session-only"}
         elif route in {"reduction/units", "reduction/plan"}:
             from .minimize import removable_units, plan_reduction
-            execution = self.server.assessment_executions.get(body.get("execution_id"))
-            if execution is None:
-                raise ContractError("Select an available confirmed execution.")
+            _, _, execution = self.server.assessment_source(body, trace_kinds={"workflow-trace"})
             if route == "reduction/units":
                 result = {"units": removable_units(execution)}
             else:
@@ -749,8 +822,8 @@ class StudioHandler(BaseHTTPRequestHandler):
                     self.server.signing_key, self.server.public_key = private, public
                 if not self.server.signing_key or not self.server.public_key:
                     raise ContractError("Configure a complete signing key pair before opening Studio.")
-            result = {"signed_proof": True, "key_scope": "session" if self.server.session_key_directory else "configured",
-                "public_key": self.server.public_key.read_text("ascii"), "message": "The private key stays in the local server. Session keys are removed when Studio closes."}
+            result = {**self.server.signing_metadata(),
+                "message": "The private key stays in the local server. Session keys are removed when Studio closes."}
         self.respond(200, result)
 
     def do_POST(self):

@@ -115,7 +115,7 @@ def compile_workflow(spec):
         raise WorkflowError("Workflow title is required.")
     normalized = copy.deepcopy(spec)
     try:
-        contract = load_contract(normalized["contract"], allow_mutations=True)
+        contract = load_contract(normalized["contract"], allow_mutations=True, allow_workflow_headers=True)
     except ContractError as exc:
         raise WorkflowError(str(exc)) from None
     from .experiments import _reject_literal_credentials
@@ -395,10 +395,10 @@ def execute_workflow(plan, *, context=None, credential_resolver=None, fixture_re
             contract = copy.deepcopy(template)
             contract["cases"] = [case]
             contract["limits"]["concurrency"] = 1
-            contract = load_contract(contract, allow_mutations=True)
+            contract = load_contract(contract, allow_mutations=True, allow_workflow_headers=True)
             observed = []
             report = engine.run(contract, context=variant_context, credential_resolver=pinned_resolver,
-                                observation_sink=observed.append, request_kind=kind)
+                                observation_sink=observed.append, request_kind=kind, allow_workflow_headers=True)
             capture = observed[0] if observed else None
             if capture:
                 captures[step["id"]] = capture
@@ -414,9 +414,9 @@ def execute_workflow(plan, *, context=None, credential_resolver=None, fixture_re
             control_contract = copy.deepcopy(template)
             control_contract["cases"] = [copy.deepcopy(cases[item]) for item in spec["controls"]]
             control_contract["limits"]["concurrency"] = 1
-            control_contract = load_contract(control_contract, allow_mutations=True)
+            control_contract = load_contract(control_contract, allow_mutations=True, allow_workflow_headers=True)
             control_report = engine.run(control_contract, context=variant_context, credential_resolver=pinned_resolver,
-                                        request_kind="identity_control")
+                                        request_kind="identity_control", allow_workflow_headers=True)
             trace["controls"] = {"contract": control_contract, "report": control_report}
             trace["controls_valid"] = all(result["outcome"] == "pass" for result in control_report["results"])
             if not trace["controls_valid"]:
@@ -553,7 +553,7 @@ def verify_workflow(trace):
                 errors.append("Workflow control validity does not match its evidence.")
             for record in records:
                 errors.extend(verify_report(record["report"]))
-                build_graph(record["contract"], record["report"])
+                build_graph(record["contract"], record["report"], allow_workflow_headers=True)
                 if contract_digest(record["contract"]) != record["report"]["contract_sha256"]:
                     errors.append("Materialized workflow contract/report mismatch.")
             expected_steps = [spec["setup"], spec["precondition"], *planned["steps"], spec["postcondition"], *spec["cleanup"]]

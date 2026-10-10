@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "features": [
+    "typed protected marker and tenant binding",
+    "three graphical variants with mutation review",
+    "budget changes invalidate authorization",
+    "multiselect source-bound retest",
+    "multi-variant reduction requires independently executed baseline",
+    "reduction budget invalidation and readable evidence",
+    "report metadata and programmatic source-title change invalidate snapshot",
+    "graphical replay effect rule and stable operation identifier",
+    "workflow add/remove invalidates review",
+    "isolated workflow reduction and cleanup",
+    "full experiment specification import/export",
+    "spec edits invalidate review",
+    "stale change-impact response cannot restore authorization",
+    "credential tuples remain bound to captured origin during asynchronous preparation",
+    "unsent credentials cleared on binding change",
+    "signer SPKI fingerprint",
+    "390px feature views"
+  ],
+  "page_errors": []
+}

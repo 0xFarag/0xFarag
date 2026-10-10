@@ -1,0 +1,14 @@
+{
+  "build_backend": {
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
+  },
+  "bytes": 1404954,
+  "passed": true,
+  "sha256": "77ffbef884f881c615f177164bf43b75abe006ec363b53c407936a61b97d6b9b",
+  "source_date_epoch": 1767225600,
+  "wheels": [
+    "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/wheel-1/authzledger-1.1.0-py3-none-any.whl",
+    "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/wheel-2/authzledger-1.1.0-py3-none-any.whl"
+  ]
+}

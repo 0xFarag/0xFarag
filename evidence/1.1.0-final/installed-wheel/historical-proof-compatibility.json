@@ -1,0 +1,44 @@
+[
+  {
+    "name": "assessment-demos",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "command": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/7b68a7003223/authzledger/evidence/1.1.0-release-review/assessment-demos/proof",
+      "--public-key",
+      "/workspace/scratch/7b68a7003223/authzledger/evidence/1.1.0-release-review/assessment-demos/trusted-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/historical-assessment-demos-verification.json"
+    ],
+    "source_date_epoch": "unset"
+  },
+  {
+    "name": "selective100",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "command": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/7b68a7003223/authzledger/evidence/1.1.0-release-review/selective100/proof",
+      "--public-key",
+      "/workspace/scratch/7b68a7003223/authzledger/evidence/1.1.0-release-review/selective100/trusted-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/historical-selective100-verification.json"
+    ],
+    "source_date_epoch": "unset"
+  }
+]

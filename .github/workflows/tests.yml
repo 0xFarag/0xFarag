@@ -42,8 +42,15 @@ jobs:
         run: python tools/check_selective100.py --out artifacts/selective100-acceptance
       - name: Isolated workflow, replay and mutating reduction
         run: python tools/check_workflows110.py --out artifacts/workflow-acceptance
-      - name: Build wheel
-        run: python -m pip wheel --no-deps --wheel-dir dist .
+      - name: Native Burp provenance, original bytes and controlled execution
+        run: python -I tools/check_native_burp.py
+      - name: Require complete stable acceptance
+        run: python tools/release_gate110.py
+      - name: Build wheel reproducibly
+        run: |
+          python -m pip wheel --no-deps --wheel-dir dist .
+          python -m pip wheel --no-deps --wheel-dir artifacts/repeated-wheel .
+          cmp dist/authzledger-1.1.0-py3-none-any.whl artifacts/repeated-wheel/authzledger-1.1.0-py3-none-any.whl
       - name: Verify installed distribution outside checkout
         shell: bash
         run: |
@@ -89,6 +96,7 @@ jobs:
           node tests/browser_assessments.cjs
           node tests/browser_assessment_security.cjs
           node tests/browser_retest_freshness.cjs
+          node tests/browser_feature_coverage.cjs
 
   publish:
     needs: [verify, browser]

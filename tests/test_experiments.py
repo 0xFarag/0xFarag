@@ -113,6 +113,23 @@ class ExperimentTests(unittest.TestCase):
             plan=plan_experiment_retest(before,['cross-tenant']);state['mode']='fixed';after=execute_experiment(plan)
             comparison=compare_executions(before,after)
         self.assertEqual(comparison['transitions'][0]['status'],'fix_verified');self.assertEqual(before,original)
+    def test_mixed_method_retest_only_retains_previously_approved_mutations(self):
+        with fixture_service() as (url,state):
+            spec=fixture_spec(url)
+            mutation=copy.deepcopy(spec['contract']['cases'][-1]);mutation.update(id='mutating-target',method='POST')
+            variant=copy.deepcopy(spec['variants'][0]);variant.update(id='mutating-variant',case_id='mutating-target')
+            spec['contract']['cases'].append(mutation);spec['variants'].append(variant);spec['mutation_approval']=['mutating-target']
+            baseline=execute_experiment(compile_experiment(spec));original=copy.deepcopy(baseline)
+            count=len(state['requests'])
+            safe=plan_experiment_retest(baseline,['cross-tenant'])
+            self.assertEqual(safe['spec']['mutation_approval'],[])
+            self.assertTrue(all(case['method']=='GET' for case in safe['contract']['cases']))
+            mutating=plan_experiment_retest(baseline,['mutating-variant'])
+            self.assertEqual(mutating['spec']['mutation_approval'],['mutating-target'])
+            self.assertEqual(set(mutating['spec']['mutation_approval']),set(baseline['plan']['spec']['mutation_approval']))
+            self.assertEqual(len(state['requests']),count)
+            self.assertEqual(baseline,original)
+            self.assertEqual(verify_plan(safe),[]);self.assertEqual(verify_plan(mutating),[])
     def test_changed_rule_not_a_fix(self):
         with fixture_service() as (url,state):
             before=execute_experiment(compile_experiment(fixture_spec(url)));spec=fixture_spec(url);spec['rule']['id']='another';after=execute_experiment(compile_experiment(spec))

@@ -26,7 +26,7 @@ DEFAULT_LIMITS = {
     "max_body_bytes": 1048576, "max_json_depth": 64,
     "max_headers": 100, "max_header_bytes": 65536,
 }
-PROFILES = ("burp-xml", "zap-json-plus", "har-1.2")
+PROFILES = ("burp-xml", "zap-json-plus", "har-1.2", "burp-http-pair-v1")
 _METHODS = {"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
 _HEADER_NAME = re.compile(r"[!#$%&'*+.^_`|~0-9A-Za-z-]+\Z")
 _SAFE_HEADERS = {"accept", "accept-language", "content-type", "cache-control", "pragma"}
@@ -382,19 +382,22 @@ def _raw_http(entry: dict, raw: bytes, limits: dict, *, response: bool = False) 
             _block(entry, "invalid_header")
             continue
         name, value = line.split(b":", 1)
+        # HTTP optional whitespace is SP / HTAB only. Generic strip() would
+        # erase invalid edge controls (for example VT/FF) before validation.
+        value = value.strip(b" \t")
         try:
             name_text = name.decode("ascii")
         except UnicodeError:
             _block(entry, "non_ascii_header")
             continue
         try:
-            value_text = value.strip().decode("ascii")
+            value_text = value.decode("ascii")
         except UnicodeError:
             _block(entry, "non_ascii_header")
             try:
-                value_text = value.strip().decode("utf-8")
+                value_text = value.decode("utf-8")
             except UnicodeError:
-                value_text = value.strip().decode("latin-1")
+                value_text = value.decode("latin-1")
             _remember(entry, value_text)
             if name_text.lower() in {"authorization", "proxy-authorization"} and " " in value_text:
                 _remember(entry, value_text.split(" ", 1)[1])
@@ -495,6 +498,84 @@ def _burp(raw: bytes, limits: dict) -> list:
     return result
 
 
+def _explicit_source_origin(value: object) -> str:
+    """Validate operator-supplied transport metadata, never a scope grant."""
+    if (not isinstance(value, str) or not 1 <= len(value) <= 2048 or not value.isascii()
+            or any(ord(c) <= 32 or ord(c) == 127 for c in value)
+            or any(c in value for c in "\\?#")):
+        _fail("invalid_source_origin")
+    try:
+        parsed = urlsplit(value)
+        host, port = parsed.hostname, parsed.port
+    except ValueError:
+        _fail("invalid_source_origin")
+    if (parsed.scheme not in {"http", "https"} or not host or parsed.path
+            or parsed.username is not None or parsed.password is not None
+            or parsed.netloc.endswith(":")):
+        _fail("invalid_source_origin")
+    # urlsplit accepts arbitrary ASCII host text. Limit it to IP/domain syntax;
+    # the execution scope applies its own independent target validation later.
+    if ":" not in host and not re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9.])?", host):
+        _fail("invalid_source_origin")
+    if port is not None and not 1 <= port <= 65535:
+        _fail("invalid_source_origin")
+    authority = (f"[{host}]" if ":" in host else host) + (f":{port}" if port is not None else "")
+    if parsed.netloc.lower() != authority.lower() or "%" in authority:
+        _fail("invalid_source_origin")
+    return value
+
+
+def _burp_http_pair(raw: bytes, response: bytes, source_origin: str, limits: dict) -> list:
+    """Read native Copy-to-file bytes with a separately declared origin.
+
+    No XML wrapper, decoded/re-encoded request, inferred TLS scheme or external
+    provenance assertion is manufactured. Only the common redacted projection
+    is retained; the supplied response remains an unverified source observation.
+    """
+    source_origin = _explicit_source_origin(source_origin)
+    source_url, target_error, version = source_origin + "/", None, None
+    try:
+        first = raw.split(b"\n", 1)[0].removesuffix(b"\r").decode("ascii")
+        _, target, version = first.split(" ")
+        if (not target or any(ord(c) <= 32 or ord(c) >= 127 for c in target)
+                or "\\" in target or "#" in target or target.endswith("?")
+                or re.search(r"%(?![0-9A-Fa-f]{2})", target)):
+            target_error = "unsupported_request_target"
+        elif target.startswith("/") and not target.startswith("//"):
+            source_url = source_origin + target
+        elif target.startswith(("http://", "https://")):
+            absolute = urlsplit(target)
+            # _raw_http compares the unchanged absolute authority with the
+            # separately declared source. Never adopt the imported authority.
+            if not absolute.hostname or absolute.username is not None or absolute.password is not None:
+                target_error = "unsupported_request_target"
+            else:
+                source_url = source_origin + (absolute.path or "/") + (
+                    "?" + absolute.query if absolute.query else "")
+        else:
+            target_error = "unsupported_request_target"
+    except (UnicodeError, ValueError):
+        target_error = "invalid_request_line"
+    entry = _entry("burp-http-pair-v1", 0, "/request", source_url)
+    entry["source_refs"][0]["origin_basis"] = "explicit_operator_binding"
+    entry["source_refs"][0]["response_location"] = "/response" if response else None
+    if target_error:
+        entry["path"] = None
+        _block(entry, target_error)
+    if version not in {"HTTP/1.0", "HTTP/1.1"}:
+        _block(entry, "unsupported_http_version")
+    _raw_http(entry, raw, limits)
+    _raw_http(entry, response, limits, response=True)
+    # Origin-form HTTP/1.1 without Host is not a complete native request. The
+    # explicit origin cannot silently supply a missing required wire header.
+    if version == "HTTP/1.1":
+        head = raw.split(b"\r\n\r\n", 1)[0] if b"\r\n\r\n" in raw else raw.split(b"\n\n", 1)[0]
+        lines = head.split(b"\r\n") if b"\r\n" in head else head.split(b"\n")
+        if not any(line.split(b":", 1)[0].lower() == b"host" for line in lines[1:]):
+            _block(entry, "missing_host_header")
+    return [entry]
+
+
 def _zap(raw: bytes, limits: dict) -> list:
     root = _object(_strict_json(raw, limits))
     sites = _array(root.get("site"), limits["max_entries"])
@@ -514,7 +595,12 @@ def _zap(raw: bytes, limits: dict) -> list:
                 for response, prefix in ((False, "request"), (True, "response")):
                     head = _text(instance.get(prefix + "-header", ""), limits["max_header_bytes"])
                     body = _text(instance.get(prefix + "-body", ""), limits["max_body_bytes"])
-                    message = head.rstrip("\r\n") + "\r\n\r\n" + body if head else ""
+                    # Complete the header delimiter without stripping bytes:
+                    # a dangling CR/LF must remain an invalid field/request,
+                    # rather than silently becoming an executable message.
+                    separator = ("" if head.endswith("\r\n\r\n") else
+                                 "\r\n" if head.endswith("\r\n") else "\r\n\r\n")
+                    message = head + separator + body if head else ""
                     _raw_http(entry, message.encode("utf-8"), limits, response=response)
                 if "method" in instance and instance["method"] != entry["method"]:
                     _block(entry, "declared_method_mismatch")
@@ -636,20 +722,37 @@ def _har(raw: bytes, limits: dict) -> list:
     return result
 
 
-def parse_import(raw_bytes: bytes, format_profile: str, limits: dict | None = None) -> dict:
+def parse_import(raw_bytes: bytes, format_profile: str, limits: dict | None = None, *,
+                 source_origin: str | None = None, response_bytes: bytes | None = None) -> dict:
     """Return an offline, bounded and deterministically redacted ImportBatch v1.
 
     ``limits`` may lower hard defaults and add ``redact_headers``. No option
     disables redaction, enables entity resolution, or authorizes network use.
     Header slots need identity binding. Redacted query/body/path values are
     execution blockers until the operator supplies a new explicit mapping.
+    ``burp-http-pair-v1`` alone accepts explicit ``source_origin`` metadata and
+    optional native ``response_bytes``; both messages share the file budget.
     """
     effective = _limits(limits)
     if type(raw_bytes) is not bytes or not raw_bytes or len(raw_bytes) > effective["max_file_bytes"]:
         _fail("invalid_or_oversized_import")
     if not isinstance(format_profile, str) or format_profile not in PROFILES:
         _fail("unsupported_import_profile")
-    entries = {"burp-xml": _burp, "zap-json-plus": _zap, "har-1.2": _har}[format_profile](raw_bytes, effective)
+    if format_profile == "burp-http-pair-v1":
+        if response_bytes is not None and type(response_bytes) is not bytes:
+            _fail("invalid_response_bytes")
+        response = b"" if response_bytes is None else response_bytes
+        if len(raw_bytes) + len(response) > effective["max_file_bytes"]:
+            _fail("invalid_or_oversized_import")
+        entries = _burp_http_pair(raw_bytes, response, source_origin, effective)
+    else:
+        if source_origin is not None or response_bytes is not None:
+            _fail("unexpected_import_context")
+        entries = {"burp-xml": _burp, "zap-json-plus": _zap, "har-1.2": _har}[format_profile](raw_bytes, effective)
+    return _finalize(entries, format_profile)
+
+
+def _finalize(entries: list, format_profile: str) -> dict:
     known_secrets = set().union(*(entry.get("_secret_values", set()) for entry in entries))
     # Keep echo filtering bounded across a hostile multi-message import as well.
     if (len(known_secrets) > 4096 or sum(len(value) for value in known_secrets) > 262144
@@ -673,6 +776,9 @@ def parse_import(raw_bytes: bytes, format_profile: str, limits: dict | None = No
                  "All query values and JSON strings require explicit remapping; unknown headers require binding.",
                  "Path identifiers are retained unless credential-labeled or token-like; review paths before persistence.",
                  "Imported origin does not authorize execution; assessment scope and identity mapping are required."]}
+    if format_profile == "burp-http-pair-v1":
+        batch["limitations"].append(
+            "Origin is explicit operator-supplied metadata; the raw messages do not establish scheme, origin or pairing provenance.")
     batch["import_sha256"] = _digest(batch)
     return batch
 

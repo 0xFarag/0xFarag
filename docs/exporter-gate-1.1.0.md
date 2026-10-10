@@ -1,14 +1,15 @@
 # F01-01: Native exporter acceptance
 
-Review date: 10 October 2026. Status: **partial; production release blocked**.
+Review date: 10 October 2026. Status: **native evidence present for all three producers under the explicit F01 addendum; final release gates remain separate**.
 
-The acceptance contract requires an actual versioned export from Burp, ZAP and a HAR producer, with traceable HTTP fields and provenance. A handwritten format fixture, an official example copied into a file, or a filename containing a tool version does not satisfy this gate.
+The acceptance contract, including the [native Burp profile addendum](burp-native-import-v1.md), requires an actual versioned export from Burp, ZAP and a HAR producer, with traceable HTTP fields and provenance. A handwritten format fixture, an official example copied into a file, or a filename containing a tool version does not satisfy this gate.
 
 | Producer/profile | Actual evidence | Status |
 |---|---|---|
 | Playwright 1.64.0 / Chromium 153.0.8010.0 / HAR 1.2 | `fixtures/imports/chromium-real.har` and matching provenance; two real public loopback requests | Verified browser-produced HAR; not a manual DevTools export |
 | ZAP 2.17.0 / Report Generation 0.43.0 / `traditional-json-plus` | `fixtures/imports/zap-real.json`, matching provenance and separate controlled execution | Verified native exporter component |
-| Burp / HTTP-message XML | Only explicitly synthetic `burp-http-messages.xml` is available | Genuine compatible native export missing |
+| Burp Community 2026.9.2 / `burp-http-pair-v1` | `fixtures/imports/burp-native-v1/`: unchanged native Raw request/response files, UI receipts, provenance and controlled execution | Verified native message export under the explicit addendum |
+| Burp Community 2026.9.2 / native Save item XML | Unchanged `burp-native-v1/burp-http-messages.xml` containing a DTD | Correctly rejected with `xml_declarations_forbidden`; negative fixture only |
 
 ## Reproduce the verified ZAP component
 
@@ -32,26 +33,45 @@ The original report is read without modification. Explicit mapping supplies fres
 
 Each reproduction has its own timestamps, ephemeral port and hashes. It must create a new provenance sidecar, not replace the historical fixture's contents or digest. Startup diagnostics about unused Firefox integration remain in the native report and in the provenance summary; this acceptance does not assert that every installed ZAP add-on works.
 
-## Burp: exact remaining blocker
+## Burp: verified native raw-message path
 
-PortSwigger documents **Save item** as a native XML request/response export in its [message editor documentation](https://portswigger.net/burp/documentation/desktop/tools/message-editor). Its [HTTP-item XML export release documentation](https://portswigger.net/burp/releases/professional-1-4-04) describes a DTD with base64 attributes. The current [XML issue report documentation](https://portswigger.net/burp/documentation/desktop/running-scans/reporting/report-settings) also describes an internal DTD; issue reports and HTTP-item exports are different formats.
+PortSwigger documents **Copy to file** separately from **Save item** in its [message editor documentation](https://portswigger.net/burp/documentation/desktop/tools/message-editor). The [F01 addendum](burp-native-import-v1.md) explicitly adds the complete native Raw request/response pair as `burp-http-pair-v1`. It does not reinterpret a modified XML file as a native export, relax the original DTD prohibition or retroactively rewrite historical acceptance records.
 
-The binding [1.0.5 implementation contract](implementation-1.0.5.md), F01, excludes **DTDs and entities**. The implementation accordingly returns `xml_declarations_forbidden` before XML parsing. It accepts the documented DTD-free `<items>` profile only. No native, installed-version Burp procedure producing that supported profile has been demonstrated here. The environment did not contain an installed Burp instance; official documentation alone cannot supply the missing export or prove such an option exists.
+The pinned official Burp Community **2026.9.2** JAR has SHA-256 `3571f8cadbfd65b0b090d2753735c40b76ad7fdde0b927df2b22ec46ea09693a`. The isolated temporary project used an owned, public synthetic loopback fixture. The observed message-editor action was **Save selected text to file** in the Raw tab with **no selection**, which saved each complete message. The native request and response bytes equal the corresponding base64 messages in the independently retained native XML. The XML itself was neither modified nor accepted by the importer.
 
-The next concrete Burp action is:
+| Retained original | SHA-256 |
+|---|---|
+| `burp-request.http` | `494b9be5fc48c4f8faf23bf2f01d1647e473fbe81831d74143d6368c8c5cbedb` |
+| `burp-response.http` | `552123446e70539dd222b275c733b451ccc4dac7a76702888c750cb44a5ecd61` |
+| `burp-http-messages.xml` — rejected | `1f4157ec2e306dc11c9192e7f0efcf9425b92b53af4b8526b322025d488cd67d` |
 
-1. Record the installed Burp edition and exact version, acquisition source and installer/JAR digest. Use an isolated temporary project containing only the public local lab; no customer traffic or credentials.
-2. Capture one request and its response against that lab. Use the native **Save item(s)** XML action with base64 message encoding. Preserve the complete output exactly as emitted; record a screenshot or export receipt, export settings and hash.
-3. Inspect whether the native output contains a DOCTYPE. A DTD-bearing original must fail the existing importer. It may be preserved as an additional **negative** interoperability fixture, never relabelled as accepted.
-4. A genuinely supported native DTD-free option, if the installed tool offers one, must be demonstrated with a second unchanged export. Run import, explicit mapping and a budgeted controlled execution; record the resulting source and execution digests.
-5. If the native exporter cannot emit a contract-compatible profile, the frozen contract and native exporter remain incompatible. Supporting a reviewed inert-DTD profile would require an explicit contract change, a separate parser design and hostile-input tests; it is not an implementation shortcut authorised by this gate. No blanket DTD allowance, regex stripping, reconstructed XML or relabelling of a derived file is acceptable.
+`burp-real.provenance.json` binds the distribution, native files, screenshots and capture harness. The UI receipt retains the actual menu label and absence of selection. The source origin is explicit operator metadata; the parser never infers TLS from a Host header. Import then applies the same bounded redaction and mapping rules as the other profiles.
 
-No Burp download, installation or export is claimed by this review. The DTD rejection was not relaxed. A successful negative test alone cannot close F01-01.
+The fixture records **one native capture request and four separately counted controlled requests**. The latter use fresh identity, owner and denial controls and produce a confirmed synthetic marker disclosure. The execution retains its imported source ID and passes semantic verification. Scanner assertions and imported responses themselves are not promoted to verified findings.
+
+Check the retained original evidence offline:
+
+```sh
+python3 tools/check_native_burp.py
+python3 -m unittest discover -s tests -p test_imports.py -q
+```
+
+To collect a separate reproduction with the pinned official JAR, use a **new directory**:
+
+```sh
+python3 tools/capture_burp_fixture.py \
+  --burp-jar /path/to/burpsuite_community_v2026.9.2.jar \
+  --out /new/burp-capture --wait-seconds 1200
+```
+
+The harness prints the owned origin and completion protocol. Make exactly the requested native capture, save the complete request and response with no text selected, preserve the actual UI receipts and finish the documented completion record. The harness then performs the separate controlled execution. New ports and timestamps produce new hashes and provenance; do not overwrite this pinned historical capture. `check_native_burp.py` intentionally checks the retained reviewed fixture, rather than accepting arbitrary new provenance as equivalent.
+
+The original `burp-xml` parser still accepts only the supported DTD-free `<items>` profile. The native **Save item** export from this pinned installation contains a DOCTYPE and fails before XML parsing. A successful negative XML test alone is not positive native acceptance; the separately demonstrated raw-message profile supplies that path. Other Burp versions and export modes are not certified by this fixture.
 
 ## Required provenance and release decision
 
 Every actual export needs the native file, its SHA-256, capture time with offset, tool/edition/version, exporter/profile and relevant add-on versions, distribution source/digest, native export action/settings, owned origin, observed HTTP request count, public-data declaration, reproduction command and verification artifacts. Derived mapping and execution evidence must remain separate from the unchanged native source. Raw-byte digests in this repository are appropriate only for deliberately public fixtures; live imports retain the secret-free projection hashing contract.
 
-The ZAP sidecar supplies those applicable fields and binds its separate controlled execution. The HAR sidecar supplies the browser/exporter fields. Neither establishes a Burp export by analogy.
+The Burp and ZAP sidecars supply those applicable fields and bind separate controlled executions. The HAR sidecar supplies its browser/exporter fields. Each producer has its own native evidence; none is inferred from another tool.
 
-The correct target version remains **1.1.0** for the F01–F08 feature release. `1.1.5` is not a remedy for an open feature acceptance gate. Until the missing Burp component is verified, retain the development version, keep F01-01 partial and do not publish a stable release. A transparent development update may describe exactly the verified components without claiming 88/88 acceptance or full Burp interoperability.
+The release target is **1.1.0**. Native evidence closes the previously missing Burp component only within the explicit addendum and pinned profile. The full acceptance ledger, frozen-source test results, isolated wheel checks and exact-commit CI still govern stable publication. Historical `1.1.0.dev0` receipts and their original partial-gate statements remain unchanged; they are not the final candidate receipt. No claim of universal Burp interoperability follows from this acceptance.

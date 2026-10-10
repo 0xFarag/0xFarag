@@ -1,0 +1,194 @@
+{
+  "product": "AuthzLedger",
+  "version": "1.1.0",
+  "capture_receipt": {
+    "suite": "browser_assessments",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "tests/browser_assessments.cjs"
+    ],
+    "cwd": "/workspace/scratch/7b68a7003223/authzledger",
+    "environment_overrides": {
+      "PYTHON": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PLAYWRIGHT_MODULE": "/workspace/scratch/5e2d341bf98a/browser-runtime/node_modules/playwright",
+      "CHROME_EXECUTABLE": "/workspace/scratch/5e2d341bf98a/browser-runtime/chromium",
+      "AUTHZ_BROWSER_ASSESSMENT_ARTIFACTS": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/browser/browser_assessments/artifacts"
+    },
+    "started_utc": "2026-10-10T17:33:31.027450+00:00",
+    "finished_utc": "2026-10-10T17:33:42.865546+00:00",
+    "duration_seconds": 11.838,
+    "exit_code": 0,
+    "product_version": "1.1.0",
+    "source_changed_during_execution": false,
+    "source_sha256": {
+      "authzledger/__init__.py": "82d2404b1ca7aac9d55ec35fca6e810c684788d6801946b9e2f8795d8d2f2c22",
+      "authzledger/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+      "authzledger/assessment_demo.py": "0957fe4d789fecf3bc0bc05add559af287f649efadcf94a3f188d264be6c138b",
+      "authzledger/assessment_reports.py": "5c699f0ea345acf598caa96da1dd2a424d6502ac945f641a67c56a62c146b000",
+      "authzledger/assessments.py": "06ac22a50e5a9f8f44c1a50d0a5bb43949e0b706792d35852120a6c751a0f2a8",
+      "authzledger/assurance.py": "40251305a7594a1944ad5ae5a26e904a0ec55bfbea912910cba40b65069fa43b",
+      "authzledger/benchmark.py": "1725876a4fe6d5cae8c391be8dfe09abfc4476b51c44588547c0d8dacb0e8572",
+      "authzledger/brand_logo.png": "815c7713f48eb136d6a4701bc2f2126d50f9b8b591b61cdb8f94bc81a37bdee4",
+      "authzledger/cli.py": "41b7f46272acf9aab577136b73843bb5b32a996ddba3a3a9ee96b8e31be4c6fd",
+      "authzledger/commands_assessment.py": "0f9ddba2ec06cb1bf447a06b474371d9288a30066d345395a5bb9b8621d33f49",
+      "authzledger/commands_v1.py": "301cf6aa5ce3e31eae23b4084a336f42554fee669fbde5b5d69373c872927519",
+      "authzledger/comparison.py": "913d46de01c810c62b0b029dc8d7f49e0909347242be30770e0d760fef7eea2d",
+      "authzledger/credentials.py": "ecdc784fc1c32c522ae50fbc80a8b992b8a19cd2c3b70522e37eb5a6673373e6",
+      "authzledger/demo.py": "e0132757c99814231d625c06462c55052e274387f5a03249f17e50b5c3c7e1a7",
+      "authzledger/engine.py": "be304b4f69ea92ac421ae9e3241b027529d49f1dd382ad97dbb10f12c83797a3",
+      "authzledger/evidence.py": "0ee3e4a368ef7decdc3c97d049ed6fb9626954d54a273a52d7a6adb6b3be1558",
+      "authzledger/execution.py": "656bbe70b9cddde4cf59af2bcc4079efc06d895d2d898355a8f5ec6d8a4203c6",
+      "authzledger/experiments.py": "27fef8cbb6bdb7c8c39a229886a4ab451eee9ffeb078207d71bc9a42131f0647",
+      "authzledger/fonts/DejaVuSans-Bold.ttf": "5c1247acef7f2b8522a31742c76d6adcb5569bacc0be7ceaa4dc39dd252ce895",
+      "authzledger/fonts/DejaVuSans.ttf": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280",
+      "authzledger/fonts/LICENSE-DejaVu.txt": "562c8f5e92af7a06339292a1bb0b9a3e9c8d5142af5d7167f2866fc50261b993",
+      "authzledger/history.py": "dcde97c0a196b8b3d2f98d85aeebee0dc7795674b367b3ece6ff96ce7d0bcfd1",
+      "authzledger/imports.py": "7776ba1db9313539deb87229acfc377a4c6ce6532c2ba33d006cc6d459036eda",
+      "authzledger/intelligence.py": "4c2f07f383fa5690a6d1be3278549d1c1223b739f05ef34589600e03e3941a01",
+      "authzledger/lab110.py": "c3d526cbb9dc67db5a83d2a27d0b6c3910f6705a76b434ab864c473e8a80c0ec",
+      "authzledger/matrix.py": "f17720cb6c0fc5e9737d4c546dbf979fb1fd6b3ad054bc08efaedd0ce73127c9",
+      "authzledger/minimize.py": "79e418fe67af74821d7d3cb7c4cd3a1d554daf1eb1d3eb2be03391f0147e56b0",
+      "authzledger/model.py": "a596caf09c1113c163b7d68a1ed826d4d79d96ed8f0eb2a09bb1c7dbc32bae9d",
+      "authzledger/observations.py": "d610c6fdea651a1c2ffef6f874a3b864cebd4ce3213b96ae8472ee1eee5a2751",
+      "authzledger/openapi.py": "4815a24f390f91048251b6ccfb169010559747b2e82484011b017d5284dd0678",
+      "authzledger/oracles.py": "c28eb22fd4f3fcda9e8b14a866e2f1430ccbc33002972c4078d2373bef3bef4c",
+      "authzledger/policy.py": "a9e90aef88c7b407d537ee3424d77ded0f7e28cd8e98811877b12e18bfa381a1",
+      "authzledger/reasoning.py": "acb334bfac94724b397b0544d901c6d115d06a1bb0880e5537c4edde898faf04",
+      "authzledger/reports.py": "49a2121252d0bd830d939ecc10ba4974f1a4088096783d20859b8f0d12d0bcde",
+      "authzledger/signing.py": "7c623aa44842d6baa74368c1aa6bfb52e357be4a2b2efdbd71cc8e0bd9201dd1",
+      "authzledger/studio.py": "8cd17b98e8c92ad27d679a90b004aa61d0a4757be855e604c46559488375fb97",
+      "authzledger/web/app.js": "74b6f1325d8365e59ff0ade86f801c4a7818675a73ae2293e645e6e1858a496e",
+      "authzledger/web/assessment.css": "272f9efe5a4e51368135ba606daa0f2619ccaf6019c49fbb6b616f15b5f9a652",
+      "authzledger/web/assessment.js": "5ccdf890b5370180ee2bd61b8da1f611df2beb0a67a3dc3bf8b008ac92f560b5",
+      "authzledger/web/index.html": "da875fb7aae9925438c657c317f64750ca07635f5983eeb76ac46b9819ff155e",
+      "authzledger/web/plans.json": "87243bc2593bdfddc057641b548ac0b226bab267fef2d783ac6908af0171a750",
+      "authzledger/web/style.css": "c0eafa50c98a80a9f6eb17906ba1a6328e864c5fb12cd74806051030f34c7abf",
+      "authzledger/workflow_assurance.py": "4e90cda0116c874fe468cc3ab42fe39e21bf6f685927fed5356e159f271fc830",
+      "authzledger/workflows.py": "5c7076974fedf87bc120ef264b67fc04ea875234d7b9eb3b99f69061e8cdc03c",
+      "tests/browser_acceptance.cjs": "b7377d20c2d726e19d8cda55f5601d7c92377853005493d2c770374388a0cf01",
+      "tests/browser_assessment_security.cjs": "97e37f1e43f07dd1571301ffccd728af549465cd23f17c34b7f3491524d41914",
+      "tests/browser_assessments.cjs": "731ae3c99648724468845fce058a6f998136783e846547f2fd4b5055a0efb4bb",
+      "tests/browser_comparison.cjs": "e81320a4e11ff99911ed619d3b901d584ee36b98e804cebf4cf2c612f2d4b43c",
+      "tests/browser_feature_coverage.cjs": "25ecf860c56f4545ef407983d693cd2508736c793e23f259a4d3a42f4379d3a5",
+      "tests/browser_retest_freshness.cjs": "ec8f8443169e5f79978c0915e2ad207428b24c180af44c8024c066e45e496719",
+      "tests/browser_v1.cjs": "3d9b99b80232e54d52da23633a91d7a6ebb57790e3092163458eafe1f1be7690",
+      "tools/verify_bundle.py": "66a16919c13d04fe5012a45bf20297a8d89f45ae064e1b80e68955d8bcb5c287"
+    },
+    "runtime": {
+      "node": "v24.19.0",
+      "python": "Python 3.12.14",
+      "chromium": "Chromium 153.0.8010.0",
+      "playwright": "1.64.0",
+      "python_packages": {
+        "reportlab": "4.4.9",
+        "cryptography": "50.0.1",
+        "pypdf": "6.10.0",
+        "Pillow": "12.3.0"
+      },
+      "product_version": "1.1.0",
+      "platform": "Linux-6.18.44-x86_64-with-glibc2.39"
+    },
+    "acceptance": {
+      "passed": true,
+      "keyboard_only": true,
+      "file_picker_fixture_injection": true,
+      "workflows": [
+        "offline HAR import",
+        "byte-exact raw Burp pair import with explicit action and optional response",
+        "binary header remains execution-blocked",
+        "raw import size bound and failure clear selected files",
+        "raw import causes no target requests",
+        "credential binding without browser persistence",
+        "keyboard command palette",
+        "polling failure during held running control and same-job reconnection",
+        "403 marker with valid controls",
+        "shared matrix / graph / history context",
+        "stale preview revision rejection",
+        "reopen original session and reconnect without redispatch",
+        "minimal reproducer",
+        "source-bound fix retest",
+        "fresh workflow and cleanup",
+        "bounded two-cycle workflow assurance and stop after violation",
+        "frozen JSON / HTML / PDF",
+        "fresh local signing key",
+        "independent offline proof verification",
+        "390px viewport"
+      ],
+      "page_errors": []
+    },
+    "artifact_sha256": {
+      "artifacts/acceptance.json": "fc28b21b2d3aac49e03ab7a4577e125596e54ecba3f554eca7edefc9280b2933",
+      "artifacts/assessment.html": "9f4a180fa9e390cc7474bcd769425472552e3fe834543adb37c01e13e5d974c9",
+      "artifacts/assessment.json": "90eb7f9b642cc8d483ae88e683070e176a43ea66b83f66b3e01ad29c4aae63bd",
+      "artifacts/assessment.pdf": "0bd22305f257eb8827b2dbb50118cce4168b1b024361fd454949a3339804c249",
+      "artifacts/contrast-inspector.png": "0e721796ccf445eace0299529323aca526e43aa08cad977274fd37fa629fb5b9",
+      "artifacts/contrast-launch.png": "7acf4d6201f8e508ca5114ad2a1fbb7ce2676c212a57bf73d1fc1b302d62f46b",
+      "artifacts/handover-launch.png": "ad59f4fe9695c4ab34f905c7145296f58cfaf00f0b35e0a9cb3ef16097148645",
+      "artifacts/performance.json": "fb116b587e1d05712dcb6667b74f42b5be968ba07be5640ab66f6c11204a6d9a",
+      "artifacts/proof/attachments/assessment.html": "9f4a180fa9e390cc7474bcd769425472552e3fe834543adb37c01e13e5d974c9",
+      "artifacts/proof/attachments/assessment.json": "90eb7f9b642cc8d483ae88e683070e176a43ea66b83f66b3e01ad29c4aae63bd",
+      "artifacts/proof/attachments/assessment.pdf": "0bd22305f257eb8827b2dbb50118cce4168b1b024361fd454949a3339804c249",
+      "artifacts/proof/manifest.json": "f462eb57ee3a656f18820c128a3b24e211a79518d1b10fd05f174830d7572ae7",
+      "artifacts/proof/public.pem": "ec9cd1d37224e883e948d3d377a1d37c4ee25677b7b09c237b1501f1e8b553ba",
+      "artifacts/proof/report.json": "7e690a35ec2a486cbb89c4bc8c7507da98a5eee49ed1804cdb25353a9dee250d",
+      "artifacts/proof/signature.base64": "390a5bcd575470073de4d369f8e09d9f88637182f61efe9ea322ba0ce7854e93",
+      "artifacts/proof.zip": "01945ea3e5ce5402c7cb07b1b0049b6e332377dbaa5b65f2e07dfbea09b326cf",
+      "artifacts/raw-import.png": "29913d3ea551c95e13b911d11686768d1874081a45258c0348a76b1ea6ed8002",
+      "artifacts/signed-handover.png": "8b12231783ecf411e6eb48cb7bcdae8554b935b92b4cdb2af95a9df71c3592df",
+      "artifacts/verification-key.pem": "ec9cd1d37224e883e948d3d377a1d37c4ee25677b7b09c237b1501f1e8b553ba"
+    },
+    "log_sha256": "a56469c6258fd68ac39cc7329f5827aa16c4847611a650a318aa934e9f37b73c"
+  },
+  "source_capture": {
+    "file": "studio-source.png",
+    "sha256": "7acf4d6201f8e508ca5114ad2a1fbb7ce2676c212a57bf73d1fc1b302d62f46b",
+    "dimensions": [
+      1200,
+      900
+    ],
+    "nature": "Actual Studio screenshot from synthetic local browser acceptance fixture",
+    "crop": [
+      0,
+      14,
+      1200,
+      886
+    ],
+    "transform": "Documented top crop and uniform scaling only. Displayed pixels are not retouched; complete original source is retained."
+  },
+  "palette": {
+    "navy": "#071722",
+    "gold": "#C8A66B",
+    "text": "#EDF5F7"
+  },
+  "variants": [
+    "launch-landscape.svg",
+    "launch-portrait.svg"
+  ],
+  "release_status": "Version label only; this asset is not evidence of publication or release-gate completion",
+  "rendering": {
+    "browser": "153.0.8010.0",
+    "scale": 1,
+    "method": "SVG rendered by pinned Chromium; all screenshot content is embedded without retouching"
+  },
+  "files": {
+    "studio-source.png": "7acf4d6201f8e508ca5114ad2a1fbb7ce2676c212a57bf73d1fc1b302d62f46b",
+    "launch-landscape.svg": "b64fae5c1bd370d538b3d43f813571d707ec87f85752a55403b83c5aca3decf3",
+    "launch-landscape.png": "ee1176d0efcf2ed4b12fb1d1d8072c4ef245ee2821b5fa5264f4e6f0f518aef1",
+    "launch-portrait.svg": "49a0a4ae940e063d18e2ff38682995bdab03a514b8504d25e8c6689bbb8332e1",
+    "launch-portrait.png": "bf0518d9f3727fce5ff4903e6a39565a0e9b34b09477dae116c7deda0d25b17a"
+  },
+  "capture_receipt_file": "capture-receipt.json",
+  "capture_receipt_sha256": "12d1a825c04af17e16fcf306fd0e39e436fc502fde65a1f365b4ee8169a887db",
+  "reproduction_check": {
+    "passed": true,
+    "method": "Independent regeneration with compose.py and render.cjs, followed by exact byte comparison",
+    "byte_identical": [
+      "studio-source.png",
+      "launch-landscape.svg",
+      "launch-landscape.png",
+      "launch-portrait.svg",
+      "launch-portrait.png"
+    ]
+  }
+}

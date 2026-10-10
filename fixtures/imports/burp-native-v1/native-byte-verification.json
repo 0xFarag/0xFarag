@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-10T17:15:05.420820+00:00",
+  "producer": "Burp Suite Community Edition v2026.9.2",
+  "observed_ui_label": "Save selected text to file",
+  "selection": "none",
+  "native_xml_action": "Save item",
+  "native_xml_base64_setting": true,
+  "native_xml_doctype_present": true,
+  "messages": {
+    "request": {
+      "file": "burp-request.http",
+      "length": 124,
+      "sha256": "494b9be5fc48c4f8faf23bf2f01d1647e473fbe81831d74143d6368c8c5cbedb",
+      "byte_equal_to_native_xml_base64": true
+    },
+    "response": {
+      "file": "burp-response.http",
+      "length": 211,
+      "sha256": "552123446e70539dd222b275c733b451ccc4dac7a76702888c750cb44a5ecd61",
+      "byte_equal_to_native_xml_base64": true
+    }
+  },
+  "raw_files_modified_after_final_native_export": false,
+  "xml_modified_after_export": false,
+  "export_retry_note": "The first request-file selection referenced the previous HTTP history row. Byte comparison rejected it. The intended stable row was then saved again through the native Raw editor menu; prior bytes retained separately as stale-request-attempt2.http. No additional HTTP request was made."
+}

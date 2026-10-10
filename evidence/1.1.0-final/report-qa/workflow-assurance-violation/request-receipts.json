@@ -1,0 +1,26 @@
+[
+  [
+    "GET",
+    "/control"
+  ],
+  [
+    "POST",
+    "/objects"
+  ],
+  [
+    "GET",
+    "/objects/1"
+  ],
+  [
+    "POST",
+    "/objects/1/complete"
+  ],
+  [
+    "GET",
+    "/objects/1"
+  ],
+  [
+    "DELETE",
+    "/objects/1"
+  ]
+]

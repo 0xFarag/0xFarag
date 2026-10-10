@@ -390,7 +390,8 @@ def plan_experiment_retest(baseline_execution, selected_variant_ids):
     selected=[variants[v] for v in sorted(selected_variant_ids)]
     subset=retest_plan(baseline_execution['contract'],[v['case_id'] for v in selected],allow_mutations=True)
     spec=copy.deepcopy(baseline_execution['plan']['spec']); spec['contract']=subset['contract']; spec['variants']=selected
-    spec['mutation_approval']=[c['id'] for c in spec['contract']['cases'] if c['method'] not in {'GET','HEAD','OPTIONS'}]
+    retained_ids={c['id'] for c in spec['contract']['cases']}
+    spec['mutation_approval']=[case_id for case_id in spec['mutation_approval'] if case_id in retained_ids]
     return compile_experiment(spec)
 
 def compare_executions(baseline, current):

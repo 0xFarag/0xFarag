@@ -5,3 +5,75 @@
 .assessment-trace pre,.assessment-plan-json{font-size:10px;line-height:1.7;max-height:350px;overflow:auto;white-space:pre-wrap;word-break:break-word;padding:16px;background:#071723;border-radius:6px}.assessment-trace h3{font-size:18px;font-weight:500}.assessment-row input[type=checkbox]{width:16px;margin-right:8px}.workflow-step>button{padding:6px;font-size:10px}
 [hidden]{display:none!important}.assessment-context{top:12px}.assessment-main h1{letter-spacing:-1.1px}.assessment-shell{scroll-margin-top:100px}
 .graph-pagination{display:flex;align-items:center;gap:8px;margin:12px 0}.graph-pagination>span{flex:1;font-size:10px}.graph-pagination button{font-size:10px;padding:7px 10px}@media(max-width:760px){.graph-pagination{flex-wrap:wrap}.graph-pagination>span{flex-basis:100%}}
+
+/* Shared Navy / Gold surfaces and stable controls through all six steps. */
+#assessment.panel{padding-top:28px}
+.assessment-context{background:#0c1e2bf5;min-height:64px;border-radius:var(--radius)}
+.assessment-context strong{overflow-wrap:anywhere}
+.assessment-steps{background:var(--panel);border-radius:var(--radius);gap:4px;scroll-padding:8px;scrollbar-width:thin;scrollbar-color:var(--control-border) var(--panel)}
+.assessment-steps button{min-height:44px;margin:0;font-family:inherit;border-radius:5px}
+.assessment-steps button:hover{background:var(--surface-hover);color:var(--ink)}
+.assessment-steps button.selected{background:var(--gold-surface);color:var(--gold);box-shadow:inset 0 -2px var(--gold)}
+.assessment-step .section-title button.selected{margin:0;font-family:inherit}
+.assessment-step .form-grid{align-items:start}
+#a-import .form-grid{align-items:end}
+.assessment-step .button.file{margin-top:0;min-width:0}
+.assessment-row,.assessment-graph-node{background:var(--surface);margin-top:0}
+.assessment-row.selected,.assessment-graph-node.selected{background:var(--gold-surface);font-family:inherit}
+.assessment-boundary{background:var(--gold-surface)}
+.inspector-dot{box-shadow:none}
+#a-inspector-disclosure>summary{min-height:44px;padding:10px 0;color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;line-height:24px}
+#a-inspector-disclosure[open]>summary{margin-bottom:16px}
+#a-inspector-fields{max-height:min(50vh,620px);overflow:auto;padding-right:10px;scrollbar-width:thin;scrollbar-color:var(--control-border) var(--panel);overscroll-behavior:contain}
+#a-inspector-fields:focus-visible{outline:2px solid var(--focus);outline-offset:5px}
+@media(min-width:801px){#a-inspector-disclosure[open]>summary{display:none}}
+.assessment-empty{padding:32px 20px}
+.assessment-empty>span{color:var(--gold);opacity:.8;font-size:30px;margin-bottom:12px}
+.assessment-trace pre,.assessment-plan-json{background:var(--bg);border:1px solid var(--line)}
+#a-palette{background:var(--panel);border-color:var(--control-border)}
+#a-command-results button:focus,#a-command-results button:hover{background:var(--surface-selected);color:var(--gold)}
+.palette-search:focus-within{outline:2px solid var(--focus);outline-offset:-4px;border-radius:var(--radius) var(--radius) 0 0}
+#a-raw-import{margin-top:8px;padding-top:16px;border-top:1px solid var(--line)}
+#a-import-raw{min-height:44px}
+#a-freeze{margin-top:20px}
+.assessment-variant{padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);margin:12px 0;min-width:0}
+.assessment-variant-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px}
+.assessment-variant-fields label{margin:0}
+.assessment-variant-fields>label:nth-child(3){grid-column:1/-1}
+.assessment-variant .actions{margin-top:14px}
+.assessment-context-meta{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--muted);font-size:10px;line-height:1.7;overflow-wrap:anywhere}
+.assessment-context-meta>span{min-width:0;max-width:100%}
+.assessment-source-list{margin:16px 0;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);font-size:12px;overflow-wrap:anywhere}
+.assessment-source-list:empty{display:none}
+.assessment-source-list .check{margin:10px 0}
+.workflow-step-extra{grid-column:1/-1;padding-top:12px;border-top:1px solid var(--line)}
+.assessment-step .workflow-step-extra{margin-top:0}
+.workflow-step-extra>.form-grid{grid-template-columns:minmax(140px,.7fr) repeat(2,minmax(0,1fr));align-items:start}
+.workflow-step-extra>.form-grid>label{grid-column:auto}
+.workflow-step-extra label{margin:0;min-width:0}
+.workflow-step-extra textarea{min-height:88px}
+.workflow-step,.workflow-step>label{min-width:0}
+.workflow-step{grid-template-columns:minmax(110px,.7fr) minmax(96px,.6fr) minmax(180px,2fr) minmax(96px,.6fr)}
+.workflow-step>label:nth-child(5){grid-column:1/-1}
+.workflow-step>button{justify-self:start;grid-column:1/-1;padding:8px 12px}
+@media(max-width:1100px){
+  .assessment-context{flex-wrap:wrap;gap:10px 18px}
+  .assessment-context>div:first-child{flex:1 1 calc(100% - 220px)}
+  .assessment-context>button{order:1}
+  .assessment-context>span{display:block;order:2;max-width:100%;min-width:0}
+  .assessment-context>.assessment-context-meta{order:3;flex:1 1 100%}
+}
+@media(max-width:800px){
+  #assessment.panel{padding-top:24px}
+  .assessment-steps button{flex:none;padding:10px 12px;font-size:11px}
+  .assessment-context button{min-height:44px}
+  .assessment-inspector>.section-title{display:none}
+  .assessment-inspector{padding:16px 20px}
+  #a-inspector-fields{max-height:420px}
+  .assessment-empty{padding:28px 16px}
+  .assessment-step .form-grid{gap:12px}
+  .assessment-variant{padding:14px}
+  .assessment-variant-fields,.workflow-step-extra>.form-grid{grid-template-columns:minmax(0,1fr)}
+  .workflow-step{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .assessment-context-meta{gap:4px 10px}
+}

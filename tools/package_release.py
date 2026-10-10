@@ -20,7 +20,8 @@ sys.path.insert(0, str(ROOT))
 from authzledger import __version__ as VERSION
 
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--proof-source', type=Path, default=ROOT / 'evidence/1.1.0-release-review',
+parser.add_argument('--proof-source', type=Path,
+                    default=ROOT / ('evidence/1.1.0-final' if VERSION == '1.1.0' else 'evidence/1.1.0-release-review'),
                     help='Public synthetic proof root containing assessment-demos and selective100')
 args = parser.parse_args()
 PRIVATE_PEM = re.compile(rb'^-----BEGIN (?:[A-Z0-9 ]+ )?PRIVATE KEY-----', re.M)
@@ -69,11 +70,11 @@ for name in ['README.md', 'INSTALL.md', 'RELEASE_NOTES.md', 'RELEASE.json', 'CHA
     path = ROOT / name
     if path.is_file():
         files.append(path)
-for name in ['authzledger', 'docs', 'examples', 'fixtures', 'tests', 'tools', 'brand', '.github', 'evidence/1.0.0', 'evidence/1.1.0-dev0', 'evidence/1.1.0-release-review']:
+for name in ['authzledger', 'docs', 'examples', 'fixtures', 'tests', 'tools', 'brand', '.github', 'evidence/1.0.0', 'evidence/1.1.0-dev0', 'evidence/1.1.0-release-review', 'evidence/1.1.0-final']:
     directory = ROOT / name
     if directory.is_dir():
         files.extend(path for path in directory.rglob('*')
-                     if permitted(path, public_proof=name == 'evidence/1.1.0-release-review'))
+                     if permitted(path, public_proof=name in {'evidence/1.1.0-release-review', 'evidence/1.1.0-final'}))
 archive = DIST / f'authzledger-{VERSION}-source.zip'
 with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as output:
     for path in sorted(set(files)):

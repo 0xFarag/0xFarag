@@ -482,6 +482,44 @@ def render_assessment_html(snapshot: dict) -> str:
             f"<footer>Snapshot {esc(snapshot['snapshot_digest'])}</footer></main></body></html>\n")
 
 
+def _profile_pdf_canvas(*args, **kwargs):
+    """Bind the pinned renderer's clock locally, before PDF ID initialization.
+
+    ReportLab 4.4.9's invariant clock still reads SOURCE_DATE_EPOCH (and
+    rejects malformed values). Its Canvas has no document/clock factory hook.
+    Rebind only the two constructor namespaces instead of changing process
+    environment or shared ReportLab state. All other upstream behavior stays
+    intact. The float timestamp preserves this profile's original no-env ID.
+    """
+    from types import FunctionType, SimpleNamespace
+    from reportlab.lib.utils import TimeStamp
+    from reportlab.pdfbase import pdfdoc
+    from reportlab.pdfgen.canvas import Canvas
+
+    class ProfileTimeStamp(TimeStamp):
+        def __init__(self, invariant=None):
+            self.t = 946684800.0
+            self.lt = (2000, 1, 1, 0, 0, 0, 5, 1, 0)
+            self.YMDhms = self.lt[:6]
+            self.dhh = self.dmm = 0
+            self.tzname = "UTC"
+
+    def local_constructor(original, **bindings):
+        constructor = FunctionType(original.__code__, {**original.__globals__, **bindings},
+                                   original.__name__, original.__defaults__, original.__closure__)
+        constructor.__kwdefaults__ = original.__kwdefaults__
+        return constructor
+
+    class ProfileDocument(pdfdoc.PDFDocument):
+        __init__ = local_constructor(pdfdoc.PDFDocument.__init__, TimeStamp=ProfileTimeStamp)
+
+    class ProfileCanvas(Canvas):
+        __init__ = local_constructor(Canvas.__init__, pdfdoc=SimpleNamespace(
+            PDFDocument=ProfileDocument, PDF_VERSION_DEFAULT=pdfdoc.PDF_VERSION_DEFAULT))
+
+    return ProfileCanvas(*args, **kwargs)
+
+
 def render_assessment_pdf(snapshot: dict) -> bytes:
     _require(snapshot)
     try:
@@ -533,7 +571,7 @@ def render_assessment_pdf(snapshot: dict) -> bytes:
             canvas.drawString(48, 25, "AuthzLedger | " + snapshot["snapshot_digest"][:24])
             canvas.drawRightString(A4[0]-48, 25, f"Page {doc.page}")
             canvas.restoreState()
-        document.build(story, onFirstPage=page, onLaterPages=page)
+        document.build(story, onFirstPage=page, onLaterPages=page, canvasmaker=_profile_pdf_canvas)
         return buffer.getvalue()
 
 

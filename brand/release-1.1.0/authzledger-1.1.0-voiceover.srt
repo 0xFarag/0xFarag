@@ -1,0 +1,61 @@
+1
+00:00:00,000 --> 00:00:06,667
+Ein 403 kann geschützte Daten enthalten.
+Für einen belastbaren Befund zählen die
+
+2
+00:00:06,667 --> 00:00:10,000
+Regel, die Identität und gültige
+Kontrollen.
+
+3
+00:00:10,000 --> 00:00:15,000
+AuthzLedger 1.1.0 bringt diesen Ablauf in
+eine lokale Workbench. Importiere native
+
+4
+00:00:15,000 --> 00:00:18,636
+Burp-Nachrichten, ZAP-Exporte oder
+HAR-Dateien. Lege Regel und Identitäten
+
+5
+00:00:18,636 --> 00:00:23,182
+fest, prüfe den Request-Plan und starte
+den freigegebenen Test. Reduziere
+
+6
+00:00:23,182 --> 00:00:27,727
+anschließend nur ausgewählte Bestandteile;
+jeder akzeptierte Schritt muss den Befund
+
+7
+00:00:27,727 --> 00:00:30,000
+mit frischen Kontrollen erneut bestätigen.
+
+8
+00:00:30,000 --> 00:00:37,500
+Friere den geprüften Stand ein. JSON, HTML
+und PDF gehen in ein Ed25519-signiertes
+
+9
+00:00:37,500 --> 00:00:43,269
+Paket. Der separate Verifier prüft
+Signatur und Dateiinventar gegen deinen
+
+10
+00:00:43,269 --> 00:00:45,000
+vertrauenswürdigen öffentlichen Schlüssel.
+
+11
+00:00:45,000 --> 00:00:51,000
+Beim Retest bleibt sichtbar, welcher Fix
+geprüft wurde und welche Fälle nicht
+
+12
+00:00:51,000 --> 00:00:57,500
+erneut getestet wurden. AuthzLedger 1.1.0
+auf GitHub. Lade das lokale Lab, prüfe die
+
+13
+00:00:57,500 --> 00:01:00,000
+Evidenz und verifiziere das Paket.

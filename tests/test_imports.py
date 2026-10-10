@@ -5,7 +5,9 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+import shutil
 import socket
+import tempfile
 import unittest
 from unittest.mock import patch
 from xml.sax.saxutils import escape
@@ -39,7 +41,184 @@ def burp(request, url="https://api.example.test/invoices/A", response=b"HTTP/1.1
             + "</response></item></items>").encode()
 
 
+def parse_raw_profile(request, profile):
+    if profile == "burp-xml":
+        return parse_import(burp(request), profile)["entries"][0]
+    value = {"site": [{"@name": "https://api.example.test", "alerts": [
+        {"instances": [{"uri": "https://api.example.test/invoices/A",
+                        "request-header": request.decode("ascii"),
+                        "response-header": "HTTP/1.1 403 Forbidden\r\n\r\n"}]}]}]}
+    return parse_import(json.dumps(value).encode(), profile)["entries"][0]
+
+
 class ImportTests(unittest.TestCase):
+    def test_genuine_burp_copy_to_file_and_native_xml_gate_verify_offline(self):
+        from tools.check_native_burp import check_native_burp
+        with patch.object(socket, "getaddrinfo", side_effect=AssertionError("network")), \
+                patch.object(socket, "socket", side_effect=AssertionError("network")):
+            receipt = check_native_burp()
+        self.assertEqual(receipt["producer"], "Burp Suite Community 2026.9.2")
+        self.assertEqual(receipt["profile"], "burp-http-pair-v1")
+        self.assertEqual(receipt["native_capture_requests"], 1)
+        self.assertEqual(receipt["controlled_execution_requests"], 4)
+        self.assertEqual(receipt["xml_import_result"], "xml_declarations_forbidden")
+        self.assertEqual(receipt["screenshots_checked"], 9)
+
+    def test_native_burp_gate_rejects_changed_original_bytes(self):
+        from tools.check_native_burp import DEFAULT_FIXTURE, PINNED_NATIVE_SHA256, check_native_burp
+        for name in PINNED_NATIVE_SHA256:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as temporary:
+                copied = Path(temporary) / "tampered-fixture"
+                shutil.copytree(DEFAULT_FIXTURE, copied)
+                path = copied / name
+                path.write_bytes(path.read_bytes() + b"\n")
+                with self.assertRaisesRegex(ValueError, "native_bytes_changed"):
+                    check_native_burp(copied)
+
+    def test_native_burp_gate_rejects_changed_projection_execution_or_screenshot(self):
+        from tools.check_native_burp import DEFAULT_FIXTURE, check_native_burp
+        cases = (("burp-real.import.json", "native_import_receipt_mismatch"),
+                 ("burp-real.execution.json", "native_execution_verification_failed"),
+                 ("burp-real.provenance.json", "native_request_count_mismatch"),
+                 ("ui-history-ready.png", "native_screenshot_hash_mismatch"))
+        for name, failure in cases:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as temporary:
+                copied = Path(temporary) / "tampered-fixture"
+                shutil.copytree(DEFAULT_FIXTURE, copied)
+                path = copied / name
+                if name.endswith(".png"):
+                    path.write_bytes(path.read_bytes() + b"tampered")
+                else:
+                    value = json.loads(path.read_bytes())
+                    if name == "burp-real.import.json":
+                        value["entries"][0]["id"] = "import-substituted-source"
+                    elif name == "burp-real.execution.json":
+                        value["plan"]["spec"]["sources"] = ["import-substituted-source"]
+                    else:
+                        value["controlled_execution_requests"] = 3
+                    path.write_text(json.dumps(value))
+                with self.assertRaisesRegex(ValueError, failure):
+                    check_native_burp(copied)
+
+    def test_native_burp_gate_requires_the_actual_provenance_receipt(self):
+        from tools.check_native_burp import DEFAULT_FIXTURE, check_native_burp
+        with tempfile.TemporaryDirectory() as temporary:
+            copied = Path(temporary) / "incomplete-fixture"
+            shutil.copytree(DEFAULT_FIXTURE, copied)
+            (copied / "burp-real.provenance.json").unlink()
+            with self.assertRaisesRegex(ValueError, "native_fixture_missing_or_malformed"):
+                check_native_burp(copied)
+
+    def test_burp_http_pair_keeps_native_bytes_and_explicit_origin_provenance(self):
+        body = b'{"count":2,"label":"public-label"}'
+        raw = (b"POST /invoices/A HTTP/1.1\r\nHost: api.example.test\r\n"
+               b"Authorization: Bearer RAW_PAIR_SECRET\r\nContent-Type: application/json\r\n"
+               b"Content-Length: " + str(len(body)).encode() + b"\r\n\r\n" + body)
+        response = b"HTTP/1.1 403 Forbidden\r\nContent-Type: application/json\r\n\r\nPRIVATE_RESPONSE"
+        original = raw, response
+        batch = parse_import(raw, "burp-http-pair-v1", source_origin="https://api.example.test", response_bytes=response)
+        entry = batch["entries"][0]
+        self.assertEqual((raw, response), original)
+        self.assertEqual((entry["method"], entry["origin"], entry["path"]),
+                         ("POST", "https://api.example.test", "/invoices/A"))
+        self.assertEqual(entry["response"], {"status": 403, "body_retained": False})
+        self.assertEqual(entry["source_refs"][0]["origin_basis"], "explicit_operator_binding")
+        self.assertEqual(entry["source_refs"][0]["response_location"], "/response")
+        self.assertIn("redacted_json_requires_mapping", entry["execution_blockers"])
+        serialized = json.dumps(batch)
+        for secret in ("RAW_PAIR_SECRET", "public-label", "PRIVATE_RESPONSE"):
+            self.assertNotIn(secret, serialized)
+        self.assertEqual(batch["hash_basis"], "redacted-normalized-projection-v1")
+        self.assertNotIn(hashlib.sha256(raw).hexdigest(), serialized)
+        self.assertNotIn(hashlib.sha256(response).hexdigest(), serialized)
+        self.assertEqual(batch, parse_import(raw, "burp-http-pair-v1", source_origin="https://api.example.test", response_bytes=response))
+
+    def test_burp_http_pair_requires_strict_explicit_origin_without_inference(self):
+        raw = b"GET /invoices/A HTTP/1.1\r\nHost: api.example.test\r\n\r\n"
+        for origin in (None, "", "api.example.test", "ftp://api.example.test", "https://user:pass@api.example.test",
+                       "https://api.example.test/", "https://api.example.test?q=1", "https://api.example.test?",
+                       "https://api.example.test#x", "https://api.example.test#", "https://api.example.test:",
+                       "https://api.example.test:0", "https://api.example.test:65536", "https://[::1]suffix",
+                       "https://ä.example.test", "https://api.example.test\n", "https://api.example.test\\foo"):
+            with self.subTest(origin=origin), self.assertRaisesRegex(ImportError, "invalid_source_origin"):
+                parse_import(raw, "burp-http-pair-v1", source_origin=origin)
+        for origin, host in (("http://127.0.0.1:8080", "127.0.0.1:8080"), ("https://[::1]:8443", "[::1]:8443")):
+            with self.subTest(origin=origin):
+                entry = parse_import(b"GET / HTTP/1.1\r\nHost: " + host.encode() + b"\r\n\r\n",
+                                     "burp-http-pair-v1", source_origin=origin)["entries"][0]
+                self.assertEqual(entry["origin"], origin)
+                self.assertFalse(entry["execution_blockers"])
+
+    def test_burp_http_pair_blocks_origin_mismatch_and_unsafe_targets(self):
+        cases = ((b"GET /invoices/A HTTP/1.1\r\nHost: other.example.test\r\n\r\n", "host_origin_mismatch"),
+                 (b"GET http://api.example.test/invoices/A HTTP/1.1\r\nHost: api.example.test\r\n\r\n", "request_origin_mismatch"),
+                 (b"GET https://other.example.test/invoices/A HTTP/1.1\r\nHost: api.example.test\r\n\r\n", "request_origin_mismatch"),
+                 (b"GET /invoices/A HTTP/1.1\r\n\r\n", "missing_host_header"))
+        for raw, expected in cases:
+            with self.subTest(raw=raw):
+                entry = parse_import(raw, "burp-http-pair-v1", source_origin="https://api.example.test")["entries"][0]
+                self.assertIn(expected, entry["execution_blockers"])
+        for target in (b"//other.example.test/x", b"*", b"/x#fragment", b"/x%ZZ", b"/x?", b"https://user@api.example.test/x"):
+            with self.subTest(target=target):
+                raw = b"GET " + target + b" HTTP/1.1\r\nHost: api.example.test\r\n\r\n"
+                entry = parse_import(raw, "burp-http-pair-v1", source_origin="https://api.example.test")["entries"][0]
+                self.assertIn("unsupported_request_target", entry["execution_blockers"])
+                self.assertIsNone(entry["path"])
+
+    def test_burp_http_pair_delimiters_and_absent_response_do_not_invent_status(self):
+        for delimiter in (b"\r\n", b"\n"):
+            with self.subTest(delimiter=delimiter):
+                raw = delimiter.join((b"GET /invoices/A HTTP/1.1", b"Host: api.example.test", b"", b""))
+                entry = parse_import(raw, "burp-http-pair-v1", source_origin="https://api.example.test")["entries"][0]
+                self.assertFalse(entry["execution_blockers"])
+                self.assertIsNone(entry["response"]["status"])
+                self.assertIn("missing_response", entry["gaps"])
+        raw = b"GET /invoices/A HTTP/1.1\r\nHost: api.example.test"
+        entry = parse_import(raw, "burp-http-pair-v1", source_origin="https://api.example.test",
+                             response_bytes=b"HTTP/1.1 200 OK")["entries"][0]
+        self.assertIn("incomplete_request", entry["execution_blockers"])
+        self.assertIn("incomplete_response", entry["gaps"])
+        self.assertIsNone(entry["response"]["status"])
+
+    def test_burp_http_pair_budgets_cover_both_native_files(self):
+        raw = b"GET /invoices/A HTTP/1.1\r\nHost: api.example.test\r\n\r\n"
+        response = b"HTTP/1.1 200 OK\r\n\r\n" + b"x" * 20
+        with self.assertRaisesRegex(ImportError, "invalid_or_oversized_import"):
+            parse_import(raw, "burp-http-pair-v1", {"max_file_bytes": len(raw) + len(response) - 1},
+                         source_origin="https://api.example.test", response_bytes=response)
+        with self.assertRaisesRegex(ImportError, "message_component_bytes_exceeded"):
+            parse_import(raw, "burp-http-pair-v1", {"max_body_bytes": 19},
+                         source_origin="https://api.example.test", response_bytes=response)
+        for response_value in ("HTTP/1.1 200 OK", bytearray(response), {}):
+            with self.subTest(response_value=type(response_value)), self.assertRaisesRegex(ImportError, "invalid_response_bytes"):
+                parse_import(raw, "burp-http-pair-v1", source_origin="https://api.example.test", response_bytes=response_value)
+
+    def test_burp_http_pair_performs_no_network_and_reuses_security_blockers(self):
+        samples = ((b"GET /invoices/A HTTP/1.1\r\nHost: api.example.test\r\nAccept: \x0bapplication/json\r\n\r\n", "invalid_header"),
+                   (b"GET /invoices/A HTTP/1.1\r\nHost: api.example.test\r\nHost: api.example.test\r\n\r\n", "duplicate_header"),
+                   (b"GET /invoices/A?a=1&a=2 HTTP/1.1\r\nHost: api.example.test\r\n\r\n", "duplicate_query_name"),
+                   (b"POST /invoices/A HTTP/1.1\r\nHost: api.example.test\r\nContent-Type: application/octet-stream\r\n\r\n\xff", "unsupported_body_format"),
+                   (b"GET /invoices/A HTTP/2\r\nHost: api.example.test\r\n\r\n", "unsupported_http_version"),
+                   (b"\xff /invoices/A HTTP/1.1\r\nHost: api.example.test\r\n\r\n", "invalid_request_line"))
+        with patch.object(socket, "getaddrinfo", side_effect=AssertionError("network")), \
+                patch.object(socket, "socket", side_effect=AssertionError("network")), \
+                patch("builtins.open", side_effect=AssertionError("file read")):
+            for raw, expected in samples:
+                with self.subTest(expected=expected):
+                    entry = parse_import(raw, "burp-http-pair-v1", source_origin="https://api.example.test")["entries"][0]
+                    self.assertIn(expected, entry["execution_blockers"])
+                    mappings = {s["id"]: {"literal": "safe"} for s in entry["secret_slots"] if s["kind"] == "query_value"}
+                    self.assertIn(expected, resolve_imported_entry(entry, mappings)["execution_blockers"])
+
+    def test_existing_profiles_reject_new_profile_context(self):
+        for filename, profile in (("burp-http-messages.xml", "burp-xml"),
+                                  ("zap-traditional-json-plus.json", "zap-json-plus"),
+                                  ("har-1.2.json", "har-1.2")):
+            raw = (FIXTURES / filename).read_bytes()
+            for context in ({"source_origin": "https://api.example.test"}, {"response_bytes": b""}):
+                with self.subTest(profile=profile, context=context), self.assertRaisesRegex(ImportError, "unexpected_import_context"):
+                    parse_import(raw, profile, **context)
+
     def test_three_profiles_normalize_real_message_fields_without_secret_values(self):
         for filename, profile in (("burp-http-messages.xml", "burp-xml"),
                                   ("zap-traditional-json-plus.json", "zap-json-plus"),
@@ -181,6 +360,47 @@ class ImportTests(unittest.TestCase):
         self.assertIn("duplicate_header", entry["execution_blockers"])
         self.assertIn("unsupported_http_framing", entry["execution_blockers"])
         self.assertIn("content_length_mismatch", entry["execution_blockers"])
+
+    def test_raw_header_edge_controls_are_blocked_without_silent_repair(self):
+        for profile in ("burp-xml", "zap-json-plus"):
+            for control in (b"\x00", b"\x0b", b"\x0c", b"\x1c", b"\x7f"):
+                for value in (control + b"application/json", b"application/json" + control):
+                    with self.subTest(profile=profile, value=value):
+                        raw = b"GET /invoices/A HTTP/1.1\r\nAccept: " + value + b"\r\n\r\n"
+                        entry = parse_raw_profile(raw, profile)
+                        self.assertIn("invalid_header", entry["execution_blockers"])
+                        self.assertNotIn("accept", entry["headers"])
+                        self.assertIn("invalid_header", resolve_imported_entry(entry, {})["execution_blockers"])
+
+    def test_raw_header_ows_accepts_only_space_and_tab_at_edges(self):
+        for profile in ("burp-xml", "zap-json-plus"):
+            with self.subTest(profile=profile):
+                entry = parse_raw_profile(
+                    b"GET /invoices/A HTTP/1.1\r\nAccept: \t application/json\t \r\n\r\n", profile)
+                self.assertEqual(entry["headers"], {"accept": "application/json"})
+                self.assertFalse(entry["execution_blockers"])
+
+    def test_raw_request_line_controls_are_not_stripped(self):
+        for profile in ("burp-xml", "zap-json-plus"):
+            for control in (b"\t", b"\x0b", b"\x0c"):
+                with self.subTest(profile=profile, control=control):
+                    entry = parse_raw_profile(b"GET /invoices/A HTTP/1.1" + control + b"\r\n\r\n", profile)
+                    self.assertIn("unsupported_request_line", entry["execution_blockers"])
+
+    def test_zap_dangling_header_line_endings_are_not_silently_removed(self):
+        for ending in (b"\r", b"\n", b"\r\n\r", b"\r\n\n"):
+            with self.subTest(ending=ending):
+                entry = parse_raw_profile(
+                    b"GET /invoices/A HTTP/1.1\r\nAccept: application/json" + ending, "zap-json-plus")
+                self.assertIn("invalid_header", entry["execution_blockers"])
+
+    def test_zap_valid_header_delimiters_remain_supported(self):
+        for ending in (b"", b"\r\n", b"\r\n\r\n"):
+            with self.subTest(ending=ending):
+                entry = parse_raw_profile(
+                    b"GET /invoices/A HTTP/1.1\r\nAccept: application/json" + ending, "zap-json-plus")
+                self.assertEqual(entry["headers"], {"accept": "application/json"})
+                self.assertFalse(entry["execution_blockers"])
 
     def test_request_target_host_and_method_disagreements_block_execution(self):
         raw = b"GET /different HTTP/1.1\r\nHost: attacker.example.test\r\n\r\n"

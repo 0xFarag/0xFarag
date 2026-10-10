@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "unique_pdf_count": 5,
+  "pages_rasterized": 98,
+  "contact_sheets_reviewed": 8,
+  "detail_pages_reviewed": 7,
+  "contact_review": "All 98 pages inspected on 8 contact sheets at 55 dpi. No clipped text, overlapping blocks, missing pages or margin violations observed.",
+  "detail_review": "7 selected pages inspected at 110 dpi: Unicode cover and long title, evidence references, long URL, selective scope limits, safe and violation workflow details. Glyphs, readability and page footers preserved.",
+  "detail_pages": [
+    "pdf-01:2",
+    "pdf-02:12",
+    "pdf-03:1",
+    "pdf-03:2",
+    "pdf-03:72",
+    "pdf-04:2",
+    "pdf-05:2"
+  ],
+  "report50_pdf_pages": 72,
+  "limitations": "Contact-sheet inspection with selected full-page detail views; text verification separately covers all 50 finding IDs and every evidence reference."
+}

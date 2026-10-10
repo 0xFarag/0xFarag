@@ -1,0 +1,11 @@
+{
+  "errors": 0,
+  "expected_failures": 0,
+  "failures": 0,
+  "passed_without_skips": true,
+  "skipped": 0,
+  "summary": "OK",
+  "tests_run": 530,
+  "unexpected_successes": 0,
+  "unittest_duration_seconds": 89.143
+}

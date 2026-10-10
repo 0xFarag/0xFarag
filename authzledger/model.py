@@ -144,7 +144,7 @@ def _path(value: object) -> str:
     _error("case path contains excessive nested encodings.")
 
 
-def _headers(value: object, *, case: bool = False) -> dict:
+def _headers(value: object, *, case: bool = False, allow_workflow_headers: bool = False) -> dict:
     if not isinstance(value, dict) or len(value) > 32:
         _error("headers must be an object with at most 32 entries.")
     result = {}
@@ -158,7 +158,8 @@ def _headers(value: object, *, case: bool = False) -> dict:
         names.add(lowered)
         if lowered in _FORBIDDEN_HEADERS or lowered.startswith(("proxy-", "x-forwarded-")):
             _error("routing and connection headers cannot be configured.")
-        if case and lowered not in _CASE_HEADERS:
+        workflow_identifier = case and allow_workflow_headers and lowered == "idempotency-key"
+        if case and lowered not in _CASE_HEADERS and not workflow_identifier:
             _error("case headers are limited to content negotiation and request identifiers; use identity headers for security context.")
         if isinstance(header_value, dict):
             if case:
@@ -170,7 +171,9 @@ def _headers(value: object, *, case: bool = False) -> dict:
                 _error("header values must be strings or environment references.")
             if any(ord(c) < 32 or ord(c) == 127 or ord(c) > 255 for c in header_value):
                 _error("header values contain invalid characters.")
-            if _SENSITIVE.search(lowered):
+            if workflow_identifier and not re.fullmatch(r"[A-Za-z0-9._:-]{1,200}", header_value):
+                _error("workflow idempotency keys must be bounded public ASCII identifiers.")
+            if _SENSITIVE.search(lowered) and not workflow_identifier:
                 _error("sensitive identity headers must use environment references.")
             result[key] = header_value
     return result
@@ -214,7 +217,7 @@ def _expect(value: object) -> dict:
     return result
 
 
-def _case(value: object, identities: dict, allow_mutations: bool) -> dict:
+def _case(value: object, identities: dict, allow_mutations: bool, allow_workflow_headers: bool = False) -> dict:
     _fields(value, {"id", "identity", "method", "path", "expect", "requires", "body", "headers"},
             "case", {"id", "identity", "method", "path", "expect"})
     case_id = _identifier(value["id"], "case id")
@@ -235,7 +238,7 @@ def _case(value: object, identities: dict, allow_mutations: bool) -> dict:
         _error("case requires contains duplicate identifiers.")
     result = {"id": case_id, "identity": identity, "method": method, "path": _path(value["path"]),
               "requires": list(requires), "expect": _expect(value["expect"]),
-              "headers": _headers(value.get("headers", {}), case=True)}
+              "headers": _headers(value.get("headers", {}), case=True, allow_workflow_headers=allow_workflow_headers)}
     if "body" in value:
         if method in {"GET", "HEAD"}:
             _error("GET and HEAD bodies are not supported.")
@@ -255,8 +258,10 @@ def _pairs(pairs: list[tuple[str, object]]) -> dict:
     return result
 
 
-def load_contract(path_or_dict, *, allow_mutations: bool = False) -> dict:
+def load_contract(path_or_dict, *, allow_mutations: bool = False, allow_workflow_headers: bool = False) -> dict:
     """Read and normalize a contract without reading credential environments."""
+    if type(allow_workflow_headers) is not bool:
+        _error("workflow header selection must be boolean.")
     if isinstance(path_or_dict, dict):
         value = path_or_dict
     else:
@@ -313,7 +318,7 @@ def load_contract(path_or_dict, *, allow_mutations: bool = False) -> dict:
                 _error("expanded cases exceed limits.max_requests.")
     if not expanded or len(expanded) > limits["max_requests"]:
         _error("contract must contain 1 to limits.max_requests expanded cases.")
-    cases = [_case(case, normalized_identities, allow_mutations) for case in expanded]
+    cases = [_case(case, normalized_identities, allow_mutations, allow_workflow_headers) for case in expanded]
     ids = [case["id"] for case in cases]
     if len(set(ids)) != len(ids):
         _error("expanded case identifiers must be unique.")

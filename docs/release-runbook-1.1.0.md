@@ -2,23 +2,21 @@
 
 Review date: **10 October 2026, Europe/Zurich**. Owner: **Nasser Aldin Farag / 0xFarag**.
 
-The current producer remains **1.1.0.dev0**. The intended stable version is **1.1.0** because this delivery adds the eight contracted capability areas to 1.0.0. **1.1.5 is not a substitute for an incomplete acceptance gate**: no stable 1.1.0 baseline and separately bounded patch scope have been established.
+The release target is **1.1.0** for the eight contracted capability areas. This runbook is executable stable preparation, not a record that publication has happened. Current acceptance is tracked in `docs/acceptance-1.1.0.md`; final receipts must identify the frozen candidate. Historical `evidence/1.1.0-dev0/` and `evidence/1.1.0-release-review/` retain their original versions, counts and hashes.
 
-This runbook is executable preparation, not a record that a stable release has happened. Current results are recorded separately under `evidence/1.1.0-release-review/`. The binding ledger remains `docs/acceptance-1.1.0.md`.
+## Priority 1 — verify native exporter evidence
 
-## Priority 1 — close the exporter evidence gap
+1. Preserve the original genuine HAR, ZAP and historical proof bytes.
+2. Verify the retained Burp Community 2026.9.2 native request/response pair with `python tools/check_native_burp.py`. Its original files, screenshots, provenance, one native request and four controlled requests are in `fixtures/imports/burp-native-v1/`.
+3. Apply the explicit [F01 addendum](burp-native-import-v1.md). Positive Burp acceptance uses the complete native Raw messages saved with no text selection. The observed menu label is **Save selected text to file**; the profile is `burp-http-pair-v1` with explicit origin metadata.
+4. Keep native Save item XML containing a DTD rejected with `xml_declarations_forbidden`. The retained XML is a negative fixture, not an accepted or rewritten import. DTD stripping, reconstructed XML and invented exporter provenance are never substitutes for a genuine capture.
+5. Confirm the source-bound controlled execution and public-data declaration for each relevant native fixture. No operator credentials, private targets or customer data belong in release evidence. Only verified scenarios may be marked `Verifiziert` in the current ledger.
 
-1. Preserve the existing genuine HAR and all historical evidence bytes.
-2. Use genuine, versioned ZAP and Burp installations against the public loopback fixture. Preserve native export bytes. Record the exact product and exporter versions, installation digest where available, capture method, command or UI actions, public fixture revision, time, file length and SHA-256.
-3. Exercise **import → explicit principal/resource/control mapping → a bounded controlled execution**. A format-only parser test is insufficient. Capture originals must not contain operator credentials, private targets or customer data.
-4. Keep every DTD/entity input rejected under the binding import contract. Native Burp XML containing a DTD is a **compatibility blocker**, even if a particular declaration appears benign. Removing a DTD, relabelling a HAR as Burp XML, authoring an XML fixture or weakening the parser does not supply the missing native export evidence.
-5. Only mark **F01-01 `Verifiziert`** when the complete scenario actually passes. If no native compatible Burp procedure can be demonstrated, retain its partial status, the development version and the stable-publication block. An altered supported profile requires an explicit, separately reviewed contract change; this runbook grants none.
-
-See `docs/exporter-gate-1.1.0.md` for the exporter-specific outcome and reproduction procedure. No remaining step has a guaranteed duration; a deadline cannot substitute for evidence.
+See [the exporter record](exporter-gate-1.1.0.md) for exact hashes, scope and reproduction commands. A new capture creates a new provenance record and cannot replace the originals silently.
 
 ## Priority 2 — freeze and verify the intended release
 
-Perform these steps only after F01-01 is closed. Keep the released `v1.0.0` tag at `c0d4446a17ca15fb4e8a71f20f6b02c1a364e90c`, its asset hashes and `evidence/1.0.0/` unchanged. Work exclusively on `authzledger-v1.1.0`; the repository's profile branch `main` is unrelated.
+Perform these steps after the amended F01-01 scenario and its native evidence check pass. Keep the released `v1.0.0` tag at `c0d4446a17ca15fb4e8a71f20f6b02c1a364e90c`, its asset hashes and `evidence/1.0.0/` unchanged. Work exclusively on `authzledger-v1.1.0`; the repository's profile branch `main` is unrelated.
 
 1. Set both `pyproject.toml` and `authzledger/__init__.py` to **1.1.0**. Update `RELEASE.json`, `RELEASE_NOTES.md`, `CHANGELOG.md`, `INSTALL.md` and `docs/release-1.1.0.md` to the measured final state. Remove development labels only where they describe the new release. Retain historical receipt/version labels.
 2. Review the complete diff, rights notices and inventory. Commit the candidate. Use a clean checkout of that exact commit for final verification. Record its commit, tree and runtime-source hashes in external receipts, avoiding a self-referential commit-hash claim inside its own commit.
@@ -32,17 +30,19 @@ python tools/check_comparison.py --out artifacts/release-final/comparison
 python tools/check_assessment.py --out artifacts/release-final/assessment
 python tools/check_workflows110.py --out artifacts/release-final/workflows
 python tools/check_selective100.py --out artifacts/release-final/selective100
+python tools/check_native_burp.py
 node tests/browser_acceptance.cjs
 node tests/browser_v1.cjs
 node tests/browser_comparison.cjs
 node tests/browser_assessments.cjs
 node tests/browser_assessment_security.cjs
 node tests/browser_retest_freshness.cjs
+node tests/browser_feature_coverage.cjs
 python tools/release_gate110.py
 ```
 
-4. Build the wheel with the build tools pinned in `pyproject.toml`. Install it in a new virtual environment **outside the checkout**, clear `PYTHONPATH`, and confirm the imported module is in that environment's `site-packages`. Run `authzledger assessment demo`, snapshot verification and both bundle verifiers after the fixture stops. PDF verification needs the pinned reports extra. `tools/verify_bundle.py` remains standalone and is invoked with `python -I`.
-5. Run `python tools/package_release.py`. Verify `dist/SHA256SUMS.txt`, inspect source/wheel inventories and confirm no private keys or local assessment databases are present. Preserve the separate licensed-font notices. A demo public key is a local demonstration trust anchor, not an authenticated author identity.
+4. Build the wheel twice from the same frozen source with the build tools pinned in `pyproject.toml` and the same `SOURCE_DATE_EPOCH`; require identical SHA-256 digests. Compare repeated JSON/HTML/PDF output from one frozen snapshot, including 50+ findings and long Unicode titles, and check the rendered PDF for clipping. Install it in a new virtual environment **outside the checkout**, clear `PYTHONPATH`, and confirm the imported module is in that environment's `site-packages`. Run `authzledger assessment demo`, snapshot verification and both bundle verifiers after the fixture stops. PDF verification needs the pinned reports extra. `tools/verify_bundle.py` remains standalone and is invoked with `python -I`.
+5. Run `python tools/package_release.py --proof-source /path/to/final-public-proof-root` with the newly verified public `assessment-demos` and `selective100` directories. Verify `dist/SHA256SUMS.txt`, inspect source/wheel inventories and confirm no private keys or local assessment databases are present. Preserve the separate licensed-font notices. A demo public key is a local demonstration trust anchor, not an authenticated author identity.
 6. Push the exact candidate to `authzledger-v1.1.0` without force. Require the **verify** and **browser** jobs to pass on its exact SHA. A passing run for an older commit does not approve a later one. Stop for any secret leak, unbudgeted request, falsely confirmed finding/fix, overwritten original or unverifiable report.
 
 ## Priority 3 — publish assets, then channel announcements
@@ -55,7 +55,7 @@ gh workflow run tests.yml --repo 0xFarag/0xFarag \
 gh run list --repo 0xFarag/0xFarag --workflow tests.yml --limit 5
 ```
 
-Select the **workflow_dispatch** run for the verified SHA, inspect its jobs and wait for completion. Its `publish110` job repeats the version/ledger gate and creates `v1.1.0`. Before dispatch, confirm neither that tag nor release already exists; if either exists, inspect it and stop instead of replacing it. Do not merge into the 1.0.0 product branch to trigger its separate legacy publisher.
+Select the **workflow_dispatch** run for the verified SHA, inspect its jobs and wait for completion. Its `publish110` job repeats the release gate and creates `v1.1.0`. Before dispatch, confirm neither that tag nor release already exists; if either exists, inspect it and stop instead of replacing it. Do not merge into the 1.0.0 product branch to trigger its separate legacy publisher.
 
 After publication:
 
@@ -69,7 +69,7 @@ After publication:
 
 | Demonstration | Run / retained evidence | Claim boundary |
 |---|---|---|
-| Request → reproducer | `tools/check_assessment.py`; `01-import-to-reproducer` outputs and `results.json` | Three approved irrelevant units removed; fresh valid controls; original retained. Authored Burp-format demo input does not close the genuine-exporter gate. |
+| Request → reproducer | `tools/check_assessment.py`; `01-import-to-reproducer` outputs and `results.json` | Three approved irrelevant units removed; fresh valid controls; original retained. The authored demo import is separate from the verified native Burp raw-message capture. |
 | 403 leakage vs controls | Same assessment check; `02-denial-and-controls` outputs and receipt | Protected content can contradict an HTTP denial. Invalid controls remain inconclusive. A 200 error object alone does not prove unauthorized access. |
 | Selective fix + independent package | Assessment proof plus `tools/check_selective100.py` | Distinguish the small five-to-four assessment demo from the contractual 100-to-ten case fixture. Retained unselected cases stay `not_retested`; neither demonstrates universal time savings. |
 

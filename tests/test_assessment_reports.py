@@ -4,10 +4,12 @@ import copy
 import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import textwrap
 import unittest
 from unittest.mock import patch
 
@@ -41,6 +43,36 @@ class AssessmentReportTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(); self.root = Path(self.temp.name)
         self.addCleanup(self.temp.cleanup)
+
+    def test_workflow_idempotency_headers_survive_snapshot_and_both_bundle_verifiers(self):
+        from test_workflows import fixture, spec
+        from authzledger.workflows import compile_workflow, execute_workflow
+        with fixture() as (origin, state):
+            source = spec(origin)
+            for case in source['contract']['cases']:
+                case['headers'] = {'Idempotency-Key': 'public-' + case['id']}
+            trace = execute_workflow(compile_workflow(source))
+            self.assertEqual(state['objects'], {})
+        # Every materialized contract includes the workflow header, including
+        # setup, controls and the final cleanup report used as package anchor.
+        for variant in trace['variants']:
+            self.assertIn('Idempotency-Key', variant['controls']['contract']['cases'][0]['headers'])
+            self.assertTrue(all('Idempotency-Key' in step['contract']['cases'][0]['headers']
+                                for step in variant['steps']))
+        with patch('socket.getaddrinfo', side_effect=AssertionError('retained proof must stay offline')):
+            snapshot = freeze_assessment([], {'title': 'Workflow header proof'}, workflows=[trace])
+            self.assertEqual(verify_assessment(snapshot), [])
+            private, public = self.root / 'private.pem', self.root / 'trusted-public.pem'
+            generate_keypair(private, public)
+            bundle = self.root / 'workflow-header-proof'
+            create_assessment_bundle(snapshot, bundle, private)
+            self.assertEqual(verify_bundle(bundle, public), [])
+        self.assertTrue((bundle / 'attachments/assessment.pdf').read_bytes().startswith(b'%PDF'))
+        verifier = Path(__file__).resolve().parents[1] / 'tools/verify_bundle.py'
+        standalone = subprocess.run([sys.executable, '-I', str(verifier), str(bundle), '--public-key', str(public)],
+                                    cwd=self.root, capture_output=True, text=True, timeout=20)
+        self.assertEqual(standalone.returncode, 0, standalone.stdout + standalone.stderr)
+        self.assertIn('VERIFIED', standalone.stdout)
 
     def test_snapshot_is_detached_and_original_roots_unchanged(self):
         execution = copy.deepcopy(self.execution); original = copy.deepcopy(execution)
@@ -191,6 +223,69 @@ class AssessmentReportTests(unittest.TestCase):
         self.assertIn('Zürich αβγ',text)
         for row in self.snapshot['findings']:
             for value in [row['id'],row['record']['status'],*row['record']['evidence_refs']]: self.assertIn(value,text)
+
+    @unittest.skipUnless(PDF_AVAILABLE,'reports extra not installed')
+    def test_report_profile_ignores_source_date_epoch_across_processes(self):
+        snapshot_path = self.root / 'snapshot.json'
+        snapshot_path.write_text(render_assessment_json(self.snapshot), encoding='utf-8')
+        private, public = self.root / 'private.pem', self.root / 'trusted-public.pem'
+        generate_keypair(private, public)
+        repo = Path(__file__).resolve().parents[1]
+        program = textwrap.dedent('''
+            import json, os, runpy, socket, sys
+            from pathlib import Path
+            sys.path.insert(0, sys.argv[1])
+            import authzledger.assessment_reports as reports
+            from authzledger.signing import verify_bundle
+            from reportlab.pdfbase import pdfdoc
+            from reportlab.pdfgen.canvas import Canvas
+            def no_network(*args, **kwargs):
+                raise AssertionError('report rendering and verification must stay offline')
+            socket.getaddrinfo = socket.create_connection = socket.socket.connect = no_network
+            root, mode = Path(sys.argv[2]), sys.argv[3]
+            snapshot = json.loads((root / 'snapshot.json').read_text(encoding='utf-8'))
+            environment = dict(os.environ)
+            constructors = (Canvas.__init__, pdfdoc.PDFDocument.__init__, pdfdoc.TimeStamp)
+            files = reports.assessment_attachments(snapshot)
+            if mode == 'unset':
+                # The unchanged upstream canvas is the historical no-env profile.
+                profile_canvas = reports._profile_pdf_canvas
+                reports._profile_pdf_canvas = Canvas
+                try:
+                    assert files == reports.assessment_attachments(snapshot)
+                finally:
+                    reports._profile_pdf_canvas = profile_canvas
+            proof = root / mode
+            reports.create_assessment_bundle(snapshot, proof, root / 'private.pem')
+            trusted_key = root / 'trusted-public.pem'  # external to every proof
+            standalone = runpy.run_path(str(Path(sys.argv[1]) / 'tools/verify_bundle.py'))
+            for candidate in (root / 'unset', proof):
+                assert verify_bundle(candidate, trusted_key) == []
+                assert standalone['verify_bundle'](candidate, trusted_key) == []
+            assert environment == dict(os.environ)
+            assert constructors == (Canvas.__init__, pdfdoc.PDFDocument.__init__, pdfdoc.TimeStamp)
+        ''')
+        expected = None
+        for mode, epoch in [('unset', None), ('zero', '0'), ('release', '1767225600'),
+                            ('invalid', 'not-a-timestamp'), ('overflow', '9' * 100), ('negative', '-1')]:
+            with self.subTest(epoch=epoch):
+                environment = dict(os.environ)
+                if epoch is None:
+                    environment.pop('SOURCE_DATE_EPOCH', None)
+                else:
+                    environment['SOURCE_DATE_EPOCH'] = epoch
+                result = subprocess.run([sys.executable, '-I', '-c', program, str(repo), str(self.root), mode],
+                                        cwd=self.root, env=environment, capture_output=True, text=True, timeout=30)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                # This includes canonical JSON/HTML/PDF, their exact inventory,
+                # the Ed25519 signature and every other retained proof byte.
+                proof = self.root / mode
+                actual = {path.relative_to(proof).as_posix(): path.read_bytes()
+                          for path in proof.rglob('*') if path.is_file()}
+                if expected is None:
+                    expected = actual
+                else:
+                    self.assertEqual(actual, expected)
 
     @unittest.skipUnless(PDF_AVAILABLE,'reports extra not installed')
     def test_missing_unicode_glyph_is_explicit_export_failure(self):

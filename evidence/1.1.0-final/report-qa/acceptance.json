@@ -1,0 +1,57 @@
+{
+  "findings": 50,
+  "independent_process_render_byte_equality": {
+    "assessment.html": {
+      "bytes": 118747,
+      "sha256": "bf51cae944e8db1d7afe571c61829e3a0d2cd38ceb518152ae974e13bf769007"
+    },
+    "assessment.json": {
+      "bytes": 1171715,
+      "sha256": "8e108c9339652e729910b39387c0e30e7590dadb9c5153b5d5e21ec800ba374b"
+    },
+    "assessment.pdf": {
+      "bytes": 181135,
+      "sha256": "565ad7840983164c164856bfd1f14fa204f3f4a7c308b4ff646d13f995798348"
+    }
+  },
+  "network": "controlled synthetic loopback only",
+  "network_requests_50": 200,
+  "passed": true,
+  "pdf_pages": 72,
+  "private_keys_retained": false,
+  "repeat_signed_bundle_byte_equality": true,
+  "signed_inventory_covers_json_html_pdf": true,
+  "source_date_epoch_independent_render_and_verification": {
+    "render-a": null,
+    "render-b": "1767225600",
+    "render-epoch-invalid": "invalid",
+    "render-epoch-zero": "0"
+  },
+  "unicode_and_all_evidence_refs_present": true,
+  "unsigned_pdf_modification_rejected": true,
+  "visual_review": {
+    "contact_sheets_reviewed": 8,
+    "detail_pages_reviewed": 7,
+    "pages_rasterized": 98,
+    "passed": true,
+    "receipt": "visual-qa/review.json"
+  },
+  "workflow_assurance": {
+    "safe": {
+      "cycles": 2,
+      "history_reopened_verified": true,
+      "objects_cleaned": true,
+      "offline_verification": true,
+      "requests": 12,
+      "status": "satisfied"
+    },
+    "violation": {
+      "cycles": 1,
+      "history_reopened_verified": true,
+      "objects_cleaned": true,
+      "offline_verification": true,
+      "requests": 6,
+      "status": "violation"
+    }
+  }
+}

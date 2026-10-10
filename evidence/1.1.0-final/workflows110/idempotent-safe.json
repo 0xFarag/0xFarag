@@ -1,0 +1,1332 @@
+{
+  "schema_id": "authzledger.workflow-trace",
+  "schema_version": 1,
+  "kind": "workflow-trace",
+  "plan": {
+    "schema_id": "authzledger.workflow-plan",
+    "schema_version": 1,
+    "kind": "workflow-plan",
+    "spec": {
+      "schema_version": 1,
+      "kind": "workflow-spec",
+      "id": "approval",
+      "title": "Approval must precede completion",
+      "contract": {
+        "version": 1,
+        "name": "Workflow fixture",
+        "target": "http://127.0.0.1:41565",
+        "limits": {
+          "max_requests": 100,
+          "timeout_seconds": 5,
+          "max_response_bytes": 65536,
+          "concurrency": 1
+        },
+        "identities": {
+          "operator": {
+            "headers": {}
+          }
+        },
+        "cases": [
+          {
+            "id": "control",
+            "identity": "operator",
+            "method": "GET",
+            "path": "/control",
+            "requires": [],
+            "expect": {
+              "status": [
+                200
+              ],
+              "json": {
+                "/principal": "operator"
+              }
+            },
+            "headers": {}
+          },
+          {
+            "id": "create",
+            "identity": "operator",
+            "method": "POST",
+            "path": "/objects",
+            "requires": [],
+            "expect": {
+              "status": [
+                201
+              ]
+            },
+            "headers": {}
+          },
+          {
+            "id": "before",
+            "identity": "operator",
+            "method": "GET",
+            "path": "/objects/placeholder",
+            "requires": [],
+            "expect": {
+              "status": [
+                200
+              ],
+              "json": {
+                "/state": "draft",
+                "/effects": 0
+              }
+            },
+            "headers": {}
+          },
+          {
+            "id": "approve",
+            "identity": "operator",
+            "method": "POST",
+            "path": "/objects/placeholder/approve",
+            "requires": [],
+            "expect": {
+              "status": [
+                200
+              ]
+            },
+            "headers": {}
+          },
+          {
+            "id": "complete",
+            "identity": "operator",
+            "method": "POST",
+            "path": "/objects/placeholder/complete",
+            "requires": [],
+            "expect": {
+              "status": [
+                200,
+                403
+              ]
+            },
+            "headers": {},
+            "body": {
+              "operation_id": "placeholder",
+              "noise": "demonstrably unnecessary"
+            }
+          },
+          {
+            "id": "after",
+            "identity": "operator",
+            "method": "GET",
+            "path": "/objects/placeholder",
+            "requires": [],
+            "expect": {
+              "status": [
+                200
+              ]
+            },
+            "headers": {}
+          },
+          {
+            "id": "delete",
+            "identity": "operator",
+            "method": "DELETE",
+            "path": "/objects/placeholder",
+            "requires": [],
+            "expect": {
+              "status": [
+                200
+              ]
+            },
+            "headers": {}
+          }
+        ]
+      },
+      "controls": [
+        "control"
+      ],
+      "setup": {
+        "id": "create",
+        "case_id": "create",
+        "bindings": []
+      },
+      "precondition": {
+        "id": "before",
+        "case_id": "before",
+        "bindings": [
+          {
+            "source_step": "create",
+            "pointer": "/id",
+            "type": "string",
+            "target": {
+              "kind": "path_segment",
+              "index": 2
+            }
+          }
+        ]
+      },
+      "steps": [
+        {
+          "id": "approve",
+          "case_id": "approve",
+          "bindings": [
+            {
+              "source_step": "create",
+              "pointer": "/id",
+              "type": "string",
+              "target": {
+                "kind": "path_segment",
+                "index": 2
+              }
+            }
+          ]
+        },
+        {
+          "id": "complete",
+          "case_id": "complete",
+          "bindings": [
+            {
+              "source_step": "create",
+              "pointer": "/id",
+              "type": "string",
+              "target": {
+                "kind": "path_segment",
+                "index": 2
+              }
+            },
+            {
+              "source_step": "create",
+              "pointer": "/id",
+              "type": "string",
+              "target": {
+                "kind": "json",
+                "pointer": "/operation_id"
+              }
+            }
+          ]
+        }
+      ],
+      "postcondition": {
+        "id": "after",
+        "case_id": "after",
+        "bindings": [
+          {
+            "source_step": "create",
+            "pointer": "/id",
+            "type": "string",
+            "target": {
+              "kind": "path_segment",
+              "index": 2
+            }
+          }
+        ]
+      },
+      "cleanup": [
+        {
+          "id": "delete",
+          "case_id": "delete",
+          "bindings": [
+            {
+              "source_step": "create",
+              "pointer": "/id",
+              "type": "string",
+              "target": {
+                "kind": "path_segment",
+                "index": 2
+              }
+            }
+          ]
+        }
+      ],
+      "fixture": {
+        "source_step": "create",
+        "pointer": "/id",
+        "type": "string",
+        "read_pointer": "/id"
+      },
+      "rule": {
+        "id": "idempotency",
+        "kind": "effect_increase",
+        "pointer": "/effects",
+        "max_delta": 1
+      },
+      "variants": [
+        {
+          "id": "repeated-completion",
+          "repeat": {
+            "complete": 2
+          },
+          "omit": [],
+          "identity_overrides": {}
+        }
+      ],
+      "mutation_approval": [
+        "create",
+        "approve",
+        "complete",
+        "delete"
+      ]
+    },
+    "variants": [
+      {
+        "id": "repeated-completion",
+        "steps": [
+          {
+            "id": "approve",
+            "case_id": "approve",
+            "bindings": [
+              {
+                "source_step": "create",
+                "pointer": "/id",
+                "type": "string",
+                "target": {
+                  "kind": "path_segment",
+                  "index": 2
+                }
+              }
+            ],
+            "attempt": 1,
+            "identity": "operator"
+          },
+          {
+            "id": "complete",
+            "case_id": "complete",
+            "bindings": [
+              {
+                "source_step": "create",
+                "pointer": "/id",
+                "type": "string",
+                "target": {
+                  "kind": "path_segment",
+                  "index": 2
+                }
+              },
+              {
+                "source_step": "create",
+                "pointer": "/id",
+                "type": "string",
+                "target": {
+                  "kind": "json",
+                  "pointer": "/operation_id"
+                }
+              }
+            ],
+            "attempt": 1,
+            "identity": "operator"
+          },
+          {
+            "id": "complete",
+            "case_id": "complete",
+            "bindings": [
+              {
+                "source_step": "create",
+                "pointer": "/id",
+                "type": "string",
+                "target": {
+                  "kind": "path_segment",
+                  "index": 2
+                }
+              },
+              {
+                "source_step": "create",
+                "pointer": "/id",
+                "type": "string",
+                "target": {
+                  "kind": "json",
+                  "pointer": "/operation_id"
+                }
+              }
+            ],
+            "attempt": 2,
+            "identity": "operator"
+          }
+        ],
+        "request_upper_bound": 8
+      }
+    ],
+    "contract_digest": "a77cc925a045c6417e213394ad63e890c549ebd5ae1912a44e09e7776d4b543f",
+    "request_upper_bound": 8,
+    "cleanup_reserve": 1,
+    "rule_digest": "89b40cf4539c6882753a1dd256b8f197ee9a54eee0a03cd37e41b5499aeef32d",
+    "plan_digest": "e8780c2bf6153fbd5c30c883b4c349c40d315566194d82de97470d474dfca87f"
+  },
+  "variants": [
+    {
+      "id": "repeated-completion",
+      "interpretation": "satisfied",
+      "controls_valid": true,
+      "steps": [
+        {
+          "step_id": "create",
+          "attempt": 1,
+          "kind": "setup",
+          "contract": {
+            "version": 1,
+            "name": "Workflow fixture",
+            "target": "http://127.0.0.1:41565",
+            "limits": {
+              "max_requests": 100,
+              "timeout_seconds": 5,
+              "max_response_bytes": 65536,
+              "concurrency": 1
+            },
+            "identities": {
+              "operator": {
+                "headers": {}
+              }
+            },
+            "cases": [
+              {
+                "id": "create",
+                "identity": "operator",
+                "method": "POST",
+                "path": "/objects",
+                "requires": [],
+                "expect": {
+                  "status": [
+                    201
+                  ]
+                },
+                "headers": {}
+              }
+            ]
+          },
+          "report": {
+            "contract_sha256": "647cd954ca2ab6f1bd2d7cb93f8672d5c61598738871cee749beb37789e09d5d",
+            "finished_at": "2026-10-10T17:35:35.471Z",
+            "name": "Workflow fixture",
+            "results": [
+              {
+                "checks": [
+                  {
+                    "passed": true,
+                    "type": "status"
+                  }
+                ],
+                "control_type": "positive",
+                "duration_ms": 1.419,
+                "id": "create",
+                "identity": "operator",
+                "method": "POST",
+                "outcome": "pass",
+                "path": "/objects",
+                "reason": "Configured checks passed.",
+                "requires": [],
+                "response_sha256": "488fc88ee40b76f5232c2a0e756f2a6b872211dfbb9e7e75f4b8332ed867085d",
+                "status": 201
+              }
+            ],
+            "schema_version": 1,
+            "started_at": "2026-10-10T17:35:35.469Z",
+            "summary": {
+              "error": 0,
+              "fail": 0,
+              "inconclusive": 0,
+              "pass": 1,
+              "total": 1
+            },
+            "target": "http://127.0.0.1:41565",
+            "tool": {
+              "name": "AuthzLedger",
+              "version": "1.1.0"
+            },
+            "evidence": {
+              "version": 1,
+              "algorithm": "sha256",
+              "metadata_sha256": "5f9624d5ace75b44bdc1bbc1bf06ebb3d5158b347f5c94e930f25d0170ed32c7",
+              "records": [
+                {
+                  "id": "create",
+                  "previous_sha256": "5f9624d5ace75b44bdc1bbc1bf06ebb3d5158b347f5c94e930f25d0170ed32c7",
+                  "sha256": "197e5c7dada60c985fd089753514e5222a8f6dad4484369003852d5db8ccba50"
+                }
+              ],
+              "root_sha256": "197e5c7dada60c985fd089753514e5222a8f6dad4484369003852d5db8ccba50"
+            }
+          },
+          "bindings": []
+        },
+        {
+          "step_id": "before",
+          "attempt": 1,
+          "kind": "state_probe",
+          "contract": {
+            "version": 1,
+            "name": "Workflow fixture",
+            "target": "http://127.0.0.1:41565",
+            "limits": {
+              "max_requests": 100,
+              "timeout_seconds": 5,
+              "max_response_bytes": 65536,
+              "concurrency": 1
+            },
+            "identities": {
+              "operator": {
+                "headers": {}
+              }
+            },
+            "cases": [
+              {
+                "id": "before",
+                "identity": "operator",
+                "method": "GET",
+                "path": "/objects/3",
+                "requires": [],
+                "expect": {
+                  "status": [
+                    200
+                  ],
+                  "json": {
+                    "/state": "draft",
+                    "/effects": 0
+                  }
+                },
+                "headers": {}
+              }
+            ]
+          },
+          "report": {
+            "contract_sha256": "8578a2c96e69a1e101a43470f53dae73bbe6e6a46bb8ce4beac4549cc0c14880",
+            "finished_at": "2026-10-10T17:35:35.473Z",
+            "name": "Workflow fixture",
+            "results": [
+              {
+                "checks": [
+                  {
+                    "passed": true,
+                    "type": "status"
+                  },
+                  {
+                    "passed": true,
+                    "type": "json_parse"
+                  },
+                  {
+                    "passed": true,
+                    "type": "json"
+                  },
+                  {
+                    "passed": true,
+                    "type": "json"
+                  }
+                ],
+                "control_type": "positive",
+                "duration_ms": 1.396,
+                "id": "before",
+                "identity": "operator",
+                "method": "GET",
+                "outcome": "pass",
+                "path": "/objects/3",
+                "reason": "Configured checks passed.",
+                "requires": [],
+                "response_sha256": "49a108b79aa61f5b1a30edbe8ef0c79fee8f69fa161adac35b7ea3bac086e439",
+                "status": 200
+              }
+            ],
+            "schema_version": 1,
+            "started_at": "2026-10-10T17:35:35.471Z",
+            "summary": {
+              "error": 0,
+              "fail": 0,
+              "inconclusive": 0,
+              "pass": 1,
+              "total": 1
+            },
+            "target": "http://127.0.0.1:41565",
+            "tool": {
+              "name": "AuthzLedger",
+              "version": "1.1.0"
+            },
+            "evidence": {
+              "version": 1,
+              "algorithm": "sha256",
+              "metadata_sha256": "df92f2b031d1aab6235fa1b9a5ddb9c7bbff9c78c24b60374b78d6025bef967a",
+              "records": [
+                {
+                  "id": "before",
+                  "previous_sha256": "df92f2b031d1aab6235fa1b9a5ddb9c7bbff9c78c24b60374b78d6025bef967a",
+                  "sha256": "21275177b1c6f48e08349841c2ea1a7f64051343cba7ace4d88f8ee268800ff4"
+                }
+              ],
+              "root_sha256": "21275177b1c6f48e08349841c2ea1a7f64051343cba7ace4d88f8ee268800ff4"
+            }
+          },
+          "bindings": [
+            {
+              "source_step": "create",
+              "source_body_sha256": "488fc88ee40b76f5232c2a0e756f2a6b872211dfbb9e7e75f4b8332ed867085d",
+              "selector": {
+                "pointer": "/id"
+              },
+              "selected_headers_sha256": null,
+              "type": "string",
+              "target": {
+                "kind": "path_segment",
+                "index": 2
+              }
+            }
+          ]
+        },
+        {
+          "step_id": "approve",
+          "attempt": 1,
+          "kind": "application",
+          "contract": {
+            "version": 1,
+            "name": "Workflow fixture",
+            "target": "http://127.0.0.1:41565",
+            "limits": {
+              "max_requests": 100,
+              "timeout_seconds": 5,
+              "max_response_bytes": 65536,
+              "concurrency": 1
+            },
+            "identities": {
+              "operator": {
+                "headers": {}
+              }
+            },
+            "cases": [
+              {
+                "id": "approve",
+                "identity": "operator",
+                "method": "POST",
+                "path": "/objects/3/approve",
+                "requires": [],
+                "expect": {
+                  "status": [
+                    200
+                  ]
+                },
+                "headers": {}
+              }
+            ]
+          },
+          "report": {
+            "contract_sha256": "da260ae99859d2210236ba8739a29a70ff6f2e994faf4d3fa591858f1490c2b0",
+            "finished_at": "2026-10-10T17:35:35.475Z",
+            "name": "Workflow fixture",
+            "results": [
+              {
+                "checks": [
+                  {
+                    "passed": true,
+                    "type": "status"
+                  }
+                ],
+                "control_type": "positive",
+                "duration_ms": 1.26,
+                "id": "approve",
+                "identity": "operator",
+                "method": "POST",
+                "outcome": "pass",
+                "path": "/objects/3/approve",
+                "reason": "Configured checks passed.",
+                "requires": [],
+                "response_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "status": 200
+              }
+            ],
+            "schema_version": 1,
+            "started_at": "2026-10-10T17:35:35.473Z",
+            "summary": {
+              "error": 0,
+              "fail": 0,
+              "inconclusive": 0,
+              "pass": 1,
+              "total": 1
+            },
+            "target": "http://127.0.0.1:41565",
+            "tool": {
+              "name": "AuthzLedger",
+              "version": "1.1.0"
+            },
+            "evidence": {
+              "version": 1,
+              "algorithm": "sha256",
+              "metadata_sha256": "2a4a38287a5dabce9f04c63a4a951173fef041dc002d5b052736c569cefb7268",
+              "records": [
+                {
+                  "id": "approve",
+                  "previous_sha256": "2a4a38287a5dabce9f04c63a4a951173fef041dc002d5b052736c569cefb7268",
+                  "sha256": "b030fe267f587b5723982a61a28d7bac72b1c30647f8f4f24118bca8f6cba574"
+                }
+              ],
+              "root_sha256": "b030fe267f587b5723982a61a28d7bac72b1c30647f8f4f24118bca8f6cba574"
+            }
+          },
+          "bindings": [
+            {
+              "source_step": "create",
+              "source_body_sha256": "488fc88ee40b76f5232c2a0e756f2a6b872211dfbb9e7e75f4b8332ed867085d",
+              "selector": {
+                "pointer": "/id"
+              },
+              "selected_headers_sha256": null,
+              "type": "string",
+              "target": {
+                "kind": "path_segment",
+                "index": 2
+              }
+            }
+          ]
+        },
+        {
+          "step_id": "complete",
+          "attempt": 1,
+          "kind": "application",
+          "contract": {
+            "version": 1,
+            "name": "Workflow fixture",
+            "target": "http://127.0.0.1:41565",
+            "limits": {
+              "max_requests": 100,
+              "timeout_seconds": 5,
+              "max_response_bytes": 65536,
+              "concurrency": 1
+            },
+            "identities": {
+              "operator": {
+                "headers": {}
+              }
+            },
+            "cases": [
+              {
+                "id": "complete",
+                "identity": "operator",
+                "method": "POST",
+                "path": "/objects/3/complete",
+                "requires": [],
+                "expect": {
+                  "status": [
+                    200,
+                    403
+                  ]
+                },
+                "headers": {},
+                "body": {
+                  "operation_id": "3",
+                  "noise": "demonstrably unnecessary"
+                }
+              }
+            ]
+          },
+          "report": {
+            "contract_sha256": "628aee27186a1519314cb40602d5e9f0f5c61ab0f485d1d768778d1ffb083198",
+            "finished_at": "2026-10-10T17:35:35.478Z",
+            "name": "Workflow fixture",
+            "results": [
+              {
+                "checks": [
+                  {
+                    "passed": true,
+                    "type": "status"
+                  }
+                ],
+                "control_type": "configured",
+                "duration_ms": 1.266,
+                "id": "complete",
+                "identity": "operator",
+                "method": "POST",
+                "outcome": "pass",
+                "path": "/objects/3/complete",
+                "reason": "Configured checks passed.",
+                "requires": [],
+                "response_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "status": 200
+              }
+            ],
+            "schema_version": 1,
+            "started_at": "2026-10-10T17:35:35.477Z",
+            "summary": {
+              "error": 0,
+              "fail": 0,
+              "inconclusive": 0,
+              "pass": 1,
+              "total": 1
+            },
+            "target": "http://127.0.0.1:41565",
+            "tool": {
+              "name": "AuthzLedger",
+              "version": "1.1.0"
+            },
+            "evidence": {
+              "version": 1,
+              "algorithm": "sha256",
+              "metadata_sha256": "bf415b16a2173b16996ed7f587102ebb57e9fb5c5d189a50a3bfb4c72d417bad",
+              "records": [
+                {
+                  "id": "complete",
+                  "previous_sha256": "bf415b16a2173b16996ed7f587102ebb57e9fb5c5d189a50a3bfb4c72d417bad",
+                  "sha256": "4c2053aff24a0c66b14e48cc980266d42c4864dd7c1566af91510d282b543068"
+                }
+              ],
+              "root_sha256": "4c2053aff24a0c66b14e48cc980266d42c4864dd7c1566af91510d282b543068"
+            }
+          },
+          "bindings": [
+            {
+              "source_step": "create",
+              "source_body_sha256": "488fc88ee40b76f5232c2a0e756f2a6b872211dfbb9e7e75f4b8332ed867085d",
+              "selector": {
+                "pointer": "/id"
+              },
+              "selected_headers_sha256": null,
+              "type": "string",
+              "target": {
+                "kind": "path_segment",
+                "index": 2
+              }
+            },
+            {
+              "source_step": "create",
+              "source_body_sha256": "488fc88ee40b76f5232c2a0e756f2a6b872211dfbb9e7e75f4b8332ed867085d",
+              "selector": {
+                "pointer": "/id"
+              },
+              "selected_headers_sha256": null,
+              "type": "string",
+              "target": {
+                "kind": "json",
+                "pointer": "/operation_id"
+              }
+            }
+          ]
+        },
+        {
+          "step_id": "complete",
+          "attempt": 2,
+          "kind": "replay",
+          "contract": {
+            "version": 1,
+            "name": "Workflow fixture",
+            "target": "http://127.0.0.1:41565",
+            "limits": {
+              "max_requests": 100,
+              "timeout_seconds": 5,
+              "max_response_bytes": 65536,
+              "concurrency": 1
+            },
+            "identities": {
+              "operator": {
+                "headers": {}
+              }
+            },
+            "cases": [
+              {
+                "id": "complete",
+                "identity": "operator",
+                "method": "POST",
+                "path": "/objects/3/complete",
+                "requires": [],
+                "expect": {
+                  "status": [
+                    200,
+                    403
+                  ]
+                },
+                "headers": {},
+                "body": {
+                  "operation_id": "3",
+                  "noise": "demonstrably unnecessary"
+                }
+              }
+            ]
+          },
+          "report": {
+            "contract_sha256": "628aee27186a1519314cb40602d5e9f0f5c61ab0f485d1d768778d1ffb083198",
+            "finished_at": "2026-10-10T17:35:35.480Z",
+            "name": "Workflow fixture",
+            "results": [
+              {
+                "checks": [
+                  {
+                    "passed": true,
+                    "type": "status"
+                  }
+                ],
+                "control_type": "configured",
+                "duration_ms": 1.309,
+                "id": "complete",
+                "identity": "operator",
+                "method": "POST",
+                "outcome": "pass",
+                "path": "/objects/3/complete",
+                "reason": "Configured checks passed.",
+                "requires": [],
+                "response_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "status": 200
+              }
+            ],
+            "schema_version": 1,
+            "started_at": "2026-10-10T17:35:35.478Z",
+            "summary": {
+              "error": 0,
+              "fail": 0,
+              "inconclusive": 0,
+              "pass": 1,
+              "total": 1
+            },
+            "target": "http://127.0.0.1:41565",
+            "tool": {
+              "name": "AuthzLedger",
+              "version": "1.1.0"
+            },
+            "evidence": {
+              "version": 1,
+              "algorithm": "sha256",
+              "metadata_sha256": "75b9d74dc4591ed4f189f553ba178d2c5ee359ef29ce08a5a912e978abe7afb6",
+              "records": [
+                {
+                  "id": "complete",
+                  "previous_sha256": "75b9d74dc4591ed4f189f553ba178d2c5ee359ef29ce08a5a912e978abe7afb6",
+                  "sha256": "df83a934e7e2ff28688b6e05e502ad93daff7cd4058138764add066e9fee5ba4"
+                }
+              ],
+              "root_sha256": "df83a934e7e2ff28688b6e05e502ad93daff7cd4058138764add066e9fee5ba4"
+            }
+          },
+          "bindings": [
+            {
+              "source_step": "create",
+              "source_body_sha256": "488fc88ee40b76f5232c2a0e756f2a6b872211dfbb9e7e75f4b8332ed867085d",
+              "selector": {
+                "pointer": "/id"
+              },
+              "selected_headers_sha256": null,
+              "type": "string",
+              "target": {
+                "kind": "path_segment",
+                "index": 2
+              }
+            },
+            {
+              "source_step": "create",
+              "source_body_sha256": "488fc88ee40b76f5232c2a0e756f2a6b872211dfbb9e7e75f4b8332ed867085d",
+              "selector": {
+                "pointer": "/id"
+              },
+              "selected_headers_sha256": null,
+              "type": "string",
+              "target": {
+                "kind": "json",
+                "pointer": "/operation_id"
+              }
+            }
+          ]
+        },
+        {
+          "step_id": "after",
+          "attempt": 1,
+          "kind": "state_probe",
+          "contract": {
+            "version": 1,
+            "name": "Workflow fixture",
+            "target": "http://127.0.0.1:41565",
+            "limits": {
+              "max_requests": 100,
+              "timeout_seconds": 5,
+              "max_response_bytes": 65536,
+              "concurrency": 1
+            },
+            "identities": {
+              "operator": {
+                "headers": {}
+              }
+            },
+            "cases": [
+              {
+                "id": "after",
+                "identity": "operator",
+                "method": "GET",
+                "path": "/objects/3",
+                "requires": [],
+                "expect": {
+                  "status": [
+                    200
+                  ]
+                },
+                "headers": {}
+              }
+            ]
+          },
+          "report": {
+            "contract_sha256": "c7a77782836712076ff3a87a2aefdbee30b9d745c42339d1401d2cd526126e3f",
+            "finished_at": "2026-10-10T17:35:35.482Z",
+            "name": "Workflow fixture",
+            "results": [
+              {
+                "checks": [
+                  {
+                    "passed": true,
+                    "type": "status"
+                  }
+                ],
+                "control_type": "positive",
+                "duration_ms": 1.279,
+                "id": "after",
+                "identity": "operator",
+                "method": "GET",
+                "outcome": "pass",
+                "path": "/objects/3",
+                "reason": "Configured checks passed.",
+                "requires": [],
+                "response_sha256": "7ec8b67b1d8a8825dbe94cb6804f7d805697e50b516a1f8830dc0efd6529be77",
+                "status": 200
+              }
+            ],
+            "schema_version": 1,
+            "started_at": "2026-10-10T17:35:35.480Z",
+            "summary": {
+              "error": 0,
+              "fail": 0,
+              "inconclusive": 0,
+              "pass": 1,
+              "total": 1
+            },
+            "target": "http://127.0.0.1:41565",
+            "tool": {
+              "name": "AuthzLedger",
+              "version": "1.1.0"
+            },
+            "evidence": {
+              "version": 1,
+              "algorithm": "sha256",
+              "metadata_sha256": "cddb9a6a5941c753a66d07122e8efb8128f7fe3af0460cc3eff9003631fd04d4",
+              "records": [
+                {
+                  "id": "after",
+                  "previous_sha256": "cddb9a6a5941c753a66d07122e8efb8128f7fe3af0460cc3eff9003631fd04d4",
+                  "sha256": "fe121f4b74f0dae77bc092a70c7a352121fcaca31681c5b8165457aa3070a953"
+                }
+              ],
+              "root_sha256": "fe121f4b74f0dae77bc092a70c7a352121fcaca31681c5b8165457aa3070a953"
+            }
+          },
+          "bindings": [
+            {
+              "source_step": "create",
+              "source_body_sha256": "488fc88ee40b76f5232c2a0e756f2a6b872211dfbb9e7e75f4b8332ed867085d",
+              "selector": {
+                "pointer": "/id"
+              },
+              "selected_headers_sha256": null,
+              "type": "string",
+              "target": {
+                "kind": "path_segment",
+                "index": 2
+              }
+            }
+          ]
+        },
+        {
+          "step_id": "delete",
+          "attempt": 1,
+          "kind": "cleanup",
+          "contract": {
+            "version": 1,
+            "name": "Workflow fixture",
+            "target": "http://127.0.0.1:41565",
+            "limits": {
+              "max_requests": 100,
+              "timeout_seconds": 5,
+              "max_response_bytes": 65536,
+              "concurrency": 1
+            },
+            "identities": {
+              "operator": {
+                "headers": {}
+              }
+            },
+            "cases": [
+              {
+                "id": "delete",
+                "identity": "operator",
+                "method": "DELETE",
+                "path": "/objects/3",
+                "requires": [],
+                "expect": {
+                  "status": [
+                    200
+                  ]
+                },
+                "headers": {}
+              }
+            ]
+          },
+          "report": {
+            "contract_sha256": "e2c6e1afc4d8540234f0927c9398024775a43a48c8515558ce1960f192da6eef",
+            "finished_at": "2026-10-10T17:35:35.484Z",
+            "name": "Workflow fixture",
+            "results": [
+              {
+                "checks": [
+                  {
+                    "passed": true,
+                    "type": "status"
+                  }
+                ],
+                "control_type": "positive",
+                "duration_ms": 1.27,
+                "id": "delete",
+                "identity": "operator",
+                "method": "DELETE",
+                "outcome": "pass",
+                "path": "/objects/3",
+                "reason": "Configured checks passed.",
+                "requires": [],
+                "response_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "status": 200
+              }
+            ],
+            "schema_version": 1,
+            "started_at": "2026-10-10T17:35:35.482Z",
+            "summary": {
+              "error": 0,
+              "fail": 0,
+              "inconclusive": 0,
+              "pass": 1,
+              "total": 1
+            },
+            "target": "http://127.0.0.1:41565",
+            "tool": {
+              "name": "AuthzLedger",
+              "version": "1.1.0"
+            },
+            "evidence": {
+              "version": 1,
+              "algorithm": "sha256",
+              "metadata_sha256": "b3637d374d8cb908f9868d62213a0f16900496c3bdb7504202eb2c3b1b27fc0d",
+              "records": [
+                {
+                  "id": "delete",
+                  "previous_sha256": "b3637d374d8cb908f9868d62213a0f16900496c3bdb7504202eb2c3b1b27fc0d",
+                  "sha256": "74dad8a05f2423ff3c27db1df348ab7c60c4994ec016cdb0ea4ff05506ed3b05"
+                }
+              ],
+              "root_sha256": "74dad8a05f2423ff3c27db1df348ab7c60c4994ec016cdb0ea4ff05506ed3b05"
+            }
+          },
+          "bindings": [
+            {
+              "source_step": "create",
+              "source_body_sha256": "488fc88ee40b76f5232c2a0e756f2a6b872211dfbb9e7e75f4b8332ed867085d",
+              "selector": {
+                "pointer": "/id"
+              },
+              "selected_headers_sha256": null,
+              "type": "string",
+              "target": {
+                "kind": "path_segment",
+                "index": 2
+              }
+            }
+          ]
+        }
+      ],
+      "reason": "Independent state probe established the configured transition result.",
+      "cleanup": "complete",
+      "controls": {
+        "contract": {
+          "version": 1,
+          "name": "Workflow fixture",
+          "target": "http://127.0.0.1:41565",
+          "limits": {
+            "max_requests": 100,
+            "timeout_seconds": 5,
+            "max_response_bytes": 65536,
+            "concurrency": 1
+          },
+          "identities": {
+            "operator": {
+              "headers": {}
+            }
+          },
+          "cases": [
+            {
+              "id": "control",
+              "identity": "operator",
+              "method": "GET",
+              "path": "/control",
+              "requires": [],
+              "expect": {
+                "status": [
+                  200
+                ],
+                "json": {
+                  "/principal": "operator"
+                }
+              },
+              "headers": {}
+            }
+          ]
+        },
+        "report": {
+          "contract_sha256": "341a75a72a99b010b3cb2ec3033b895cff066ef1b0d58032a27e0d4a36550c46",
+          "finished_at": "2026-10-10T17:35:35.469Z",
+          "name": "Workflow fixture",
+          "results": [
+            {
+              "checks": [
+                {
+                  "passed": true,
+                  "type": "status"
+                },
+                {
+                  "passed": true,
+                  "type": "json_parse"
+                },
+                {
+                  "passed": true,
+                  "type": "json"
+                }
+              ],
+              "control_type": "positive",
+              "duration_ms": 1.503,
+              "id": "control",
+              "identity": "operator",
+              "method": "GET",
+              "outcome": "pass",
+              "path": "/control",
+              "reason": "Configured checks passed.",
+              "requires": [],
+              "response_sha256": "69486b25ea4222f9927cf9853d217cc81bdcf84c793ff1a555c4a6ab4c2802c0",
+              "status": 200
+            }
+          ],
+          "schema_version": 1,
+          "started_at": "2026-10-10T17:35:35.467Z",
+          "summary": {
+            "error": 0,
+            "fail": 0,
+            "inconclusive": 0,
+            "pass": 1,
+            "total": 1
+          },
+          "target": "http://127.0.0.1:41565",
+          "tool": {
+            "name": "AuthzLedger",
+            "version": "1.1.0"
+          },
+          "evidence": {
+            "version": 1,
+            "algorithm": "sha256",
+            "metadata_sha256": "4fc06e18e3a6f27f383db820602ae80deb4d6ec961abf1e351ca385ddb28fd2e",
+            "records": [
+              {
+                "id": "control",
+                "previous_sha256": "4fc06e18e3a6f27f383db820602ae80deb4d6ec961abf1e351ca385ddb28fd2e",
+                "sha256": "1c5d4930346828eca4b3976be9b3f095672f74254b36136197861e2d1a7586d0"
+              }
+            ],
+            "root_sha256": "1c5d4930346828eca4b3976be9b3f095672f74254b36136197861e2d1a7586d0"
+          }
+        }
+      },
+      "fixture_binding": {
+        "source_step": "create",
+        "pointer": "/id",
+        "type": "string"
+      },
+      "oracle": {
+        "rule_digest": "89b40cf4539c6882753a1dd256b8f197ee9a54eee0a03cd37e41b5499aeef32d",
+        "verification_level": "evaluation_attested",
+        "before_body_sha256": "49a108b79aa61f5b1a30edbe8ef0c79fee8f69fa161adac35b7ea3bac086e439",
+        "after_body_sha256": "7ec8b67b1d8a8825dbe94cb6804f7d805697e50b516a1f8830dc0efd6529be77"
+      }
+    }
+  ],
+  "budget_ledger": {
+    "schema_version": 1,
+    "kind": "request-budget-ledger",
+    "approved_total": 8,
+    "dispatched_total": 8,
+    "reserved_pending": 0,
+    "leased_pending": 0,
+    "remaining": 0,
+    "cleanup_remaining": 0,
+    "cancelled": false,
+    "cancel_reason": null,
+    "by_kind": {
+      "advisory": 0,
+      "application": 2,
+      "cleanup": 1,
+      "identity_control": 1,
+      "negative_control": 0,
+      "object_control": 0,
+      "pdp": 0,
+      "reduction": 0,
+      "replay": 1,
+      "setup": 1,
+      "state_probe": 2
+    },
+    "requests": [
+      {
+        "sequence": 1,
+        "kind": "identity_control",
+        "operation_id": "control",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.503,
+        "response_bytes": 25
+      },
+      {
+        "sequence": 2,
+        "kind": "setup",
+        "operation_id": "create",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.419,
+        "response_bytes": 11
+      },
+      {
+        "sequence": 3,
+        "kind": "state_probe",
+        "operation_id": "before",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.396,
+        "response_bytes": 61
+      },
+      {
+        "sequence": 4,
+        "kind": "application",
+        "operation_id": "approve",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.26,
+        "response_bytes": 2
+      },
+      {
+        "sequence": 5,
+        "kind": "application",
+        "operation_id": "complete",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.266,
+        "response_bytes": 2
+      },
+      {
+        "sequence": 6,
+        "kind": "replay",
+        "operation_id": "complete",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.309,
+        "response_bytes": 2
+      },
+      {
+        "sequence": 7,
+        "kind": "state_probe",
+        "operation_id": "after",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.279,
+        "response_bytes": 68
+      },
+      {
+        "sequence": 8,
+        "kind": "cleanup",
+        "operation_id": "delete",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.27,
+        "response_bytes": 2
+      }
+    ]
+  },
+  "limitations": [
+    "Fresh fixture identifiers and independent probes bind the configured object only.",
+    "Response bodies are transient; signed state evaluations are attested, not independently replayable from body digests."
+  ],
+  "workflow_digest": "216e0453a438a1d3e8f843f09b680cf14d979c6af26d429e3642bbc639e03deb"
+}

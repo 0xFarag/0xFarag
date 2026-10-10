@@ -1,0 +1,141 @@
+{
+  "passed": true,
+  "removed_ephemeral_demo_private_keys": [
+    "release_check/private.pem"
+  ],
+  "results": [
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "duration_seconds": 89.397,
+      "exit_code": 0,
+      "finished_utc": "2026-10-10T17:34:42.897541+00:00",
+      "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/unit.log",
+      "log_sha256": "601642af5bfe21e47e26b5d7cc49781344efd61a6ebc938494e3191782bb6e6d",
+      "name": "unit",
+      "started_utc": "2026-10-10T17:33:13.500716+00:00"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "tools/release_check.py",
+        "--out",
+        "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/release_check"
+      ],
+      "duration_seconds": 2.12,
+      "exit_code": 0,
+      "finished_utc": "2026-10-10T17:33:15.620806+00:00",
+      "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/release_check.log",
+      "log_sha256": "cd41122dd2ff935923626c64179bcaf9a5655a38873c26aa77e90e9963c52f1a",
+      "name": "release_check",
+      "started_utc": "2026-10-10T17:33:13.501060+00:00"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "tools/check_comparison.py",
+        "--out",
+        "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_comparison"
+      ],
+      "duration_seconds": 0.421,
+      "exit_code": 0,
+      "finished_utc": "2026-10-10T17:33:13.921920+00:00",
+      "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_comparison.log",
+      "log_sha256": "e4d4ee5cff864374feff717dfa861378ef8eb010f6902727d78bd675dc09cddf",
+      "name": "check_comparison",
+      "started_utc": "2026-10-10T17:33:13.501387+00:00"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "tools/check_assessment.py",
+        "--out",
+        "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_assessment"
+      ],
+      "duration_seconds": 1.067,
+      "exit_code": 0,
+      "finished_utc": "2026-10-10T17:33:14.989357+00:00",
+      "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_assessment.log",
+      "log_sha256": "e73a12740c4c7ec076a093afcf7a630051158aca92a62d7aebf256d8e61ab2d3",
+      "name": "check_assessment",
+      "started_utc": "2026-10-10T17:33:13.922529+00:00"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "tools/check_workflows110.py",
+        "--out",
+        "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_workflows110"
+      ],
+      "duration_seconds": 0.82,
+      "exit_code": 0,
+      "finished_utc": "2026-10-10T17:33:15.809986+00:00",
+      "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_workflows110.log",
+      "log_sha256": "4cab6b353ec0aeeb6baab9a276a738f3b7198d590cd4c40530a343e6119a41e3",
+      "name": "check_workflows110",
+      "started_utc": "2026-10-10T17:33:14.989946+00:00"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "tools/check_selective100.py",
+        "--out",
+        "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_selective100"
+      ],
+      "duration_seconds": 3.976,
+      "exit_code": 0,
+      "finished_utc": "2026-10-10T17:33:19.597380+00:00",
+      "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_selective100.log",
+      "log_sha256": "1effc55f0847a36acf3a1d8ec207d77aaaf50d962316dbd4e9af1a8b38aa4386",
+      "name": "check_selective100",
+      "started_utc": "2026-10-10T17:33:15.621171+00:00"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "tools/check_native_burp.py"
+      ],
+      "duration_seconds": 0.115,
+      "exit_code": 0,
+      "finished_utc": "2026-10-10T17:34:43.013789+00:00",
+      "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_native_burp.log",
+      "log_sha256": "ea30f2b0d8b80a6d332ea6bf6f3c7494f4d6f6fc80734fcf967022d3075a26f0",
+      "name": "check_native_burp",
+      "started_utc": "2026-10-10T17:34:42.899229+00:00"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "tools/release_gate110.py"
+      ],
+      "duration_seconds": 0.115,
+      "exit_code": 0,
+      "finished_utc": "2026-10-10T17:34:43.128974+00:00",
+      "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/release_gate110.log",
+      "log_sha256": "afef187e8320fcf82bf4920b8083e0f0eb5b80306843006a4fc184ef5f849551",
+      "name": "release_gate110",
+      "started_utc": "2026-10-10T17:34:43.014415+00:00"
+    }
+  ],
+  "source_sha256": "40044a7ba1b3f28d0b6e07412789205ea6dac964ba08d7cbf8fcb66d9de63a0b",
+  "source_unchanged": true,
+  "trust_note": "Generated fixture public keys are demonstration anchors, not authenticated producer identities.",
+  "unit": {
+    "errors": 0,
+    "expected_failures": 0,
+    "failures": 0,
+    "passed_without_skips": true,
+    "skipped": 0,
+    "summary": "OK",
+    "tests_run": 530,
+    "unexpected_successes": 0,
+    "unittest_duration_seconds": 89.143
+  }
+}

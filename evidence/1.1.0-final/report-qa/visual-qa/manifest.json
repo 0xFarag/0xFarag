@@ -1,0 +1,80 @@
+[
+  {
+    "source_pdf": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/assessment-demos/proof/attachments/assessment.pdf",
+    "sha256": "2e74e22d563fb1102638b46a6e56e595007db3d934766db4173876adbd6b06de",
+    "pages": 5,
+    "raster_dpi": 55,
+    "directory": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-01",
+    "contact_sheets": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-01/contact-01.png"
+    ],
+    "detail_pages_rendered_110dpi": [
+      1,
+      2,
+      5
+    ]
+  },
+  {
+    "source_pdf": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/selective100/assessment.pdf",
+    "sha256": "f741faf2a5daa3c466aa366611ecc74ef75a29a3b6a8111c468b5c4b891db529",
+    "pages": 12,
+    "raster_dpi": 55,
+    "directory": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-02",
+    "contact_sheets": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-02/contact-01.png"
+    ],
+    "detail_pages_rendered_110dpi": [
+      1,
+      2,
+      12
+    ]
+  },
+  {
+    "source_pdf": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/proof-a/attachments/assessment.pdf",
+    "sha256": "565ad7840983164c164856bfd1f14fa204f3f4a7c308b4ff646d13f995798348",
+    "pages": 72,
+    "raster_dpi": 55,
+    "directory": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-03",
+    "contact_sheets": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-03/contact-01.png",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-03/contact-02.png",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-03/contact-03.png",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-03/contact-04.png"
+    ],
+    "detail_pages_rendered_110dpi": [
+      1,
+      2,
+      72
+    ]
+  },
+  {
+    "source_pdf": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/workflow-assurance-safe/proof/attachments/assessment.pdf",
+    "sha256": "01938cf40d6604299a81d7af321eecc0b159e4446ef81ef7ce4c0e2fe7adff6b",
+    "pages": 5,
+    "raster_dpi": 55,
+    "directory": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-04",
+    "contact_sheets": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-04/contact-01.png"
+    ],
+    "detail_pages_rendered_110dpi": [
+      1,
+      2,
+      5
+    ]
+  },
+  {
+    "source_pdf": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/workflow-assurance-violation/proof/attachments/assessment.pdf",
+    "sha256": "72d6e575824f440d4bb1533bddcdd06a0b02e713ec97b4da565e173c82b03892",
+    "pages": 4,
+    "raster_dpi": 55,
+    "directory": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-05",
+    "contact_sheets": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/visual-qa/pdf-05/contact-01.png"
+    ],
+    "detail_pages_rendered_110dpi": [
+      1,
+      2,
+      4
+    ]
+  }
+]

@@ -18,6 +18,65 @@ class AssessmentCliTests(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
             return main(['assessment', *map(str, args)])
 
+    def test_raw_burp_pair_cli_preserves_bytes_and_matches_offline_parser(self):
+        from authzledger.imports import parse_import
+        origin = 'http://127.0.0.1:9'
+        response = b'HTTP/1.1 403 Forbidden\r\nContent-Length: 0\r\n\r\n'
+        for header in (b'Accept: application/json', b'X-Custom: \xffCLI_RAW_SECRET'):
+            with self.subTest(header=header), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                request = (b'GET /invoice/A HTTP/1.1\r\nHost: 127.0.0.1:9\r\n' + header
+                           + b'\r\nAuthorization: Bearer CLI_IMPORT_SECRET\r\n\r\n')
+                (root / 'request.bin').write_bytes(request)
+                (root / 'response.bin').write_bytes(response)
+                with patch('socket.getaddrinfo', side_effect=AssertionError('offline import')):
+                    self.assertEqual(self.call('import', root / 'request.bin', '--format', 'burp-http-pair-v1',
+                        '--source-origin', origin, '--response', root / 'response.bin', '--out', root / 'import.json'), 0)
+                result = json.loads((root / 'import.json').read_text())
+                self.assertEqual(result, parse_import(request, 'burp-http-pair-v1',
+                    source_origin=origin, response_bytes=response))
+                self.assertEqual((root / 'request.bin').read_bytes(), request)
+                self.assertEqual((root / 'response.bin').read_bytes(), response)
+                self.assertNotIn('CLI_IMPORT_SECRET', json.dumps(result))
+                self.assertNotIn('CLI_RAW_SECRET', json.dumps(result))
+                self.assertEqual(result['entries'][0]['response']['status'], 403)
+
+    def test_raw_burp_request_only_has_visible_missing_response(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'request.bin').write_bytes(b'GET / HTTP/1.1\r\nHost: example.test\r\n\r\n')
+            self.assertEqual(self.call('import', root / 'request.bin', '--format', 'burp-http-pair-v1',
+                '--source-origin', 'https://example.test', '--out', root / 'import.json'), 0)
+            entry = json.loads((root / 'import.json').read_text())['entries'][0]
+            self.assertIn('missing_response', entry['gaps'])
+            self.assertIsNone(entry['response']['status'])
+
+    def test_raw_burp_cli_context_is_required_and_legacy_context_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / 'request.bin'
+            source.write_bytes(b'GET / HTTP/1.1\r\n\r\n')
+            cases = [('--format', 'burp-http-pair-v1'),
+                     ('--format', 'har-1.2', '--source-origin', 'https://example.test'),
+                     ('--format', 'burp-xml', '--response', root / 'absent-response.bin')]
+            for args in cases:
+                with self.subTest(args=args):
+                    self.assertEqual(self.call('import', source, *args, '--out', root / 'import.json'), 2)
+                    self.assertFalse((root / 'import.json').exists())
+
+    def test_raw_burp_cli_bounds_combined_request_and_response_reads(self):
+        from authzledger.imports import DEFAULT_LIMITS
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            request = root / 'request.bin'
+            response = root / 'response.bin'
+            request.write_bytes(b'GET / HTTP/1.1\r\nHost: example.test\r\n\r\n')
+            with response.open('wb') as stream:
+                stream.truncate(DEFAULT_LIMITS['max_file_bytes'])
+            self.assertEqual(self.call('import', request, '--format', 'burp-http-pair-v1',
+                '--source-origin', 'https://example.test', '--response', response, '--out', root / 'import.json'), 2)
+            self.assertFalse((root / 'import.json').exists())
+
     def test_plan_is_offline_and_bad_approval_sends_nothing(self):
         with assessment_lab() as (target, state, _, _), tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

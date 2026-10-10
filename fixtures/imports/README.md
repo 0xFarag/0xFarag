@@ -1,6 +1,6 @@
 # Offline import fixtures
 
-The three original format fixtures below are authored and synthetic; they are not claimed to be captured exports from installed third-party tools. Every credential and private marker in them is a public test canary. `chromium-real.har` and `zap-real.json` are separately identified as actual browser/tool exports.
+The three original format fixtures below are authored and synthetic; they are not claimed to be captured exports from installed third-party tools. Every credential and private marker in them is a public test canary. `chromium-real.har`, `zap-real.json` and `burp-native-v1/` are separately identified as actual browser/tool exports.
 
 * `burp-http-messages.xml`: HTTP-message XML `<items>` with base64 request/response. Only the no-DTD profile is accepted. Exports with a DOCTYPE are explicitly rejected under the import contract.
 * `zap-traditional-json-plus.json`: ZAP Traditional JSON Report with Requests and Responses, using the official `site` / `alerts` / `instances` and `request-header` fields.
@@ -16,7 +16,7 @@ No parser connects to any imported URL. Source digests bind the redacted normali
 
 ## Mapping and supported bounds
 
-`parse_import(raw_bytes, format_profile, limits=None)` is offline. The parser accepts at most 10 MiB, 500 entries, 1 MiB per decoded body, 100 headers and JSON/XML depth 64; callers may only reduce these limits. Echo filtering has an additional bounded redaction budget. Duplicate JSON keys, non-finite values, DTDs, entity declarations and invalid base64 fail closed. Duplicate HTTP headers/query names, unsupported bodies, mismatched framing and incomplete messages remain visible execution blockers. No compressed or multipart message decoding is performed.
+`parse_import(raw_bytes, format_profile, limits=None, *, source_origin=None, response_bytes=None)` is offline. The additional keyword-only context is accepted only for `burp-http-pair-v1`. The parser accepts at most 10 MiB, 500 entries, 1 MiB per decoded body, 100 headers and JSON/XML depth 64; callers may only reduce these limits. Echo filtering has an additional bounded redaction budget. Duplicate JSON keys, non-finite values, DTDs, entity declarations and invalid base64 fail closed. Duplicate HTTP headers/query names, unsupported bodies, mismatched framing and incomplete messages remain visible execution blockers. No compressed or multipart message decoding is performed.
 
 Request header values outside the safe content-negotiation allowlist become required binding slots. Transport headers are omitted with explicit gaps. Every query value and JSON string is conservatively redacted. Credential-labelled or token-shaped path segments are redacted; ordinary path identifiers remain visible. Known request credentials echoed in other retained request fields are removed across the complete batch. This is not a claim that arbitrary unlabeled application data can be classified as secret automatically: the operator must review ordinary paths, field names and declared public literals before use. Response bodies, response headers and scanner descriptions are never retained.
 
@@ -28,7 +28,7 @@ Example for a benign redacted query or JSON value:
 {"slot-1": {"literal": "invoice-A"}, "slot-2": {"omit": true}}
 ```
 
-The authored fixtures establish parser regression behavior, not interoperability certification against installed Burp/ZAP releases. A genuine ZAP 2.17.0 JSON+ export is now verified below. Genuine compatible Burp export acceptance remains unverified. Burp exports containing a DOCTYPE are rejected, never silently rewritten.
+The authored fixtures establish parser regression behavior. Separate native captures below verify the pinned Burp and ZAP profiles. Burp XML containing a DOCTYPE is rejected, never silently rewritten. The [F01 addendum](../../docs/burp-native-import-v1.md) adds the separate native raw-message path explicitly.
 
 ## Actual Chromium / Playwright HAR capture
 
@@ -59,7 +59,7 @@ The current message-editor documentation describes **Save item** as XML request/
 
 * https://portswigger.net/burp/documentation/desktop/tools/message-editor
 
-The implementation contract prohibits every DTD. Therefore any DTD-bearing export is rejected with `xml_declarations_forbidden`; no internal-DTD allowlist or silent stripping is applied. The supported profile is DTD-free `<items>` HTTP-message XML. Direct compatibility with a current installed Burp **Save item** export is not demonstrated. The product must not claim universal or one-click Burp export compatibility until a contract-compliant export path is verified.
+The XML implementation contract prohibits every DTD. DTD-bearing exports are rejected with `xml_declarations_forbidden`; no internal-DTD allowlist or silent stripping is applied. The supported XML profile remains DTD-free `<items>`. The pinned native **Save item** XML below demonstrably contains a DTD and is rejected. Positive native compatibility uses the separate complete Raw message export under `burp-http-pair-v1`; it does not establish universal or one-click compatibility with every Burp export mode.
 
 The ZAP parser field names follow the official **Traditional JSON Report with Requests and Responses** example:
 
@@ -87,4 +87,27 @@ python3 -m unittest discover -s tests -p test_imports.py -q
 
 Ports and timestamps legitimately differ between captures; a new capture has its own hashes and provenance. The script never rewrites the native report. Raw-byte fixture hashes are used only because this capture intentionally contains public lab data and no credentials; production import digests still cover the redacted normalized projection only.
 
-The native report's upstream-generated scanner descriptions are from ZAP, under [Apache-2.0](https://github.com/zaproxy/zap-extensions/blob/main/LICENSE). The authored lab data and capture harness use the repository licence. F01-01 remains **partial** until its genuine compatible Burp component is verified; see [exporter gate](../../docs/exporter-gate-1.1.0.md).
+The native report's upstream-generated scanner descriptions are from ZAP, under [Apache-2.0](https://github.com/zaproxy/zap-extensions/blob/main/LICENSE). The authored lab data and capture harness use the repository licence. The current exporter decision, including the separate native Burp profile, is in the [exporter gate](../../docs/exporter-gate-1.1.0.md).
+
+## Actual Burp Community 2026.9.2 raw-message export
+
+`burp-native-v1/` contains the unchanged complete request and response saved from a native Burp Community 2026.9.2 temporary project. In the Raw editor, **Save selected text to file** with **no selection** writes the complete message; PortSwigger documents this action as Copy to file. The separate native Save item XML was also saved unchanged and is retained only as a negative DTD fixture.
+
+| Original file | SHA-256 |
+|---|---|
+| `burp-request.http` | `494b9be5fc48c4f8faf23bf2f01d1647e473fbe81831d74143d6368c8c5cbedb` |
+| `burp-response.http` | `552123446e70539dd222b275c733b451ccc4dac7a76702888c750cb44a5ecd61` |
+| `burp-http-messages.xml` — rejected | `1f4157ec2e306dc11c9192e7f0efcf9425b92b53af4b8526b322025d488cd67d` |
+
+The JAR SHA-256 is `3571f8cadbfd65b0b090d2753735c40b76ad7fdde0b927df2b22ec46ea09693a`, acquired from the official PortSwigger 2026.9.2 distribution. `burp-real.provenance.json` binds that version, the original files, native action, screenshots, capture time and harness. This is observed capture provenance, not a vendor attestation. The request/response bytes are also equal to the corresponding base64 payloads in the exact pinned native XML.
+
+`burp-real.import.json` is the separate redacted source projection. `burp-real.execution.json` records a source-bound controlled experiment with fresh identity/owner/denial controls and a confirmed synthetic marker disclosure. `request-receipts.json` records one native capture request and four controlled requests, all against the owned public loopback fixture. No customer traffic or private credentials are present.
+
+```sh
+python3 tools/check_native_burp.py
+python3 -m unittest discover -s tests -p test_imports.py -q
+```
+
+The checker validates the pinned original bytes and provenance offline, verifies the execution and confirms `xml_declarations_forbidden` for the native XML. It is a fixture-specific acceptance checker; it does not authenticate arbitrary operator input or turn DTD XML into an accepted file.
+
+For the raw profile, supply the exact source origin explicitly; it contains only scheme, host and optional port. The Host header does not determine TLS, and import does not grant target authorization. A response is optional and its absence stays visible. Combined CLI input is limited to 10 MiB; Studio's byte-preserving upload transport limits a pair to 2 MiB. See [installation and GUI instructions](../../INSTALL.md) and the [profile addendum](../../docs/burp-native-import-v1.md).

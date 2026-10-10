@@ -1,0 +1,44 @@
+VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.
+Report assertion/dependency semantics and execution truth are not established by this standalone verifier.
+
+BEFORE · vulnerable local fixture
+AuthzLedger 1.1.0 | 6 configured checks
+PASS 4  FAIL 2  ERROR 0  INCONCLUSIVE 0
+  PASS         owner-own-invoice
+  PASS         peer-own-invoice
+  FAIL         peer-cannot-read-owner
+  PASS         anonymous-cannot-read
+  PASS         admin-can-read-audit
+  FAIL         owner-cannot-read-audit
+Evidence anchor: afd3e04690b5847d8a43c03d603e9c7bd56393a69e311667dda09353bfd69f52
+
+AFTER · fixed local fixture
+AuthzLedger 1.1.0 | 6 configured checks
+PASS 6  FAIL 0  ERROR 0  INCONCLUSIVE 0
+  PASS         owner-own-invoice
+  PASS         peer-own-invoice
+  PASS         peer-cannot-read-owner
+  PASS         anonymous-cannot-read
+  PASS         admin-can-read-audit
+  PASS         owner-cannot-read-audit
+Evidence anchor: 57ee145690290a6b12189fdbcd8786188e44c85691a947d41e75baef7a729178
+
+Demo verified: 2 resolved; synthetic loopback fixture only.
+Reports: /workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/release_check/demo
+Authorization graph written: /workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/release_check/before-graph.json
+Authorization graph written: /workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/release_check/after-graph.json
+Evidence explanation written. AI annotations do not influence authorization decisions.
+Created Ed25519 keypair. Retain the public key separately from evidence packages.
+Signed evidence package: /workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/release_check/proof
+Signature, trusted key, manifest, file hashes and report semantics verified.
+Retest plan written. No HTTP requests sent.
+clean ACCEPTED {'error': 0, 'fail': 0, 'inconclusive': 0, 'pass': 24, 'total': 24}
+owner-bypass ACCEPTED {'error': 0, 'fail': 2, 'inconclusive': 0, 'pass': 22, 'total': 24}
+tenant-bypass ACCEPTED {'error': 0, 'fail': 4, 'inconclusive': 0, 'pass': 20, 'total': 24}
+role-bypass ACCEPTED {'error': 0, 'fail': 2, 'inconclusive': 0, 'pass': 22, 'total': 24}
+denial-leak ACCEPTED {'error': 0, 'fail': 1, 'inconclusive': 0, 'pass': 23, 'total': 24}
+expired-credential ACCEPTED {'error': 0, 'fail': 1, 'inconclusive': 7, 'pass': 16, 'total': 24}
+missing-resource ACCEPTED {'error': 0, 'fail': 2, 'inconclusive': 7, 'pass': 15, 'total': 24}
+wrong-object ACCEPTED {'error': 0, 'fail': 2, 'inconclusive': 7, 'pass': 15, 'total': 24}
+Eight authored local scenarios, not an independent tool comparison, field study or market-superiority proof.
+AuthzLedger 1.0 complete local evidence workflow passed.

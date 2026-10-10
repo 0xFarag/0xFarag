@@ -13,7 +13,9 @@ def add_commands(commands):
     command.add_argument("--out", type=Path, required=True)
     command = actions.add_parser("import", help="Parse a bounded offline Burp, ZAP or HAR export")
     command.add_argument("source", type=Path)
-    command.add_argument("--format", required=True, choices=("burp-xml", "zap-json-plus", "har-1.2"))
+    command.add_argument("--format", required=True, choices=("burp-xml", "burp-http-pair-v1", "zap-json-plus", "har-1.2"))
+    command.add_argument("--source-origin", help="Required raw-pair capture origin; metadata only, not execution authorization")
+    command.add_argument("--response", type=Path, help="Optional native raw response file for burp-http-pair-v1 only")
     command.add_argument("--out", type=Path, required=True)
     for name in ("plan", "workflow-plan", "assurance-plan"):
         command = actions.add_parser(name, help="Compile and inspect a deterministic plan without target traffic")
@@ -132,12 +134,29 @@ def execute_command(args):
         print("Retained reports and proof: " + str(args.out))
         return 0
     if action == "import":
-        from .imports import parse_import
+        from .imports import DEFAULT_LIMITS, parse_import
         if args.out.exists():
             raise ValueError("Output already exists")
+        raw_pair = args.format == "burp-http-pair-v1"
+        if raw_pair and args.source_origin is None:
+            raise ValueError("Raw Burp request import requires --source-origin; this does not authorize execution")
+        if not raw_pair and (args.source_origin is not None or args.response is not None):
+            raise ValueError("Source origin and response file are only supported for burp-http-pair-v1")
+        maximum = DEFAULT_LIMITS["max_file_bytes"]
         with args.source.open("rb") as source:
-            raw = source.read(10 * 1024 * 1024 + 1)
-        result = parse_import(raw, args.format)
+            raw = source.read(maximum + 1)
+        if len(raw) > maximum:
+            raise ValueError("Import exceeds the supported size limit")
+        if raw_pair:
+            response = None
+            if args.response is not None:
+                with args.response.open("rb") as source:
+                    response = source.read(maximum - len(raw) + 1)
+                if len(raw) + len(response) > maximum:
+                    raise ValueError("Import exceeds the supported size limit")
+            result = parse_import(raw, args.format, source_origin=args.source_origin, response_bytes=response)
+        else:
+            result = parse_import(raw, args.format)
         _write(args.out, result)
         print(f"Imported {len(result['entries'])} source entries offline; explicit mapping and controls are required.")
         return 0

@@ -1,0 +1,6 @@
+{
+  "main_rejected": true,
+  "standalone_exit_code": 1,
+  "standalone_stderr": "FAILED: file exceeds size limit\n",
+  "standalone_stdout": ""
+}

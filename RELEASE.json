@@ -1,8 +1,8 @@
 {
-  "version": "1.1.0.dev0",
+  "version": "1.1.0",
   "target_version": "1.1.0",
   "date": "2026-10-10",
-  "status": "development-review-stable-publication-blocked",
+  "status": "stable-ready-awaiting-exact-commit-ci-and-publication",
   "repository": "https://github.com/0xFarag/0xFarag",
   "distribution_branch": "authzledger-v1.1.0",
   "release_url": null,
@@ -25,26 +25,24 @@
   },
   "acceptance": {
     "total": 88,
-    "verified": 87,
-    "partial": [
-      "F01-01"
-    ],
-    "ledger": "docs/acceptance-1.1.0.md"
+    "verified": 88,
+    "partial": [],
+    "ledger": "docs/acceptance-1.1.0.md",
+    "amendment": "docs/burp-native-import-v1.md"
   },
   "publication_blockers": [
-    "F01-01: genuine Burp exporter capture with provenance and a verified DTD-safe Burp import profile remain incomplete. Native ZAP 2.17.0 / reports 0.43.0 and Playwright HAR captures are verified.",
-    "Producer remains 1.1.0.dev0. Stable 1.1.0 requires complete acceptance, final-version revalidation and successful CI on the exact reviewed commit."
+    "Remote verify/browser jobs must pass on the final commit before immutable publication."
   ],
-  "version_decision": "Retain 1.1.0.dev0 until F01-01 closes. Then release 1.1.0. No prior 1.1.x stable release exists here to justify 1.1.5 as a fix release.",
+  "version_decision": "Native Burp acceptance completed under the explicit F01 addendum. Candidate producer is 1.1.0; final-version verification and immutable publication remain separate gates.",
   "prior_verified_snapshot": {
     "tests_passed": 492,
     "browser_suites_passed": 6,
     "evidence_directory": "evidence/1.1.0-dev0",
     "verification_protocol": "docs/verification-1.1.0.md"
   },
-  "current_review_evidence_directory": "evidence/1.1.0-release-review",
-  "distribution_receipt": "evidence/1.1.0-release-review/installed-wheel.json",
-  "demonstration_proof_directory": "evidence/1.1.0-release-review/assessment-demos",
+  "current_review_evidence_directory": "evidence/1.1.0-final",
+  "distribution_receipt": "evidence/1.1.0-final/installed-wheel.json",
+  "demonstration_proof_directory": "evidence/1.1.0-final/assessment-demos",
   "remote_ci_status": "Not established by this file; inspect the remote workflow on the exact commit before publishing.",
   "verification_depth": {
     "standalone": "Ed25519 signature, inventory, file hashes, JSON structure and report anchor binding; Python standard library plus OpenSSL.",
@@ -54,7 +52,7 @@
   "billing_enabled": false,
   "known_limits": [
     "Local single-operator workbench; hosted multi-user operation is outside this release.",
-    "Three assessment demonstrations use authored synthetic loopback fixtures and do not close genuine Burp exporter acceptance. Native ZAP and Playwright HAR are separately evidenced.",
+    "Three assessment demonstrations use public synthetic loopback fixtures. Native Burp Community 2026.9.2 raw messages, ZAP 2.17.0 / reports 0.43.0 and Playwright HAR exports have separately retained provenance. Native DTD-bearing Burp XML remains rejected.",
     "Default oracle evidence is an evaluation attestation; discarded raw response values cannot be independently reconstructed.",
     "Selective retests prove only the explicitly retained rule, identity, object and valid controls; omitted findings remain not_retested.",
     "Only the documented Linux/CPython and Chromium environment is measured; other platforms and full accessibility are not certified.",
@@ -63,13 +61,34 @@
   ],
   "release_media": {
     "current_1_1_video_verified": false,
-    "note": "Historical 1.0 media do not demonstrate the 1.1 assessment workflow and are excluded from this development package."
+    "note": "Actual final 1.1.0 Studio captures, reproducible landscape/portrait artwork, ready channel drafts, 60-second storyboard and captions are included. No recorded 1.1.0 video or social publication is claimed.",
+    "assets_directory": "brand/release-1.1.0"
   },
-  "current_review": {
+  "previous_review": {
     "tests_passed": 494,
     "browser_suites_passed": 6,
     "check_tools_passed": 5,
     "verification": "evidence/1.1.0-release-review/verification.json",
     "stable_gate": "blocked: native compatible Burp export missing"
+  },
+  "current_review": {
+    "status": "All final local gates and canonical distribution checks passed.",
+    "evidence_directory": "evidence/1.1.0-final",
+    "native_burp_gate": "passed: unchanged native raw pair, pinned producer, one capture and four controlled requests",
+    "browser_suites_required": 7,
+    "tests_passed": 530,
+    "tests_failed": 0,
+    "tests_skipped": 0,
+    "browser_suites_passed": 7,
+    "check_tools_passed": 5,
+    "native_check_passed": true,
+    "stable_gate": "passed",
+    "wheel_reproducible": true,
+    "reports_reproducible": true,
+    "report_qa_findings": 50,
+    "report_qa_pdf_pages": 72,
+    "wheel_sha256": "77ffbef884f881c615f177164bf43b75abe006ec363b53c407936a61b97d6b9b",
+    "source_date_epoch_independent": true,
+    "verification": "evidence/1.1.0-final/README.md"
   }
 }

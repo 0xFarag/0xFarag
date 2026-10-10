@@ -377,13 +377,14 @@ def _execute_in_context(case, target, headers, limits, context, observation_sink
         return _record(case, "inconclusive", "Request not sent: " + exc.code + ".")
 
 
-def run(contract: dict, *, context=None, credential_resolver=None, observation_sink=None, request_kind=None) -> dict:
+def run(contract: dict, *, context=None, credential_resolver=None, observation_sink=None, request_kind=None,
+        allow_workflow_headers=False) -> dict:
     """Execute a normalized contract, preserving dependency and result order.
 
     Mutating-method permission is granted when loading the contract. Revalidate
     here to prevent raw dictionaries from bypassing scope or limit validation.
     """
-    contract = load_contract(contract, allow_mutations=True)
+    contract = load_contract(contract, allow_mutations=True, allow_workflow_headers=allow_workflow_headers)
     if observation_sink is not None and not callable(observation_sink):
         raise ContractError("observation_sink must be callable.")
     if request_kind is not None and not isinstance(request_kind, (str, dict)):

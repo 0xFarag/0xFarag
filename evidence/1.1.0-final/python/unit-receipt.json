@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-v"
+  ],
+  "duration_seconds": 89.397,
+  "exit_code": 0,
+  "finished_utc": "2026-10-10T17:34:42.897541+00:00",
+  "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/unit.log",
+  "log_sha256": "601642af5bfe21e47e26b5d7cc49781344efd61a6ebc938494e3191782bb6e6d",
+  "name": "unit",
+  "started_utc": "2026-10-10T17:33:13.500716+00:00"
+}

@@ -183,14 +183,14 @@ def _findings(edge):
     return findings
 
 
-def build_graph(contract, report=None, policy=None) -> dict:
+def build_graph(contract, report=None, policy=None, *, allow_workflow_headers=False) -> dict:
     """Bind intent, optional verified observations and independent policy input.
 
     A normalized contract is accepted without executing it. A supplied report
     must have a valid local evidence chain and exactly match its whole contract.
     Hash consistency is not a claim of network execution or trusted authorship.
     """
-    contract = load_contract(contract, allow_mutations=True)
+    contract = load_contract(contract, allow_mutations=True, allow_workflow_headers=allow_workflow_headers)
     results = _bind_report(contract, report) if report is not None else {}
     policy = _bind_policy(contract, policy)
     cases = {case["id"]: case for case in contract["cases"]}

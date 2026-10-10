@@ -10,7 +10,7 @@ python3 -m pip install '.[reports]'
 
 The core package remains dependency-free. The `reports` extra pins `reportlab==4.4.9`. Missing ReportLab or another ReportLab version is an explicit PDF export/semantic-verification error; HTML is never substituted for PDF. HTML/JSON export and packages without a PDF do not need the extra. OpenSSL remains the existing Ed25519 implementation.
 
-The profile is `assessment-html-pdf-v1-reportlab-4.4.9-dejavu-2.37`. It fixes A4 pages, margins, typography, PDF invariant metadata, and the bundled fonts. The renderer makes no network requests and executes no HTML from assessment content. Exported HTML is escaped, self-contained and uses `default-src 'none'`; sources and long URLs are inert text. PDF text is escaped before entering ReportLab's paragraph parser. Missing font glyphs block export explicitly instead of replacing evidence text with invisible boxes. This font profile supports the tested Latin, Greek and Cyrillic repertoire; it is not a claim of universal script shaping or CJK support. Reports are not PDF/UA-certified.
+The profile is `assessment-html-pdf-v1-reportlab-4.4.9-dejavu-2.37`. It fixes A4 pages, margins, typography, PDF invariant metadata, and the bundled fonts. PDF metadata and document IDs use the canonical UTC instant 2000-01-01, preserving the original no-environment profile. `SOURCE_DATE_EPOCH` is used for wheel builds only and cannot change a report, including when unset, invalid, negative or out of range. The pinned ReportLab clock is supplied through local constructor bindings; the renderer never changes process environment variables or shared ReportLab constructors. The renderer makes no network requests and executes no HTML from assessment content. Exported HTML is escaped, self-contained and uses `default-src 'none'`; sources and long URLs are inert text. PDF text is escaped before entering ReportLab's paragraph parser. Missing font glyphs block export explicitly instead of replacing evidence text with invisible boxes. This font profile supports the tested Latin, Greek and Cyrillic repertoire; it is not a claim of universal script shaping or CJK support. Reports are not PDF/UA-certified.
 
 | Artifact | SHA-256 |
 |---|---|
@@ -18,7 +18,7 @@ The profile is `assessment-html-pdf-v1-reportlab-4.4.9-dejavu-2.37`. It fixes A4
 | ReportLab `reportlab-4.4.9.tar.gz` | `7cf487764294ee791a4781f5a157bebce262a666ae4bbb87786760a9676c9378` |
 | `fonts/DejaVuSans.ttf` | `ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280` |
 | `fonts/DejaVuSans-Bold.ttf` | `5c1247acef7f2b8522a31742c76d6adcb5569bacc0be7ceaa4dc39dd252ce895` |
-| `fonts/LICENSE-DejaVu.txt` | `e180b3d65bf650dffffd71dd21b6180767b469a18dd87e1d8552be69bb9ecdf0` |
+| `fonts/LICENSE-DejaVu.txt` | `562c8f5e92af7a06339292a1bb0b9a3e9c8d5142af5d7167f2866fc50261b993` |
 
 ReportLab archive hashes are the publisher's PyPI file hashes, checked on 2026-10-10. Font hashes are computed from the actual bundled files and enforced before PDF rendering. DejaVu's redistribution notice ships alongside the fonts; the fonts do not acquire AuthzLedger's proprietary license. ReportLab's transitive dependencies are resolved by the package manager; the table is not a claim of a complete transitive supply-chain lock. The exact-render profile was exercised on Python 3.12/Linux. A different renderer producing different bytes is rejected rather than silently classified as equivalent.
 

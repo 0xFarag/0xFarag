@@ -1,4 +1,12 @@
-# AuthzLedger 1.1.0 — Verifikation des Entwicklungsstands
+# AuthzLedger 1.1.0 — Verifikationsprotokoll
+
+## Finaler Kandidat nach nativem Burp-Nachweis
+
+Der native Burp-Nachweis wurde am 10. Oktober 2026 abgeschlossen. `tools/check_native_burp.py` prüft offline die gepinnten unveränderten Originale, Herkunftsbelege, neun Screenshots, Importprojektion und die Ausführung mit einem Capture plus vier kontrollierten Requests. Das explizite [F01-Addendum](burp-native-import-v1.md) erweitert den nativen Burp-Pfad um Raw-Nachrichten; DTD-haltiges XML bleibt gesperrt.
+
+Die finale lokale Prüfung des erweiterten 1.1.0-Kandidaten ist unter [`evidence/1.1.0-final/`](../evidence/1.1.0-final/README.md) dokumentiert: **530 Tests ohne Fehler oder Skips, sieben Browser-Suiten, fünf Kernprüfer, Native-Burp- und Release-Gate bestanden.** Zwei Wheels sind bytegleich; saubere Installation, beide Verifier und bytegleiche JSON-/HTML-/PDF-Berichte mit 50 Unicode-Findings sind geprüft. Der öffentliche Release verlangt zusätzlich CI auf dem exakten Commit und die bestätigte Veröffentlichung. Die folgenden Abschnitte bleiben als datierte historische Prüfstände erhalten. Ihre Testzahlen, Versionsstrings, offenen Gates und Artefakte beschreiben ausschliesslich den damaligen Stand.
+
+## Historische Entwicklungsprüfung — vor dem finalen Kandidaten
 
 **Ergänzung der Releaseprüfung vom 10. Oktober:** Nach Aufnahme des echten ZAP-Exports bestehen **494 Tests**, sechs Browser-Suiten und fünf Check-Tools. Das finale Entwicklungs-Wheel wurde ausserhalb des Checkouts installiert und mit beiden Verifiern geprüft. Die neuen Logs, das eingefrorene Codeinventar und die unabhängigen Demo-Pakete stehen unter [`evidence/1.1.0-release-review/`](../evidence/1.1.0-release-review/README.md). Die nachfolgenden 492-Test-/Wheelangaben bleiben als historische ursprüngliche Prüfung erhalten. F01-01 bleibt wegen des echten kompatiblen Burp-Exports teilweise verifiziert; keine stabile Veröffentlichung.
 

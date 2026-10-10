@@ -1,5 +1,7 @@
 """Assessment endpoints preserve offline planning, credentials and review identity."""
+import base64
 import copy
+import hashlib
 import http.client
 import io
 import json
@@ -119,6 +121,52 @@ class StudioAssessmentTests(unittest.TestCase):
         self.assertNotIn('hidden-secret', json.dumps(self.server.assessment_imports))
         self.assertEqual(self.fixture_state['requests'], [])
 
+    def test_raw_burp_import_transport_preserves_binary_bytes_before_redaction(self):
+        from authzledger.imports import parse_import
+        request = (b'GET /invoice/A HTTP/1.1\r\nHost: ' + self.target.removeprefix('http://').encode('ascii')
+                   + b'\r\nAuthorization: Bearer RAW_IMPORT_SECRET\r\nX-Custom: \xffRAW_BINARY_SECRET\r\n\r\n')
+        response = b'HTTP/1.1 403 Forbidden\r\nContent-Length: 0\r\n\r\n'
+        with patch('authzledger.imports.parse_import', wraps=parse_import) as parser:
+            code, result = self.request('/api/assessment/import', {'profile': 'burp-http-pair-v1',
+                'request_base64': base64.b64encode(request).decode('ascii'), 'source_origin': self.target,
+                'response_base64': base64.b64encode(response).decode('ascii')})
+            self.assertEqual(code, 200, result)
+            parser.assert_called_once_with(request, 'burp-http-pair-v1',
+                source_origin=self.target, response_bytes=response)
+        entry = result['import']['entries'][0]
+        self.assertIn('non_ascii_header', entry['execution_blockers'])
+        self.assertEqual(entry['response']['status'], 403)
+        self.assertNotIn('RAW_IMPORT_SECRET', json.dumps(result))
+        self.assertNotIn('RAW_BINARY_SECRET', json.dumps(self.server.assessment_imports))
+        self.assertEqual(self.fixture_state['requests'], [])
+
+    def test_raw_burp_request_only_keeps_response_gap_and_origin_is_not_authorization(self):
+        request = (b'GET /invoice/A HTTP/1.1\r\nHost: '
+                   + self.target.removeprefix('http://').encode('ascii') + b'\r\n\r\n')
+        payload = {'profile': 'burp-http-pair-v1', 'request_base64': base64.b64encode(request).decode('ascii'),
+                   'source_origin': self.target}
+        code, result = self.request('/api/assessment/import', payload)
+        self.assertEqual(code, 200, result)
+        entry = result['import']['entries'][0]
+        self.assertIn('missing_response', entry['gaps'])
+        self.assertIsNone(entry['response']['status'])
+        self.assertEqual(entry['origin'], self.target)
+        self.assertEqual(self.request('/api/assessment/run', {'review': result['import_id'], 'authorized': True})[0], 400)
+        self.assertEqual(self.fixture_state['requests'], [])
+
+    def test_raw_burp_transport_rejects_malformed_and_ambiguous_profile_fields(self):
+        request = base64.b64encode(b'GET / HTTP/1.1\r\n\r\n').decode('ascii')
+        valid = {'profile': 'burp-http-pair-v1', 'request_base64': request, 'source_origin': self.target}
+        cases = [dict(valid, text='GET / HTTP/1.1'), dict(valid, request_base64='%%%'),
+                 dict(valid, request_base64=None), dict(valid, response_base64=None),
+                 dict(valid, source_origin=None), dict(valid, profile='har-1.2'),
+                 {'profile': 'burp-xml', 'text': '<items/>', 'response_base64': ''}]
+        for payload in cases:
+            with self.subTest(payload=payload):
+                self.assertEqual(self.request('/api/assessment/import', payload)[0], 400)
+        self.assertEqual(self.server.assessment_imports, {})
+        self.assertEqual(self.fixture_state['requests'], [])
+
     def test_public_query_mapping_keeps_original_import_immutable(self):
         har = {'log': {'version': '1.2', 'entries': [{'request': {'method': 'GET',
             'url': self.target + '/invoice/A?note=private-original', 'headers': []}, 'response': {'status': 403}}]}}
@@ -166,6 +214,7 @@ class StudioAssessmentTests(unittest.TestCase):
             names = package.namelist(); self.assertIn('public.pem', names)
             self.assertTrue(any(name.endswith('assessment.pdf') for name in names))
             self.assertFalse(any('private' in name for name in names))
+            self.assertEqual(json.loads(package.read('manifest.json'))['signer']['public_key_sha256'], key['public_key_sha256'])
 
     def test_cancel_during_control_prevents_following_dispatches(self):
         from authzledger import engine
@@ -202,6 +251,35 @@ class StudioAssessmentTests(unittest.TestCase):
                 'finding_id': result['execution']['findings'][0]['id']})
         self.assertEqual(code, 200, inspector)
         self.assertEqual(len(self.fixture_state['requests']), count)
+
+    def test_selective_get_retest_drops_unselected_mutation_approval_without_changing_baseline(self):
+        mutation = copy.deepcopy(self.spec['contract']['cases'][-1])
+        mutation.update(id='mutating-target', method='POST')
+        variant = copy.deepcopy(self.spec['variants'][0])
+        variant.update(id='mutating-variant', case_id='mutating-target')
+        self.spec['contract']['cases'].append(mutation)
+        self.spec['variants'].append(variant)
+        self.spec['mutation_approval'] = ['mutating-target']
+        baseline = self.run_job(self.preview()['review'])
+        original = copy.deepcopy(baseline['execution'])
+        count = len(self.fixture_state['requests'])
+        code, preview = self.request('/api/assessment/retest', {'execution_id': baseline['execution_id'],
+            'selected_ids': ['target']})
+        self.assertEqual(code, 200, preview)
+        self.assertEqual(preview['plan']['spec']['mutation_approval'], [])
+        self.assertTrue(all(case['method'] == 'GET' for case in preview['plan']['contract']['cases']))
+        self.assertEqual(len(self.fixture_state['requests']), count)
+        self.fixture_state['mode'] = 'fixed'
+        current = self.run_job(preview['review'])
+        self.assertEqual(current['execution']['plan'], preview['plan'])
+        self.assertEqual(self.server.assessment_executions[baseline['execution_id']], original)
+        code, mutation_preview = self.request('/api/assessment/retest', {'execution_id': baseline['execution_id'],
+            'selected_ids': ['mutating-target']})
+        self.assertEqual(code, 200, mutation_preview)
+        self.assertEqual(mutation_preview['plan']['spec']['mutation_approval'], ['mutating-target'])
+        unapproved = copy.deepcopy(mutation_preview['plan']['spec'])
+        unapproved['mutation_approval'] = []
+        self.assertEqual(self.request('/api/assessment/plan', {'spec': unapproved})[0], 400)
 
     def test_shared_inspector_and_unknown_dependency_full_scope(self):
         execution = self.run_job(self.preview()['review'])
@@ -259,6 +337,7 @@ class StudioAssessmentTests(unittest.TestCase):
             self.assertEqual(result['trace']['budget_ledger']['dispatched_total'], 12)
             self.assertEqual(len(state['requests']), 12)
             self.assertEqual(state['objects'], {})
+
             self.assertEqual(self.run_job(preview['review'])['id'], result['id'])
             self.assertEqual(len(state['requests']), 12)
             self.assertTrue(all(cycle['history'] for cycle in result['trace']['cycles']))
@@ -276,6 +355,114 @@ class StudioAssessmentTests(unittest.TestCase):
             self.assertEqual(stopped['trace']['cycles'][0]['trace']['variants'][0]['interpretation'], 'violation')
             self.assertEqual(len(state['requests']), 18)
             self.assertEqual(state['objects'], {})
+
+    def test_workflow_reduction_preserves_retained_source_scope_controls_and_cleanup(self):
+        import test_workflows as workflows
+        from authzledger.minimize import verify_reduction
+        with workflows.fixture() as (origin, state):
+            specification = workflows.spec(origin)
+            specification['contract']['cases'][4]['body']['noise'] = 'unnecessary'
+            code, preview = self.request('/api/assessment/workflow/plan', {'spec': specification})
+            self.assertEqual(code, 200, preview)
+            workflow = self.run_job(preview['review'])
+            retained = copy.deepcopy(workflow['trace'])
+            source = {'trace_id': workflow['trace_id']}
+            count = len(state['requests'])
+            code, inspector = self.request('/api/assessment/inspect', source)
+            self.assertEqual(code, 200, inspector)
+            self.assertEqual(inspector['trace'], retained)
+            code, available = self.request('/api/assessment/reduction/units', source)
+            self.assertEqual(code, 200, available)
+            units = [unit for unit in available['units'] if unit.get('pointer') == '/noise']
+            self.assertEqual(len(units), 1)
+            code, reduction = self.request('/api/assessment/reduction/plan', dict(source, units=units, max_requests=18))
+            self.assertEqual(code, 200, reduction)
+            self.assertEqual(reduction['plan']['original_execution'], retained)
+            self.assertEqual(reduction['plan']['scope']['target'], origin)
+            self.assertEqual(reduction['plan']['original_execution']['plan']['spec']['mutation_approval'], specification['mutation_approval'])
+            self.assertEqual(len(state['requests']), count)
+            self.assertEqual(self.request('/api/assessment/run', {'review': reduction['review'], 'authorized': False})[0], 400)
+            self.assertEqual(len(state['requests']), count)
+            reduced = self.run_job(reduction['review'])
+            self.assertEqual(verify_reduction(reduced['trace']), [])
+            self.assertTrue(reduced['trace']['one_minimal'])
+            self.assertEqual(reduced['trace']['original_execution'], retained)
+            self.assertLessEqual(reduced['trace']['requests_used'], 18)
+            self.assertEqual(self.server.assessment_traces[workflow['trace_id']], retained)
+            self.assertEqual(state['objects'], {})
+            code, inspector = self.request('/api/assessment/inspect', {'trace_id': reduced['trace_id']})
+            self.assertEqual(code, 200, inspector)
+            self.assertEqual(inspector['trace'], reduced['trace'])
+            code, frozen = self.request('/api/assessment/freeze', {'execution_ids': [],
+                'trace_ids': [workflow['trace_id'], reduced['trace_id']], 'metadata': {'title': 'Workflow reduction'}})
+            self.assertEqual(code, 200, frozen)
+            self.assertEqual(frozen['assessment']['reductions'], [reduced['trace']])
+
+    def test_reduction_sources_require_exclusive_typed_session_owned_verified_records(self):
+        import test_workflows as workflows
+        with workflows.fixture() as (origin, state):
+            specification = workflows.spec(origin)
+            specification['contract']['cases'][4]['body']['noise'] = 'unnecessary'
+            code, preview = self.request('/api/assessment/workflow/plan', {'spec': specification})
+            self.assertEqual(code, 200, preview)
+            workflow = self.run_job(preview['review'])
+            count = len(state['requests'])
+            wrong_kind = self.server.retain_assessment(self.server.assessment_traces, {'kind': 'reduction-trace'})
+            foreign = StudioServer()
+            try:
+                foreign_id = foreign.retain_assessment(foreign.assessment_traces, workflow['trace'])
+                for body in ({}, {'trace_id': None}, {'trace_id': []}, {'trace_id': foreign_id},
+                             {'trace_id': wrong_kind}, {'execution_id': workflow['trace_id']},
+                             {'trace_id': workflow['trace_id'], 'execution_id': None},
+                             {'trace_id': workflow['trace_id'], 'spec': specification}):
+                    with self.subTest(body=body):
+                        self.assertEqual(self.request('/api/assessment/reduction/units', body)[0], 400)
+                        self.assertEqual(self.request('/api/assessment/reduction/plan', dict(body, units=[], max_requests=18))[0], 400)
+            finally:
+                foreign.server_close()
+            self.assertEqual(self.request('/api/assessment/inspect', {'trace_id': workflow['trace_id'], 'finding_id': 'other'})[0], 400)
+            self.server.assessment_traces[workflow['trace_id']]['plan']['spec']['mutation_approval'] = []
+            self.assertEqual(self.request('/api/assessment/reduction/units', {'trace_id': workflow['trace_id']})[0], 400)
+            self.assertEqual(self.request('/api/assessment/inspect', {'trace_id': workflow['trace_id']})[0], 400)
+            self.assertEqual(len(state['requests']), count)
+            self.assertEqual(state['objects'], {})
+
+    def test_workflow_reduction_review_rejects_changed_credentials_without_traffic(self):
+        import test_workflows as workflows
+        with workflows.fixture() as (origin, state):
+            specification = workflows.spec(origin)
+            specification['contract']['cases'][4]['body']['noise'] = 'unnecessary'
+            code, preview = self.request('/api/assessment/workflow/plan', {'spec': specification})
+            self.assertEqual(code, 200, preview)
+            workflow = self.run_job(preview['review'])
+            code, available = self.request('/api/assessment/reduction/units', {'trace_id': workflow['trace_id']})
+            units = [unit for unit in available['units'] if unit.get('pointer') == '/noise']
+            code, reduction = self.request('/api/assessment/reduction/plan',
+                {'trace_id': workflow['trace_id'], 'units': units, 'max_requests': 18})
+            self.assertEqual(code, 200, reduction)
+            count = len(state['requests'])
+            code, _ = self.request('/api/assessment/credentials', {'env': 'NEW_WORKFLOW_SECRET', 'value': 'new-secret',
+                'identity': 'operator', 'target_origin': origin})
+            self.assertEqual(code, 200)
+            self.assertEqual(self.request('/api/assessment/run', {'review': reduction['review'], 'authorized': True})[0], 400)
+            self.assertEqual(len(state['requests']), count)
+
+    def test_signing_metadata_fingerprint_matches_manifest_der_trust_anchor(self):
+        from authzledger.signing import _public_der
+        code, before = self.request('/api/session')
+        self.assertEqual(code, 200, before)
+        self.assertFalse(before['signed_proof'])
+        self.assertIsNone(before['public_key_sha256'])
+        code, signing = self.request('/api/assessment/signing', {'create_session_key': True})
+        self.assertEqual(code, 200, signing)
+        fingerprint = hashlib.sha256(_public_der(signing['public_key'].encode('ascii'))).hexdigest()
+        self.assertEqual(signing['public_key_sha256'], fingerprint)
+        self.assertEqual(signing['public_key_fingerprint_algorithm'], 'SHA-256 of DER SubjectPublicKeyInfo')
+        self.assertEqual(signing['key_scope'], 'session')
+        code, session = self.request('/api/session')
+        self.assertEqual(code, 200, session)
+        self.assertEqual(session['public_key_sha256'], fingerprint)
+        self.assertEqual(session['public_key'], signing['public_key'])
 
     def test_catalog_matches_shared_reporting_service(self):
         from authzledger.assessment_reports import reporting_catalog

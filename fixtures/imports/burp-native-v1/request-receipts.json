@@ -1,0 +1,159 @@
+[
+  {
+    "headers": [
+      [
+        "Host",
+        "127.0.0.1:37915"
+      ],
+      [
+        "User-Agent",
+        "curl/8.5.0"
+      ],
+      [
+        "Accept",
+        "application/json"
+      ],
+      [
+        "Connection",
+        "keep-alive"
+      ]
+    ],
+    "method": "GET",
+    "path": "/invoice/A",
+    "phase": "native_capture",
+    "request_line_hex": "474554202f696e766f6963652f4120485454502f312e310d0a",
+    "status": 200
+  },
+  {
+    "headers": [
+      [
+        "Host",
+        "127.0.0.1:37915"
+      ],
+      [
+        "User-Agent",
+        "AuthzLedger/1.1.0.dev0"
+      ],
+      [
+        "Accept",
+        "application/json"
+      ],
+      [
+        "Accept-Encoding",
+        "identity"
+      ],
+      [
+        "Authorization",
+        "Bearer public-lab-owner"
+      ],
+      [
+        "Connection",
+        "close"
+      ]
+    ],
+    "method": "GET",
+    "path": "/invoice/A",
+    "phase": "controlled_execution",
+    "request_line_hex": "474554202f696e766f6963652f4120485454502f312e310d0a",
+    "status": 200
+  },
+  {
+    "headers": [
+      [
+        "Host",
+        "127.0.0.1:37915"
+      ],
+      [
+        "User-Agent",
+        "AuthzLedger/1.1.0.dev0"
+      ],
+      [
+        "Accept",
+        "application/json"
+      ],
+      [
+        "Accept-Encoding",
+        "identity"
+      ],
+      [
+        "Authorization",
+        "Bearer public-lab-peer"
+      ],
+      [
+        "Connection",
+        "close"
+      ]
+    ],
+    "method": "GET",
+    "path": "/me",
+    "phase": "controlled_execution",
+    "request_line_hex": "474554202f6d6520485454502f312e310d0a",
+    "status": 200
+  },
+  {
+    "headers": [
+      [
+        "Host",
+        "127.0.0.1:37915"
+      ],
+      [
+        "User-Agent",
+        "AuthzLedger/1.1.0.dev0"
+      ],
+      [
+        "Accept",
+        "application/json"
+      ],
+      [
+        "Accept-Encoding",
+        "identity"
+      ],
+      [
+        "Authorization",
+        "Bearer public-lab-peer"
+      ],
+      [
+        "Connection",
+        "close"
+      ]
+    ],
+    "method": "GET",
+    "path": "/known-denial",
+    "phase": "controlled_execution",
+    "request_line_hex": "474554202f6b6e6f776e2d64656e69616c20485454502f312e310d0a",
+    "status": 403
+  },
+  {
+    "headers": [
+      [
+        "Host",
+        "127.0.0.1:37915"
+      ],
+      [
+        "User-Agent",
+        "AuthzLedger/1.1.0.dev0"
+      ],
+      [
+        "Accept",
+        "application/json"
+      ],
+      [
+        "Accept-Encoding",
+        "identity"
+      ],
+      [
+        "Authorization",
+        "Bearer public-lab-peer"
+      ],
+      [
+        "Connection",
+        "close"
+      ]
+    ],
+    "method": "GET",
+    "path": "/invoice/A",
+    "phase": "controlled_execution",
+    "request_line_hex": "474554202f696e766f6963652f4120485454502f312e310d0a",
+    "status": 403
+  }
+]

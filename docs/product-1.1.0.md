@@ -10,7 +10,7 @@ Der Wert liegt in der vollständigen Beweiskette: Welche Regel wurde verletzt? W
 
 1.1.0 übernimmt den vollständigen fachlichen Umfang des [verbindlichen 1.0.5-Implementierungsvertrags](implementation-1.0.5.md), einschliesslich aller 88 Abnahmeszenarien. Die neue Minor-Version ersetzt das geplante 1.0.5-Releaseziel. Der Vertrag bleibt als unveränderte Anforderungsbaseline erhalten; Bezeichnungen mit 1.0.5 darin sind keine zusätzlichen oder parallelen Produktziele.
 
-**Status dieses Dokuments:** Releasevertrag und Integrationsbeschreibung. Der integrierte Entwicklungsstand trägt die eindeutige Version `1.1.0.dev0` mit eigenem explizitem Vergleichsprofil. Fertigstellung, tatsächliche Tests und verbleibende Blocker werden im Verifikationsprotokoll geführt. Eine hohe Testzahl allein erklärt nicht sämtliche Anforderungen für erfüllt. Produktionsversion `1.1.0` und öffentliche Releaseaussagen folgen erst dem vollständigen Releasegate.
+**Status dieses Dokuments:** Releasevertrag und Integrationsbeschreibung des 1.1.0-Kandidaten. Der native Burp-Pfad ist durch das explizite [F01-Addendum](burp-native-import-v1.md) erweitert und mit originalen Exporten geprüft. Die tatsächlichen finalen Test- und Distributionsnachweise stehen im Verifikationsprotokoll. Veröffentlichung erfordert alle lokalen Gates und CI auf dem exakten Commit; der Versionsstring allein erklärt keinen Live-Release.
 
 ## Positionierung und unmittelbar spürbarer Wert
 

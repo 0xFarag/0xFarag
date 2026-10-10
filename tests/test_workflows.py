@@ -87,6 +87,36 @@ def spec(origin):
 
 
 class WorkflowTests(unittest.TestCase):
+    def test_public_case_idempotency_key_replay_is_scoped_and_retained(self):
+        from authzledger.minimize import removable_units
+        from authzledger.model import ContractError, load_contract
+        from authzledger.engine import run
+        with fixture() as (origin, state):
+            value = spec(origin)
+            operation = value['contract']['cases'][4]
+            operation.pop('body')
+            operation['headers'] = {'Idempotency-Key': 'public-fixture-operation'}
+            value['steps'][1]['bindings'] = [binding for binding in value['steps'][1]['bindings']
+                                            if binding['target']['kind'] != 'json']
+            value['rule'] = {'id': 'idempotency', 'kind': 'effect_increase', 'pointer': '/effects', 'max_delta': 1}
+            value['variants'] = [{'id': 'repeated-completion', 'repeat': {'complete': 2}}]
+            with self.assertRaises(ContractError):
+                load_contract(value['contract'], allow_mutations=True)
+            with self.assertRaises(ContractError):
+                run(value['contract'])
+            self.assertEqual(state['requests'], [])
+            plan = compile_workflow(value)
+            state['replay'] = True
+            trace = execute_workflow(plan)
+            self.assertEqual(trace['variants'][0]['interpretation'], 'violation')
+            self.assertEqual(verify_workflow(trace), [])
+            repeated = [step for step in trace['variants'][0]['steps'] if step['step_id'] == 'complete']
+            self.assertEqual(len(repeated), 2)
+            self.assertTrue(all(step['contract']['cases'][0]['headers']['Idempotency-Key'] == 'public-fixture-operation'
+                                for step in repeated))
+            self.assertFalse(any(unit.get('name') == 'idempotency-key' for unit in removable_units(trace)))
+            self.assertEqual(state['objects'], {})
+
     def test_safe_and_vulnerable_are_independently_observed(self):
         with fixture() as (origin, state):
             plan = compile_workflow(spec(origin))

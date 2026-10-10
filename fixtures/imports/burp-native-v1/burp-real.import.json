@@ -1,0 +1,55 @@
+{
+  "entries": [
+    {
+      "execution_blockers": [],
+      "gaps": [
+        "transport_header_omitted:host",
+        "transport_header_omitted:connection",
+        "response_body_and_headers_omitted"
+      ],
+      "headers": {
+        "accept": "application/json"
+      },
+      "id": "import-0be13fba8fc417fb1759e36a",
+      "method": "GET",
+      "origin": "http://127.0.0.1:37915",
+      "path": "/invoice/A",
+      "response": {
+        "body_retained": false,
+        "status": 200
+      },
+      "secret_slots": [
+        {
+          "id": "slot-1",
+          "kind": "header",
+          "location": "headers/1/user-agent",
+          "required": true
+        }
+      ],
+      "source_assertions": [],
+      "source_refs": [
+        {
+          "entry_index": 0,
+          "location": "/request",
+          "origin_basis": "explicit_operator_binding",
+          "profile": "burp-http-pair-v1",
+          "response_location": "/response"
+        }
+      ]
+    }
+  ],
+  "format_profile": "burp-http-pair-v1",
+  "hash_basis": "redacted-normalized-projection-v1",
+  "import_sha256": "d7a7ee059c66041f4b543c6fcb1476a2f046b4c9e4957d47143b083ae83e7a9d",
+  "kind": "import-batch",
+  "limitations": [
+    "Source digest binds only the redacted normalized projection, not original bytes.",
+    "Response bodies, response headers, scanner prose and credential values are not retained.",
+    "Imported responses and scanner assertions are unverified; they do not confirm findings.",
+    "All query values and JSON strings require explicit remapping; unknown headers require binding.",
+    "Path identifiers are retained unless credential-labeled or token-like; review paths before persistence.",
+    "Imported origin does not authorize execution; assessment scope and identity mapping are required.",
+    "Origin is explicit operator-supplied metadata; the raw messages do not establish scheme, origin or pairing provenance."
+  ],
+  "schema_version": 1
+}

@@ -1,6 +1,16 @@
 # AuthzLedger changelog
 
-## 1.1.0.dev0 — unreleased integration, 2026-10-10
+## 1.1.0 — stable release candidate, 2026-10-10
+
+PDF rendering now binds a canonical UTC-2000 clock locally. Build-environment `SOURCE_DATE_EPOCH` values no longer change signed report bytes or cause independent semantic verification to fail; historical no-environment PDF bytes remain compatible.
+
+- Added the `burp-http-pair-v1` native import profile under an explicit F01 addendum. Pinned Burp Community 2026.9.2 raw-message originals, native action screenshots, provenance and a four-request controlled execution now accompany the existing native ZAP and HAR evidence. The native DTD-bearing XML is retained as a rejection fixture; DTD/entity handling is unchanged.
+- Exposed raw message import in CLI and Studio with explicit origin binding, optional response, byte-preserving transport and bounded input sizes. Hardened header validation against silently discarded control bytes and malformed ZAP trailing content.
+- Completed graphical controls for explicit experiment variants, typed markers, tenant binding, execution limits and mutation review; workflow identities, request fields, state/effect oracles and reduction; multiple selected retests; and advanced versioned specifications.
+- Added source-aware execution/trace selection, stale-plan and stale-snapshot invalidation, readable evidence traces and public signing-key fingerprints. Consolidated the existing Navy/Blue and Gold interface, keyboard focus and responsive layouts.
+- Added native exporter and integrated feature-coverage acceptance checks. Final stable publication remains conditional on the frozen candidate, isolated build and exact-commit CI checks; no live release is claimed by this entry.
+
+## 1.1.0.dev0 — historical integration review, 2026-10-10
 
 Release review: top-level release metadata, notes and installation instructions now identify the actual development producer. The public review distribution includes the three synthetic assessment demonstrations and their signed proof, with separate main/standalone verification instructions. Native ZAP and Playwright HAR captures are verified; F01-01 remains partial for genuine Burp and its DTD-safe profile; `release_gate110.py` intentionally prevents stable publication. This is not a 1.1.5 fix release. Historical 1.0.0 tags and evidence are preserved.
 

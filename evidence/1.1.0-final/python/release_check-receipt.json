@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "tools/release_check.py",
+    "--out",
+    "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/release_check"
+  ],
+  "duration_seconds": 2.12,
+  "exit_code": 0,
+  "finished_utc": "2026-10-10T17:33:15.620806+00:00",
+  "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/release_check.log",
+  "log_sha256": "cd41122dd2ff935923626c64179bcaf9a5655a38873c26aa77e90e9963c52f1a",
+  "name": "release_check",
+  "started_utc": "2026-10-10T17:33:13.501060+00:00"
+}
