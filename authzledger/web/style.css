@@ -11,3 +11,5 @@ select{font:inherit;color:var(--ink);background:#081923;border:1px solid var(--l
 .intelligence-layout>*{min-width:0}.graph-changes .delta-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.delta{min-width:0;overflow-wrap:anywhere}.graph-card .table-wrap{max-width:100%}.graph-toolbar{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,.8fr)}
 @media(max-width:760px){.graph-toolbar{grid-template-columns:1fr}.graph-changes .delta-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.graph-card .table-wrap{width:100%}}
 .subtle{overflow-wrap:anywhere}
+
+#retest-selection{margin:24px 0 0;padding:16px;border:1px solid var(--line);border-radius:6px;min-width:0}#retest-selection legend{font-size:13px;color:var(--gold);padding:0 8px}#retest-cases{max-height:300px;overflow:auto}#retest-cases .check{margin:12px 0}#retest-cases small{display:block;font-size:10px;color:var(--muted);overflow-wrap:anywhere}#comparison .table-wrap{margin-top:22px}#resume-job{margin:0 0 20px}

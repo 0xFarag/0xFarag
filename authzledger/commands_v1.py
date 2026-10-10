@@ -47,6 +47,14 @@ def add_commands(commands):
     retest.add_argument("--history", type=Path)
     retest.add_argument("--allow-mutations", action="store_true")
     retest.add_argument("--out", type=Path, required=True)
+    comparison = commands.add_parser("compare-retest", help="Compare a full source baseline with an exact dependency-closed retest offline")
+    comparison.add_argument("source_contract")
+    comparison.add_argument("baseline")
+    comparison.add_argument("current")
+    comparison.add_argument("--case", action="append", dest="selected_ids")
+    comparison.add_argument("--out", type=Path, required=True, help="New directory for comparison.json and comparison.html")
+    verify_comparison = commands.add_parser("verify-comparison", help="Recompute every comparison claim from retained original sources offline")
+    verify_comparison.add_argument("comparison")
     keygen = commands.add_parser("keygen", help="Generate Ed25519 operator keys without overwriting files")
     keygen.add_argument("--private", type=Path, required=True)
     keygen.add_argument("--public", type=Path, required=True)
@@ -56,6 +64,7 @@ def add_commands(commands):
     bundle.add_argument("--graph")
     bundle.add_argument("--contract", help="Exact source contract; required when attaching a graph")
     bundle.add_argument("--explanation")
+    bundle.add_argument("--comparison", help="Source-bound comparison whose current report exactly matches this report; also binds its HTML view")
     bundle.add_argument("--out", type=Path, required=True)
     verify = commands.add_parser("verify-bundle", help="Independently validate signatures against an externally trusted key")
     verify.add_argument("bundle", type=Path)
@@ -68,9 +77,49 @@ def _write(path, value):
         handle.write("\n")
 
 
+def _read_bounded_json(path):
+    """Read new comparison surfaces with strict JSON and existing proof limits."""
+    from .signing import MAX_REPORT_BYTES
+    from .studio import parse_json
+    with Path(path).open("rb") as handle:
+        raw = handle.read(MAX_REPORT_BYTES + 1)
+    if len(raw) > MAX_REPORT_BYTES:
+        raise ValueError("Comparison input exceeds the supported evidence size limit")
+    return parse_json(raw)
+
+
 def execute_command(args):
     from .cli import read_json, save_report
     name = args.command
+    if name in {"compare-retest", "verify-comparison"}:
+        from .comparison import create_comparison, verify_comparison
+        from .reports import render_comparison_html
+        if name == "verify-comparison":
+            errors = verify_comparison(_read_bounded_json(args.comparison))
+            if errors:
+                print("Comparison verification FAILED: " + "; ".join(errors))
+                return 2
+            print("Comparison source bindings, control closure, profiles and derived claims verified offline. Execution truth and identity are not attested.")
+            return 0
+        if args.out.exists():
+            raise ValueError("Output already exists; select a new comparison destination")
+        result = create_comparison(_read_bounded_json(args.source_contract),
+                                   _read_bounded_json(args.baseline), _read_bounded_json(args.current),
+                                   args.selected_ids)
+        rendered = render_comparison_html(result)
+        # Validate size before creating a deliverable that cannot be signed/read.
+        from .signing import MAX_REPORT_BYTES
+        encoded = json.dumps(result, sort_keys=True, indent=2, ensure_ascii=True, allow_nan=False) + "\n"
+        if len(encoded.encode("utf-8")) > MAX_REPORT_BYTES:
+            raise ValueError("Comparison output exceeds the supported evidence size limit")
+        args.out.mkdir(parents=True, exist_ok=False)
+        with (args.out / "comparison.json").open("x", encoding="utf-8") as handle:
+            handle.write(encoded)
+        with (args.out / "comparison.html").open("x", encoding="utf-8") as handle:
+            handle.write(rendered)
+        summary = result["summary"]
+        print(f"Compared {result['coverage']['retested_cases']} cases; {summary['not_retested']} not retested. Configured check transitions only: {args.out}")
+        return 2 if summary["inconclusive"] or summary["testability_lost"] else 1 if summary["regression"] else 0
     if name == "keygen":
         from .signing import generate_keypair
         generate_keypair(args.private, args.public)
@@ -81,6 +130,15 @@ def execute_command(args):
         from .intelligence import verify_graph
         report = read_json(args.report)
         attachments = {}
+        if args.comparison:
+            from .comparison import verify_comparison
+            from .reports import render_comparison_html
+            comparison = _read_bounded_json(args.comparison)
+            errors = verify_comparison(comparison)
+            if errors or comparison.get("current_report") != report:
+                raise ValueError("Comparison attachment is invalid or does not match the signed report")
+            attachments["comparison.json"] = json.dumps(comparison, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+            attachments["comparison.html"] = render_comparison_html(comparison).encode("utf-8")
         if args.graph:
             if not args.contract:
                 raise ValueError("A graph proof requires its source contract")

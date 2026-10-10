@@ -12,6 +12,14 @@ Built directly on v0.3.4: the access matrix, control dependency scheduler, offli
 
 **[36-second release walkthrough](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/AuthzLedger_1.0_Release_wide.mp4)** · **[Release and downloads](https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0)** · [Installation](INSTALL.md) · [Product architecture](docs/product-1.0.md) · [Release notes](RELEASE_NOTES.md)
 
+## Development toward 1.0.5
+
+This development branch adds **ComparisonEnvelope v1**: compare a retained full baseline with an exact dependency-closed retest, keep original report roots and distinguish restored checks from restored testability. Unselected cases remain `not_retested`. Studio history selection, CLI, offline verification and signed comparison JSON/HTML share the same core.
+
+[Implemented comparison workflow](docs/comparison-envelope-v1.md) · [Complete eight-capability implementation contract and 88 acceptance scenarios](docs/implementation-1.0.5.md)
+
+Run `python3 tools/check_comparison.py --out artifacts/comparison-demo` for a real local 403-leakage → selective retest → signed proof demonstration. The product version remains 1.0.0 until the full 1.0.5 release gates pass. Offline Burp/ZAP/HAR import, Contrast Lab, Workflow Contracts, Minimal Reproducer and assessment PDF reporting are specified, not delivered by this first increment.
+
 ## Start with evidence
 
 For a copy you are authorised to use; Python 3.10+:
