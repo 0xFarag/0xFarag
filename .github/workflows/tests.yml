@@ -51,6 +51,16 @@ jobs:
           python -m pip wheel --no-deps --wheel-dir dist .
           python -m pip wheel --no-deps --wheel-dir artifacts/repeated-wheel .
           cmp dist/authzledger-1.1.0-py3-none-any.whl artifacts/repeated-wheel/authzledger-1.1.0-py3-none-any.whl
+      - name: Match independently reviewed release assets
+        run: |
+          python tools/package_release.py
+          cd dist
+          sha256sum --check SHA256SUMS.txt
+          sha256sum --check <<'CHECKSUMS'
+          77ffbef884f881c615f177164bf43b75abe006ec363b53c407936a61b97d6b9b  authzledger-1.1.0-py3-none-any.whl
+          6a3871c86b24bcd1ed3f87d54f98310ed894d42535819f9d7449f9c9a9f98ce7  authzledger-1.1.0-proof.zip
+          66a16919c13d04fe5012a45bf20297a8d89f45ae064e1b80e68955d8bcb5c287  verify_bundle.py
+          CHECKSUMS
       - name: Verify installed distribution outside checkout
         shell: bash
         run: |
@@ -159,9 +169,14 @@ jobs:
         run: |
           python -m pip install '.[reports]'
           python -m pip wheel --no-deps --wheel-dir dist .
-          python tools/check_assessment.py --out artifacts/public-proof/assessment-demos
-          python tools/check_selective100.py --out artifacts/public-proof/selective100
-          python tools/package_release.py --proof-source artifacts/public-proof
+          python tools/package_release.py
+          cd dist
+          sha256sum --check SHA256SUMS.txt
+          sha256sum --check <<'CHECKSUMS'
+          77ffbef884f881c615f177164bf43b75abe006ec363b53c407936a61b97d6b9b  authzledger-1.1.0-py3-none-any.whl
+          6a3871c86b24bcd1ed3f87d54f98310ed894d42535819f9d7449f9c9a9f98ce7  authzledger-1.1.0-proof.zip
+          66a16919c13d04fe5012a45bf20297a8d89f45ae064e1b80e68955d8bcb5c287  verify_bundle.py
+          CHECKSUMS
       - name: Publish immutable AuthzLedger 1.1.0 once
         shell: bash
         env:
