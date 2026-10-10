@@ -1,0 +1,46 @@
+{
+  "id": 409163086,
+  "tag_name": "v1.1.0",
+  "target_commitish": "a7160e13289ea0983946e03c978bc6af1841a7e6",
+  "name": "AuthzLedger 1.1.0 — Controlled findings, reproducible proof",
+  "body": "# AuthzLedger 1.1.0 — Controlled findings. Verifiable evidence.\n\nAuthzLedger 1.1.0 brings authorization testing into one local Studio and CLI workflow: import a request, define the rule, validate the controls, reduce the reproducer and verify a scoped fix.\n\n- Native Burp raw-message import, ZAP JSON+ and HAR, with explicit mapping and offline parsing. DTD-bearing Burp XML stays rejected.\n- Controlled identity and workflow tests with reviewed scope and request budgets. Protected content inside a 403 response can still establish a finding when the configured controls are valid.\n- Bounded reduction with fresh controls and retained original evidence. Selective retests distinguish `fix_verified` from `not_retested`.\n- JSON, HTML and PDF from one frozen snapshot, packaged with an Ed25519-signed file inventory. A standalone verifier checks integrity against a separately trusted public key.\n\nStart with the [source](https://github.com/0xFarag/0xFarag/releases/download/v1.1.0/authzledger-1.1.0-source.zip) or [wheel](https://github.com/0xFarag/0xFarag/releases/download/v1.1.0/authzledger-1.1.0-py3-none-any.whl). Follow the [installation guide](https://github.com/0xFarag/0xFarag/blob/v1.1.0/INSTALL.md), reproduce the public local labs and inspect the [release scope and verification evidence](https://github.com/0xFarag/0xFarag/blob/v1.1.0/docs/release-1.1.0.md).\n\nSignatures establish package integrity; they do not independently establish truthful remote execution. Supported profiles, trust boundaries and rights are documented in the tagged source. Existing 1.0.0 artifacts remain unchanged.\n\n## Verification\n\nThe final 1.1.0 producer passed 530 Python tests with zero errors, failures or skips; all seven Chromium browser suites; five workflow checks; and the native Burp and release gates. Two pinned-tool wheel builds were byte-identical and the wheel was installed outside the checkout. JSON, HTML and PDF for 50 long-title Unicode findings were byte-identical across separate renderer processes; both bundle verifiers accepted the proofs and rejected a modified PDF. See the [retained evidence](https://github.com/0xFarag/0xFarag/blob/v1.1.0/evidence/1.1.0-final/README.md) for exact environment, hashes and limits.\n\nNative Burp interoperability is the explicitly documented [raw-message profile addendum](https://github.com/0xFarag/0xFarag/blob/v1.1.0/docs/burp-native-import-v1.md), with original capture provenance. Native DTD-bearing Save item XML is deliberately unsupported.\n",
+  "draft": false,
+  "prerelease": false,
+  "assets": [
+    {
+      "id": 628826459,
+      "name": "authzledger-1.1.0-proof.zip",
+      "digest": "sha256:6a3871c86b24bcd1ed3f87d54f98310ed894d42535819f9d7449f9c9a9f98ce7",
+      "size": 2093276,
+      "state": "uploaded"
+    },
+    {
+      "id": 628826461,
+      "name": "authzledger-1.1.0-py3-none-any.whl",
+      "digest": "sha256:f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f",
+      "size": 1405983,
+      "state": "uploaded"
+    },
+    {
+      "id": 628826460,
+      "name": "authzledger-1.1.0-source.zip",
+      "digest": "sha256:5990a6489d4ddabcbaaf7c56d3c07af7cc7abe1ee3dd9eba198b56eb64527762",
+      "size": 16663378,
+      "state": "uploaded"
+    },
+    {
+      "id": 628826457,
+      "name": "SHA256SUMS.txt",
+      "digest": "sha256:4ad26d867b54bd7df855d5ae1303b8d1946066e662486972cf408d109941cab3",
+      "size": 373,
+      "state": "uploaded"
+    },
+    {
+      "id": 628826463,
+      "name": "verify_bundle.py",
+      "digest": "sha256:66a16919c13d04fe5012a45bf20297a8d89f45ae064e1b80e68955d8bcb5c287",
+      "size": 13972,
+      "state": "uploaded"
+    }
+  ]
+}

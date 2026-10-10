@@ -1,0 +1,28 @@
+name: Update AuthzLedger 1.1.0 launch presentation
+on:
+  push:
+    branches: [authzledger-launch-presentation]
+    paths:
+      - '.github/workflows/release-presentation.yml'
+      - '.github/release-presentation/**'
+permissions:
+  contents: read
+concurrency:
+  group: authzledger-release-presentation-1.1.0
+  cancel-in-progress: false
+jobs:
+  present:
+    if: github.repository == '0xFarag/0xFarag' && github.ref == 'refs/heads/authzledger-launch-presentation'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Update only release title and description
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/release-presentation/update.py
