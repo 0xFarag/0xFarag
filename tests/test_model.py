@@ -121,6 +121,28 @@ class ModelTests(unittest.TestCase):
             with self.subTest(headers=headers), self.assertRaises(ContractError):
                 load_contract(source)
 
+    def test_workflow_idempotency_header_requires_narrow_explicit_profile(self):
+        source = example()
+        source['cases'][0]['headers'] = {'Idempotency-Key': 'public-operation-1'}
+        with self.assertRaises(ContractError):
+            load_contract(source)
+        normalized = load_contract(source, allow_workflow_headers=True)
+        self.assertEqual(normalized['cases'][0]['headers'], {'Idempotency-Key': 'public-operation-1'})
+        for headers in ({'Idempotency-Key': {'env': 'OPERATION_KEY'}}, {'Idempotency-Key': ''},
+                        {'Idempotency-Key': 'x' * 201}, {'Idempotency-Key': 'Bearer secret'},
+                        {'Idempotency-Key': 'bad\r\nInjected: header'}, {'Idempotency-Key': 'caf\u00e9'},
+                        {'Authorization': 'literal'}, {'X-Api-Key': 'literal'}, {'Host': 'other.test'},
+                        {'Idempotency-Key': 'one', 'idempotency-key': 'two'}):
+            source['cases'][0]['headers'] = headers
+            with self.subTest(headers=headers), self.assertRaises(ContractError):
+                load_contract(source, allow_workflow_headers=True)
+        source = example()
+        source['identities']['owner']['headers']['Idempotency-Key'] = 'public-operation-1'
+        with self.assertRaises(ContractError):
+            load_contract(source, allow_workflow_headers=True)
+        with self.assertRaises(ContractError):
+            load_contract(example(), allow_workflow_headers='true')
+
     def test_dependency_validation(self):
         for modification in ("missing", "cycle", "self", "duplicate_id", "duplicate_dependency", "identity"):
             source = example()

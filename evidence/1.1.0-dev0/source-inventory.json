@@ -1,0 +1,511 @@
+{
+  "basis": "code, tests, tools, fixtures, package and CI inputs; documentation and evidence receipts excluded to avoid circular references",
+  "files": [
+    {
+      "bytes": 8436,
+      "path": ".github/workflows/tests.yml",
+      "sha256": "97b23ee5c92642c99316b889ee30b7de32ba56b876fec8a6959ce0c5a2e2b912"
+    },
+    {
+      "bytes": 231,
+      "path": "MANIFEST.in",
+      "sha256": "561159d3a903b83468d2903c8b3244fb8ae971a8d2e7ebc4402c7d9a4b2e82e4"
+    },
+    {
+      "bytes": 96,
+      "path": "authzledger/__init__.py",
+      "sha256": "65f4398e01a3f18acb46ed95a79fd97c7a11322cae5863f9a0fa3ecd06c9fa7d"
+    },
+    {
+      "bytes": 48,
+      "path": "authzledger/__main__.py",
+      "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d"
+    },
+    {
+      "bytes": 11237,
+      "path": "authzledger/assessment_demo.py",
+      "sha256": "0957fe4d789fecf3bc0bc05add559af287f649efadcf94a3f188d264be6c138b"
+    },
+    {
+      "bytes": 42466,
+      "path": "authzledger/assessment_reports.py",
+      "sha256": "23ce9e334ad4c91eccab6ced8b8646ed4003fa500a0e40743c91bff51a770713"
+    },
+    {
+      "bytes": 9617,
+      "path": "authzledger/assessments.py",
+      "sha256": "06ac22a50e5a9f8f44c1a50d0a5bb43949e0b706792d35852120a6c751a0f2a8"
+    },
+    {
+      "bytes": 15756,
+      "path": "authzledger/assurance.py",
+      "sha256": "40251305a7594a1944ad5ae5a26e904a0ec55bfbea912910cba40b65069fa43b"
+    },
+    {
+      "bytes": 9948,
+      "path": "authzledger/benchmark.py",
+      "sha256": "1725876a4fe6d5cae8c391be8dfe09abfc4476b51c44588547c0d8dacb0e8572"
+    },
+    {
+      "bytes": 444437,
+      "path": "authzledger/brand_logo.png",
+      "sha256": "815c7713f48eb136d6a4701bc2f2126d50f9b8b591b61cdb8f94bc81a37bdee4"
+    },
+    {
+      "bytes": 12769,
+      "path": "authzledger/cli.py",
+      "sha256": "41b7f46272acf9aab577136b73843bb5b32a996ddba3a3a9ee96b8e31be4c6fd"
+    },
+    {
+      "bytes": 14192,
+      "path": "authzledger/commands_assessment.py",
+      "sha256": "ef98067baf37e302e386962ab6fd8620e1f5f997eecb81bf5d5203bbec09b0ee"
+    },
+    {
+      "bytes": 14049,
+      "path": "authzledger/commands_v1.py",
+      "sha256": "301cf6aa5ce3e31eae23b4084a336f42554fee669fbde5b5d69373c872927519"
+    },
+    {
+      "bytes": 13509,
+      "path": "authzledger/comparison.py",
+      "sha256": "913d46de01c810c62b0b029dc8d7f49e0909347242be30770e0d760fef7eea2d"
+    },
+    {
+      "bytes": 4580,
+      "path": "authzledger/credentials.py",
+      "sha256": "ecdc784fc1c32c522ae50fbc80a8b992b8a19cd2c3b70522e37eb5a6673373e6"
+    },
+    {
+      "bytes": 5583,
+      "path": "authzledger/demo.py",
+      "sha256": "e0132757c99814231d625c06462c55052e274387f5a03249f17e50b5c3c7e1a7"
+    },
+    {
+      "bytes": 20075,
+      "path": "authzledger/engine.py",
+      "sha256": "263f8cf26dffae75b984431d4ac8d830a218c03aeaaee0b1933ee3745e05fa41"
+    },
+    {
+      "bytes": 14947,
+      "path": "authzledger/evidence.py",
+      "sha256": "0ee3e4a368ef7decdc3c97d049ed6fb9626954d54a273a52d7a6adb6b3be1558"
+    },
+    {
+      "bytes": 19163,
+      "path": "authzledger/execution.py",
+      "sha256": "656bbe70b9cddde4cf59af2bcc4079efc06d895d2d898355a8f5ec6d8a4203c6"
+    },
+    {
+      "bytes": 34838,
+      "path": "authzledger/experiments.py",
+      "sha256": "cb5a261f946bd7cc9e8f0bba70b1f2975350169a626f52d5054cc24050a7e470"
+    },
+    {
+      "bytes": 708920,
+      "path": "authzledger/fonts/DejaVuSans-Bold.ttf",
+      "sha256": "5c1247acef7f2b8522a31742c76d6adcb5569bacc0be7ceaa4dc39dd252ce895"
+    },
+    {
+      "bytes": 759720,
+      "path": "authzledger/fonts/DejaVuSans.ttf",
+      "sha256": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280"
+    },
+    {
+      "bytes": 2732,
+      "path": "authzledger/fonts/LICENSE-DejaVu.txt",
+      "sha256": "562c8f5e92af7a06339292a1bb0b9a3e9c8d5142af5d7167f2866fc50261b993"
+    },
+    {
+      "bytes": 26421,
+      "path": "authzledger/history.py",
+      "sha256": "dcde97c0a196b8b3d2f98d85aeebee0dc7795674b367b3ece6ff96ce7d0bcfd1"
+    },
+    {
+      "bytes": 38087,
+      "path": "authzledger/imports.py",
+      "sha256": "ee1a08357a82c6c4e74086cb06b1aadfb38c0a35a397ccbd2c1a89b80e8c7c6a"
+    },
+    {
+      "bytes": 32958,
+      "path": "authzledger/intelligence.py",
+      "sha256": "437719cbe1a0b90c8fa09c3dfe2e42487fd937f374f55bed245a09e5ebf0ec42"
+    },
+    {
+      "bytes": 6959,
+      "path": "authzledger/lab110.py",
+      "sha256": "c3d526cbb9dc67db5a83d2a27d0b6c3910f6705a76b434ab864c473e8a80c0ec"
+    },
+    {
+      "bytes": 13030,
+      "path": "authzledger/matrix.py",
+      "sha256": "f17720cb6c0fc5e9737d4c546dbf979fb1fd6b3ad054bc08efaedd0ce73127c9"
+    },
+    {
+      "bytes": 26180,
+      "path": "authzledger/minimize.py",
+      "sha256": "79e418fe67af74821d7d3cb7c4cd3a1d554daf1eb1d3eb2be03391f0147e56b0"
+    },
+    {
+      "bytes": 17468,
+      "path": "authzledger/model.py",
+      "sha256": "87bc3c2701dddbcf5de2fbf6a723bda21ad8c67219e5910042befb1606b44952"
+    },
+    {
+      "bytes": 2764,
+      "path": "authzledger/observations.py",
+      "sha256": "d610c6fdea651a1c2ffef6f874a3b864cebd4ce3213b96ae8472ee1eee5a2751"
+    },
+    {
+      "bytes": 11254,
+      "path": "authzledger/openapi.py",
+      "sha256": "4815a24f390f91048251b6ccfb169010559747b2e82484011b017d5284dd0678"
+    },
+    {
+      "bytes": 7563,
+      "path": "authzledger/oracles.py",
+      "sha256": "c28eb22fd4f3fcda9e8b14a866e2f1430ccbc33002972c4078d2373bef3bef4c"
+    },
+    {
+      "bytes": 18345,
+      "path": "authzledger/policy.py",
+      "sha256": "a9e90aef88c7b407d537ee3424d77ded0f7e28cd8e98811877b12e18bfa381a1"
+    },
+    {
+      "bytes": 20298,
+      "path": "authzledger/reasoning.py",
+      "sha256": "acb334bfac94724b397b0544d901c6d115d06a1bb0880e5537c4edde898faf04"
+    },
+    {
+      "bytes": 24974,
+      "path": "authzledger/reports.py",
+      "sha256": "49a2121252d0bd830d939ecc10ba4974f1a4088096783d20859b8f0d12d0bcde"
+    },
+    {
+      "bytes": 25238,
+      "path": "authzledger/signing.py",
+      "sha256": "7c623aa44842d6baa74368c1aa6bfb52e357be4a2b2efdbd71cc8e0bd9201dd1"
+    },
+    {
+      "bytes": 66628,
+      "path": "authzledger/studio.py",
+      "sha256": "7570fe32e5a4f013fe818aa5dcbb4107d18e6658fdf73503a16654c536797f81"
+    },
+    {
+      "bytes": 55034,
+      "path": "authzledger/web/app.js",
+      "sha256": "74b6f1325d8365e59ff0ade86f801c4a7818675a73ae2293e645e6e1858a496e"
+    },
+    {
+      "bytes": 7696,
+      "path": "authzledger/web/assessment.css",
+      "sha256": "b302f96ade1af249860604ba23fd62ea5acf8f44f09c593c6f6356dac8bfe17e"
+    },
+    {
+      "bytes": 32017,
+      "path": "authzledger/web/assessment.js",
+      "sha256": "52565672cdfe9120d4da7d267ec0a0dc5b423c2bbf14a4f673f64b387d3fee47"
+    },
+    {
+      "bytes": 35086,
+      "path": "authzledger/web/index.html",
+      "sha256": "711aaa06bcc3a15172c44380d8522b498f05d540bb41b5de625c48966e96d6b4"
+    },
+    {
+      "bytes": 258,
+      "path": "authzledger/web/plans.json",
+      "sha256": "87243bc2593bdfddc057641b548ac0b226bab267fef2d783ac6908af0171a750"
+    },
+    {
+      "bytes": 21743,
+      "path": "authzledger/web/style.css",
+      "sha256": "eb4efad6070462514699550abf69a5fd66009f9f192b1f3ce7f3f2ec52cb602d"
+    },
+    {
+      "bytes": 16645,
+      "path": "authzledger/workflow_assurance.py",
+      "sha256": "4e90cda0116c874fe468cc3ab42fe39e21bf6f685927fed5356e159f271fc830"
+    },
+    {
+      "bytes": 44506,
+      "path": "authzledger/workflows.py",
+      "sha256": "d9a00d3eeb68378c3159c2da55df296bdd1efcc3e8eaed5b6895841274eaf9ad"
+    },
+    {
+      "bytes": 6702,
+      "path": "fixtures/imports/README.md",
+      "sha256": "04b25a57d43b6be41cc9321965b0184d476e94dd43e9ad3cde7cd1272ded0952"
+    },
+    {
+      "bytes": 641,
+      "path": "fixtures/imports/burp-http-messages.xml",
+      "sha256": "c695935bb4da53a5e5bfacecfa607da44a554eab198516484aee486c1c37d6c9"
+    },
+    {
+      "bytes": 3869,
+      "path": "fixtures/imports/chromium-real.har",
+      "sha256": "6024bbad4bfdae631ec115389765f4c7470e1adcf77547e1b48ee1e0922311ba"
+    },
+    {
+      "bytes": 1659,
+      "path": "fixtures/imports/chromium-real.provenance.json",
+      "sha256": "e2c3d586c49034e622a339f71656e8b835d82fb488f448b2cd0eff582c047824"
+    },
+    {
+      "bytes": 1457,
+      "path": "fixtures/imports/har-1.2.json",
+      "sha256": "45604170f5ea54350b0aefd16adde160c2c86bd2c5c1ddf038472d3019a30b9c"
+    },
+    {
+      "bytes": 1035,
+      "path": "fixtures/imports/zap-traditional-json-plus.json",
+      "sha256": "e5a5e538b18a009e57bb7892d2fc08c913f21d04fcf133d66f6f31592fbb2cd6"
+    },
+    {
+      "bytes": 1221,
+      "path": "pyproject.toml",
+      "sha256": "0e29bebf80edfc6b2953521d68aad5a535fb885256c4a87bc5ce234353770e56"
+    },
+    {
+      "bytes": 6452,
+      "path": "tests/browser_acceptance.cjs",
+      "sha256": "b7377d20c2d726e19d8cda55f5601d7c92377853005493d2c770374388a0cf01"
+    },
+    {
+      "bytes": 11751,
+      "path": "tests/browser_assessment_security.cjs",
+      "sha256": "97e37f1e43f07dd1571301ffccd728af549465cd23f17c34b7f3491524d41914"
+    },
+    {
+      "bytes": 16684,
+      "path": "tests/browser_assessments.cjs",
+      "sha256": "0e0cf3f3eb76b2e913a941d6ef856ea6c9d5ce957fa14762962a8b3904d50e5c"
+    },
+    {
+      "bytes": 9091,
+      "path": "tests/browser_comparison.cjs",
+      "sha256": "e81320a4e11ff99911ed619d3b901d584ee36b98e804cebf4cf2c612f2d4b43c"
+    },
+    {
+      "bytes": 5909,
+      "path": "tests/browser_retest_freshness.cjs",
+      "sha256": "ec8f8443169e5f79978c0915e2ad207428b24c180af44c8024c066e45e496719"
+    },
+    {
+      "bytes": 9587,
+      "path": "tests/browser_v1.cjs",
+      "sha256": "3d9b99b80232e54d52da23633a91d7a6ebb57790e3092163458eafe1f1be7690"
+    },
+    {
+      "bytes": 12808,
+      "path": "tests/test_assessment_cli.py",
+      "sha256": "d92bd5c6522c70a62c4bd779dddb52b8498206a5b182975575e93788543c41eb"
+    },
+    {
+      "bytes": 21900,
+      "path": "tests/test_assessment_reports.py",
+      "sha256": "9fb0a5848bb115c9d8a48dddf4c0e232a1fc0aa91b5238c1d5732ddae7965099"
+    },
+    {
+      "bytes": 6139,
+      "path": "tests/test_assessments.py",
+      "sha256": "f9524927e19670c7a021b404e59f5c8e5313cde48c357400ab065718300b7d0b"
+    },
+    {
+      "bytes": 13981,
+      "path": "tests/test_assurance.py",
+      "sha256": "ac203de88743293c3ac0b5bdea63a8cd95f87a9d81cc78514b40e8b1b9149afe"
+    },
+    {
+      "bytes": 2392,
+      "path": "tests/test_cli.py",
+      "sha256": "6ded8d9bf1bca4152cfb7190b39c897e8540612c189172d9eb563a376659a0be"
+    },
+    {
+      "bytes": 2529,
+      "path": "tests/test_cli_v1.py",
+      "sha256": "e7cfc4dde906aaec7fbc2f8747fc6a930b555edd0214652322b37ff8312f4b9c"
+    },
+    {
+      "bytes": 22546,
+      "path": "tests/test_comparison.py",
+      "sha256": "ee0358db5a4dc0cd4e8817ee01b939be968f499f8fc2f2991bc81d777e62fecf"
+    },
+    {
+      "bytes": 14304,
+      "path": "tests/test_comparison_delivery.py",
+      "sha256": "594c80fff2654a36aca802d7ab0004f649845b78a47b76fe1518b6b9350dfe48"
+    },
+    {
+      "bytes": 3921,
+      "path": "tests/test_credentials.py",
+      "sha256": "290aacf473b5a3614df7beff3123340e1ffb6740802593db794f01e2c3f2ba64"
+    },
+    {
+      "bytes": 12963,
+      "path": "tests/test_engine.py",
+      "sha256": "995742fe97d2a836df6cb3b10163ec26b054d78ceff96cba6dc6f3a54eb6c6a3"
+    },
+    {
+      "bytes": 13265,
+      "path": "tests/test_evidence.py",
+      "sha256": "4e1c85d653f0268cbe4bd576bd844ee3189840e12686e3908065463131cce09e"
+    },
+    {
+      "bytes": 5452,
+      "path": "tests/test_evidence_dependencies.py",
+      "sha256": "b8251ce2c83109eb262c26c006399c359f21b8f49a1437a514a1160741e8e536"
+    },
+    {
+      "bytes": 18265,
+      "path": "tests/test_execution.py",
+      "sha256": "6dbd410d99bd04b65a43a20c95c3a83237060eafa86f7028281b250e3117a259"
+    },
+    {
+      "bytes": 13874,
+      "path": "tests/test_experiments.py",
+      "sha256": "ce386e99b64403e3eb6b78bde461f73479bfbf8281ff0845dc0e863c199dd71a"
+    },
+    {
+      "bytes": 8223,
+      "path": "tests/test_history.py",
+      "sha256": "83a92a6ad961b2cbd0087dab7833646a2649e1136142856c776b7ad9e8ec225f"
+    },
+    {
+      "bytes": 22839,
+      "path": "tests/test_imports.py",
+      "sha256": "d2a8356a99cfc90579b4424e4f18c885cb52cb297f293ac136f53b65ee519e55"
+    },
+    {
+      "bytes": 8716,
+      "path": "tests/test_independent.py",
+      "sha256": "6ef3837b3ab4bc8ef664c6b1db011707ca894e9f0a779abac72e0e9738dd6473"
+    },
+    {
+      "bytes": 15097,
+      "path": "tests/test_integration_security.py",
+      "sha256": "5f4bee8432a88af9f4e8918eebdc04fe4f039959ce45a0231ea3f266476a286b"
+    },
+    {
+      "bytes": 15071,
+      "path": "tests/test_intelligence.py",
+      "sha256": "7b031a4290f2fe7ae1e6c96cd04bbccd3f1fed7cfb16a3456ef7cd5c58e1bdf1"
+    },
+    {
+      "bytes": 10557,
+      "path": "tests/test_matrix.py",
+      "sha256": "9b7598b77d892020e5234d5e82788e03a81abe400b4efef92caac5f7af69e2ba"
+    },
+    {
+      "bytes": 14936,
+      "path": "tests/test_minimize.py",
+      "sha256": "19b044b3c375004f3f01ff773340ac4383414917262630fa7e2fe891d7811077"
+    },
+    {
+      "bytes": 9717,
+      "path": "tests/test_model.py",
+      "sha256": "796db9e1fbde0acf63c04491c7a35eeed45d3dcf17dbc5153b6c6d9036fd56d6"
+    },
+    {
+      "bytes": 6974,
+      "path": "tests/test_openapi.py",
+      "sha256": "efee834b557ebb9fcb99f0709af29ab347a2d8251c53cd44c99b8cf604add837"
+    },
+    {
+      "bytes": 9888,
+      "path": "tests/test_policy.py",
+      "sha256": "926a0f8228d65b079def77cd5a025590672680b97680bfecd4bab5c1596aa0c8"
+    },
+    {
+      "bytes": 20245,
+      "path": "tests/test_reasoning.py",
+      "sha256": "e2f240b2c82df90b0244e95b14d38c7a12d4f8fafcdb31f42aa75a97fac9f2a1"
+    },
+    {
+      "bytes": 9486,
+      "path": "tests/test_reports.py",
+      "sha256": "665d68c7fea18b051d1c5032779c1316afda84a43a5d94e79930614b8fcbb14c"
+    },
+    {
+      "bytes": 18575,
+      "path": "tests/test_signing.py",
+      "sha256": "b4763f890c794ab40700e332f2e8fbec9573bdb8ba7859975663d5bc4b857ff9"
+    },
+    {
+      "bytes": 14100,
+      "path": "tests/test_studio.py",
+      "sha256": "7e78d91d3e302f214414adb9dc2af4eef188291ac7aa953b00ec3ae65ed4a0a3"
+    },
+    {
+      "bytes": 18747,
+      "path": "tests/test_studio_assessments.py",
+      "sha256": "6627c2453c9029a2dd14c38ce2fecef0900949e801f446ee490fd9903cdd3baa"
+    },
+    {
+      "bytes": 10749,
+      "path": "tests/test_studio_comparison.py",
+      "sha256": "73da98d52f897257e6ac43a2857f2ab3b093850c1807ee2fa7a1fceae7d817c2"
+    },
+    {
+      "bytes": 17446,
+      "path": "tests/test_studio_v1.py",
+      "sha256": "2f7c35a10ed2c6bd8ff76d8e72e5a82205cd0827d7dcf7bf8f1ec68d9723f8a5"
+    },
+    {
+      "bytes": 12154,
+      "path": "tests/test_workflow_assurance.py",
+      "sha256": "904276214226d7ef38bd9d607f2c21f390213c17b8604268a1e098e6105ed6cc"
+    },
+    {
+      "bytes": 18978,
+      "path": "tests/test_workflows.py",
+      "sha256": "35cdf06750e9e9e721834ba411ae2e077170f80d1d2bcf965e054ca42417c3ab"
+    },
+    {
+      "bytes": 6220,
+      "path": "tools/capture_har_fixture.cjs",
+      "sha256": "ebecfd3358d3af5244e3a616eebbd68a1c9376bba322b69869c5cb9b68de04c7"
+    },
+    {
+      "bytes": 891,
+      "path": "tools/check_assessment.py",
+      "sha256": "05cba3c0dfc2c7c1e5e392126e5f4e3c2e41734db60d94fd1b909feba03b3c6c"
+    },
+    {
+      "bytes": 12325,
+      "path": "tools/check_comparison.py",
+      "sha256": "ce48bf40a7d5df2ce883e2106273bf0c87c43dc07edb8865a3d16be3d77b404b"
+    },
+    {
+      "bytes": 4898,
+      "path": "tools/check_workflows110.py",
+      "sha256": "efaab5de852465d858ca06442e5822c455ba9275aa0d6d5be13b46a57d8d2766"
+    },
+    {
+      "bytes": 2387,
+      "path": "tools/package_release.py",
+      "sha256": "e09f24891da7a68c2261e8e8f2ca296a571cb2857b57dafb96a7b71b50d58d37"
+    },
+    {
+      "bytes": 3913,
+      "path": "tools/release_check.py",
+      "sha256": "cac4f5ec67a8e9e8b7bec71cfe4195225531d3b69f4ce2034f11c2d400ea6102"
+    },
+    {
+      "bytes": 1628,
+      "path": "tools/release_gate110.py",
+      "sha256": "c5897daa90fa492fa662653d5274114f69759c2a0bea6b3a2d65085344cde4e2"
+    },
+    {
+      "bytes": 19716,
+      "path": "tools/render_launch.py",
+      "sha256": "d8aa165711dadedebf35efa31d5568d414b0d2558f990bb311c144ef3fee567d"
+    },
+    {
+      "bytes": 13972,
+      "path": "tools/verify_bundle.py",
+      "sha256": "66a16919c13d04fe5012a45bf20297a8d89f45ae064e1b80e68955d8bcb5c287"
+    }
+  ],
+  "producer": "1.1.0.dev0"
+}

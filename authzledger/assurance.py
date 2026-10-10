@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 
 from . import engine
 from .evidence import verify_report
+from .execution import ExecutionContext
 from .history import HistoryError, HistoryStore
 from .model import ContractError, contract_digest, load_contract, plan
 
@@ -142,7 +143,8 @@ def assessment_status(report: dict, graph: dict, comparison: dict | None = None)
 
 
 def run_once(contract, policy=None, history: HistoryStore | None = None, *,
-             allow_mutations: bool = False, max_history_age_seconds: float | None = None) -> dict:
+             allow_mutations: bool = False, max_history_age_seconds: float | None = None,
+             context=None, credential_resolver=None, observation_sink=None) -> dict:
     """Perform one local assurance run and optionally retain/compare its context.
 
     Exit codes: 0 configured checks passed, 1 authorization mismatch/change,
@@ -167,9 +169,20 @@ def run_once(contract, policy=None, history: HistoryStore | None = None, *,
     _assert_fresh(baseline, max_history_age_seconds)
     # Fail closed across both network channels if application credentials are
     # missing or malformed. engine.run resolves them again for the actual run.
-    engine._credentials(specification)
-    evaluation = evaluate_policy(specification, configuration) if configuration is not None else policy
-    report = engine.run(specification)
+    if credential_resolver is None:
+        engine._credentials(specification)
+    else:
+        credential_resolver.resolve_contract(specification)
+    if context is None:
+        pdp = configuration is not None and configuration["engine"] == "opa"
+        context = ExecutionContext(len(specification["cases"]) * (2 if pdp else 1),
+            {"application": [specification["target"]], "pdp": [configuration["endpoint"]] if pdp else []},
+            max(specification["limits"]["timeout_seconds"], configuration["timeout_seconds"] if pdp else 0),
+            specification["limits"]["concurrency"])
+    evaluation = evaluate_policy(specification, configuration, context=context,
+                                 credential_resolver=credential_resolver) if configuration is not None else policy
+    report = engine.run(specification, context=context, credential_resolver=credential_resolver,
+                        observation_sink=observation_sink)
     errors = verify_report(report)
     if errors:
         raise AssuranceError("execution produced invalid evidence: " + "; ".join(errors))
@@ -177,7 +190,7 @@ def run_once(contract, policy=None, history: HistoryStore | None = None, *,
     comparison = differential_graphs(baseline["graph"], graph) if baseline else None
     status, exit_code, reason = _status(report, graph, comparison)
     result = {"report": report, "graph": graph, "status": status, "exit_code": exit_code,
-              "stop_reason": reason}
+              "stop_reason": reason, "execution": context.snapshot()}
     if comparison is not None:
         result["comparison"] = comparison
         result["baseline_run_id"] = baseline["id"]
@@ -196,13 +209,14 @@ def watch(contract, policy=None, history: HistoryStore | None = None, *,
           max_iterations: int = 1, interval_seconds: float = 0,
           max_requests_total: int = 1000, max_history_age_seconds: float | None = None,
           allow_mutations: bool = False, stop_event: threading.Event | None = None,
-          on_iteration=None) -> dict:
+          on_iteration=None, context=None, credential_resolver=None, observation_sink=None) -> dict:
     """Run a bounded synchronous local watch, stopping on the first unsafe result.
 
     A full case count is reserved before each iteration, including cases later
     blocked by controls. This conservative accounting caps total network scope
-    across the entire watch. Cancellation is checked before each iteration and
-    interrupts intervals; in-flight requests remain bounded by their deadline.
+    across the entire watch. A shared execution context additionally counts real
+    dispatches and stops new DAG/PDP requests after cancellation; in-flight
+    requests remain bounded by their deadline.
     """
     _number(max_iterations, "max_iterations", minimum=1, maximum=1000, integer=True)
     _number(interval_seconds, "interval_seconds", minimum=0, maximum=3600)
@@ -225,18 +239,26 @@ def watch(contract, policy=None, history: HistoryStore | None = None, *,
     results = []
     reserved = 0
     event = stop_event or threading.Event()
+    if context is None:
+        context = ExecutionContext(max_requests_total,
+            {"application": [specification["target"]], "pdp": [policy["endpoint"]] if policy_requests else []},
+            max(specification["limits"]["timeout_seconds"], policy["timeout_seconds"] if policy_requests else 0),
+            specification["limits"]["concurrency"], stop_event=event)
+    else:
+        context.add_stop_event(event)
     status, exit_code, reason = "pass", 0, "iteration-limit"
     for iteration in range(max_iterations):
         if event.is_set():
             status, exit_code, reason = "cancelled", 2, "cancelled"
             break
-        if reserved + request_count > max_requests_total:
+        if reserved + request_count > max_requests_total or context.remaining() < request_count:
             status, exit_code, reason = "inconclusive", 2, "request-budget"
             break
         reserved += request_count
         try:
             result = run_once(specification, policy, history, allow_mutations=allow_mutations,
-                              max_history_age_seconds=max_history_age_seconds)
+                              max_history_age_seconds=max_history_age_seconds, context=context,
+                              credential_resolver=credential_resolver, observation_sink=observation_sink)
         except (AssuranceError, HistoryError, ContractError, ValueError) as exc:
             # Avoid leaking credential-bearing exception text from future APIs.
             category = "stale-history" if isinstance(exc, StaleHistoryError) else "history-error" if isinstance(exc, HistoryError) else "assurance-error"
@@ -245,6 +267,9 @@ def watch(contract, policy=None, history: HistoryStore | None = None, *,
         results.append(result)
         if on_iteration is not None:
             on_iteration(iteration + 1, result)
+        if event.is_set():
+            status, exit_code, reason = "cancelled", 2, "cancelled"
+            break
         if result["exit_code"]:
             status, exit_code, reason = result["status"], result["exit_code"], result["stop_reason"]
             break
@@ -256,5 +281,5 @@ def watch(contract, policy=None, history: HistoryStore | None = None, *,
             "max_requests_total": max_requests_total, "requests_reserved": reserved,
             "application_requests_per_iteration": application_requests,
             "policy_requests_per_iteration": policy_requests,
-            "status": status, "exit_code": exit_code, "stop_reason": reason,
+            "status": status, "exit_code": exit_code, "stop_reason": reason, "execution": context.snapshot(),
             "scope": "Only explicit contract cases; intervals are unobserved, not a continuous enforcement guarantee."}

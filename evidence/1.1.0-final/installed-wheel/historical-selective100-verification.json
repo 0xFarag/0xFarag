@@ -1,0 +1,9 @@
+{
+  "bundle": "/workspace/scratch/7b68a7003223/authzledger/evidence/1.1.0-release-review/selective100/proof",
+  "external_public_key": "/workspace/scratch/7b68a7003223/authzledger/evidence/1.1.0-release-review/selective100/trusted-public.pem",
+  "main_errors": [],
+  "public_key_file_sha256": "2fbf4e0fae28e05ee2d461428b4a65c6f909e39339419b555ae1ae3cde4e8a02",
+  "standalone_exit_code": 0,
+  "standalone_stderr": "",
+  "standalone_stdout": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.\nReport assertion/dependency semantics and execution truth are not established by this standalone verifier.\n"
+}

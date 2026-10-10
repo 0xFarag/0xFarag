@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE items [
+<!ELEMENT items (item*)>
+<!ATTLIST items burpVersion CDATA "">
+<!ATTLIST items exportTime CDATA "">
+<!ELEMENT item (time, url, host, port, protocol, method, path, extension, request, status, responselength, mimetype, response, comment)>
+<!ELEMENT time (#PCDATA)>
+<!ELEMENT url (#PCDATA)>
+<!ELEMENT host (#PCDATA)>
+<!ATTLIST host ip CDATA "">
+<!ELEMENT port (#PCDATA)>
+<!ELEMENT protocol (#PCDATA)>
+<!ELEMENT method (#PCDATA)>
+<!ELEMENT path (#PCDATA)>
+<!ELEMENT extension (#PCDATA)>
+<!ELEMENT request (#PCDATA)>
+<!ATTLIST request base64 (true|false) "false">
+<!ELEMENT status (#PCDATA)>
+<!ELEMENT responselength (#PCDATA)>
+<!ELEMENT mimetype (#PCDATA)>
+<!ELEMENT response (#PCDATA)>
+<!ATTLIST response base64 (true|false) "false">
+<!ELEMENT comment (#PCDATA)>
+]>
+<items burpVersion="2026.9.2" exportTime="Sat Oct 10 19:13:21 CEST 2026">
+  <item>
+    <time>Sat Oct 10 19:11:47 CEST 2026</time>
+    <url><![CDATA[http://127.0.0.1:37915/invoice/A]]></url>
+    <host ip="127.0.0.1">127.0.0.1</host>
+    <port>37915</port>
+    <protocol>http</protocol>
+    <method><![CDATA[GET]]></method>
+    <path><![CDATA[/invoice/A]]></path>
+    <extension>null</extension>
+    <request base64="true"><![CDATA[R0VUIC9pbnZvaWNlL0EgSFRUUC8xLjENCkhvc3Q6IDEyNy4wLjAuMTozNzkxNQ0KVXNlci1BZ2VudDogY3VybC84LjUuMA0KQWNjZXB0OiBhcHBsaWNhdGlvbi9qc29uDQpDb25uZWN0aW9uOiBrZWVwLWFsaXZlDQoNCg==]]></request>
+    <status>200</status>
+    <responselength>211</responselength>
+    <mimetype>JSON</mimetype>
+    <response base64="true"><![CDATA[SFRUUC8xLjEgMjAwIE9LDQpTZXJ2ZXI6IEJhc2VIVFRQLzAuNiBQeXRob24vMy4xMi4xNA0KRGF0ZTogU2F0LCAxMCBPY3QgMjAyNiAxNzoxMTo0NyBHTVQNCkNvbnRlbnQtVHlwZTogYXBwbGljYXRpb24vanNvbg0KQ29udGVudC1MZW5ndGg6IDY2DQoNCnsibWFya2VyIjogInN5bnRoZXRpYy1BIiwgIm5vdGljZSI6ICJQdWJsaWMgc3ludGhldGljIGxhYiBvYmplY3QifQ==]]></response>
+    <comment></comment>
+  </item>
+</items>

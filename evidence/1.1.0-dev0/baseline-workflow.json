@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "scope": "synthetic loopback fixtures",
+  "resolved": 2,
+  "history_records": 2,
+  "workflows": [
+    "three-layer graph",
+    "independent local policy",
+    "differential retest",
+    "grounded explanation",
+    "Ed25519 signing",
+    "externally trusted verification",
+    "standalone verifier",
+    "durable history",
+    "dependency-closed retest",
+    "eight-scenario corpus"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "bundle": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/workflow-assurance-safe/proof",
+  "external_public_key": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/workflow-safe-public.pem",
+  "main_errors": [],
+  "public_key_file_sha256": "e074813dcdf30069af07ef78be9ec0c977e6e61fd432cbdb798cfaf215172de4",
+  "standalone_exit_code": 0,
+  "standalone_stderr": "",
+  "standalone_stdout": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.\nReport assertion/dependency semantics and execution truth are not established by this standalone verifier.\n"
+}

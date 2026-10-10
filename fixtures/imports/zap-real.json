@@ -1,0 +1,177 @@
+{
+    "@programName": "ZAP",
+    "@version": "2.17.0",
+    "@generated": "Sat, 10 Oct 2026 17:22:36",
+	"created": "2026-10-10T15:22:36.147095474Z",
+	"insights":[
+		{
+			"level": "Low",
+			"reason": "Warning",
+			"site": "",
+			"key": "insight.log.error",
+			"description": "ZAP errors logged - see the zap.log file for details",
+			"statistic": "1"
+		},
+		{
+			"level": "Low",
+			"reason": "Warning",
+			"site": "",
+			"key": "insight.log.warn",
+			"description": "ZAP warnings logged - see the zap.log file for details",
+			"statistic": "4"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://127.0.0.1:36829",
+			"key": "insight.endpoint.ctype.application/json",
+			"description": "Percentage of endpoints with content type application/json",
+			"statistic": "100"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://127.0.0.1:36829",
+			"key": "insight.endpoint.method.GET",
+			"description": "Percentage of endpoints with method GET",
+			"statistic": "100"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://127.0.0.1:36829",
+			"key": "insight.endpoint.total",
+			"description": "Count of total endpoints",
+			"statistic": "1"
+		}
+    ],
+	"site":[ 
+        {
+            "@name": "http://127.0.0.1:36829",
+            "@host": "127.0.0.1",
+            "@port": "36829",
+            "@ssl": "false",
+            "alerts": [ 
+                {
+                    "pluginid": "10021",
+                    "alertRef": "10021",
+                    "alert": "X-Content-Type-Options Header Missing",
+                    "name": "X-Content-Type-Options Header Missing",
+                    "riskcode": "1",
+                    "confidence": "2",
+                    "riskdesc": "Low (Medium)",
+                    "desc": "<p>The Anti-MIME-Sniffing header X-Content-Type-Options was not set to 'nosniff'. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.</p>",
+                    "instances":[ 
+                        {
+                            "id": "0",
+                            "uri": "http://127.0.0.1:36829/invoice/A",
+                            "nodeName": "http:\/\/127.0.0.1:36829\/invoice\/A",
+                            "method": "GET",
+                            "param": "x-content-type-options",
+                            "attack": "",
+                            "evidence": "",
+                            "otherinfo": "This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.\nAt \"High\" threshold this scan rule will not alert on client or server error responses.",
+                            "request-header": "GET http://127.0.0.1:36829/invoice/A HTTP/1.1\r\nhost: 127.0.0.1:36829\r\nuser-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\r\npragma: no-cache\r\ncache-control: no-cache\r\n\r\n",
+                            "request-body": "",
+                            "response-header": "HTTP/1.0 200 OK\r\nServer: BaseHTTP/0.6 Python/3.12.14\r\nDate: Sat, 10 Oct 2026 15:22:35 GMT\r\nContent-Type: application/json\r\nContent-Length: 66\r\n\r\n",
+                            "response-body": "{\"marker\": \"synthetic-A\", \"notice\": \"Public synthetic lab object\"}"
+                        }
+                    ],
+                    "count": "1",
+                    "systemic": true,
+                    "solution": "<p>Ensure that the application/web server sets the Content-Type header appropriately, and that it sets the X-Content-Type-Options header to 'nosniff' for all web pages.</p><p>If possible, ensure that the end user uses a standards-compliant and modern web browser that does not perform MIME-sniffing at all, or that can be directed by the web application/web server to not perform MIME-sniffing.</p>",
+                    "otherinfo": "<p>This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.</p><p>At \"High\" threshold this scan rule will not alert on client or server error responses.</p>",
+                    "reference": "<p>https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/compatibility/gg622941(v=vs.85)</p><p>https://owasp.org/www-community/Security_Headers</p>",
+                    "cweid": "693",
+                    "wascid": "15",
+                    "sourceid": "1",
+                    "tags":[ 
+                        {
+                            "tag": "OWASP_2021_A05",
+                            "link": "https:\/\/owasp.org\/Top10\/A05_2021-Security_Misconfiguration\/"
+                        },
+                        {
+                            "tag": "POLICY_QA_STD",
+                            "link": ""
+                        },
+                        {
+                            "tag": "POLICY_PENTEST",
+                            "link": ""
+                        },
+                        {
+                            "tag": "SYSTEMIC",
+                            "link": "https:\/\/www.zaproxy.org\/docs\/desktop\/addons\/common-library\/alerttags\/#systemic"
+                        },
+                        {
+                            "tag": "CWE-693",
+                            "link": "https:\/\/cwe.mitre.org\/data\/definitions\/693.html"
+                        },
+                        {
+                            "tag": "OWASP_2017_A06",
+                            "link": "https:\/\/owasp.org\/www-project-top-ten\/2017\/A6_2017-Security_Misconfiguration.html"
+                        }
+                    ]
+                }
+            ],
+            "statistics":{ 
+                "stats.tag.JSON": 1
+                
+            }
+        }
+    ],
+    "sequences":[
+    ],
+    "statistics":{ 
+        "stats.api.call.json.pscan.action.enableScanners": 1
+        ,
+        "stats.api.call.json.core.action.accessUrl": 1
+        ,
+        "stats.pscan.10021.time": 13
+        ,
+        "stats.pscan.recordsToScan": 4
+        ,
+        "stats.log.error": 1
+        ,
+        "stats.log.warn.org.openqa.selenium.manager.SeleniumManager": 1
+        ,
+        "stats.pscan.10021.alerts": 1
+        ,
+        "stats.log.warn.io.netty.util.internal.MacAddressUtil": 1
+        ,
+        "stats.network.send.success": 1
+        ,
+        "stats.pscan.Anti CSRF Token Detection": 1
+        ,
+        "stats.log.warn.org.zaproxy.zap.extension.autoupdate.ExtensionAutoUpdate": 1
+        ,
+        "stats.log.warn": 4
+        ,
+        "stats.log.error.org.zaproxy.addon.client.ExtensionClientIntegration": 1
+        ,
+        "stats.api.call.json.autoupdate.view.installedAddons": 1
+        ,
+        "stats.pscan.Parameter Scanner": 6
+        ,
+        "stats.log.warn.org.zaproxy.zap.extension.selenium.internal.FirefoxProfileManager": 1
+        ,
+        "stats.config.api.key": 1
+        ,
+        "stats.api.call.json.pscan.action.disableAllScanners": 1
+        ,
+        "stats.api.call.json.core.view.alerts": 1
+        ,
+        "stats.api.call.json.reports.action.generate": 1
+        ,
+        "stats.api.call.json.core.view.version": 1
+        ,
+        "stats.pscan.-1.time": 1
+        ,
+        "stats.api.call.json.pscan.view.recordsToScan": 10
+        
+    },
+    "afPlanErrors": [
+    ],
+    "afPlanWarns": [
+    ]
+}
+

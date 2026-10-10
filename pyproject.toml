@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "authzledger"
-version = "1.0.0"
+version = "1.1.0"
 description = "Authorization intelligence: intent, policy, observations and independently verifiable evidence."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -14,16 +14,19 @@ keywords = ["authorization", "appsec", "pentest", "api-security", "regression-te
 classifiers = ["Development Status :: 5 - Production/Stable", "Environment :: Console", "Programming Language :: Python :: 3", "Topic :: Security", "Topic :: Software Development :: Testing"]
 dependencies = []
 
+[project.optional-dependencies]
+reports = ["reportlab==4.4.9"]
+
 [project.scripts]
 authzledger = "authzledger.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/0xFarag/0xFarag/tree/authzledger-v1.0.0"
-Repository = "https://github.com/0xFarag/0xFarag/tree/authzledger-v1.0.0"
+Homepage = "https://github.com/0xFarag/0xFarag/tree/authzledger-v1.1.0"
+Repository = "https://github.com/0xFarag/0xFarag/tree/authzledger-v1.1.0"
 Issues = "https://github.com/0xFarag/0xFarag/issues"
 
 [tool.setuptools]
 packages = ["authzledger"]
 
 [tool.setuptools.package-data]
-authzledger = ["brand_logo.png", "web/*.html", "web/*.css", "web/*.js", "web/*.json"]
+authzledger = ["brand_logo.png", "web/*.html", "web/*.css", "web/*.js", "web/*.json", "fonts/*.ttf", "fonts/*.txt"]

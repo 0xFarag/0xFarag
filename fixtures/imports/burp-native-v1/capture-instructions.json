@@ -1,0 +1,10 @@
+{
+  "completion": "After both native files exist, write capture-ready.json with edition, native_action and screenshot filenames.",
+  "native_action": "Burp message editor Raw tab: Copy to file with no text selected",
+  "origin": "http://127.0.0.1:37915",
+  "public_fixture": "Owned loopback, public synthetic marker, no real credentials or customer data.",
+  "request_file": "burp-request.http",
+  "response_file": "burp-response.http",
+  "url": "http://127.0.0.1:37915/invoice/A",
+  "xml_file_optional": "burp-http-messages.xml"
+}

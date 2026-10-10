@@ -124,6 +124,65 @@ def _document(title: str, body: str, *, kind: str) -> str:
 </footer></div></body></html>'''
 
 
+def render_comparison_html(envelope: dict) -> str:
+    """Render the verified source-bound comparison, never a whole-scope fix claim.
+
+    This is deterministic for a given envelope. The signing layer can therefore
+    verify both the envelope semantics and the exact report attached to it.
+    """
+    from .comparison import verify_comparison
+    errors = verify_comparison(envelope)
+    if errors:
+        raise ValueError("invalid comparison envelope: " + "; ".join(errors))
+    source = envelope["source_contract"]
+    baseline, current = envelope["baseline_report"], envelope["current_report"]
+    labels = {
+        "regression": "Configured check regressed",
+        "resolved_check": "Configured check restored",
+        "testability_restored": "Testability restored",
+        "testability_lost": "Testability lost",
+        "inconclusive": "Inconclusive",
+        "unchanged": "Unchanged configured outcome",
+        "not_retested": "Not retested",
+    }
+    stats = "".join(
+        '<div class="stat"><strong>' + _text(envelope["summary"][key]) + '</strong><span>'
+        + _text(label) + '</span></div>'
+        for key, label in labels.items()
+    )
+    coverage = "".join('<dt>' + _text(key.replace("_", " ")) + '</dt><dd>'
+                       + _text(envelope["coverage"][key]) + '</dd>' for key in
+                       ("source_cases", "selected_cases", "dependency_cases", "retested_cases", "not_retested_cases"))
+    rows = []
+    for transition in envelope["transitions"]:
+        before, after = transition["before"], transition["after"]
+        old = before["outcome"] if before else "not available"
+        new = after["outcome"] if after else "not retested"
+        reasons = "; ".join(transition["reasons"])
+        rows.append('<tr><td class="id">' + _text(transition["case_id"])
+                    + '</td><td>' + _text(labels[transition["status"]])
+                    + '</td><td>' + _text(old) + '</td><td>' + _text(new)
+                    + '</td><td>' + _text(reasons) + '</td></tr>')
+    limitations = "".join('<li>' + _text(value) + '</li>' for value in envelope["limitations"])
+    body = ('<section class="hero"><div class="kicker">Source-bound selective retest</div><h1>'
+            + _text(source["name"]) + '</h1><p class="lead">ComparisonEnvelope v1 preserves the full baseline, '
+            'the dependency-complete retest and every untested case. Restored configured checks are not '
+            'independent proof of vulnerability remediation.</p><code>' + _text(source["target"]) + '</code></section>'
+            '<div class="stats diff-stats">' + stats + '</div><div class="layout"><main class="panel">'
+            '<h2>Case transitions</h2><div class="table-wrap"><table><thead><tr><th>Case</th><th>Classification</th>'
+            '<th>Baseline</th><th>Retest</th><th>Reason</th></tr></thead><tbody>' + ''.join(rows)
+            + '</tbody></table></div></main><aside class="stack"><section class="panel"><h2>Coverage</h2><dl>'
+            + coverage + '</dl></section><section class="panel"><h2>Retained evidence</h2><dl>'
+            '<dt>Baseline report root</dt><dd><code>' + _text(baseline["evidence"]["root_sha256"])
+            + '</code></dd><dt>Current report root</dt><dd><code>' + _text(current["evidence"]["root_sha256"])
+            + '</code></dd><dt>Comparison digest</dt><dd><code>' + _text(envelope["comparison_sha256"])
+            + '</code></dd><dt>Tool versions</dt><dd>' + _text(baseline["tool"]["version"]) + ' → '
+            + _text(current["tool"]["version"]) + '</dd></dl></section></aside></div>'
+            '<section class="panel" style="margin-top:26px"><h2>Meaning and limitations</h2><ul class="scope-list">'
+            + limitations + '</ul></section>')
+    return _document(source["name"], body, kind="Verified comparison semantics")
+
+
 def _counts(results: list[dict]) -> dict[str, int]:
     return {outcome: sum(result.get("outcome") == outcome for result in results) for outcome in _OUTCOMES}
 

@@ -1,0 +1,32 @@
+{
+  "baseline_requests": 4,
+  "comparison_sha256": "10902c43ec05e6ac40ce834a055a47e4e4c449f3df0f09cf54233c6d120fe969",
+  "coverage": {
+    "dependency_cases": 2,
+    "not_retested_cases": 1,
+    "retested_cases": 3,
+    "selected_cases": 1,
+    "source_cases": 4
+  },
+  "main_verifier": "Passed: report chain, source-bound comparison, derived HTML, inventory and Ed25519 signature.",
+  "meaning": "resolved_check records restored configured assertions; it is not an independent vulnerability-remediation attestation.",
+  "passed": true,
+  "private_key": "Created temporarily for this fixture and removed after signing.",
+  "proof_zip_sha256": "739c884c895213db75a63da22684dd6c3ef9fe4ca64d8d0f7de203152e36244b",
+  "retest_requests": 3,
+  "runtime_version": "1.1.0.dev0",
+  "scope": "Synthetic loopback fixture; comparison implementation slice, not a 1.0.5 release declaration.",
+  "signer_public_key_sha256": "c74911b0236f33b5555b9563389a2f588f45ec7d3817fdcd9a274b5029e88513",
+  "standalone_stdout": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.\nReport assertion/dependency semantics and execution truth are not established by this standalone verifier.",
+  "standalone_verifier": "Passed with python -I: signature, inventory, hashes and report anchors; comparison semantics are not evaluated.",
+  "summary": {
+    "inconclusive": 0,
+    "not_retested": 1,
+    "regression": 0,
+    "resolved_check": 1,
+    "testability_lost": 0,
+    "testability_restored": 0,
+    "unchanged": 2
+  },
+  "trust": "The generated public key is a demonstration trust anchor, not an independently authenticated producer identity."
+}

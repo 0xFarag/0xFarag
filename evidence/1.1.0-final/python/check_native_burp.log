@@ -1,0 +1,17 @@
+{
+  "controlled_execution_requests": 4,
+  "execution_digest": "74a611dd79afaaeb8cbd00707ef074f895cd1231fa4b5bb7d1c9b668cd88391c",
+  "import_sha256": "d7a7ee059c66041f4b543c6fcb1476a2f046b4c9e4957d47143b083ae83e7a9d",
+  "native_capture_requests": 1,
+  "native_files_sha256": {
+    "burp-http-messages.xml": "1f4157ec2e306dc11c9192e7f0efcf9425b92b53af4b8526b322025d488cd67d",
+    "burp-request.http": "494b9be5fc48c4f8faf23bf2f01d1647e473fbe81831d74143d6368c8c5cbedb",
+    "burp-response.http": "552123446e70539dd222b275c733b451ccc4dac7a76702888c750cb44a5ecd61"
+  },
+  "producer": "Burp Suite Community 2026.9.2",
+  "profile": "burp-http-pair-v1",
+  "screenshots_checked": 9,
+  "source_id": "import-0be13fba8fc417fb1759e36a",
+  "verification": "pinned public fixture integrity and recorded controlled execution; no vendor attestation",
+  "xml_import_result": "xml_declarations_forbidden"
+}

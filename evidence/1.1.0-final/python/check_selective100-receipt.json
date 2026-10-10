@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "tools/check_selective100.py",
+    "--out",
+    "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_selective100"
+  ],
+  "duration_seconds": 3.976,
+  "exit_code": 0,
+  "finished_utc": "2026-10-10T17:33:19.597380+00:00",
+  "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_selective100.log",
+  "log_sha256": "1effc55f0847a36acf3a1d8ec207d77aaaf50d962316dbd4e9af1a8b38aa4386",
+  "name": "check_selective100",
+  "started_utc": "2026-10-10T17:33:15.621171+00:00"
+}

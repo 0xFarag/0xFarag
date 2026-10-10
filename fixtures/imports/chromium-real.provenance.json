@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "kind": "tool-generated-har-fixture-provenance",
+  "generated_at": "2026-10-10T14:40:21.073Z",
+  "fixture": "chromium-real.har",
+  "producer": {
+    "browser": "Chromium",
+    "browser_version": "153.0.8010.0",
+    "exporter": "Playwright BrowserContext recordHar",
+    "playwright_version": "1.64.0",
+    "har_creator": {
+      "name": "Playwright",
+      "version": "1.64.0"
+    },
+    "har_browser": {
+      "name": "chromium",
+      "version": "153.0.8010.0"
+    }
+  },
+  "authenticity": "Unmodified HAR written by the installed Playwright exporter from real Chromium loopback HTTP traffic.",
+  "distinction": "This is a Playwright HAR capture, not a manually exported Chrome DevTools HAR and not a Burp/ZAP export.",
+  "source_scope": {
+    "origin": "http://127.0.0.1:44909",
+    "external_targets": false,
+    "authentication": false,
+    "response_data": "Public authored lab objects; no customer or third-party website content."
+  },
+  "request_count": 2,
+  "observed_requests": [
+    {
+      "method": "GET",
+      "path": "/public/invoices/invoice-A"
+    },
+    {
+      "method": "POST",
+      "path": "/public/preview"
+    }
+  ],
+  "sha256": "6024bbad4bfdae631ec115389765f4c7470e1adcf77547e1b48ee1e0922311ba",
+  "hash_note": "Only this deliberately public, credential-free test capture is hashed here. Production importer hashes redacted projections only.",
+  "reproduction": "PLAYWRIGHT_MODULE=<installed-playwright> CHROME_EXECUTABLE=<chromium> node tools/capture_har_fixture.cjs",
+  "license": "Repository license applies to the authored fixture content and capture script; no external website content is bundled."
+}

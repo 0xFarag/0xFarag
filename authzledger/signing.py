@@ -194,6 +194,28 @@ def _attachment_semantics(report: dict, contents: Mapping[str, bytes]) -> None:
     Other attachment names remain opaque integrity-bound bytes. Never contact a
     policy endpoint or model while verifying an existing package.
     """
+    if any(name in contents for name in ("attachments/assessment.json", "attachments/assessment.html", "attachments/assessment.pdf")):
+        from .assessment_reports import verify_assessment_attachments
+        verify_assessment_attachments(report, contents)
+    comparison_name = "attachments/comparison.json"
+    comparison_html = "attachments/comparison.html"
+    if comparison_html in contents and comparison_name not in contents:
+        raise ValueError("comparison.html requires a retained comparison.json attachment")
+    if comparison_name in contents:
+        from .comparison import verify_comparison
+        if len(contents[comparison_name]) > MAX_REPORT_BYTES:
+            raise ValueError("reserved comparison attachment exceeds size limit")
+        comparison = _json(contents[comparison_name])
+        errors = verify_comparison(comparison)
+        if errors:
+            raise ValueError("invalid retained comparison attachment: " + "; ".join(errors))
+        if _canonical(comparison["current_report"]) != _canonical(report):
+            raise ValueError("comparison current report does not match the signed report")
+        if comparison_html in contents:
+            from .reports import render_comparison_html
+            expected_html = render_comparison_html(comparison).encode("utf-8")
+            if contents[comparison_html] != expected_html:
+                raise ValueError("comparison.html does not match the retained comparison")
     contract_name, graph_name = "attachments/contract.json", "attachments/graph.json"
     explanation_name = "attachments/explanation.json"
     if graph_name in contents and contract_name not in contents:
@@ -467,7 +489,9 @@ def _verify_cryptographic(bundle_path: str | Path, public_key: str | Path) -> tu
         if _PRIVATE_PEM.search(raw):
             raise ValueError("private key material is present in bundle")
         if name in ("report.json", "public.pem", "attachments/contract.json",
-                    "attachments/graph.json", "attachments/explanation.json"):
+                    "attachments/graph.json", "attachments/explanation.json",
+                    "attachments/comparison.json", "attachments/comparison.html",
+                    "attachments/assessment.json", "attachments/assessment.html", "attachments/assessment.pdf"):
             payloads[name] = raw
     if _public_der(payloads["public.pem"]) != trusted_der:
         raise ValueError("embedded public key differs from trusted public key")

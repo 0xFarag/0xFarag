@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "keyboard_only": true,
+  "file_picker_fixture_injection": true,
+  "workflows": [
+    "offline HAR import",
+    "credential binding without browser persistence",
+    "keyboard command palette",
+    "polling failure during held running control and same-job reconnection",
+    "403 marker with valid controls",
+    "shared matrix / graph / history context",
+    "stale preview revision rejection",
+    "reopen original session and reconnect without redispatch",
+    "minimal reproducer",
+    "source-bound fix retest",
+    "fresh workflow and cleanup",
+    "bounded two-cycle workflow assurance and stop after violation",
+    "frozen JSON / HTML / PDF",
+    "fresh local signing key",
+    "independent offline proof verification",
+    "390px viewport"
+  ],
+  "page_errors": []
+}

@@ -1,0 +1,43 @@
+{
+  "palette": {
+    "bg": "#071722",
+    "panel": "#0c1e2b",
+    "control-border": "#5c758a",
+    "ink": "#edf5f7",
+    "muted": "#a0b2c1",
+    "blue": "#a5c7e5",
+    "gold": "#c8a66b"
+  },
+  "ratios": [
+    {
+      "foreground": "ink",
+      "background": "panel",
+      "contrast": 15.37
+    },
+    {
+      "foreground": "muted",
+      "background": "panel",
+      "contrast": 7.79
+    },
+    {
+      "foreground": "gold",
+      "background": "panel",
+      "contrast": 7.38
+    },
+    {
+      "foreground": "bg",
+      "background": "gold",
+      "contrast": 7.9
+    },
+    {
+      "foreground": "blue",
+      "background": "panel",
+      "contrast": 9.63
+    },
+    {
+      "foreground": "control-border",
+      "background": "bg",
+      "contrast": 3.78
+    }
+  ]
+}

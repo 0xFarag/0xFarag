@@ -1,0 +1,30 @@
+{
+  "all_three_formats_match_original_canonical_run": true,
+  "epoch_environments": {
+    "invalid": {
+      "assessment.html": "bf51cae944e8db1d7afe571c61829e3a0d2cd38ceb518152ae974e13bf769007",
+      "assessment.json": "8e108c9339652e729910b39387c0e30e7590dadb9c5153b5d5e21ec800ba374b",
+      "assessment.pdf": "565ad7840983164c164856bfd1f14fa204f3f4a7c308b4ff646d13f995798348"
+    },
+    "release": {
+      "assessment.html": "bf51cae944e8db1d7afe571c61829e3a0d2cd38ceb518152ae974e13bf769007",
+      "assessment.json": "8e108c9339652e729910b39387c0e30e7590dadb9c5153b5d5e21ec800ba374b",
+      "assessment.pdf": "565ad7840983164c164856bfd1f14fa204f3f4a7c308b4ff646d13f995798348"
+    },
+    "unset": {
+      "assessment.html": "bf51cae944e8db1d7afe571c61829e3a0d2cd38ceb518152ae974e13bf769007",
+      "assessment.json": "8e108c9339652e729910b39387c0e30e7590dadb9c5153b5d5e21ec800ba374b",
+      "assessment.pdf": "565ad7840983164c164856bfd1f14fa204f3f4a7c308b4ff646d13f995798348"
+    },
+    "zero": {
+      "assessment.html": "bf51cae944e8db1d7afe571c61829e3a0d2cd38ceb518152ae974e13bf769007",
+      "assessment.json": "8e108c9339652e729910b39387c0e30e7590dadb9c5153b5d5e21ec800ba374b",
+      "assessment.pdf": "565ad7840983164c164856bfd1f14fa204f3f4a7c308b4ff646d13f995798348"
+    }
+  },
+  "findings": 50,
+  "passed": true,
+  "snapshot": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/snapshot-50.json",
+  "snapshot_sha256": "707926f2a0460421ed6e27fc7aad87bf1fe5c48736b571cc6737b2f2cf6adf21",
+  "visual_review_reused_reason": "Every PDF byte equals previously visually reviewed canonical PDF."
+}

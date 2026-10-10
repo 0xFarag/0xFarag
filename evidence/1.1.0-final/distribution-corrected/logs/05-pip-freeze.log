@@ -1,0 +1,6 @@
+authzledger @ file:///workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/wheel-1/authzledger-1.1.0-py3-none-any.whl#sha256=f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f
+charset-normalizer==3.5.2
+pillow==12.3.0
+pip==25.0.1
+pypdf==6.10.0
+reportlab==4.4.9

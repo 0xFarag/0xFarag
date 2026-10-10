@@ -255,6 +255,7 @@ class HistoryStore:
         sequence = connection.execute("SELECT seq FROM sqlite_sequence WHERE name = 'runs'").fetchone()
         if sequence is not None and sequence[0] != count:
             errors.append("history sequence indicates removed tail records")
+        errors.extend(_verify_workflow_chain(connection))
         return errors
 
     def verify_chain(self, *, expected_root_sha256: str | None = None) -> list[str]:
@@ -334,6 +335,17 @@ class HistoryStore:
             record = self._decode(row)
             return {**record, **self._summary(record)}
 
+    def workflow_snapshot(self, scope_key=None):
+        """Verify both chains and return workflow history without network access."""
+        return _workflow_history_snapshot(self, scope_key)
+
+    def append_workflow(self, trace, *, assurance_plan_digest, scope_key, cycle,
+                        expected_previous_sha256=None, expected_runs_root_sha256=None):
+        return _append_workflow(self, trace, assurance_plan_digest=assurance_plan_digest,
+                                scope_key=scope_key, cycle=cycle,
+                                expected_previous_sha256=expected_previous_sha256,
+                                expected_runs_root_sha256=expected_runs_root_sha256)
+
     def close(self) -> None:
         self._closed = True
 
@@ -342,3 +354,136 @@ class HistoryStore:
 
     def __exit__(self, *args):
         self.close()
+
+
+# Additive workflow history has an independent, versioned chain. The legacy
+# runs table, PRAGMA version, row bytes and retained report roots are unchanged.
+_WORKFLOW_DOMAIN = b"AuthzLedger:workflow-history:v1\n"
+_WORKFLOW_SCHEMA = """CREATE TABLE workflow_runs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    created_at TEXT NOT NULL,
+    previous_sha256 TEXT NOT NULL,
+    record_sha256 TEXT NOT NULL UNIQUE,
+    context_json TEXT NOT NULL
+)"""
+_WORKFLOW_TRIGGERS = {
+    "workflow_runs_no_update": "CREATE TRIGGER workflow_runs_no_update BEFORE UPDATE ON workflow_runs BEGIN SELECT RAISE(ABORT, 'workflow history is append-only'); END",
+    "workflow_runs_no_delete": "CREATE TRIGGER workflow_runs_no_delete BEFORE DELETE ON workflow_runs BEGIN SELECT RAISE(ABORT, 'workflow history is append-only'); END",
+}
+
+
+def _workflow_digest(envelope):
+    return hashlib.sha256(_WORKFLOW_DOMAIN + _canonical(envelope).encode()).hexdigest()
+
+
+def _workflow_tables(connection):
+    return {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type = 'table'")}
+
+
+def _workflow_context_errors(context):
+    from .workflows import verify_workflow
+    if (not isinstance(context, dict) or set(context) != {"schema_version", "kind", "assurance_plan_digest", "scope_key", "cycle", "trace"}
+            or type(context["schema_version"]) is not int or context["schema_version"] != 1
+            or context["kind"] != "workflow-assurance-cycle" or type(context["cycle"]) is not int or not 1 <= context["cycle"] <= 100):
+        return ["invalid workflow history context"]
+    for key in ("assurance_plan_digest", "scope_key"):
+        value = context[key]
+        if not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+            return ["invalid workflow history digest"]
+    return verify_workflow(context["trace"])
+
+
+def _verify_workflow_chain(connection):
+    tables = _workflow_tables(connection)
+    if "workflow_runs" not in tables and "workflow_history_schema" not in tables:
+        return []
+    if not {"workflow_runs", "workflow_history_schema"} <= tables:
+        return ["workflow history extension table missing"]
+    if [row[0] for row in connection.execute("SELECT version FROM workflow_history_schema")] != [1]:
+        return ["unsupported workflow history extension schema"]
+    expected = [("id", "INTEGER", 0, None, 1), ("created_at", "TEXT", 1, None, 0),
+                ("previous_sha256", "TEXT", 1, None, 0), ("record_sha256", "TEXT", 1, None, 0),
+                ("context_json", "TEXT", 1, None, 0)]
+    columns = [(r["name"], r["type"], r["notnull"], r["dflt_value"], r["pk"])
+               for r in connection.execute("PRAGMA table_info(workflow_runs)")]
+    if columns != expected:
+        return ["workflow history schema changed"]
+    errors = []
+    triggers = {r["name"]: r["sql"] for r in connection.execute("SELECT name, sql FROM sqlite_master WHERE type = 'trigger'")}
+    for name, statement in _WORKFLOW_TRIGGERS.items():
+        if triggers.get(name) != statement:
+            errors.append("workflow append-only trigger missing or changed")
+    previous = _GENESIS
+    count = 0
+    for row in connection.execute("SELECT * FROM workflow_runs ORDER BY id"):
+        count += 1
+        if row["id"] != count or row["previous_sha256"] != previous:
+            errors.append("workflow history sequence or previous hash mismatch")
+        try:
+            context = json.loads(row["context_json"])
+            if _canonical(context) != row["context_json"]:
+                errors.append("workflow history context is not canonical")
+            errors.extend(_workflow_context_errors(context))
+            envelope = {"schema_version": 1, "id": row["id"], "created_at": row["created_at"],
+                        "previous_sha256": row["previous_sha256"], "context": context}
+            if _workflow_digest(envelope) != row["record_sha256"]:
+                errors.append("workflow history record hash mismatch")
+        except (ValueError, TypeError, KeyError, RecursionError):
+            errors.append("workflow history context invalid")
+        previous = row["record_sha256"]
+    seq = connection.execute("SELECT seq FROM sqlite_sequence WHERE name = 'workflow_runs'").fetchone()
+    if seq is not None and seq[0] != count:
+        errors.append("workflow history tail removed")
+    return errors
+
+
+def _workflow_history_snapshot(self, scope_key=None):
+    """Verify both histories and return immutable workflow records and anchors."""
+    with self._connection(read_only=True) as connection:
+        connection.execute("BEGIN")
+        errors = self._verify(connection)
+        if errors:
+            raise HistoryError("history integrity check failed before workflow traffic")
+        legacy = connection.execute("SELECT record_sha256 FROM runs ORDER BY id DESC LIMIT 1").fetchone()
+        rows = list(connection.execute("SELECT * FROM workflow_runs ORDER BY id")) if "workflow_runs" in _workflow_tables(connection) else []
+        return {"runs_root_sha256": legacy[0] if legacy else _GENESIS,
+                "workflow_root_sha256": rows[-1]["record_sha256"] if rows else _GENESIS,
+                "records": [self._decode(row) for row in rows
+                            if scope_key is None or json.loads(row["context_json"])["scope_key"] == scope_key]}
+
+
+def _append_workflow(self, trace, *, assurance_plan_digest, scope_key, cycle,
+                     expected_previous_sha256=None, expected_runs_root_sha256=None):
+    context = {"schema_version": 1, "kind": "workflow-assurance-cycle", "assurance_plan_digest": assurance_plan_digest,
+               "scope_key": scope_key, "cycle": cycle, "trace": trace}
+    if _workflow_context_errors(context):
+        raise HistoryError("invalid workflow history context")
+    context_json = _canonical(context)
+    context = json.loads(context_json)
+    _secret_free(trace["plan"]["spec"]["contract"], context)
+    with self._connection() as connection:
+        connection.execute("BEGIN IMMEDIATE")
+        if self._verify(connection):
+            raise HistoryError("history integrity check failed before workflow append")
+        legacy = connection.execute("SELECT record_sha256 FROM runs ORDER BY id DESC LIMIT 1").fetchone()
+        if expected_runs_root_sha256 is not None and (legacy[0] if legacy else _GENESIS) != expected_runs_root_sha256:
+            raise HistoryError("legacy history changed during workflow execution")
+        if "workflow_runs" not in _workflow_tables(connection):
+            connection.execute(_WORKFLOW_SCHEMA)
+            connection.execute("CREATE TABLE workflow_history_schema (version INTEGER PRIMARY KEY CHECK (version = 1))")
+            connection.execute("INSERT INTO workflow_history_schema (version) VALUES (1)")
+            for statement in _WORKFLOW_TRIGGERS.values():
+                connection.execute(statement)
+        tail = connection.execute("SELECT id,record_sha256 FROM workflow_runs ORDER BY id DESC LIMIT 1").fetchone()
+        previous = tail["record_sha256"] if tail else _GENESIS
+        if expected_previous_sha256 is not None and previous != expected_previous_sha256:
+            raise HistoryError("workflow history changed during execution")
+        row_id = tail["id"] + 1 if tail else 1
+        created = datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+        anchor = _workflow_digest({"schema_version": 1, "id": row_id, "created_at": created,
+                                   "previous_sha256": previous, "context": context})
+        connection.execute("INSERT INTO workflow_runs (id,created_at,previous_sha256,record_sha256,context_json) VALUES (?,?,?,?,?)",
+                           (row_id, created, previous, anchor, context_json))
+        connection.commit()
+    return {"id": row_id, "created_at": created, "previous_sha256": previous, "record_sha256": anchor,
+            "workflow_digest": trace["workflow_digest"], "scope_key": scope_key, "cycle": cycle}

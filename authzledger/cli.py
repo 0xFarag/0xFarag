@@ -100,8 +100,13 @@ def main(argv: list[str] | None = None) -> int:
     api_import.add_argument("--out", type=Path, required=True)
     from .commands_v1 import add_commands, execute_command
     add_commands(commands)
+    from .commands_assessment import add_commands as add_assessment_commands, execute_command as execute_assessment_command
+    add_assessment_commands(commands)
     args = parser.parse_args(argv)
     try:
+        handled = execute_assessment_command(args)
+        if handled is not None:
+            return handled
         handled = execute_command(args)
         if handled is not None:
             return handled

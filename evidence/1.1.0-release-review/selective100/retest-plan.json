@@ -1,0 +1,593 @@
+{
+  "contract": {
+    "cases": [
+      {
+        "expect": {
+          "json": {
+            "/principal": "peer",
+            "/tenant": "B"
+          },
+          "status": [
+            200
+          ]
+        },
+        "headers": {},
+        "id": "actor",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/me",
+        "requires": []
+      },
+      {
+        "expect": {
+          "json": {
+            "/marker": "synthetic-A"
+          },
+          "status": [
+            200
+          ]
+        },
+        "headers": {},
+        "id": "owner",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/invoice/A",
+        "requires": []
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "negative",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/known-denial",
+        "requires": [
+          "actor",
+          "owner"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-0",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=0",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-1",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=1",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-2",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=2",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-3",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=3",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-4",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=4",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-5",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=5",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-6",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=6",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      }
+    ],
+    "identities": {
+      "owner": {
+        "headers": {
+          "Authorization": {
+            "env": "SELECTIVE_OWNER"
+          }
+        }
+      },
+      "peer": {
+        "headers": {
+          "Authorization": {
+            "env": "SELECTIVE_PEER"
+          }
+        }
+      }
+    },
+    "limits": {
+      "concurrency": 1,
+      "max_requests": 100,
+      "max_response_bytes": 4096,
+      "timeout_seconds": 2
+    },
+    "name": "Demo C: bounded 100-case baseline",
+    "target": "http://127.0.0.1:46833",
+    "version": 1
+  },
+  "contract_digest": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+  "kind": "experiment-plan",
+  "limitations": [
+    "Explicit variants only; no automatic discovery or deployment-policy attestation.",
+    "Identity and resource claims depend on configured response assertions; marker uniqueness and tenant semantics are operator-declared."
+  ],
+  "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+  "plan_digest": "1d963736c7e43fa16213797fc3c53b3bc303368d0079f474ec362df3fdc651c1",
+  "request_upper_bound": 10,
+  "rule": {
+    "id": "tenant-isolation",
+    "kind": "forbid_field_equal",
+    "pointer": "/marker",
+    "resource_id": "invoice-A",
+    "value": "synthetic-A"
+  },
+  "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+  "schema_id": "authzledger.experiment-plan",
+  "schema_version": 1,
+  "scope": {
+    "target": "http://127.0.0.1:46833"
+  },
+  "spec": {
+    "capture_mode": "safe_values",
+    "contract": {
+      "cases": [
+        {
+          "expect": {
+            "json": {
+              "/principal": "peer",
+              "/tenant": "B"
+            },
+            "status": [
+              200
+            ]
+          },
+          "headers": {},
+          "id": "actor",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/me",
+          "requires": []
+        },
+        {
+          "expect": {
+            "json": {
+              "/marker": "synthetic-A"
+            },
+            "status": [
+              200
+            ]
+          },
+          "headers": {},
+          "id": "owner",
+          "identity": "owner",
+          "method": "GET",
+          "path": "/invoice/A",
+          "requires": []
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "negative",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/known-denial",
+          "requires": [
+            "actor",
+            "owner"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-0",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=0",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-1",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=1",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-2",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=2",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-3",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=3",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-4",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=4",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-5",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=5",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-6",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=6",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        }
+      ],
+      "identities": {
+        "owner": {
+          "headers": {
+            "Authorization": {
+              "env": "SELECTIVE_OWNER"
+            }
+          }
+        },
+        "peer": {
+          "headers": {
+            "Authorization": {
+              "env": "SELECTIVE_PEER"
+            }
+          }
+        }
+      },
+      "limits": {
+        "concurrency": 1,
+        "max_requests": 100,
+        "max_response_bytes": 4096,
+        "timeout_seconds": 2
+      },
+      "name": "Demo C: bounded 100-case baseline",
+      "target": "http://127.0.0.1:46833",
+      "version": 1
+    },
+    "id": "selective100",
+    "identity_bindings": {
+      "peer": {
+        "principal": "peer",
+        "principal_pointer": "/principal",
+        "tenant": "B",
+        "tenant_pointer": "/tenant"
+      }
+    },
+    "kind": "experiment-spec",
+    "mutation_approval": [],
+    "rule": {
+      "id": "tenant-isolation",
+      "kind": "forbid_field_equal",
+      "pointer": "/marker",
+      "resource_id": "invoice-A",
+      "value": "synthetic-A"
+    },
+    "schema_version": 1,
+    "sources": [],
+    "title": "Selective retest: seven declared views of one synthetic resource",
+    "variants": [
+      {
+        "case_id": "target-0",
+        "id": "variant-0",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-1",
+        "id": "variant-1",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-2",
+        "id": "variant-2",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-3",
+        "id": "variant-3",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-4",
+        "id": "variant-4",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-5",
+        "id": "variant-5",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-6",
+        "id": "variant-6",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      }
+    ],
+    "volatile_pointers": []
+  },
+  "variants": [
+    {
+      "case_id": "target-0",
+      "id": "variant-0",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-1",
+      "id": "variant-1",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-2",
+      "id": "variant-2",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-3",
+      "id": "variant-3",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-4",
+      "id": "variant-4",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-5",
+      "id": "variant-5",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-6",
+      "id": "variant-6",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    }
+  ]
+}

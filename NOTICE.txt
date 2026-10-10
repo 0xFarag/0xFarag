@@ -12,3 +12,20 @@ applicable law, applicable hosting-platform terms and any separately
 agreed written licence. Third-party rights and licences are preserved.
 
 Permissions: https://github.com/0xFarag
+
+Third-party material: native ZAP exporter fixture
+
+fixtures/imports/zap-real.json is an unchanged native report produced by
+ZAP 2.17.0, Report Generation 0.43.0 and Passive Scanner Rules 70.0.0.
+Its upstream-generated report and scanner descriptions are attributed
+to the ZAP Dev Team and contributors and retain their Apache License,
+Version 2.0 terms. Those third-party contributions are not claimed as
+exclusive AuthzLedger property. The authored public lab payload and
+AuthzLedger capture harness remain subject to the repository LICENSE.
+
+Upstream project: https://github.com/zaproxy/zap-extensions/
+Distribution source: https://github.com/zaproxy/zaproxy/releases/tag/v2.17.0
+The accompanying fixtures/imports/ZAP-LICENSE.txt is an unmodified copy
+of license/ApacheLicense-2.0.txt from that official ZAP distribution.
+The fixture provenance records the verified distribution SHA-256,
+producer versions and unchanged native report digest.

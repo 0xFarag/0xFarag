@@ -1,0 +1,14 @@
+{
+  "added": [
+    "authzledger-1.1.0.dist-info/licenses/NOTICE.txt"
+  ],
+  "all_authzledger_payloads_byte_identical": true,
+  "cause": "External acceptance source copy listed NOTICE rather than existing NOTICE.txt; clean Git CI correctly includes license notice.",
+  "changed": [
+    "authzledger-1.1.0.dist-info/METADATA",
+    "authzledger-1.1.0.dist-info/RECORD"
+  ],
+  "correct_wheel_sha256": "f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f",
+  "removed": [],
+  "superseded_wheel_sha256": "77ffbef884f881c615f177164bf43b75abe006ec363b53c407936a61b97d6b9b"
+}

@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "gates": [
+    "F01-05",
+    "F01-07",
+    "F06-09",
+    "F06-10"
+  ],
+  "request_count": 4,
+  "no_requests_before_authorization": true,
+  "credential_canary_locations": [
+    "header",
+    "cookie",
+    "query",
+    "JSON body",
+    "response body",
+    "error text",
+    "runtime owner credential",
+    "runtime peer credential"
+  ],
+  "checked_surfaces": [
+    "import API",
+    "rendered DOM",
+    "execution API",
+    "history API",
+    "SQLite and WAL bytes",
+    "JSON export",
+    "HTML export in actual browser",
+    "decompressed PDF text",
+    "API errors",
+    "stdout/stderr",
+    "sessionStorage/localStorage",
+    "URL after session initialization"
+  ],
+  "xss_executed": false,
+  "page_errors": []
+}

@@ -1,0 +1,6 @@
+authzledger @ file:///workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/wheel-1/authzledger-1.1.0-py3-none-any.whl#sha256=77ffbef884f881c615f177164bf43b75abe006ec363b53c407936a61b97d6b9b
+charset-normalizer==3.5.2
+pillow==12.3.0
+pip==25.0.1
+pypdf==6.10.0
+reportlab==4.4.9

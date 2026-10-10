@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "installed_receipt": "installed-wheel/installed-provenance.json",
+  "report_qa_attestation": "report-qa/acceptance.json",
+  "visual_attestation": "report-qa/visual-qa/review.json",
+  "private_pem_material_found": false,
+  "sqlite_database_files_included": false,
+  "every_file_below_2000000_bytes": true,
+  "full_50_finding_proof": "report-qa/proof-50",
+  "external_report_public_key": "trust-anchors/report-50-public.pem",
+  "original_proof_names": "proof-a and proof-b were byte-identical; curated proof-a is named proof-50, all contained bytes unchanged.",
+  "source": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+  "omissions": "Build/install venvs, duplicate50finding proof-b and render directories, raw98page rasters and SQLite stores omitted. Original run files remain in scratch."
+}

@@ -1,0 +1,28 @@
+{
+  "@version": "synthetic-profile-fixture-v1",
+  "site": [
+    {
+      "@name": "https://api.example.test",
+      "alerts": [
+        {
+          "pluginid": "90034",
+          "alert": "External scanner source assertion",
+          "riskcode": "3",
+          "confidence": "2",
+          "desc": "IMPORT_CANARY_ERROR_2026",
+          "instances": [
+            {
+              "uri": "https://api.example.test/invoices/invoice-A",
+              "method": "GET",
+              "request-header": "GET /invoices/invoice-A HTTP/1.1\r\nHost: api.example.test\r\nAuthorization: Bearer IMPORT_CANARY_BEARER_2026\r\nAccept: application/json\r\n\r\n",
+              "request-body": "",
+              "response-header": "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nSet-Cookie: session=IMPORT_CANARY_COOKIE_2026\r\n\r\n",
+              "response-body": "{\"id\":\"invoice-A\",\"private\":\"IMPORT_CANARY_RESPONSE_2026\"}",
+              "evidence": "IMPORT_CANARY_EVIDENCE_2026"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

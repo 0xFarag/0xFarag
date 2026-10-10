@@ -1,0 +1,225 @@
+[
+  {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-m",
+      "venv",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/build-venv"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/01-build-venv.log",
+    "name": "01-build-venv",
+    "seconds": 1.813
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/build-venv/bin/python",
+      "-m",
+      "pip",
+      "install",
+      "setuptools==84.0.0",
+      "wheel==0.48.0"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/02-build-dependencies.log",
+    "name": "02-build-dependencies",
+    "seconds": 0.736
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/build-venv/bin/python",
+      "-m",
+      "pip",
+      "wheel",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/wheel-1",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/build-source-1"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/03-build-wheel-1.log",
+    "name": "03-build-wheel-1",
+    "seconds": 0.705
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/build-venv/bin/python",
+      "-m",
+      "pip",
+      "wheel",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/wheel-2",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/build-source-2"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/03-build-wheel-2.log",
+    "name": "03-build-wheel-2",
+    "seconds": 0.759
+  },
+  {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-m",
+      "venv",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/04-clean-install-venv.log",
+    "name": "04-clean-install-venv",
+    "seconds": 1.887
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-m",
+      "pip",
+      "install",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/wheel-1/authzledger-1.1.0-py3-none-any.whl[reports]",
+      "pypdf==6.10.0",
+      "pillow==12.3.0"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/05-install-wheel-reports.log",
+    "name": "05-install-wheel-reports",
+    "seconds": 1.365
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-m",
+      "pip",
+      "check"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/06-installed-pip-check.log",
+    "name": "06-installed-pip-check",
+    "seconds": 0.252
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-m",
+      "pip",
+      "freeze",
+      "--all"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/07-installed-pip-freeze.log",
+    "name": "07-installed-pip-freeze",
+    "seconds": 0.207
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/tools/check_assessment.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/assessment-demos"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/08-assessment-demos.log",
+    "name": "08-assessment-demos",
+    "seconds": 0.941
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/tools/check_selective100.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/selective100"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/09-selective-100.log",
+    "name": "09-selective-100",
+    "seconds": 4.272
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/tools/check_workflows110.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/workflows110"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/10-workflows.log",
+    "name": "10-workflows",
+    "seconds": 0.813
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/assessment-demos/proof",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/assessment-demos-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/assessment-demos-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/11-verify-assessment-demos.log",
+    "name": "11-verify-assessment-demos",
+    "seconds": 0.41
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/selective100/proof",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/selective100-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/selective100-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/11-verify-selective100.log",
+    "name": "11-verify-selective100",
+    "seconds": 1.132
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/proof_qa.py",
+      "run",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa",
+      "--anchors",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/harness/tools/verify_bundle.py"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical",
+    "exit_code": 0,
+    "log": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/logs/12-report-and-assurance-qa.log",
+    "name": "12-report-and-assurance-qa",
+    "seconds": 16.533
+  }
+]

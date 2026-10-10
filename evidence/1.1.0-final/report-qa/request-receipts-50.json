@@ -1,0 +1,1002 @@
+[
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/me"
+  },
+  {
+    "identity": "owner",
+    "method": "GET",
+    "path": "/invoices/a"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/known-denial"
+  },
+  {
+    "identity": "peer",
+    "method": "GET",
+    "path": "/invoices/a"
+  }
+]

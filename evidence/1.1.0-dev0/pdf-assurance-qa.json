@@ -1,0 +1,145 @@
+{
+  "snapshot": "assurance-snapshot.json",
+  "snapshot_digest": "2d54986d61414a8d79e0a20a6c2fd817737d6c99cf14f5ba3fdab0edef2c9ddc",
+  "pdf": "assurance.pdf",
+  "pdf_sha256": "216b746f7ee70f3918957f66de6af8ec95e2f3b741f57451a9394c8c518eaccc",
+  "pages": 5,
+  "verification_errors": [],
+  "exact_render_match": true,
+  "cycles": 2,
+  "budget_ledger": {
+    "schema_version": 1,
+    "kind": "request-budget-ledger",
+    "approved_total": 12,
+    "dispatched_total": 12,
+    "reserved_pending": 0,
+    "leased_pending": 0,
+    "remaining": 0,
+    "cleanup_remaining": 0,
+    "cancelled": false,
+    "cancel_reason": null,
+    "by_kind": {
+      "advisory": 0,
+      "application": 2,
+      "cleanup": 2,
+      "identity_control": 2,
+      "negative_control": 0,
+      "object_control": 0,
+      "pdp": 0,
+      "reduction": 0,
+      "replay": 0,
+      "setup": 2,
+      "state_probe": 4
+    },
+    "requests": [
+      {
+        "sequence": 1,
+        "kind": "identity_control",
+        "operation_id": "control",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 5.38,
+        "response_bytes": 25
+      },
+      {
+        "sequence": 2,
+        "kind": "setup",
+        "operation_id": "create",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 2.014,
+        "response_bytes": 11
+      },
+      {
+        "sequence": 3,
+        "kind": "state_probe",
+        "operation_id": "before",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.329,
+        "response_bytes": 43
+      },
+      {
+        "sequence": 4,
+        "kind": "application",
+        "operation_id": "complete",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.48,
+        "response_bytes": 2
+      },
+      {
+        "sequence": 5,
+        "kind": "state_probe",
+        "operation_id": "after",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.504,
+        "response_bytes": 43
+      },
+      {
+        "sequence": 6,
+        "kind": "cleanup",
+        "operation_id": "delete",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.374,
+        "response_bytes": 2
+      },
+      {
+        "sequence": 7,
+        "kind": "identity_control",
+        "operation_id": "control",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.545,
+        "response_bytes": 25
+      },
+      {
+        "sequence": 8,
+        "kind": "setup",
+        "operation_id": "create",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.439,
+        "response_bytes": 11
+      },
+      {
+        "sequence": 9,
+        "kind": "state_probe",
+        "operation_id": "before",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.236,
+        "response_bytes": 43
+      },
+      {
+        "sequence": 10,
+        "kind": "application",
+        "operation_id": "complete",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.295,
+        "response_bytes": 2
+      },
+      {
+        "sequence": 11,
+        "kind": "state_probe",
+        "operation_id": "after",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.072,
+        "response_bytes": 43
+      },
+      {
+        "sequence": 12,
+        "kind": "cleanup",
+        "operation_id": "delete",
+        "state": "finished",
+        "outcome": "pass",
+        "elapsed_ms": 1.221,
+        "response_bytes": 2
+      }
+    ]
+  }
+}

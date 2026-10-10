@@ -1,0 +1,44 @@
+{
+  "errors": [],
+  "results": [
+    {
+      "view": "variants",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "view": "workflow-fields",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "view": "variants",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "view": "workflow-fields",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "view": "variants",
+      "width": 320,
+      "documentWidth": 320
+    },
+    {
+      "view": "workflow-fields",
+      "width": 320,
+      "documentWidth": 320
+    }
+  ],
+  "passed": true,
+  "checks": [
+    "Empty mobile inspector collapses",
+    "Selected source opens evidence inspector",
+    "Two explicit variants and POST body editable",
+    "Workflow per-step identity/headers/body usable",
+    "Command palette keyboard focus and restoration",
+    "Reduced motion disables transitions"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "kind": "tool-generated-zap-fixture-provenance",
+  "generated_at": "2026-10-10T15:22:36.388322+00:00",
+  "fixture": "zap-real.json",
+  "producer": {
+    "tool": "ZAP",
+    "version": "2.17.0",
+    "exporter": "reports.generate",
+    "profile": "traditional-json-plus",
+    "addons": [
+      {
+        "id": "network",
+        "version": "0.25.0"
+      },
+      {
+        "id": "reports",
+        "version": "0.43.0"
+      },
+      {
+        "id": "pscan",
+        "version": "0.6.0"
+      },
+      {
+        "id": "pscanrules",
+        "version": "70.0.0"
+      }
+    ]
+  },
+  "producer_diagnostics": {
+    "stats.log.error": 1,
+    "stats.log.warn.org.openqa.selenium.manager.SeleniumManager": 1,
+    "stats.log.warn.io.netty.util.internal.MacAddressUtil": 1,
+    "stats.log.warn.org.zaproxy.zap.extension.autoupdate.ExtensionAutoUpdate": 1,
+    "stats.log.warn": 4,
+    "stats.log.error.org.zaproxy.addon.client.ExtensionClientIntegration": 1,
+    "stats.log.warn.org.zaproxy.zap.extension.selenium.internal.FirefoxProfileManager": 1
+  },
+  "distribution": {
+    "url": "https://github.com/zaproxy/zaproxy/releases/download/v2.17.0/ZAP_2.17.0_Linux.tar.gz",
+    "sha256": "efe799aaa3627db683b43f00c9c210aea0b75c00cc8f0a0f0434d12bb3ddde5a",
+    "checksum_source": "https://github.com/zaproxy/zaproxy/releases/tag/v2.17.0"
+  },
+  "authenticity": "Unmodified report bytes written directly by the installed ZAP Report Generation add-on after actual loopback HTTP traffic and native passive rule 10021.",
+  "source_scope": {
+    "origin": "http://127.0.0.1:36829",
+    "external_targets": false,
+    "authentication": false,
+    "response_data": "Public authored synthetic lab object; no customer data."
+  },
+  "capture_request_count": 1,
+  "controlled_execution_request_count": 4,
+  "observed_requests": [
+    {
+      "method": "GET",
+      "path": "/invoice/A"
+    },
+    {
+      "method": "GET",
+      "path": "/invoice/A"
+    },
+    {
+      "method": "GET",
+      "path": "/me"
+    },
+    {
+      "method": "GET",
+      "path": "/known-denial"
+    },
+    {
+      "method": "GET",
+      "path": "/invoice/A"
+    }
+  ],
+  "sha256": "f5212d5dbbf7e12439002656b4888741a9bf0af58bbba1aa28b9436c071bfe87",
+  "execution": {
+    "fixture": "zap-real.execution.json",
+    "sha256": "b023c0c0390bdbd50887e48cb3f13868466f689f5636be13e9040e6ecddf5197",
+    "execution_digest": "3045fca8f320b3ad65098ad93dd23ec523925c5326b520f33c9d3fe201d9e03b",
+    "finding_status": "confirmed",
+    "verification_errors": []
+  },
+  "reproduction": "python3 tools/capture_zap_fixture.py --zap-dir /path/to/ZAP_2.17.0 --archive /path/to/ZAP_2.17.0_Linux.tar.gz --output /new/capture/directory",
+  "hash_note": "Raw-byte hashing applies only to this deliberate public credential-free fixture. Production imports hash the redacted projection.",
+  "limitations": [
+    "The captured alert is ZAP's missing-header assertion, retained as unverified source data. The separate AuthzLedger run confirms only the configured synthetic authorization marker rule.",
+    "This capture closes the ZAP component of F01-01 only. It is not a Burp export.",
+    "ZAP API calls and the one export-capture request are counted separately from the four-request AuthzLedger execution budget.",
+    "The native report retains ZAP startup diagnostics; this fixture verifies the HTTP/passive-scan/report path, not every installed ZAP add-on or browser integration."
+  ],
+  "license": "Public lab payload and harness: repository license. ZAP-generated report descriptions: upstream ZAP Apache-2.0; see https://github.com/zaproxy/zap-extensions/blob/main/LICENSE."
+}

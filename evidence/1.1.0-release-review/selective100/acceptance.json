@@ -1,0 +1,29 @@
+{
+  "baseline_requests": 100,
+  "baseline_root_sha256": "9a9ea83b31031ee4c66bef9737ab671b151b69abe38eafd37d4de2c33434c3a3",
+  "comparison_sha256": "6665988aa0408f92d465ae23a549ada474d43332315f368f4839bc28ceaf3bac",
+  "coverage": {
+    "dependency_cases": 3,
+    "not_retested_cases": 90,
+    "retested_cases": 10,
+    "selected_cases": 7,
+    "source_cases": 100
+  },
+  "current_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+  "fixture_stopped_before_verification": true,
+  "main_verifier": "Passed: signature, inventory, report chain, retained execution/finding semantics, comparison and exact report renderings.",
+  "meaning": "fix_verified is scoped to selected rule/resource/identity bindings with fresh valid controls; 90 other cases remain historical.",
+  "not_retested_cases": 90,
+  "passed": true,
+  "private_key_removed": true,
+  "proof_zip_sha256": "38bafb47189570647d35a6a176f6eba40e3f536cf41a7477f23634bdd3a2651f",
+  "required_control_cases": 3,
+  "retest_requests": 10,
+  "runtime_version": "1.1.0.dev0",
+  "selected_cases": 7,
+  "signer_public_key_sha256": "3371123dce57da8bcc71a6b6e85c73169bf7aae779f133721736964ac289d9ef",
+  "standalone_stdout": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.\nReport assertion/dependency semantics and execution truth are not established by this standalone verifier.",
+  "standalone_verifier": "Passed under python -I outside checkout: signature, inventory, hashes and report anchors; no oracle/finding/comparison semantic replay.",
+  "total_network_requests": 110,
+  "trust": "Fresh demonstration key; distribute its fingerprint separately. The signature does not authenticate producer identity or remote execution truth."
+}

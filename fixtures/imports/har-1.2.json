@@ -1,0 +1,58 @@
+{
+  "log": {
+    "version": "1.2",
+    "creator": {
+      "name": "AuthzLedger synthetic profile fixture",
+      "version": "1"
+    },
+    "entries": [
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://api.example.test/invoices/invoice-A",
+          "httpVersion": "HTTP/1.1",
+          "headers": [
+            {
+              "name": "Host",
+              "value": "api.example.test"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer IMPORT_CANARY_BEARER_2026"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "queryString": [],
+          "cookies": [
+            {
+              "name": "session",
+              "value": "IMPORT_CANARY_COOKIE_2026"
+            }
+          ],
+          "headersSize": -1,
+          "bodySize": 0
+        },
+        "response": {
+          "status": 200,
+          "statusText": "OK",
+          "httpVersion": "HTTP/1.1",
+          "headers": [
+            {
+              "name": "Set-Cookie",
+              "value": "session=IMPORT_CANARY_COOKIE_2026"
+            }
+          ],
+          "content": {
+            "size": 58,
+            "mimeType": "application/json",
+            "text": "{\"id\":\"invoice-A\",\"private\":\"IMPORT_CANARY_RESPONSE_2026\"}"
+          }
+        },
+        "comment": "IMPORT_CANARY_ERROR_2026"
+      }
+    ]
+  }
+}

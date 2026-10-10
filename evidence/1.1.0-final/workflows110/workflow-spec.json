@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "kind": "workflow-spec",
+  "id": "approval",
+  "title": "Approval must precede completion",
+  "contract": {
+    "version": 1,
+    "name": "Workflow fixture",
+    "target": "http://127.0.0.1:41565",
+    "identities": {
+      "operator": {
+        "headers": {}
+      }
+    },
+    "limits": {
+      "max_requests": 100,
+      "concurrency": 1
+    },
+    "cases": [
+      {
+        "id": "control",
+        "identity": "operator",
+        "method": "GET",
+        "path": "/control",
+        "expect": {
+          "status": [
+            200
+          ],
+          "json": {
+            "/principal": "operator"
+          }
+        }
+      },
+      {
+        "id": "create",
+        "identity": "operator",
+        "method": "POST",
+        "path": "/objects",
+        "expect": {
+          "status": [
+            201
+          ]
+        }
+      },
+      {
+        "id": "before",
+        "identity": "operator",
+        "method": "GET",
+        "path": "/objects/placeholder",
+        "expect": {
+          "status": [
+            200
+          ],
+          "json": {
+            "/state": "draft",
+            "/effects": 0
+          }
+        }
+      },
+      {
+        "id": "approve",
+        "identity": "operator",
+        "method": "POST",
+        "path": "/objects/placeholder/approve",
+        "expect": {
+          "status": [
+            200
+          ]
+        }
+      },
+      {
+        "id": "complete",
+        "identity": "operator",
+        "method": "POST",
+        "path": "/objects/placeholder/complete",
+        "expect": {
+          "status": [
+            200,
+            403
+          ]
+        },
+        "body": {
+          "operation_id": "placeholder",
+          "noise": "demonstrably unnecessary"
+        }
+      },
+      {
+        "id": "after",
+        "identity": "operator",
+        "method": "GET",
+        "path": "/objects/placeholder",
+        "expect": {
+          "status": [
+            200
+          ]
+        }
+      },
+      {
+        "id": "delete",
+        "identity": "operator",
+        "method": "DELETE",
+        "path": "/objects/placeholder",
+        "expect": {
+          "status": [
+            200
+          ]
+        }
+      }
+    ]
+  },
+  "controls": [
+    "control"
+  ],
+  "setup": {
+    "id": "create",
+    "case_id": "create",
+    "bindings": []
+  },
+  "precondition": {
+    "id": "before",
+    "case_id": "before",
+    "bindings": [
+      {
+        "source_step": "create",
+        "pointer": "/id",
+        "type": "string",
+        "target": {
+          "kind": "path_segment",
+          "index": 2
+        }
+      }
+    ]
+  },
+  "steps": [
+    {
+      "id": "approve",
+      "case_id": "approve",
+      "bindings": [
+        {
+          "source_step": "create",
+          "pointer": "/id",
+          "type": "string",
+          "target": {
+            "kind": "path_segment",
+            "index": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "complete",
+      "case_id": "complete",
+      "bindings": [
+        {
+          "source_step": "create",
+          "pointer": "/id",
+          "type": "string",
+          "target": {
+            "kind": "path_segment",
+            "index": 2
+          }
+        },
+        {
+          "source_step": "create",
+          "pointer": "/id",
+          "type": "string",
+          "target": {
+            "kind": "json",
+            "pointer": "/operation_id"
+          }
+        }
+      ]
+    }
+  ],
+  "postcondition": {
+    "id": "after",
+    "case_id": "after",
+    "bindings": [
+      {
+        "source_step": "create",
+        "pointer": "/id",
+        "type": "string",
+        "target": {
+          "kind": "path_segment",
+          "index": 2
+        }
+      }
+    ]
+  },
+  "cleanup": [
+    {
+      "id": "delete",
+      "case_id": "delete",
+      "bindings": [
+        {
+          "source_step": "create",
+          "pointer": "/id",
+          "type": "string",
+          "target": {
+            "kind": "path_segment",
+            "index": 2
+          }
+        }
+      ]
+    }
+  ],
+  "fixture": {
+    "source_step": "create",
+    "pointer": "/id",
+    "type": "string",
+    "read_pointer": "/id"
+  },
+  "rule": {
+    "id": "approval",
+    "kind": "forbidden_state",
+    "pointer": "/state",
+    "value": "completed"
+  },
+  "variants": [
+    {
+      "id": "skip-approval",
+      "omit": [
+        "approve"
+      ]
+    }
+  ],
+  "mutation_approval": [
+    "create",
+    "approve",
+    "complete",
+    "delete"
+  ]
+}

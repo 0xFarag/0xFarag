@@ -1,0 +1,17 @@
+{
+  "edition": "Community",
+  "native_action": "Burp message editor Raw tab: Copy to file with no text selected",
+  "observed_ui_label": "Save selected text to file",
+  "selection": "none",
+  "screenshots": [
+    "ui-history-ready.png",
+    "ui-request-verified-menu.png",
+    "ui-request-verified-dialog.png",
+    "ui-request-verified-saved.png",
+    "ui-response-copy-menu.png",
+    "ui-response-save-dialog.png",
+    "ui-save-item-menu.png",
+    "ui-save-item-dialog.png",
+    "ui-xml-saved.png"
+  ]
+}

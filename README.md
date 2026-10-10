@@ -1,6 +1,6 @@
-# AuthzLedger 1.0
+# AuthzLedger 1.1.0 — local authorization proof workbench
 
-**Authorization Intelligence, built on evidence.**
+**Turn a request into a controlled finding, a smaller reproducer and a verifiable fix.**
 
 Know who can do what. Prove what changed.
 
@@ -10,14 +10,41 @@ An authorization decision has three sources: what the contract intends, what a p
 
 Built directly on v0.3.4: the access matrix, control dependency scheduler, offline OpenAPI import, redacted HTTP evidence, Studio and CLI remain the foundation. Version 1.0 adds policy evaluation, differential intelligence, durable history, bounded continuous assurance, grounded advisory reasoning and Ed25519 proof packages.
 
-**[36-second release walkthrough](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/AuthzLedger_1.0_Release_wide.mp4)** · **[Release and downloads](https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0)** · [Installation](INSTALL.md) · [Product architecture](docs/product-1.0.md) · [Release notes](RELEASE_NOTES.md)
+[Installation](INSTALL.md) · [1.1.0 release record](docs/release-1.1.0.md) · [Product architecture](docs/product-1.1.0.md) · [Release notes](RELEASE_NOTES.md) · [Published releases](https://github.com/0xFarag/0xFarag/releases)
+
+The [1.0 walkthrough](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/AuthzLedger_1.0_Release_wide.mp4) documents the earlier release; it is not a recording of the 1.1 assessment workflow.
+
+## Integrated assessment workflow for 1.1.0
+
+This release candidate extends the released 1.0 foundation and **ComparisonEnvelope v1** with all eight capability areas: offline Burp/ZAP/HAR import and mapping, Contrast Lab, Workflow Contracts, bounded Minimal Reproducer, source-bound selective retests, an integrated Studio assessment workspace, HTML/PDF/JSON assessment reports and explainable impact selection. Studio and CLI call the same services and existing HTTP DAG through one request budget.
+
+[1.1.0 product and implementation contract](docs/product-1.1.0.md) · [All 88 acceptance scenarios](docs/acceptance-1.1.0.md) · [Executed verification and release boundaries](docs/verification-1.1.0.md) · [ComparisonEnvelope v1](docs/comparison-envelope-v1.md) · [Binding original implementation contract](docs/implementation-1.0.5.md)
+
+**1.1.0 stable release candidate.** Publication requires the final version, acceptance, build and exact-commit CI gates in the [release runbook](docs/release-runbook-1.1.0.md). This document does not assert that the tag or download assets have already been published. Existing 1.0.0 artifacts and historical evidence remain unchanged.
+
+```sh
+python3 -m pip install '.[reports]'
+python3 -m authzledger studio --history ./authorization-history.sqlite3 --open
+python3 -m authzledger assessment demo --out artifacts/assessment-demo
+python3 tools/check_workflows110.py --out artifacts/workflow-demo
+```
+
+Choose **Assessment** for request import, explicit principal/object/control mapping, plan review, investigation, reduction, retest and signed handover. Ctrl/Cmd+K opens local commands. Session credentials stay in server memory; reload requires reopening the authenticated session URL. Export assessment evidence before closing the server. New assessment working state is memory-only. With `--history`, bounded workflow assurance retains an additional verified history chain beside the unchanged v1 run history; without it, Studio explicitly labels workflow history as session-only.
+
+Studio retains the existing Navy/Blue and Gold identity across the assessment workspace and the original Matrix, Graph, History, Policy and Evidence views. Contrast exposes explicit variants, methods, headers, bodies, typed markers, optional tenant binding and execution limits. Workflow exposes per-step identities and requests, state/effect oracles and bounded assurance. Investigation supports multiple selected retests; reduction and handover preserve their source evidence. Editing a reviewed plan or report invalidates its previous execution or export approval. Advanced versioned specifications remain available alongside the graphical controls.
+
+The three assessment demos issue real loopback HTTP requests: imported request to reduced finding; 403 disclosure versus invalid controls and a 200 error object; selective fix proof with an omitted finding explicitly `not_retested`. Report generation and package verification happen after the fixture stops. Their Burp XML input is an authored format fixture. Separate unchanged native captures cover Burp Community 2026.9.2 raw request/response files, Chromium/Playwright HAR and ZAP Traditional JSON+. The [native Burp addendum](docs/burp-native-import-v1.md) adds an explicit raw-message profile; DTD-bearing Burp XML remains rejected. See [import profile boundaries and provenance](fixtures/imports/README.md).
+
+The [release execution order](docs/release-runbook-1.1.0.md), [exporter gate record](docs/exporter-gate-1.1.0.md) and [channel copy](docs/launch-1.1.0.md) separate verified product behavior from publication status. `python3 tools/check_selective100.py --out artifacts/selective100-proof` reproduces the separate 100-case baseline → seven selected cases plus three controls, with 90 cases explicitly `not_retested`.
+
+Run `python3 tools/check_assessment.py --out artifacts/assessment-proof` to also invoke the standalone verifier in an isolated Python process. [CLI and reproducible demonstrations](docs/assessment-cli.md) · [Reporting profile and verification limits](docs/reporting-profile-1.1.0.md).
 
 ## Start with evidence
 
 For a copy you are authorised to use; Python 3.10+:
 
 ```sh
-git clone --branch authzledger-v1.0.0 --single-branch https://github.com/0xFarag/0xFarag.git authzledger
+git clone --branch authzledger-v1.1.0 --single-branch https://github.com/0xFarag/0xFarag.git authzledger
 cd authzledger
 python3 -m authzledger studio --history ./authorization-history.sqlite3 --open
 ```
@@ -60,7 +87,7 @@ OpenSSL 3 with Ed25519 support is required for these commands:
 python3 -m authzledger keygen --private operator-private.pem --public operator-public.pem
 python3 -m authzledger bundle artifacts/demo/fixed/report.json --key operator-private.pem --contract artifacts/demo/contract.json --graph after-graph.json --explanation explanation.json --out proof
 python3 -m authzledger verify-bundle proof --public-key operator-public.pem
-python3 tools/verify_bundle.py proof --public-key operator-public.pem
+python3 -I tools/verify_bundle.py proof --public-key operator-public.pem
 ```
 
 The trusted public key is supplied separately. Signatures establish signed content integrity and key possession; they do not prove truthful execution, operator identity or a trusted timestamp. History is tamper-evident relative to retained records and anchors, not an immutable external ledger.

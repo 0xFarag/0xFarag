@@ -1,0 +1,63 @@
+{
+  "version": "1.1.0",
+  "all_passed": true,
+  "completed": 7,
+  "suites": [
+    {
+      "suite": "browser_acceptance",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 3.547,
+      "source_unchanged": true,
+      "receipt": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/browser/browser_acceptance/receipt.json"
+    },
+    {
+      "suite": "browser_v1",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 4.946,
+      "source_unchanged": true,
+      "receipt": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/browser/browser_v1/receipt.json"
+    },
+    {
+      "suite": "browser_comparison",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 1.931,
+      "source_unchanged": true,
+      "receipt": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/browser/browser_comparison/receipt.json"
+    },
+    {
+      "suite": "browser_assessments",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 11.838,
+      "source_unchanged": true,
+      "receipt": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/browser/browser_assessments/receipt.json"
+    },
+    {
+      "suite": "browser_assessment_security",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 2.583,
+      "source_unchanged": true,
+      "receipt": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/browser/browser_assessment_security/receipt.json"
+    },
+    {
+      "suite": "browser_retest_freshness",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 1.739,
+      "source_unchanged": true,
+      "receipt": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/browser/browser_retest_freshness/receipt.json"
+    },
+    {
+      "suite": "browser_feature_coverage",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 6.643,
+      "source_unchanged": true,
+      "receipt": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/browser/browser_feature_coverage/receipt.json"
+    }
+  ]
+}

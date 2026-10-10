@@ -1,0 +1,10 @@
+{
+  "case_count": 1000,
+  "rendered_bound": 100,
+  "interactions": 20,
+  "selection_filter_p95_ms": 19.700000002980232,
+  "input_feedback_p95_ms": 2.1000000089406967,
+  "measured_user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+  "logical_cpus": 9,
+  "network_included": false
+}

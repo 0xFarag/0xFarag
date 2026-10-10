@@ -1,0 +1,9 @@
+{
+  "LC_ALL": "C.UTF-8",
+  "PIP_FIND_LINKS": "/workspace/scratch/5ee9d8409b8d/phase2-final/dependency-wheels",
+  "PIP_NO_INDEX": "1",
+  "PYTHONDONTWRITEBYTECODE": "1",
+  "PYTHONHASHSEED": "0",
+  "SOURCE_DATE_EPOCH": "1767225600",
+  "TZ": "UTC"
+}

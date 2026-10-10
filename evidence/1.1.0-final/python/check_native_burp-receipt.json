@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "tools/check_native_burp.py"
+  ],
+  "duration_seconds": 0.115,
+  "exit_code": 0,
+  "finished_utc": "2026-10-10T17:34:43.013789+00:00",
+  "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/check_native_burp.log",
+  "log_sha256": "ea30f2b0d8b80a6d332ea6bf6f3c7494f4d6f6fc80734fcf967022d3075a26f0",
+  "name": "check_native_burp",
+  "started_utc": "2026-10-10T17:34:42.899229+00:00"
+}

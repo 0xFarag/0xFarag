@@ -1,0 +1,4 @@
+VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.
+Report assertion/dependency semantics and execution truth are not established by this standalone verifier.
+Three controlled demonstrations verified: import/reproducer, denial/controls, selective retest/proof.
+Request count: 35

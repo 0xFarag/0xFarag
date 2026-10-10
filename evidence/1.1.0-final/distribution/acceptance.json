@@ -1,0 +1,16 @@
+{
+  "all_commands_exit_zero": true,
+  "commands": 14,
+  "key_scope": "Ephemeral demo/acceptance anchors explicitly supplied outside bundles; not publisher identity attestation.",
+  "passed": true,
+  "source_core_unchanged": true,
+  "version": "1.1.0",
+  "visual_review": {
+    "contact_sheets_reviewed": 8,
+    "detail_pages_reviewed": 7,
+    "pages_rasterized": 98,
+    "passed": true,
+    "receipt": "visual-qa/review.json"
+  },
+  "wheel_sha256": "77ffbef884f881c615f177164bf43b75abe006ec363b53c407936a61b97d6b9b"
+}

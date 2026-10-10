@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "tools/release_gate110.py"
+  ],
+  "duration_seconds": 0.115,
+  "exit_code": 0,
+  "finished_utc": "2026-10-10T17:34:43.128974+00:00",
+  "log": "/workspace/scratch/5ee9d8409b8d/release-final/phase1-revalidated/python/release_gate110.log",
+  "log_sha256": "afef187e8320fcf82bf4920b8083e0f0eb5b80306843006a4fc184ef5f849551",
+  "name": "release_gate110",
+  "started_utc": "2026-10-10T17:34:43.014415+00:00"
+}

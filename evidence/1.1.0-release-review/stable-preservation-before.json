@@ -1,0 +1,53 @@
+{
+  "checked_at": "2026-10-10T15:22:18.044Z",
+  "source": "GitHub REST read via authenticated connector",
+  "release_id": 407432988,
+  "tag": "refs/tags/v1.0.0",
+  "commit": "c0d4446a17ca15fb4e8a71f20f6b02c1a364e90c",
+  "published_at": "2026-10-09T02:24:44Z",
+  "assets": [
+    {
+      "id": 623647840,
+      "name": "authzledger-1.0.0-py3-none-any.whl",
+      "size": 544875,
+      "digest": "sha256:21312e86b9eedf1d3f3e954b8e8d825cb1fee47539027654cd80861ba2f34f0a"
+    },
+    {
+      "id": 623647845,
+      "name": "authzledger-1.0.0-source.zip",
+      "size": 2477545,
+      "digest": "sha256:ce0fe424caf4ec19be28f1db72957d5d59abd45cc49a8c48f345085b19a0a839"
+    },
+    {
+      "id": 623647887,
+      "name": "AuthzLedger_1.0_en.srt",
+      "size": 1079,
+      "digest": "sha256:e95b1cc652dfbae69a7ef2270664cc2f7b631d5e79fe36c63b5776970448653f"
+    },
+    {
+      "id": 623647881,
+      "name": "AuthzLedger_1.0_Release_vertical.mp4",
+      "size": 2226085,
+      "digest": "sha256:91dc8c198043e911236f5247e0c42f500c8a2d77fb2009a9c3dd6a5c1e2f2a9c"
+    },
+    {
+      "id": 623647846,
+      "name": "AuthzLedger_1.0_Release_wide.mp4",
+      "size": 2316801,
+      "digest": "sha256:8a3970f32f2a675355f24ad12f4f9fa1325b24bf54f97d6897599f9fc234d56d"
+    },
+    {
+      "id": 623647843,
+      "name": "SHA256SUMS.txt",
+      "size": 570,
+      "digest": "sha256:d4a7ff0f2fd20d5be5b3e2fb6cd93cdfcad1b6219aca2b6b438656fafb8d14c9"
+    },
+    {
+      "id": 623647844,
+      "name": "verify_bundle.py",
+      "size": 13972,
+      "digest": "sha256:66a16919c13d04fe5012a45bf20297a8d89f45ae064e1b80e68955d8bcb5c287"
+    }
+  ],
+  "preservation_policy": "No mutation of stable tag, release assets or evidence/1.0.0"
+}

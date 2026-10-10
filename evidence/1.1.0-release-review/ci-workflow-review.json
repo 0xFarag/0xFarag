@@ -1,0 +1,89 @@
+{
+  "workflow": ".github/workflows/tests.yml",
+  "sha256": "0079837059adecaa4a0f4b947448df31e3422e791772b1db67ca75b77ba46400",
+  "yaml_parse": "passed",
+  "old_v100_publication_job": "byte_identical_to_HEAD",
+  "shell_steps": [
+    {
+      "job": "verify",
+      "step": "Install pinned assessment report renderer",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "verify",
+      "step": "Unit, adversarial and local HTTP integration tests",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "verify",
+      "step": "Full authorization intelligence and independent proof workflow",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "verify",
+      "step": "Source-bound selective comparison and isolated proof verification",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "verify",
+      "step": "Import, controlled finding, reproducer, retest and independent proof",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "verify",
+      "step": "Full baseline, seven selected cases, three controls and ninety historical cases",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "verify",
+      "step": "Isolated workflow, replay and mutating reduction",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "verify",
+      "step": "Build wheel",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "verify",
+      "step": "Verify installed distribution outside checkout",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "browser",
+      "step": "Install pinned browser test runtime",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "browser",
+      "step": "Existing Studio workflows and source-bound selective retest",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "publish",
+      "step": "Build verified release assets",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "publish",
+      "step": "Publish AuthzLedger 1.0 once",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "publish110",
+      "step": "Require the complete 1.1.0 release contract",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "publish110",
+      "step": "Package the verified commit",
+      "shell_syntax": "passed"
+    },
+    {
+      "job": "publish110",
+      "step": "Publish immutable AuthzLedger 1.1.0 once",
+      "shell_syntax": "passed"
+    }
+  ],
+  "remote_execution": "not performed by this validation"
+}

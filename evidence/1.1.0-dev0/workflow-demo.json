@@ -1,0 +1,12 @@
+{
+  "workflow_skip_approval": "violation_vs_satisfied",
+  "replay": "independent_effect_counter",
+  "invalid_controls": "inconclusive_without_setup",
+  "reduction": "fresh_fixture_per_attempt",
+  "reduction_requests": 12,
+  "one_minimal": true,
+  "all_objects_cleaned": true,
+  "requests": 41,
+  "state_verification": "evaluation_attested",
+  "network": "synthetic_loopback_only"
+}

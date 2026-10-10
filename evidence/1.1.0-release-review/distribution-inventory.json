@@ -1,0 +1,27 @@
+{
+  "authzledger-1.1.0.dev0-proof.zip": {
+    "public_pem_files": [
+      "authzledger-proof/assessment-demos/proof/public.pem",
+      "authzledger-proof/assessment-demos/trusted-public.pem",
+      "authzledger-proof/selective100/proof/public.pem",
+      "authzledger-proof/selective100/trusted-public.pem"
+    ],
+    "private_key_content_absent": true,
+    "operator_data_absent": true
+  },
+  "authzledger-1.1.0.dev0-source.zip": {
+    "public_pem_files": [
+      "authzledger/evidence/1.1.0-release-review/assessment-demos/proof/public.pem",
+      "authzledger/evidence/1.1.0-release-review/assessment-demos/trusted-public.pem",
+      "authzledger/evidence/1.1.0-release-review/selective100/proof/public.pem",
+      "authzledger/evidence/1.1.0-release-review/selective100/trusted-public.pem"
+    ],
+    "private_key_content_absent": true,
+    "operator_data_absent": true
+  },
+  "negative_public_pem_check": {
+    "rejected": true,
+    "stderr": "Refusing non-public PEM in public proof"
+  },
+  "scope": "Allowlist and negative private-PEM guard checks on review packaging. No source/archive hash is embedded here; final SHA256SUMS.txt binds final distributable bytes."
+}

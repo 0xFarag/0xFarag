@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "gate": "F08-05",
+  "baseline": "2026-10-10T14:39:17.861Z",
+  "current": "2026-10-10T14:39:18.493Z",
+  "coverage": {
+    "source_cases": 100,
+    "selected_cases": 1,
+    "dependency_cases": 9,
+    "retested_cases": 10,
+    "not_retested_cases": 90
+  },
+  "original_baseline_root": "cb01c5078bafc5771fc49edff162c333464abe122560bfdfefc342abf45704b0",
+  "compared_baseline_root": "cb01c5078bafc5771fc49edff162c333464abe122560bfdfefc342abf45704b0",
+  "comparison_digest": "c1131f9413c943df2912ba355fb3d4b696a56aa9ff48cf44dae4933dd330dfb9",
+  "current_count": 10,
+  "page_errors": []
+}

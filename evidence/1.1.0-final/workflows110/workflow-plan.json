@@ -1,0 +1,295 @@
+{
+  "schema_id": "authzledger.workflow-plan",
+  "schema_version": 1,
+  "kind": "workflow-plan",
+  "spec": {
+    "schema_version": 1,
+    "kind": "workflow-spec",
+    "id": "approval",
+    "title": "Approval must precede completion",
+    "contract": {
+      "version": 1,
+      "name": "Workflow fixture",
+      "target": "http://127.0.0.1:41565",
+      "limits": {
+        "max_requests": 100,
+        "timeout_seconds": 5,
+        "max_response_bytes": 65536,
+        "concurrency": 1
+      },
+      "identities": {
+        "operator": {
+          "headers": {}
+        }
+      },
+      "cases": [
+        {
+          "id": "control",
+          "identity": "operator",
+          "method": "GET",
+          "path": "/control",
+          "requires": [],
+          "expect": {
+            "status": [
+              200
+            ],
+            "json": {
+              "/principal": "operator"
+            }
+          },
+          "headers": {}
+        },
+        {
+          "id": "create",
+          "identity": "operator",
+          "method": "POST",
+          "path": "/objects",
+          "requires": [],
+          "expect": {
+            "status": [
+              201
+            ]
+          },
+          "headers": {}
+        },
+        {
+          "id": "before",
+          "identity": "operator",
+          "method": "GET",
+          "path": "/objects/placeholder",
+          "requires": [],
+          "expect": {
+            "status": [
+              200
+            ],
+            "json": {
+              "/state": "draft",
+              "/effects": 0
+            }
+          },
+          "headers": {}
+        },
+        {
+          "id": "approve",
+          "identity": "operator",
+          "method": "POST",
+          "path": "/objects/placeholder/approve",
+          "requires": [],
+          "expect": {
+            "status": [
+              200
+            ]
+          },
+          "headers": {}
+        },
+        {
+          "id": "complete",
+          "identity": "operator",
+          "method": "POST",
+          "path": "/objects/placeholder/complete",
+          "requires": [],
+          "expect": {
+            "status": [
+              200,
+              403
+            ]
+          },
+          "headers": {},
+          "body": {
+            "operation_id": "placeholder",
+            "noise": "demonstrably unnecessary"
+          }
+        },
+        {
+          "id": "after",
+          "identity": "operator",
+          "method": "GET",
+          "path": "/objects/placeholder",
+          "requires": [],
+          "expect": {
+            "status": [
+              200
+            ]
+          },
+          "headers": {}
+        },
+        {
+          "id": "delete",
+          "identity": "operator",
+          "method": "DELETE",
+          "path": "/objects/placeholder",
+          "requires": [],
+          "expect": {
+            "status": [
+              200
+            ]
+          },
+          "headers": {}
+        }
+      ]
+    },
+    "controls": [
+      "control"
+    ],
+    "setup": {
+      "id": "create",
+      "case_id": "create",
+      "bindings": []
+    },
+    "precondition": {
+      "id": "before",
+      "case_id": "before",
+      "bindings": [
+        {
+          "source_step": "create",
+          "pointer": "/id",
+          "type": "string",
+          "target": {
+            "kind": "path_segment",
+            "index": 2
+          }
+        }
+      ]
+    },
+    "steps": [
+      {
+        "id": "approve",
+        "case_id": "approve",
+        "bindings": [
+          {
+            "source_step": "create",
+            "pointer": "/id",
+            "type": "string",
+            "target": {
+              "kind": "path_segment",
+              "index": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "complete",
+        "case_id": "complete",
+        "bindings": [
+          {
+            "source_step": "create",
+            "pointer": "/id",
+            "type": "string",
+            "target": {
+              "kind": "path_segment",
+              "index": 2
+            }
+          },
+          {
+            "source_step": "create",
+            "pointer": "/id",
+            "type": "string",
+            "target": {
+              "kind": "json",
+              "pointer": "/operation_id"
+            }
+          }
+        ]
+      }
+    ],
+    "postcondition": {
+      "id": "after",
+      "case_id": "after",
+      "bindings": [
+        {
+          "source_step": "create",
+          "pointer": "/id",
+          "type": "string",
+          "target": {
+            "kind": "path_segment",
+            "index": 2
+          }
+        }
+      ]
+    },
+    "cleanup": [
+      {
+        "id": "delete",
+        "case_id": "delete",
+        "bindings": [
+          {
+            "source_step": "create",
+            "pointer": "/id",
+            "type": "string",
+            "target": {
+              "kind": "path_segment",
+              "index": 2
+            }
+          }
+        ]
+      }
+    ],
+    "fixture": {
+      "source_step": "create",
+      "pointer": "/id",
+      "type": "string",
+      "read_pointer": "/id"
+    },
+    "rule": {
+      "id": "approval",
+      "kind": "forbidden_state",
+      "pointer": "/state",
+      "value": "completed"
+    },
+    "variants": [
+      {
+        "id": "skip-approval",
+        "omit": [
+          "approve"
+        ],
+        "identity_overrides": {},
+        "repeat": {}
+      }
+    ],
+    "mutation_approval": [
+      "create",
+      "approve",
+      "complete",
+      "delete"
+    ]
+  },
+  "variants": [
+    {
+      "id": "skip-approval",
+      "steps": [
+        {
+          "id": "complete",
+          "case_id": "complete",
+          "bindings": [
+            {
+              "source_step": "create",
+              "pointer": "/id",
+              "type": "string",
+              "target": {
+                "kind": "path_segment",
+                "index": 2
+              }
+            },
+            {
+              "source_step": "create",
+              "pointer": "/id",
+              "type": "string",
+              "target": {
+                "kind": "json",
+                "pointer": "/operation_id"
+              }
+            }
+          ],
+          "attempt": 1,
+          "identity": "operator"
+        }
+      ],
+      "request_upper_bound": 6
+    }
+  ],
+  "contract_digest": "a77cc925a045c6417e213394ad63e890c549ebd5ae1912a44e09e7776d4b543f",
+  "request_upper_bound": 6,
+  "cleanup_reserve": 1,
+  "rule_digest": "a4ab19f38046c985e259876047ba6968b572bf2f60a0a5cf002081e9773b2020",
+  "plan_digest": "16546e9490e5373df59fa8dd89fc2530a7371ec59c92cf914ae9f781a54127db"
+}

@@ -1,0 +1,845 @@
+{
+  "baseline": {
+    "approved_requests": 100,
+    "by_kind": {
+      "advisory": 0,
+      "application": 97,
+      "cleanup": 0,
+      "identity_control": 1,
+      "negative_control": 1,
+      "object_control": 1,
+      "pdp": 0,
+      "reduction": 0,
+      "replay": 0,
+      "setup": 0,
+      "state_probe": 0
+    },
+    "dispatched_requests": 100,
+    "execution_digest": "1f4a17dff869fe369cce352dd7c054a05860e9d7d227a3604b15a187fcc9fd2c",
+    "report_root_sha256": "9a9ea83b31031ee4c66bef9737ab671b151b69abe38eafd37d4de2c33434c3a3",
+    "server_observed_requests": [
+      {
+        "identity": "peer",
+        "kind": "identity_control",
+        "method": "GET",
+        "path": "/me",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "object_control",
+        "method": "GET",
+        "path": "/invoice/A",
+        "status": 200
+      },
+      {
+        "identity": "peer",
+        "kind": "negative_control",
+        "method": "GET",
+        "path": "/known-denial",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=0",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=1",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=2",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=3",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=4",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=5",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=6",
+        "status": 403
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/00",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/01",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/02",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/03",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/04",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/05",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/06",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/07",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/08",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/09",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/10",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/11",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/12",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/13",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/14",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/15",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/16",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/17",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/18",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/19",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/20",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/21",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/22",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/23",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/24",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/25",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/26",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/27",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/28",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/29",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/30",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/31",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/32",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/33",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/34",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/35",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/36",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/37",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/38",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/39",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/40",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/41",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/42",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/43",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/44",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/45",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/46",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/47",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/48",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/49",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/50",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/51",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/52",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/53",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/54",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/55",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/56",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/57",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/58",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/59",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/60",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/61",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/62",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/63",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/64",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/65",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/66",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/67",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/68",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/69",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/70",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/71",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/72",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/73",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/74",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/75",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/76",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/77",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/78",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/79",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/80",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/81",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/82",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/83",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/84",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/85",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/86",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/87",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/88",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "application",
+        "method": "GET",
+        "path": "/historical/89",
+        "status": 200
+      }
+    ]
+  },
+  "baseline_bytes_unchanged": true,
+  "baseline_file_sha256": "f31b93ab8776e458e89021fbcf9c0787cf89219ea67c91acd2346d2ed4548ef6",
+  "current": {
+    "approved_requests": 100,
+    "by_kind": {
+      "advisory": 0,
+      "application": 7,
+      "cleanup": 0,
+      "identity_control": 1,
+      "negative_control": 1,
+      "object_control": 1,
+      "pdp": 0,
+      "reduction": 0,
+      "replay": 0,
+      "setup": 0,
+      "state_probe": 0
+    },
+    "dispatched_requests": 10,
+    "execution_digest": "ca3f0b1c0ab3cf5ab980aec523d8995781d82830c5381288e70dd92d77d7869d",
+    "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+    "server_observed_requests": [
+      {
+        "identity": "peer",
+        "kind": "identity_control",
+        "method": "GET",
+        "path": "/me",
+        "status": 200
+      },
+      {
+        "identity": "owner",
+        "kind": "object_control",
+        "method": "GET",
+        "path": "/invoice/A",
+        "status": 200
+      },
+      {
+        "identity": "peer",
+        "kind": "negative_control",
+        "method": "GET",
+        "path": "/known-denial",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=0",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=1",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=2",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=3",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=4",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=5",
+        "status": 403
+      },
+      {
+        "identity": "peer",
+        "kind": "application",
+        "method": "GET",
+        "path": "/invoice/A?view=6",
+        "status": 403
+      }
+    ]
+  },
+  "demo": "C",
+  "fixture_stopped_before_verification": true,
+  "not_retested_cases": 90,
+  "required_control_cases": 3,
+  "schema_version": 1,
+  "scope": "synthetic-loopback-selective-retest",
+  "scope_limits": [
+    "Seven explicit query variants share one synthetic resource, identity and rule.",
+    "The 90 remaining baseline cases are historical, not evidence of a current fix.",
+    "100 to 10 compares dispatched requests within this fixture; it is not a general speedup benchmark.",
+    "Server receipts are local measurements by this runner, not third-party execution attestations.",
+    "Setup, cleanup, replay, reduction, PDP, advisory and state probes make no HTTP requests here."
+  ],
+  "selected_cases": 7,
+  "tool_source_sha256": "5163ef0dee210146923292356a611f49a997ba881f203258307dd3349c55fb5c",
+  "total_by_kind": {
+    "advisory": 0,
+    "application": 104,
+    "cleanup": 0,
+    "identity_control": 2,
+    "negative_control": 2,
+    "object_control": 2,
+    "pdp": 0,
+    "reduction": 0,
+    "replay": 0,
+    "setup": 0,
+    "state_probe": 0
+  },
+  "total_network_requests": 110
+}

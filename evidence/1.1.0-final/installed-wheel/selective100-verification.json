@@ -1,0 +1,9 @@
+{
+  "bundle": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/selective100/proof",
+  "external_public_key": "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/selective100-public.pem",
+  "main_errors": [],
+  "public_key_file_sha256": "d1e2bee944922b86d84fc84f11d14eede5f2c04808e24927eb7a526fd2253f44",
+  "standalone_exit_code": 0,
+  "standalone_stderr": "",
+  "standalone_stdout": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.\nReport assertion/dependency semantics and execution truth are not established by this standalone verifier.\n"
+}

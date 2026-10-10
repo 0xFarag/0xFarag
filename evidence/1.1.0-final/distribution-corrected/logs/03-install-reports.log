@@ -1,0 +1,8 @@
+Looking in links: /workspace/scratch/5ee9d8409b8d/phase2-final/dependency-wheels
+Processing ./wheel-1/authzledger-1.1.0-py3-none-any.whl (from authzledger==1.1.0)
+Processing /workspace/scratch/5ee9d8409b8d/phase2-final/dependency-wheels/pypdf-6.10.0-py3-none-any.whl
+Processing /workspace/scratch/5ee9d8409b8d/phase2-final/dependency-wheels/pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+Processing /workspace/scratch/5ee9d8409b8d/phase2-final/dependency-wheels/reportlab-4.4.9-py3-none-any.whl (from authzledger==1.1.0->authzledger==1.1.0)
+Processing /workspace/scratch/5ee9d8409b8d/phase2-final/dependency-wheels/charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (from reportlab==4.4.9->authzledger==1.1.0->authzledger==1.1.0)
+Installing collected packages: pypdf, pillow, charset-normalizer, authzledger, reportlab
+Successfully installed authzledger-1.1.0 charset-normalizer-3.5.2 pillow-12.3.0 pypdf-6.10.0 reportlab-4.4.9

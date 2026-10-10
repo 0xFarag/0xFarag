@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "producer": "1.1.0.dev0",
+  "outside_checkout": true,
+  "wheel_sha256": "a5351f857bd1f82bfcbe0514bd1b093b4fbf9a86742bd46552a9bf75d4f44bd9",
+  "demo_requests": 35,
+  "assurance_cycles": 2,
+  "assurance_requests": 12,
+  "durable_history_reopened": true,
+  "original_v1_history_rows": 0,
+  "reports": [
+    "json",
+    "html",
+    "pdf"
+  ],
+  "main_verifier": true,
+  "standalone_isolated_verifier": true,
+  "installed_assets": true,
+  "network": "synthetic_loopback_only"
+}

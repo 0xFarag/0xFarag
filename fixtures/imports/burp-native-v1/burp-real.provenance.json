@@ -1,0 +1,37 @@
+{
+  "capture_time": "2026-10-10T17:15:05.668613+00:00",
+  "controlled_execution_requests": 4,
+  "distribution_sha256": "3571f8cadbfd65b0b090d2753735c40b76ad7fdde0b927df2b22ec46ea09693a",
+  "distribution_url": "https://portswigger.net/burp/releases/startdownload?product=desktop&type=jar&version=2026.9.2",
+  "edition": "Community",
+  "harness_sha256": "ceea4c70ce01a53ed8e4c272f06322921f496ccd2c2df38dff959465a04ca1ea",
+  "native_action": "Burp message editor Raw tab: Copy to file with no text selected",
+  "native_capture_requests": 1,
+  "native_files_sha256": {
+    "burp-request.http": "494b9be5fc48c4f8faf23bf2f01d1647e473fbe81831d74143d6368c8c5cbedb",
+    "burp-response.http": "552123446e70539dd222b275c733b451ccc4dac7a76702888c750cb44a5ecd61"
+  },
+  "native_files_unchanged": true,
+  "producer": "Burp Suite",
+  "profile": "burp-http-pair-v1",
+  "provenance_level": "Observed native UI action, pinned producer binary and unchanged export bytes; not a vendor attestation.",
+  "public_synthetic_fixture": true,
+  "screenshots_sha256": {
+    "ui-history-ready.png": "f3168a6830638fbf89a5d443233de579f0123e9d4f7aed023f903e0dc94329c8",
+    "ui-request-verified-dialog.png": "a1c0b4ad42971e0bdf2fb17c9ed616118b13ee93e413ef4ed5a76b5f2f8d3f90",
+    "ui-request-verified-menu.png": "9ff9c1d70479184f806cfa0a5978b04e4b539ef2b230f7a3e81612e8003b5564",
+    "ui-request-verified-saved.png": "c3ec1f02eec9263ab218f91de0de4b1e249ca416276d7b1a0e9b669e212d53f1",
+    "ui-response-copy-menu.png": "7442bfd01b01a7be3a506673a5467f65846e476a5ca0d44f927c143f0c8ff625",
+    "ui-response-save-dialog.png": "dbaea77f01821d612f853651b9ff60de7b35d50d1c4a70b640a69618aa444b3d",
+    "ui-save-item-dialog.png": "a9adbfbbd7138f777aeebac970f6449076495599521248372e0740b289020740",
+    "ui-save-item-menu.png": "7442bfd01b01a7be3a506673a5467f65846e476a5ca0d44f927c143f0c8ff625",
+    "ui-xml-saved.png": "e5f6eb5beb16fdff4716d0a1076a9c1363174911e60e5dd181f4d034c361d8b7"
+  },
+  "source_origin": "http://127.0.0.1:37915",
+  "version": "2026.9.2",
+  "xml_export": {
+    "accepted": false,
+    "import_result": "xml_declarations_forbidden",
+    "sha256": "1f4157ec2e306dc11c9192e7f0efcf9425b92b53af4b8526b322025d488cd67d"
+  }
+}

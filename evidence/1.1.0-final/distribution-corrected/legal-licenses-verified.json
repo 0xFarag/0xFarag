@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "wheel_entries": 51,
+  "metadata_license_files": [
+    "LICENSE",
+    "NOTICE.txt"
+  ],
+  "legal_files": {
+    "authzledger-1.1.0.dist-info/licenses/LICENSE": {
+      "source": "LICENSE",
+      "bytes": 1726,
+      "sha256": "a29abff6cb7662bfaa515ce8f9c4d1f25c07e634aa66a1a83ab5b965b56cf9b9",
+      "installed_bytes_match": true
+    },
+    "authzledger-1.1.0.dist-info/licenses/NOTICE.txt": {
+      "source": "NOTICE.txt",
+      "bytes": 1611,
+      "sha256": "a92cb04d0bd7854fea0e122ffdbfad0b41e0fef68874f63e2439bcc15d835816",
+      "installed_bytes_match": true
+    },
+    "authzledger/fonts/LICENSE-DejaVu.txt": {
+      "source": "authzledger/fonts/LICENSE-DejaVu.txt",
+      "bytes": 2732,
+      "sha256": "562c8f5e92af7a06339292a1bb0b9a3e9c8d5142af5d7167f2866fc50261b993",
+      "installed_bytes_match": true
+    }
+  },
+  "build_backend_versions": {
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
+  }
+}
