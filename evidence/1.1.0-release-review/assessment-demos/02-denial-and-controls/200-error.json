@@ -1,0 +1,1068 @@
+{
+  "budget_ledger": {
+    "approved_total": 50,
+    "by_kind": {
+      "advisory": 0,
+      "application": 1,
+      "cleanup": 0,
+      "identity_control": 1,
+      "negative_control": 1,
+      "object_control": 1,
+      "pdp": 0,
+      "reduction": 0,
+      "replay": 0,
+      "setup": 0,
+      "state_probe": 0
+    },
+    "cancel_reason": null,
+    "cancelled": false,
+    "cleanup_remaining": 0,
+    "dispatched_total": 4,
+    "kind": "request-budget-ledger",
+    "leased_pending": 0,
+    "remaining": 46,
+    "requests": [
+      {
+        "elapsed_ms": 2.551,
+        "kind": "object_control",
+        "operation_id": "owner-object",
+        "outcome": "pass",
+        "response_bytes": 77,
+        "sequence": 1,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 1.991,
+        "kind": "identity_control",
+        "operation_id": "actor-identity-0",
+        "outcome": "pass",
+        "response_bytes": 36,
+        "sequence": 2,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 1.282,
+        "kind": "negative_control",
+        "operation_id": "known-denial-0",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 3,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 1.394,
+        "kind": "application",
+        "operation_id": "variant-peer-1",
+        "outcome": "fail",
+        "response_bytes": 19,
+        "sequence": 4,
+        "state": "finished"
+      }
+    ],
+    "reserved_pending": 0,
+    "schema_version": 1
+  },
+  "contract": {
+    "cases": [
+      {
+        "expect": {
+          "json": {
+            "/id": "invoice-a",
+            "/protected_marker": "SYNTHETIC-INVOICE-A"
+          },
+          "status": [
+            200
+          ]
+        },
+        "headers": {},
+        "id": "owner-object",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/invoices/a",
+        "requires": []
+      },
+      {
+        "expect": {
+          "json": {
+            "/principal": "peer",
+            "/tenant": "B"
+          },
+          "status": [
+            200
+          ]
+        },
+        "headers": {},
+        "id": "actor-identity-0",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/me",
+        "requires": []
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/protected_marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "known-denial-0",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/known-denial",
+        "requires": [
+          "actor-identity-0",
+          "owner-object"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/protected_marker"
+          ],
+          "status": [
+            401,
+            403,
+            404
+          ]
+        },
+        "headers": {
+          "accept": "application/json",
+          "accept-language": "en",
+          "pragma": "no-cache"
+        },
+        "id": "variant-peer-1",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoices/a",
+        "requires": [
+          "actor-identity-0",
+          "owner-object",
+          "known-denial-0"
+        ]
+      }
+    ],
+    "identities": {
+      "owner": {
+        "headers": {
+          "Authorization": {
+            "env": "DEMO_OWNER"
+          }
+        }
+      },
+      "peer": {
+        "headers": {
+          "Authorization": {
+            "env": "DEMO_PEER"
+          }
+        }
+      }
+    },
+    "limits": {
+      "concurrency": 4,
+      "max_requests": 50,
+      "max_response_bytes": 65536,
+      "timeout_seconds": 5
+    },
+    "name": "Tenant B must not receive Tenant A invoice content",
+    "target": "http://127.0.0.1:44441",
+    "version": 1
+  },
+  "execution_digest": "a5b2c14fd938ca7ffee7bba62f939af70615e11293cc9b77a9040dfe48d74218",
+  "execution_id": "b9f1f43a-ab07-4564-8754-01d676117f4a",
+  "findings": [
+    {
+      "case_id": "variant-peer-1",
+      "category": "authorization_rule_violation",
+      "control_refs": [
+        "actor-identity-0",
+        "known-denial-0",
+        "owner-object"
+      ],
+      "evidence_refs": [
+        "ffa21cccfe3555bd0fc303aafb287fe04fce53f7e01e21d98abc03fb7f36cb84"
+      ],
+      "finding_digest": "eac5804eed8adc0b7648f31e21899971083f91a4254a9f5f194c94831e6a3b9f",
+      "id": "finding-cabbe355c68937e2311bb886",
+      "identity": "peer",
+      "impact": "Limited to the explicitly evaluated predicate; business impact requires review.",
+      "interpretation": "satisfied",
+      "kind": "finding",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "remediation": "Enforce the configured rule at the resource and response boundary; rerun this experiment with fresh controls.",
+      "resource_id": "invoice-a",
+      "rule_digest": "b998c742eb0fa660c51a813c5b9a5aecf3385cdd950a870bbb839b48036eb11f",
+      "schema_id": "authzledger.finding",
+      "schema_version": 1,
+      "status": "rejected",
+      "title": "Tenant B must not receive Tenant A invoice content",
+      "verification_level": "captured_inputs_replayed"
+    }
+  ],
+  "graph": {
+    "contract_sha256": "6a327e2cb9f15f52772fac433173fc15eccca03c03d6d55c0f22c99871b53188",
+    "coverage": {
+      "anchored_negative": 2,
+      "assessed": 4,
+      "errors": 0,
+      "inconclusive": 0,
+      "intended_known": 4,
+      "observed_known": 3,
+      "policy_known": 0,
+      "total": 4,
+      "unobserved": 0
+    },
+    "edges": [
+      {
+        "case_id": "actor-identity-0",
+        "controls": {
+          "anchored": false,
+          "negative": [],
+          "other": [],
+          "positive": []
+        },
+        "evidence": {
+          "record_sha256": "d3de3c819b2d999ad139bb754b7d28a2c501481d593802377c1840926c879396",
+          "report_root_sha256": "8c7c457054a69944d4930d1457f0005669e6f6c46617935e20b4f0ffa8d00c93",
+          "response_sha256": "b8c5fde2e0acac9f49e5f77d907f2d6170a50f8e9a47df546c8d03f6e6aa995f"
+        },
+        "findings": [],
+        "id": "access:f54e0d1bb268d515dc6c1774c0710110",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "b574ac28964b5b1b3744217b8feffc057d3667987c03133164ef5646abde8fa3",
+          "decision": "allow",
+          "source": "contract",
+          "statuses": [
+            200
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "allowed",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            }
+          ],
+          "content_evidence": "matched-positive-assertions",
+          "decision": "allow",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 200
+        },
+        "path": "/me",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:0ce6024d09c856eb3491b7a2d5163e54"
+      },
+      {
+        "case_id": "known-denial-0",
+        "controls": {
+          "anchored": true,
+          "negative": [],
+          "other": [],
+          "positive": [
+            "actor-identity-0",
+            "owner-object"
+          ]
+        },
+        "evidence": {
+          "record_sha256": "be89836de7a0aeb0dcd4766882413450aa8357abd84f28ce07d0fef3568a5c12",
+          "report_root_sha256": "8c7c457054a69944d4930d1457f0005669e6f6c46617935e20b4f0ffa8d00c93",
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+        },
+        "findings": [],
+        "id": "access:c07d2e79ac2781fe24d47836b7df3435",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "3717637c365437501828fd42b4daa42ae02b37167c8174434a1102d6f921e4bf",
+          "decision": "deny",
+          "source": "contract",
+          "statuses": [
+            403
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "denied",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 403
+        },
+        "path": "/known-denial",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [
+          "actor-identity-0",
+          "owner-object"
+        ],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:70ca5d0c528f1155ba271478122ad2d6"
+      },
+      {
+        "case_id": "owner-object",
+        "controls": {
+          "anchored": false,
+          "negative": [],
+          "other": [],
+          "positive": []
+        },
+        "evidence": {
+          "record_sha256": "cc70bd8e71a20b80ed0809dcabb1f38172225b3f832abf44b2164652002e3a8c",
+          "report_root_sha256": "8c7c457054a69944d4930d1457f0005669e6f6c46617935e20b4f0ffa8d00c93",
+          "response_sha256": "d88717f689df18b042ae08628e74b7da7e04c396c4ff868947029d097100b55b"
+        },
+        "findings": [],
+        "id": "access:573cebfc999b54226f0faa75638a9a40",
+        "identity": "owner",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "ee700f77b474d634d0ee55a53c5f22671f7e02732bb5d5dec27e958ec9bbdabc",
+          "decision": "allow",
+          "source": "contract",
+          "statuses": [
+            200
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "allowed",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            }
+          ],
+          "content_evidence": "matched-positive-assertions",
+          "decision": "allow",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 200
+        },
+        "path": "/invoices/a",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [],
+        "source": "identity:b5fc3efab88190f954f69edd514e8d2b",
+        "target": "resource:c666f02e5b97a94215d0c77f8cbf20b7"
+      },
+      {
+        "case_id": "variant-peer-1",
+        "controls": {
+          "anchored": true,
+          "negative": [
+            "known-denial-0"
+          ],
+          "other": [],
+          "positive": [
+            "actor-identity-0",
+            "owner-object"
+          ]
+        },
+        "evidence": {
+          "record_sha256": "8c7c457054a69944d4930d1457f0005669e6f6c46617935e20b4f0ffa8d00c93",
+          "report_root_sha256": "8c7c457054a69944d4930d1457f0005669e6f6c46617935e20b4f0ffa8d00c93",
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+        },
+        "findings": [
+          {
+            "basis": [
+              "A denial expectation produced 2xx but no configured content evidence established protected access."
+            ],
+            "case_id": "variant-peer-1",
+            "edge_id": "access:f168e70ccde214afd6871eed168d141b",
+            "severity": "medium",
+            "type": "unexpected-success-status"
+          }
+        ],
+        "id": "access:f168e70ccde214afd6871eed168d141b",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation.",
+            "401 may establish authentication rejection rather than an authenticated authorization decision.",
+            "404 may conceal a resource or indicate it is absent; a passing positive resource control establishes only the configured resource evidence."
+          ],
+          "checks_sha256": "5d09ae773b67255a7bc26b525d35ceccd60e002ff2f05458f385ff5c13266d82",
+          "decision": "deny",
+          "source": "contract",
+          "statuses": [
+            401,
+            403,
+            404
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "unexpected-success-status",
+          "checks": [
+            {
+              "passed": false,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "content_evidence": "not-established",
+          "decision": "unknown",
+          "outcome": "fail",
+          "reason": "Configured checks failed.",
+          "status": 200
+        },
+        "path": "/invoices/a",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [
+          "actor-identity-0",
+          "owner-object",
+          "known-denial-0"
+        ],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:c666f02e5b97a94215d0c77f8cbf20b7"
+      }
+    ],
+    "evidence_report_root_sha256": "8c7c457054a69944d4930d1457f0005669e6f6c46617935e20b4f0ffa8d00c93",
+    "findings": [
+      {
+        "basis": [
+          "A denial expectation produced 2xx but no configured content evidence established protected access."
+        ],
+        "case_id": "variant-peer-1",
+        "edge_id": "access:f168e70ccde214afd6871eed168d141b",
+        "severity": "medium",
+        "type": "unexpected-success-status"
+      }
+    ],
+    "graph_sha256": "03ed410fa1ec915842abaa55055053d919de458c1e02ad7daafc8821c6e774cb",
+    "kind": "authorization-graph",
+    "name": "Tenant B must not receive Tenant A invoice content",
+    "nodes": [
+      {
+        "id": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "identity": "peer",
+        "kind": "identity",
+        "label": "peer"
+      },
+      {
+        "id": "identity:b5fc3efab88190f954f69edd514e8d2b",
+        "identity": "owner",
+        "kind": "identity",
+        "label": "owner"
+      },
+      {
+        "id": "resource:0ce6024d09c856eb3491b7a2d5163e54",
+        "kind": "resource",
+        "label": "/me",
+        "path": "/me",
+        "target": "http://127.0.0.1:44441"
+      },
+      {
+        "id": "resource:70ca5d0c528f1155ba271478122ad2d6",
+        "kind": "resource",
+        "label": "/known-denial",
+        "path": "/known-denial",
+        "target": "http://127.0.0.1:44441"
+      },
+      {
+        "id": "resource:c666f02e5b97a94215d0c77f8cbf20b7",
+        "kind": "resource",
+        "label": "/invoices/a",
+        "path": "/invoices/a",
+        "target": "http://127.0.0.1:44441"
+      }
+    ],
+    "policy_sha256": null,
+    "schema_version": 1,
+    "target": "http://127.0.0.1:44441",
+    "trust": "Local evidence consistency checked; execution, identity binding and supplied policy deployment are not independently attested."
+  },
+  "kind": "experiment-execution",
+  "observations": [
+    {
+      "attempt_id": "variant-peer-1:1",
+      "body_complete": true,
+      "body_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+      "capture_profile": "selected-values-v1",
+      "case_id": "variant-peer-1",
+      "contract_digest": "6a327e2cb9f15f52772fac433173fc15eccca03c03d6d55c0f22c99871b53188",
+      "control_refs": [
+        "actor-identity-0",
+        "known-denial-0",
+        "owner-object"
+      ],
+      "controls_valid": true,
+      "execution_id": "b9f1f43a-ab07-4564-8754-01d676117f4a",
+      "headers_retained": false,
+      "interpretation": "satisfied",
+      "kind": "observation",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+      "observation_digest": "ffa21cccfe3555bd0fc303aafb287fe04fce53f7e01e21d98abc03fb7f36cb84",
+      "oracle": {
+        "decision": {
+          "interpretation": "satisfied",
+          "reason": "predicate_satisfied"
+        },
+        "input": {
+          "present": false
+        },
+        "input_retained": true,
+        "oracle_id": "forbid_field_equal",
+        "oracle_version": 1
+      },
+      "plan_digest": "c21117056e8fe22d30dc2c5d5665513dcff0137728cc5a4c10062368a608e8e1",
+      "report_root": "8c7c457054a69944d4930d1457f0005669e6f6c46617935e20b4f0ffa8d00c93",
+      "request_projection_digest": "fcef65e8d260cb8ba63b002903247130863af2b2c61e2117030205db58b912f9",
+      "rule_digest": "b998c742eb0fa660c51a813c5b9a5aecf3385cdd950a870bbb839b48036eb11f",
+      "schema_id": "authzledger.observation",
+      "schema_version": 1,
+      "status": 200,
+      "verification_level": "captured_inputs_replayed"
+    }
+  ],
+  "plan": {
+    "contract": {
+      "cases": [
+        {
+          "expect": {
+            "json": {
+              "/id": "invoice-a",
+              "/protected_marker": "SYNTHETIC-INVOICE-A"
+            },
+            "status": [
+              200
+            ]
+          },
+          "headers": {},
+          "id": "owner-object",
+          "identity": "owner",
+          "method": "GET",
+          "path": "/invoices/a",
+          "requires": []
+        },
+        {
+          "expect": {
+            "json": {
+              "/principal": "peer",
+              "/tenant": "B"
+            },
+            "status": [
+              200
+            ]
+          },
+          "headers": {},
+          "id": "actor-identity-0",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/me",
+          "requires": []
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/protected_marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "known-denial-0",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/known-denial",
+          "requires": [
+            "actor-identity-0",
+            "owner-object"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/protected_marker"
+            ],
+            "status": [
+              401,
+              403,
+              404
+            ]
+          },
+          "headers": {
+            "accept": "application/json",
+            "accept-language": "en",
+            "pragma": "no-cache"
+          },
+          "id": "variant-peer-1",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoices/a",
+          "requires": [
+            "actor-identity-0",
+            "owner-object",
+            "known-denial-0"
+          ]
+        }
+      ],
+      "identities": {
+        "owner": {
+          "headers": {
+            "Authorization": {
+              "env": "DEMO_OWNER"
+            }
+          }
+        },
+        "peer": {
+          "headers": {
+            "Authorization": {
+              "env": "DEMO_PEER"
+            }
+          }
+        }
+      },
+      "limits": {
+        "concurrency": 4,
+        "max_requests": 50,
+        "max_response_bytes": 65536,
+        "timeout_seconds": 5
+      },
+      "name": "Tenant B must not receive Tenant A invoice content",
+      "target": "http://127.0.0.1:44441",
+      "version": 1
+    },
+    "contract_digest": "6a327e2cb9f15f52772fac433173fc15eccca03c03d6d55c0f22c99871b53188",
+    "kind": "experiment-plan",
+    "limitations": [
+      "Explicit variants only; no automatic discovery or deployment-policy attestation.",
+      "Identity and resource claims depend on configured response assertions; marker uniqueness and tenant semantics are operator-declared."
+    ],
+    "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+    "plan_digest": "c21117056e8fe22d30dc2c5d5665513dcff0137728cc5a4c10062368a608e8e1",
+    "request_upper_bound": 4,
+    "rule": {
+      "id": "tenant-isolation",
+      "kind": "forbid_field_equal",
+      "pointer": "/protected_marker",
+      "resource_id": "invoice-a",
+      "resource_pointer": "/id",
+      "resource_value": "invoice-a",
+      "value": "SYNTHETIC-INVOICE-A"
+    },
+    "rule_digest": "b998c742eb0fa660c51a813c5b9a5aecf3385cdd950a870bbb839b48036eb11f",
+    "schema_id": "authzledger.experiment-plan",
+    "schema_version": 1,
+    "scope": {
+      "target": "http://127.0.0.1:44441"
+    },
+    "spec": {
+      "capture_mode": "safe_values",
+      "contract": {
+        "cases": [
+          {
+            "expect": {
+              "json": {
+                "/id": "invoice-a",
+                "/protected_marker": "SYNTHETIC-INVOICE-A"
+              },
+              "status": [
+                200
+              ]
+            },
+            "headers": {},
+            "id": "owner-object",
+            "identity": "owner",
+            "method": "GET",
+            "path": "/invoices/a",
+            "requires": []
+          },
+          {
+            "expect": {
+              "json": {
+                "/principal": "peer",
+                "/tenant": "B"
+              },
+              "status": [
+                200
+              ]
+            },
+            "headers": {},
+            "id": "actor-identity-0",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/me",
+            "requires": []
+          },
+          {
+            "expect": {
+              "json_absent": [
+                "/protected_marker"
+              ],
+              "status": [
+                403
+              ]
+            },
+            "headers": {},
+            "id": "known-denial-0",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/known-denial",
+            "requires": [
+              "actor-identity-0",
+              "owner-object"
+            ]
+          },
+          {
+            "expect": {
+              "json_absent": [
+                "/protected_marker"
+              ],
+              "status": [
+                401,
+                403,
+                404
+              ]
+            },
+            "headers": {
+              "accept": "application/json",
+              "accept-language": "en",
+              "pragma": "no-cache"
+            },
+            "id": "variant-peer-1",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/invoices/a",
+            "requires": [
+              "actor-identity-0",
+              "owner-object",
+              "known-denial-0"
+            ]
+          }
+        ],
+        "identities": {
+          "owner": {
+            "headers": {
+              "Authorization": {
+                "env": "DEMO_OWNER"
+              }
+            }
+          },
+          "peer": {
+            "headers": {
+              "Authorization": {
+                "env": "DEMO_PEER"
+              }
+            }
+          }
+        },
+        "limits": {
+          "concurrency": 4,
+          "max_requests": 50,
+          "max_response_bytes": 65536,
+          "timeout_seconds": 5
+        },
+        "name": "Tenant B must not receive Tenant A invoice content",
+        "target": "http://127.0.0.1:44441",
+        "version": 1
+      },
+      "id": "invoice-isolation",
+      "identity_bindings": {
+        "peer": {
+          "principal": "peer",
+          "principal_pointer": "/principal",
+          "tenant": "B",
+          "tenant_pointer": "/tenant"
+        }
+      },
+      "kind": "experiment-spec",
+      "mutation_approval": [],
+      "rule": {
+        "id": "tenant-isolation",
+        "kind": "forbid_field_equal",
+        "pointer": "/protected_marker",
+        "resource_id": "invoice-a",
+        "resource_pointer": "/id",
+        "resource_value": "invoice-a",
+        "value": "SYNTHETIC-INVOICE-A"
+      },
+      "schema_version": 1,
+      "sources": [
+        "import-2f25bea6436b0256dc73f5dd"
+      ],
+      "title": "Tenant B must not receive Tenant A invoice content",
+      "variants": [
+        {
+          "case_id": "variant-peer-1",
+          "id": "peer-1",
+          "identity_control": "actor-identity-0",
+          "negative_control": "known-denial-0",
+          "object_control": "owner-object"
+        }
+      ],
+      "volatile_pointers": []
+    },
+    "variants": [
+      {
+        "case_id": "variant-peer-1",
+        "id": "peer-1",
+        "identity_control": "actor-identity-0",
+        "negative_control": "known-denial-0",
+        "object_control": "owner-object"
+      }
+    ]
+  },
+  "report": {
+    "contract_sha256": "6a327e2cb9f15f52772fac433173fc15eccca03c03d6d55c0f22c99871b53188",
+    "evidence": {
+      "algorithm": "sha256",
+      "metadata_sha256": "b7858e630b5b9f5fd13ea2cd290513f342b4b1897f818e965801720966e638a5",
+      "records": [
+        {
+          "id": "owner-object",
+          "previous_sha256": "b7858e630b5b9f5fd13ea2cd290513f342b4b1897f818e965801720966e638a5",
+          "sha256": "cc70bd8e71a20b80ed0809dcabb1f38172225b3f832abf44b2164652002e3a8c"
+        },
+        {
+          "id": "actor-identity-0",
+          "previous_sha256": "cc70bd8e71a20b80ed0809dcabb1f38172225b3f832abf44b2164652002e3a8c",
+          "sha256": "d3de3c819b2d999ad139bb754b7d28a2c501481d593802377c1840926c879396"
+        },
+        {
+          "id": "known-denial-0",
+          "previous_sha256": "d3de3c819b2d999ad139bb754b7d28a2c501481d593802377c1840926c879396",
+          "sha256": "be89836de7a0aeb0dcd4766882413450aa8357abd84f28ce07d0fef3568a5c12"
+        },
+        {
+          "id": "variant-peer-1",
+          "previous_sha256": "be89836de7a0aeb0dcd4766882413450aa8357abd84f28ce07d0fef3568a5c12",
+          "sha256": "8c7c457054a69944d4930d1457f0005669e6f6c46617935e20b4f0ffa8d00c93"
+        }
+      ],
+      "root_sha256": "8c7c457054a69944d4930d1457f0005669e6f6c46617935e20b4f0ffa8d00c93",
+      "version": 1
+    },
+    "finished_at": "2026-10-10T15:27:40.007Z",
+    "name": "Tenant B must not receive Tenant A invoice content",
+    "results": [
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json"
+          },
+          {
+            "passed": true,
+            "type": "json"
+          }
+        ],
+        "control_type": "positive",
+        "duration_ms": 2.551,
+        "id": "owner-object",
+        "identity": "owner",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/invoices/a",
+        "reason": "Configured checks passed.",
+        "requires": [],
+        "response_sha256": "d88717f689df18b042ae08628e74b7da7e04c396c4ff868947029d097100b55b",
+        "status": 200
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json"
+          },
+          {
+            "passed": true,
+            "type": "json"
+          }
+        ],
+        "control_type": "positive",
+        "duration_ms": 1.991,
+        "id": "actor-identity-0",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/me",
+        "reason": "Configured checks passed.",
+        "requires": [],
+        "response_sha256": "b8c5fde2e0acac9f49e5f77d907f2d6170a50f8e9a47df546c8d03f6e6aa995f",
+        "status": 200
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json_absent"
+          }
+        ],
+        "control_type": "negative",
+        "duration_ms": 1.282,
+        "id": "known-denial-0",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/known-denial",
+        "reason": "Configured checks passed.",
+        "requires": [
+          "actor-identity-0",
+          "owner-object"
+        ],
+        "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+        "status": 403
+      },
+      {
+        "checks": [
+          {
+            "passed": false,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json_absent"
+          }
+        ],
+        "control_type": "negative",
+        "duration_ms": 1.394,
+        "id": "variant-peer-1",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "fail",
+        "path": "/invoices/a",
+        "reason": "Configured checks failed.",
+        "requires": [
+          "actor-identity-0",
+          "owner-object",
+          "known-denial-0"
+        ],
+        "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+        "status": 200
+      }
+    ],
+    "schema_version": 1,
+    "started_at": "2026-10-10T15:27:40.001Z",
+    "summary": {
+      "error": 0,
+      "fail": 1,
+      "inconclusive": 0,
+      "pass": 3,
+      "total": 4
+    },
+    "target": "http://127.0.0.1:44441",
+    "tool": {
+      "name": "AuthzLedger",
+      "version": "1.1.0.dev0"
+    }
+  },
+  "schema_id": "authzledger.execution",
+  "schema_version": 1
+}

@@ -1,0 +1,1534 @@
+{
+  "capture_mode": "safe_values",
+  "contract": {
+    "cases": [
+      {
+        "expect": {
+          "json": {
+            "/principal": "peer",
+            "/tenant": "B"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "actor",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/me"
+      },
+      {
+        "expect": {
+          "json": {
+            "/marker": "synthetic-A"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "owner",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/invoice/A"
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "id": "negative",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/known-denial",
+        "requires": [
+          "actor",
+          "owner"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "id": "target-0",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=0",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "id": "target-1",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=1",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "id": "target-2",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=2",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "id": "target-3",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=3",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "id": "target-4",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=4",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "id": "target-5",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=5",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "id": "target-6",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=6",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-00",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/00"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-01",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/01"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-02",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/02"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-03",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/03"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-04",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/04"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-05",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/05"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-06",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/06"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-07",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/07"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-08",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/08"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-09",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/09"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-10",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/10"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-11",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/11"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-12",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/12"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-13",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/13"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-14",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/14"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-15",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/15"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-16",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/16"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-17",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/17"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-18",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/18"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-19",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/19"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-20",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/20"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-21",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/21"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-22",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/22"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-23",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/23"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-24",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/24"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-25",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/25"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-26",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/26"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-27",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/27"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-28",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/28"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-29",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/29"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-30",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/30"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-31",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/31"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-32",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/32"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-33",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/33"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-34",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/34"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-35",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/35"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-36",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/36"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-37",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/37"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-38",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/38"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-39",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/39"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-40",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/40"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-41",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/41"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-42",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/42"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-43",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/43"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-44",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/44"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-45",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/45"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-46",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/46"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-47",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/47"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-48",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/48"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-49",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/49"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-50",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/50"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-51",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/51"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-52",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/52"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-53",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/53"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-54",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/54"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-55",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/55"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-56",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/56"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-57",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/57"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-58",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/58"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-59",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/59"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-60",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/60"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-61",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/61"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-62",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/62"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-63",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/63"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-64",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/64"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-65",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/65"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-66",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/66"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-67",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/67"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-68",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/68"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-69",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/69"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-70",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/70"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-71",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/71"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-72",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/72"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-73",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/73"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-74",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/74"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-75",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/75"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-76",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/76"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-77",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/77"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-78",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/78"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-79",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/79"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-80",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/80"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-81",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/81"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-82",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/82"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-83",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/83"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-84",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/84"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-85",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/85"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-86",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/86"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-87",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/87"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-88",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/88"
+      },
+      {
+        "expect": {
+          "json": {
+            "/scope": "historical-control"
+          },
+          "status": [
+            200
+          ]
+        },
+        "id": "outside-89",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/historical/89"
+      }
+    ],
+    "identities": {
+      "owner": {
+        "headers": {
+          "Authorization": {
+            "env": "SELECTIVE_OWNER"
+          }
+        }
+      },
+      "peer": {
+        "headers": {
+          "Authorization": {
+            "env": "SELECTIVE_PEER"
+          }
+        }
+      }
+    },
+    "limits": {
+      "concurrency": 1,
+      "max_requests": 100,
+      "max_response_bytes": 4096,
+      "timeout_seconds": 2
+    },
+    "name": "Demo C: bounded 100-case baseline",
+    "target": "http://127.0.0.1:46833",
+    "version": 1
+  },
+  "id": "selective100",
+  "kind": "experiment-spec",
+  "rule": {
+    "id": "tenant-isolation",
+    "kind": "forbid_field_equal",
+    "pointer": "/marker",
+    "resource_id": "invoice-A",
+    "value": "synthetic-A"
+  },
+  "schema_version": 1,
+  "title": "Selective retest: seven declared views of one synthetic resource",
+  "variants": [
+    {
+      "case_id": "target-0",
+      "id": "variant-0",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-1",
+      "id": "variant-1",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-2",
+      "id": "variant-2",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-3",
+      "id": "variant-3",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-4",
+      "id": "variant-4",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-5",
+      "id": "variant-5",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    },
+    {
+      "case_id": "target-6",
+      "id": "variant-6",
+      "identity_control": "actor",
+      "negative_control": "negative",
+      "object_control": "owner"
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # AuthzLedger 1.1.0 — Verifikation des Entwicklungsstands
 
+**Ergänzung der Releaseprüfung vom 10. Oktober:** Nach Aufnahme des echten ZAP-Exports bestehen **494 Tests**, sechs Browser-Suiten und fünf Check-Tools. Das finale Entwicklungs-Wheel wurde ausserhalb des Checkouts installiert und mit beiden Verifiern geprüft. Die neuen Logs, das eingefrorene Codeinventar und die unabhängigen Demo-Pakete stehen unter [`evidence/1.1.0-release-review/`](../evidence/1.1.0-release-review/README.md). Die nachfolgenden 492-Test-/Wheelangaben bleiben als historische ursprüngliche Prüfung erhalten. F01-01 bleibt wegen des echten kompatiblen Burp-Exports teilweise verifiziert; keine stabile Veröffentlichung.
+
 Stand: 10. Oktober 2026. **Aktueller Producer: `1.1.0.dev0`. Kein produktionsreifer 1.1.0-Release erklärt.** Dieses Protokoll hält ausgeführte Prüfungen und verbleibende Freigaben auseinander. Die Produktionsveröffentlichung bleibt gesperrt; ein Entwicklungsbranch beziehungsweise Draft-PR ersetzt dieses Gate nicht.
 
 ## Ausgangspunkt und unveränderte Originale
@@ -23,9 +25,9 @@ Der echte HAR-Nachweis ist abgeschlossen: Playwright **1.64.0** schrieb mit Chro
 
 `6024bbad4bfdae631ec115389765f4c7470e1adcf77547e1b48ee1e0922311ba`
 
-Das ist ein Playwright-HAR und kein manueller DevTools-Export. Burp und ZAP sind bislang anhand synthetischer Formatfixtures geprüft. Echte Exporte mit installierter Toolversion fehlen. DTD-haltige Burp-XML-Dateien werden weiterhin ausdrücklich blockiert; eine sicher kompatible Exportprozedur ist noch nicht abgenommen. Ein selbst geschriebenes XML darf diese Lücke nicht verdecken.
+Das ist ein Playwright-HAR und kein manueller DevTools-Export. **Historischer Stand des ursprünglichen 492-Test-Laufs:** Burp und ZAP waren nur anhand synthetischer Formatfixtures geprüft; echte Exporte mit installierter Toolversion fehlten. Der ZAP-Anteil wurde danach wie im datierten Nachtrag unten beschrieben geschlossen. DTD-haltige Burp-XML-Dateien werden weiterhin ausdrücklich blockiert; eine sicher kompatible Exportprozedur ist noch nicht abgenommen. Ein selbst geschriebenes XML darf diese Lücke nicht verdecken.
 
-**Einziger noch offener fachlicher Freigabeschritt:** Aus installierten, dokumentierten Burp-/ZAP-Versionen je einen echten Export der öffentlichen Loopback-Fixture erzeugen, unverändert mit Herkunftsbeleg aufnehmen und durch Import, Mapping und kontrollierten Lauf prüfen. Dabei die DTD-Unvereinbarkeit mit einem ausdrücklich überprüften Export-/Parserprofil lösen; Schutz vor externen Entities oder stiller Requeständerung nicht abschalten. Erst danach kann F01-01 vollständig als verifiziert gelten.
+**Einziger noch offener fachlicher Freigabeschritt, aktualisiert am 10. Oktober 2026:** Aus einer installierten, dokumentierten Burp-Version einen echten Export der öffentlichen Loopback-Fixture erzeugen, unverändert mit Herkunftsbeleg aufnehmen und durch Import, Mapping und kontrollierten Lauf prüfen. Dabei die DTD-Unvereinbarkeit mit einem ausdrücklich überprüften, vertragskonformen Export-/Parserprofil lösen; Schutz vor externen Entities oder stiller Requeständerung nicht abschalten. Der ZAP-Teil ist inzwischen separat belegt. Erst nach dem Burp-Nachweis kann F01-01 vollständig als verifiziert gelten.
 
 ## Ausgeführte Nachweise
 
@@ -143,3 +145,21 @@ Für reale Übergaben ersetzt ein unabhängig authentifizierter Public Key den l
 | CI-Lauf / veröffentlichter Entwicklungsstand | Remote-CI folgt auf dem exakten Entwicklungscommit; Ergebnisse werden im Draft-PR geführt. Kein Produktionsrelease. |
 
 `python3 tools/release_gate110.py` muss den aktuellen Entwicklungsstand absichtlich ablehnen: Version `1.1.0.dev0` und unvollständiges Exportergate erfüllen keine Produktionsfreigabe. Erst nach Schliessen von F01-01, einer expliziten Version `1.1.0` und erneut bestandenen Prüfungen auf demselben finalen Commit ist der in [release-1.1.0.md](release-1.1.0.md) beschriebene Releaseablauf freigabefähig.
+
+## Nachtrag: echter ZAP-Export, 10. Oktober 2026, 17:22 Europe/Zurich
+
+Der ursprüngliche 492-Test-Nachweis oben bleibt historisch unverändert. Neu hinzugekommen sind zwei echte Native-Exporter-Abnahmetests. Der gezielte Importlauf besteht nun aus **38 Tests ohne Fehler**.
+
+ZAP **2.17.0**, Report Generation **0.43.0**, Passive Scan Rules **70.0.0**, Passive Scanner **0.6.0** und Network **0.25.0** wurden aus dem offiziellen, SHA-256-geprüften Linux-Paket ausgeführt. `reports.generate` schrieb unveränderte `traditional-json-plus`-Bytes aus genau einem beobachteten GET zur eigenen Loopback-Fixture. Es wurde kein Report von Hand gebaut und kein ZAP-Alert per API hinzugefügt.
+
+| Artefakt | SHA-256 / Ergebnis |
+|---|---|
+| `fixtures/imports/zap-real.json` | `f5212d5dbbf7e12439002656b4888741a9bf0af58bbba1aa28b9436c071bfe87` |
+| `fixtures/imports/zap-real.execution.json` | `b023c0c0390bdbd50887e48cb3f13868466f689f5636be13e9040e6ecddf5197` |
+| Producer, Installation, Scope und Beobachtung | `fixtures/imports/zap-real.provenance.json` |
+| Import → explizite Bindung → kontrollierte Ausführung | Ein Exportrequest plus vier getrennt budgetierte AuthzLedger-Requests; gültige Controls, bestätigte synthetische `denial_data_disclosure`, `verify_execution=[]` |
+| Reproduktion | `tools/capture_zap_fixture.py`; neue Ausgabeordner erforderlich, Originale werden nicht überschrieben |
+
+Die originale ZAP-Datei enthält Startupdiagnosen zur fehlenden Firefox-Clientintegration und deren Treiber sowie Update-/Netzwerkschnittstellenwarnungen. Diese Diagnosen wurden nicht aus dem Export entfernt. Der geprüfte Pfad benötigt keine Browserintegration: tatsächlicher Core-HTTP-Request → native Passive Rule 10021 → Report Generation. ZAPs fehlender Sicherheitsheader bleibt eine **unverifizierte Fremdaussage**; AuthzLedger bestätigt im eigenen Vier-Request-Lauf ausschliesslich die ausdrücklich konfigurierte synthetische Markerverletzung.
+
+**F01-01 bleibt teilweise verifiziert.** Die ZAP-Komponente ist geschlossen; der echte kompatible Burp-Export fehlt weiterhin. Die bisherige vollständige Regression, Browserprüfung und Wheelprüfung gelten nur für ihren oben dokumentierten Stand. Die Freigabe des danach geänderten Trees benötigt einen neuen Gesamtlauf; dessen Receipt darf die historischen Artefakthashes nicht überschreiben. Der [Exporter-Gate-Leitfaden](exporter-gate-1.1.0.md) benennt die noch notwendige Aktion.

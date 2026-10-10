@@ -1,0 +1,820 @@
+{
+  "baseline_execution_digest": "2fdaeb1d58ddf34c2af72c287ca6e71a25fb34e8a735ec72947f9d91f2b35c63",
+  "comparison_digest": "8948216dbab3f1ea0ff1279cad0c18f919e875c29d007d7e4e3a07bcab9fa7c3",
+  "comparison_envelope": {
+    "baseline_report": {
+      "contract_sha256": "82a41c60e31a13af3f1a9e025cbcf8866394b4f12a9df00cc780966a67429fc7",
+      "evidence": {
+        "algorithm": "sha256",
+        "metadata_sha256": "a3663e46941da91f5c315938246294e7dc837bce4ffcb26957217e0a0212644e",
+        "records": [
+          {
+            "id": "owner-object",
+            "previous_sha256": "a3663e46941da91f5c315938246294e7dc837bce4ffcb26957217e0a0212644e",
+            "sha256": "659f7619603014dbbb87e8d1a58f2248e042f8af25ac51ba67ea5077895bd588"
+          },
+          {
+            "id": "actor-identity-0",
+            "previous_sha256": "659f7619603014dbbb87e8d1a58f2248e042f8af25ac51ba67ea5077895bd588",
+            "sha256": "f8b9c2470e5c39e85c034e2483e7aa481d97e757b5ed78c49fec84ea24a4fa37"
+          },
+          {
+            "id": "known-denial-0",
+            "previous_sha256": "f8b9c2470e5c39e85c034e2483e7aa481d97e757b5ed78c49fec84ea24a4fa37",
+            "sha256": "6026af142e20b883cb85af3aff04628af11ca62aa2db5f38c09d228f5c750179"
+          },
+          {
+            "id": "variant-peer-1",
+            "previous_sha256": "6026af142e20b883cb85af3aff04628af11ca62aa2db5f38c09d228f5c750179",
+            "sha256": "8084d7614019f419ec7edffdf0e38439b1caabe9449ae1af1fab1d5ad922cd36"
+          },
+          {
+            "id": "variant-peer-2",
+            "previous_sha256": "8084d7614019f419ec7edffdf0e38439b1caabe9449ae1af1fab1d5ad922cd36",
+            "sha256": "e898f401667d0efa524647c5c6825c3c21e8dd2b598b132f0370faf441115265"
+          }
+        ],
+        "root_sha256": "e898f401667d0efa524647c5c6825c3c21e8dd2b598b132f0370faf441115265",
+        "version": 1
+      },
+      "finished_at": "2026-10-10T15:27:40.018Z",
+      "name": "Tenant B must not receive Tenant A invoice content",
+      "results": [
+        {
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            }
+          ],
+          "control_type": "positive",
+          "duration_ms": 2.959,
+          "id": "owner-object",
+          "identity": "owner",
+          "method": "GET",
+          "outcome": "pass",
+          "path": "/invoices/a",
+          "reason": "Configured checks passed.",
+          "requires": [],
+          "response_sha256": "d88717f689df18b042ae08628e74b7da7e04c396c4ff868947029d097100b55b",
+          "status": 200
+        },
+        {
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            }
+          ],
+          "control_type": "positive",
+          "duration_ms": 2.548,
+          "id": "actor-identity-0",
+          "identity": "peer",
+          "method": "GET",
+          "outcome": "pass",
+          "path": "/me",
+          "reason": "Configured checks passed.",
+          "requires": [],
+          "response_sha256": "b8c5fde2e0acac9f49e5f77d907f2d6170a50f8e9a47df546c8d03f6e6aa995f",
+          "status": 200
+        },
+        {
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "control_type": "negative",
+          "duration_ms": 1.192,
+          "id": "known-denial-0",
+          "identity": "peer",
+          "method": "GET",
+          "outcome": "pass",
+          "path": "/known-denial",
+          "reason": "Configured checks passed.",
+          "requires": [
+            "actor-identity-0",
+            "owner-object"
+          ],
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+          "status": 403
+        },
+        {
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": false,
+              "type": "json_absent"
+            }
+          ],
+          "control_type": "negative",
+          "duration_ms": 2.287,
+          "id": "variant-peer-1",
+          "identity": "peer",
+          "method": "GET",
+          "outcome": "fail",
+          "path": "/invoices/a",
+          "reason": "Configured checks failed.",
+          "requires": [
+            "actor-identity-0",
+            "owner-object",
+            "known-denial-0"
+          ],
+          "response_sha256": "d88717f689df18b042ae08628e74b7da7e04c396c4ff868947029d097100b55b",
+          "status": 403
+        },
+        {
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": false,
+              "type": "json_absent"
+            }
+          ],
+          "control_type": "negative",
+          "duration_ms": 2.061,
+          "id": "variant-peer-2",
+          "identity": "peer",
+          "method": "GET",
+          "outcome": "fail",
+          "path": "/invoices/a",
+          "reason": "Configured checks failed.",
+          "requires": [
+            "actor-identity-0",
+            "owner-object",
+            "known-denial-0"
+          ],
+          "response_sha256": "d88717f689df18b042ae08628e74b7da7e04c396c4ff868947029d097100b55b",
+          "status": 403
+        }
+      ],
+      "schema_version": 1,
+      "started_at": "2026-10-10T15:27:40.011Z",
+      "summary": {
+        "error": 0,
+        "fail": 2,
+        "inconclusive": 0,
+        "pass": 3,
+        "total": 5
+      },
+      "target": "http://127.0.0.1:44441",
+      "tool": {
+        "name": "AuthzLedger",
+        "version": "1.1.0.dev0"
+      }
+    },
+    "bindings": {
+      "baseline_report_sha256": "ecffcd2525bc4d2ef05ca4b07fc850a81f304290b98d1e76de32d4170bd354cd",
+      "baseline_root_sha256": "e898f401667d0efa524647c5c6825c3c21e8dd2b598b132f0370faf441115265",
+      "baseline_tool_sha256": "6bfb01cc40471bb8b4a260c8d7f95b8f9264a07f42c3c218ff6436efe592e9cc",
+      "credential_definitions": "identical-source-bound-references",
+      "current_report_sha256": "9f0dab308de9f1929e8d8c3fa5c7d225d6bb399b8c2ab17d482daecf39c4b99d",
+      "current_root_sha256": "1f0f673f4eb5a13b4a3a859c89d8145b7dbef28a2aaf47e316403e61598d9830",
+      "current_tool_sha256": "6bfb01cc40471bb8b4a260c8d7f95b8f9264a07f42c3c218ff6436efe592e9cc",
+      "original_source_sha256": "82a41c60e31a13af3f1a9e025cbcf8866394b4f12a9df00cc780966a67429fc7",
+      "retest_contract_sha256": "6a327e2cb9f15f52772fac433173fc15eccca03c03d6d55c0f22c99871b53188",
+      "runtime_credentials": "not-attested",
+      "source_contract_sha256": "82a41c60e31a13af3f1a9e025cbcf8866394b4f12a9df00cc780966a67429fc7"
+    },
+    "canonicalization": "json-sort-keys-ascii-escaped-v1",
+    "comparison_sha256": "c9f2c591b6d6a16c06267eae32e4184a7e53f70e4cc5ea7ffadc2178fd37d389",
+    "coverage": {
+      "dependency_cases": 3,
+      "not_retested_cases": 1,
+      "retested_cases": 4,
+      "selected_cases": 1,
+      "source_cases": 5
+    },
+    "current_report": {
+      "contract_sha256": "6a327e2cb9f15f52772fac433173fc15eccca03c03d6d55c0f22c99871b53188",
+      "evidence": {
+        "algorithm": "sha256",
+        "metadata_sha256": "42f93843bb6dcb99e4d653712880db6f42530af4abb68cfa10b6102457fcee24",
+        "records": [
+          {
+            "id": "owner-object",
+            "previous_sha256": "42f93843bb6dcb99e4d653712880db6f42530af4abb68cfa10b6102457fcee24",
+            "sha256": "71713f2a0881c934929c7fbd0a2511200c0a717db36ac7374cf705350f6cac13"
+          },
+          {
+            "id": "actor-identity-0",
+            "previous_sha256": "71713f2a0881c934929c7fbd0a2511200c0a717db36ac7374cf705350f6cac13",
+            "sha256": "37ceff2d3be2c4037f03c797f269299b6bc4d7e66b891adb5bd2ead3d5e6c200"
+          },
+          {
+            "id": "known-denial-0",
+            "previous_sha256": "37ceff2d3be2c4037f03c797f269299b6bc4d7e66b891adb5bd2ead3d5e6c200",
+            "sha256": "0300e5ebfc332c9ac2bf953d9f125ee1a4948130ad6bb26fcef6ec5929d79cf8"
+          },
+          {
+            "id": "variant-peer-1",
+            "previous_sha256": "0300e5ebfc332c9ac2bf953d9f125ee1a4948130ad6bb26fcef6ec5929d79cf8",
+            "sha256": "1f0f673f4eb5a13b4a3a859c89d8145b7dbef28a2aaf47e316403e61598d9830"
+          }
+        ],
+        "root_sha256": "1f0f673f4eb5a13b4a3a859c89d8145b7dbef28a2aaf47e316403e61598d9830",
+        "version": 1
+      },
+      "finished_at": "2026-10-10T15:27:40.031Z",
+      "name": "Tenant B must not receive Tenant A invoice content",
+      "results": [
+        {
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            }
+          ],
+          "control_type": "positive",
+          "duration_ms": 2.578,
+          "id": "owner-object",
+          "identity": "owner",
+          "method": "GET",
+          "outcome": "pass",
+          "path": "/invoices/a",
+          "reason": "Configured checks passed.",
+          "requires": [],
+          "response_sha256": "d88717f689df18b042ae08628e74b7da7e04c396c4ff868947029d097100b55b",
+          "status": 200
+        },
+        {
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            }
+          ],
+          "control_type": "positive",
+          "duration_ms": 2.486,
+          "id": "actor-identity-0",
+          "identity": "peer",
+          "method": "GET",
+          "outcome": "pass",
+          "path": "/me",
+          "reason": "Configured checks passed.",
+          "requires": [],
+          "response_sha256": "b8c5fde2e0acac9f49e5f77d907f2d6170a50f8e9a47df546c8d03f6e6aa995f",
+          "status": 200
+        },
+        {
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "control_type": "negative",
+          "duration_ms": 1.501,
+          "id": "known-denial-0",
+          "identity": "peer",
+          "method": "GET",
+          "outcome": "pass",
+          "path": "/known-denial",
+          "reason": "Configured checks passed.",
+          "requires": [
+            "actor-identity-0",
+            "owner-object"
+          ],
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+          "status": 403
+        },
+        {
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "control_type": "negative",
+          "duration_ms": 1.093,
+          "id": "variant-peer-1",
+          "identity": "peer",
+          "method": "GET",
+          "outcome": "pass",
+          "path": "/invoices/a",
+          "reason": "Configured checks passed.",
+          "requires": [
+            "actor-identity-0",
+            "owner-object",
+            "known-denial-0"
+          ],
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+          "status": 403
+        }
+      ],
+      "schema_version": 1,
+      "started_at": "2026-10-10T15:27:40.025Z",
+      "summary": {
+        "error": 0,
+        "fail": 0,
+        "inconclusive": 0,
+        "pass": 4,
+        "total": 4
+      },
+      "target": "http://127.0.0.1:44441",
+      "tool": {
+        "name": "AuthzLedger",
+        "version": "1.1.0.dev0"
+      }
+    },
+    "dependency_ids": [
+      "owner-object",
+      "actor-identity-0",
+      "known-denial-0"
+    ],
+    "kind": "comparison-envelope",
+    "limitations": [
+      "resolved_check means the same configured assertion now passes; it does not establish vulnerability remediation.",
+      "Evidence hashes prove internal consistency, not execution, response truth, authorship, or authenticity without a separately trusted signature/root.",
+      "Identity header definitions and environment references are bound; resolved credential values and authenticated runtime identity are not attested.",
+      "Mutable application state, deployment revisions, and resource ownership outside configured assertions are not attested.",
+      "Report timestamps are retained but are not a trusted ordering or freshness attestation.",
+      "Only selected cases and their declared control closure are retested; all remaining cases are not_retested.",
+      "No independent policy evaluations are supplied or compared; no policy-drift or policy-remediation claim is made."
+    ],
+    "policy": {
+      "reason": "No independent policy evaluations supplied.",
+      "status": "not_compared"
+    },
+    "profiles": {
+      "baseline": "authzledger-1.1.0.dev0-report-v1-checks-v1",
+      "current": "authzledger-1.1.0.dev0-report-v1-checks-v1",
+      "registration": "Explicit report-format profiles, not executable certification.",
+      "semantics": "source-bound-configured-check-transitions-v1"
+    },
+    "schema_version": 1,
+    "selected_ids": [
+      "variant-peer-1"
+    ],
+    "source_contract": {
+      "cases": [
+        {
+          "expect": {
+            "json": {
+              "/id": "invoice-a",
+              "/protected_marker": "SYNTHETIC-INVOICE-A"
+            },
+            "status": [
+              200
+            ]
+          },
+          "headers": {},
+          "id": "owner-object",
+          "identity": "owner",
+          "method": "GET",
+          "path": "/invoices/a",
+          "requires": []
+        },
+        {
+          "expect": {
+            "json": {
+              "/principal": "peer",
+              "/tenant": "B"
+            },
+            "status": [
+              200
+            ]
+          },
+          "headers": {},
+          "id": "actor-identity-0",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/me",
+          "requires": []
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/protected_marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "known-denial-0",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/known-denial",
+          "requires": [
+            "actor-identity-0",
+            "owner-object"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/protected_marker"
+            ],
+            "status": [
+              401,
+              403,
+              404
+            ]
+          },
+          "headers": {
+            "accept": "application/json",
+            "accept-language": "en",
+            "pragma": "no-cache"
+          },
+          "id": "variant-peer-1",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoices/a",
+          "requires": [
+            "actor-identity-0",
+            "owner-object",
+            "known-denial-0"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/protected_marker"
+            ],
+            "status": [
+              401,
+              403,
+              404
+            ]
+          },
+          "headers": {
+            "accept": "application/json",
+            "accept-language": "en",
+            "pragma": "no-cache"
+          },
+          "id": "variant-peer-2",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoices/a",
+          "requires": [
+            "actor-identity-0",
+            "owner-object",
+            "known-denial-0"
+          ]
+        }
+      ],
+      "identities": {
+        "owner": {
+          "headers": {
+            "Authorization": {
+              "env": "DEMO_OWNER"
+            }
+          }
+        },
+        "peer": {
+          "headers": {
+            "Authorization": {
+              "env": "DEMO_PEER"
+            }
+          }
+        }
+      },
+      "limits": {
+        "concurrency": 4,
+        "max_requests": 50,
+        "max_response_bytes": 65536,
+        "timeout_seconds": 5
+      },
+      "name": "Tenant B must not receive Tenant A invoice content",
+      "target": "http://127.0.0.1:44441",
+      "version": 1
+    },
+    "summary": {
+      "inconclusive": 0,
+      "not_retested": 1,
+      "regression": 0,
+      "resolved_check": 1,
+      "testability_lost": 0,
+      "testability_restored": 0,
+      "unchanged": 3
+    },
+    "transitions": [
+      {
+        "after": {
+          "assessment": "allowed",
+          "content_evidence": "matched-positive-assertions",
+          "decision": "allow",
+          "outcome": "pass",
+          "status": 200
+        },
+        "before": {
+          "assessment": "allowed",
+          "content_evidence": "matched-positive-assertions",
+          "decision": "allow",
+          "outcome": "pass",
+          "status": 200
+        },
+        "case_definition_sha256": "ced56019f9d756cb397e88498300c02242ce8bbe68965006833559e67e83bc02",
+        "case_id": "owner-object",
+        "controls": {
+          "baseline": {
+            "reasons": [],
+            "valid": true
+          },
+          "current": {
+            "reasons": [],
+            "valid": true
+          }
+        },
+        "evidence": {
+          "baseline": {
+            "record_sha256": "659f7619603014dbbb87e8d1a58f2248e042f8af25ac51ba67ea5077895bd588",
+            "report_root_sha256": "e898f401667d0efa524647c5c6825c3c21e8dd2b598b132f0370faf441115265",
+            "response_sha256": "d88717f689df18b042ae08628e74b7da7e04c396c4ff868947029d097100b55b"
+          },
+          "current": {
+            "record_sha256": "71713f2a0881c934929c7fbd0a2511200c0a717db36ac7374cf705350f6cac13",
+            "report_root_sha256": "1f0f673f4eb5a13b4a3a859c89d8145b7dbef28a2aaf47e316403e61598d9830",
+            "response_sha256": "d88717f689df18b042ae08628e74b7da7e04c396c4ff868947029d097100b55b"
+          }
+        },
+        "identity_definition_sha256": "5c3bbfc7b4ad0072ee2a954366f20393b16bb0704b0430e19bc32d78b0aeeb27",
+        "reasons": [
+          "configured_check_outcome_unchanged"
+        ],
+        "status": "unchanged"
+      },
+      {
+        "after": {
+          "assessment": "allowed",
+          "content_evidence": "matched-positive-assertions",
+          "decision": "allow",
+          "outcome": "pass",
+          "status": 200
+        },
+        "before": {
+          "assessment": "allowed",
+          "content_evidence": "matched-positive-assertions",
+          "decision": "allow",
+          "outcome": "pass",
+          "status": 200
+        },
+        "case_definition_sha256": "f29e74ee8c852427da5ec072d93eb42c49ade7f1289f5158db9c7542f9b8a1c5",
+        "case_id": "actor-identity-0",
+        "controls": {
+          "baseline": {
+            "reasons": [],
+            "valid": true
+          },
+          "current": {
+            "reasons": [],
+            "valid": true
+          }
+        },
+        "evidence": {
+          "baseline": {
+            "record_sha256": "f8b9c2470e5c39e85c034e2483e7aa481d97e757b5ed78c49fec84ea24a4fa37",
+            "report_root_sha256": "e898f401667d0efa524647c5c6825c3c21e8dd2b598b132f0370faf441115265",
+            "response_sha256": "b8c5fde2e0acac9f49e5f77d907f2d6170a50f8e9a47df546c8d03f6e6aa995f"
+          },
+          "current": {
+            "record_sha256": "37ceff2d3be2c4037f03c797f269299b6bc4d7e66b891adb5bd2ead3d5e6c200",
+            "report_root_sha256": "1f0f673f4eb5a13b4a3a859c89d8145b7dbef28a2aaf47e316403e61598d9830",
+            "response_sha256": "b8c5fde2e0acac9f49e5f77d907f2d6170a50f8e9a47df546c8d03f6e6aa995f"
+          }
+        },
+        "identity_definition_sha256": "ecd0f26298767b490e52018e8ff0635ff762b427bcc1ad56140f5f9fc3b3ac91",
+        "reasons": [
+          "configured_check_outcome_unchanged"
+        ],
+        "status": "unchanged"
+      },
+      {
+        "after": {
+          "assessment": "denied",
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "status": 403
+        },
+        "before": {
+          "assessment": "denied",
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "status": 403
+        },
+        "case_definition_sha256": "40cca8e10fbc45a9a3409ab767ec72f73d2788eac17d8995ae6d245606f4feea",
+        "case_id": "known-denial-0",
+        "controls": {
+          "baseline": {
+            "reasons": [],
+            "valid": true
+          },
+          "current": {
+            "reasons": [],
+            "valid": true
+          }
+        },
+        "evidence": {
+          "baseline": {
+            "record_sha256": "6026af142e20b883cb85af3aff04628af11ca62aa2db5f38c09d228f5c750179",
+            "report_root_sha256": "e898f401667d0efa524647c5c6825c3c21e8dd2b598b132f0370faf441115265",
+            "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+          },
+          "current": {
+            "record_sha256": "0300e5ebfc332c9ac2bf953d9f125ee1a4948130ad6bb26fcef6ec5929d79cf8",
+            "report_root_sha256": "1f0f673f4eb5a13b4a3a859c89d8145b7dbef28a2aaf47e316403e61598d9830",
+            "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+          }
+        },
+        "identity_definition_sha256": "ecd0f26298767b490e52018e8ff0635ff762b427bcc1ad56140f5f9fc3b3ac91",
+        "reasons": [
+          "configured_check_outcome_unchanged"
+        ],
+        "status": "unchanged"
+      },
+      {
+        "after": {
+          "assessment": "denied",
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "status": 403
+        },
+        "before": {
+          "assessment": "unsafe-denial",
+          "content_evidence": "protected-field-present",
+          "decision": "deny",
+          "outcome": "fail",
+          "status": 403
+        },
+        "case_definition_sha256": "813735addd554ea60637de536b10a6ddb8089361a255f73dbad487568a1e66cd",
+        "case_id": "variant-peer-1",
+        "controls": {
+          "baseline": {
+            "reasons": [],
+            "valid": true
+          },
+          "current": {
+            "reasons": [],
+            "valid": true
+          }
+        },
+        "evidence": {
+          "baseline": {
+            "record_sha256": "8084d7614019f419ec7edffdf0e38439b1caabe9449ae1af1fab1d5ad922cd36",
+            "report_root_sha256": "e898f401667d0efa524647c5c6825c3c21e8dd2b598b132f0370faf441115265",
+            "response_sha256": "d88717f689df18b042ae08628e74b7da7e04c396c4ff868947029d097100b55b"
+          },
+          "current": {
+            "record_sha256": "1f0f673f4eb5a13b4a3a859c89d8145b7dbef28a2aaf47e316403e61598d9830",
+            "report_root_sha256": "1f0f673f4eb5a13b4a3a859c89d8145b7dbef28a2aaf47e316403e61598d9830",
+            "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+          }
+        },
+        "identity_definition_sha256": "ecd0f26298767b490e52018e8ff0635ff762b427bcc1ad56140f5f9fc3b3ac91",
+        "reasons": [
+          "same_configured_check_now_passes_not_remediation_attestation"
+        ],
+        "status": "resolved_check"
+      },
+      {
+        "after": null,
+        "before": {
+          "assessment": "unsafe-denial",
+          "content_evidence": "protected-field-present",
+          "decision": "deny",
+          "outcome": "fail",
+          "status": 403
+        },
+        "case_definition_sha256": "6c0e350b856380309f3bd7b229840b12071ae988ab3034ccfb94cbd5c0f9775d",
+        "case_id": "variant-peer-2",
+        "controls": {
+          "baseline": {
+            "reasons": [],
+            "valid": true
+          },
+          "current": null
+        },
+        "evidence": {
+          "baseline": {
+            "record_sha256": "e898f401667d0efa524647c5c6825c3c21e8dd2b598b132f0370faf441115265",
+            "report_root_sha256": "e898f401667d0efa524647c5c6825c3c21e8dd2b598b132f0370faf441115265",
+            "response_sha256": "d88717f689df18b042ae08628e74b7da7e04c396c4ff868947029d097100b55b"
+          },
+          "current": null
+        },
+        "identity_definition_sha256": "ecd0f26298767b490e52018e8ff0635ff762b427bcc1ad56140f5f9fc3b3ac91",
+        "reasons": [
+          "outside_selected_dependency_closure"
+        ],
+        "status": "not_retested"
+      }
+    ]
+  },
+  "current_execution_digest": "2292ba9247d79919836ce3ab7777ac41b522912fb12a251ab0b7a5f018d9ce78",
+  "kind": "experiment-comparison",
+  "limitations": [
+    "Fix statements apply only to selected rule/resource/identity bindings and fresh configured controls.",
+    "Unselected findings remain historical; deployment and remote response authenticity are not independently attested."
+  ],
+  "schema_id": "authzledger.experiment-comparison",
+  "schema_version": 1,
+  "transitions": [
+    {
+      "baseline_finding_digest": "1472ecd8f609c2fb8ab39c64ff9e0cf762f6633f2e579d8240d6d6c9334a7a4c",
+      "case_id": "variant-peer-1",
+      "current_finding_digest": "2ec8af089563ffb091cd01649172ea939d17cdd480b03d620705e3f276ec0651",
+      "finding_id": "finding-cabbe355c68937e2311bb886",
+      "status": "fix_verified",
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "baseline_finding_digest": "55721a82bf7429f2adec50a351be6d18ab8c47064eb383942c930ec22e413d64",
+      "case_id": "variant-peer-2",
+      "current_finding_digest": null,
+      "finding_id": "finding-c05b584f5c488a0155a3397e",
+      "status": "not_retested",
+      "verification_level": "captured_inputs_replayed"
+    }
+  ]
+}

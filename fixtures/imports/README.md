@@ -1,6 +1,6 @@
 # Offline import fixtures
 
-The three original format fixtures below are authored and synthetic; they are not claimed to be captured exports from installed third-party tools. Every credential and private marker in them is a public test canary. `chromium-real.har` is separately identified as an actual browser/exporter capture.
+The three original format fixtures below are authored and synthetic; they are not claimed to be captured exports from installed third-party tools. Every credential and private marker in them is a public test canary. `chromium-real.har` and `zap-real.json` are separately identified as actual browser/tool exports.
 
 * `burp-http-messages.xml`: HTTP-message XML `<items>` with base64 request/response. Only the no-DTD profile is accepted. Exports with a DOCTYPE are explicitly rejected under the import contract.
 * `zap-traditional-json-plus.json`: ZAP Traditional JSON Report with Requests and Responses, using the official `site` / `alerts` / `instances` and `request-header` fields.
@@ -28,7 +28,7 @@ Example for a benign redacted query or JSON value:
 {"slot-1": {"literal": "invoice-A"}, "slot-2": {"omit": true}}
 ```
 
-The authored fixtures establish parser regression behavior, not interoperability certification against installed Burp/ZAP releases. Genuine Burp and ZAP export acceptance remains unverified. Burp exports containing a DOCTYPE are rejected, never silently rewritten.
+The authored fixtures establish parser regression behavior, not interoperability certification against installed Burp/ZAP releases. A genuine ZAP 2.17.0 JSON+ export is now verified below. Genuine compatible Burp export acceptance remains unverified. Burp exports containing a DOCTYPE are rejected, never silently rewritten.
 
 ## Actual Chromium / Playwright HAR capture
 
@@ -65,4 +65,26 @@ The ZAP parser field names follow the official **Traditional JSON Report with Re
 
 * https://www.zaproxy.org/docs/desktop/addons/report-generation/report-traditional-json-plus/
 
-No actual report emitted by an installed, version-pinned ZAP instance has been accepted in this environment. The authored ZAP fixture remains explicitly synthetic.
+The authored ZAP fixture remains explicitly synthetic. The separate native fixture below verifies one installed, pinned exporter profile; it does not certify all ZAP versions, profiles or scanners.
+
+## Actual ZAP 2.17.0 JSON+ export
+
+`zap-real.json` contains the unchanged bytes emitted by ZAP **2.17.0**, Report Generation **0.43.0**, using native `reports.generate` with `traditional-json-plus`. The downloaded Linux distribution matched SHA-256 `efe799aaa3627db683b43f00c9c210aea0b75c00cc8f0a0f0434d12bb3ddde5a` from the official release. ZAP ran with `-silent -notel`, an isolated temporary home and a keyed API bound to loopback. One actual GET to an owned, credential-free local fixture produced passive rule 10021's native missing-header alert. No custom alert or report JSON was fabricated.
+
+The export SHA-256 is `f5212d5dbbf7e12439002656b4888741a9bf0af58bbba1aa28b9436c071bfe87`. `zap-real.provenance.json` binds producer/add-on versions, distribution source, original bytes, observed requests and the separate execution artifact. The native report contains an unrelated Firefox client-integration startup error and driver warnings; those diagnostics remain visible. The checked path is core HTTP → passive rule → report generation, not ZAP browser automation.
+
+After import, the User-Agent slot was explicitly omitted and new lab identity references, identity probe, owner control, denial control, protected marker and four-request budget were supplied through `compile_imported_experiment`. `zap-real.execution.json` records the actual four-request controlled run. Its source ID equals the parsed native entry ID, its finding is `confirmed`/`denial_data_disclosure`, and `verify_execution` returns no errors. The ZAP missing-header assertion itself remains `not_verified`; it is not converted into an AuthzLedger finding.
+
+Reproduce into a **new directory** (the harness refuses overwrites):
+
+```sh
+python3 tools/capture_zap_fixture.py \
+  --zap-dir /path/to/ZAP_2.17.0 \
+  --archive /path/to/ZAP_2.17.0_Linux.tar.gz \
+  --output /new/capture/directory
+python3 -m unittest discover -s tests -p test_imports.py -q
+```
+
+Ports and timestamps legitimately differ between captures; a new capture has its own hashes and provenance. The script never rewrites the native report. Raw-byte fixture hashes are used only because this capture intentionally contains public lab data and no credentials; production import digests still cover the redacted normalized projection only.
+
+The native report's upstream-generated scanner descriptions are from ZAP, under [Apache-2.0](https://github.com/zaproxy/zap-extensions/blob/main/LICENSE). The authored lab data and capture harness use the repository licence. F01-01 remains **partial** until its genuine compatible Burp component is verified; see [exporter gate](../../docs/exporter-gate-1.1.0.md).

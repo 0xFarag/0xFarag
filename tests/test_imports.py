@@ -1,4 +1,4 @@
-"""Offline parser security and provenance tests using synthetic format fixtures."""
+"""Offline parser security with explicit synthetic and native exporter fixtures."""
 
 import base64
 import copy
@@ -375,6 +375,53 @@ class ImportTests(unittest.TestCase):
         batch = parse_har(value)
         self.assertNotIn("QUERY_CREDENTIAL", json.dumps(batch))
         self.assertNotIn("BODY_CREDENTIAL", json.dumps(batch))
+
+    def test_genuine_zap_report_has_pinned_producer_and_unmodified_source(self):
+        raw = (FIXTURES / "zap-real.json").read_bytes()
+        provenance = json.loads((FIXTURES / "zap-real.provenance.json").read_text())
+        source = json.loads(raw)
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), provenance["sha256"])
+        self.assertEqual(source["@programName"], "ZAP")
+        self.assertEqual(source["@version"], provenance["producer"]["version"])
+        self.assertEqual(source["@version"], "2.17.0")
+        self.assertEqual(provenance["producer"]["profile"], "traditional-json-plus")
+        self.assertEqual(provenance["producer"]["exporter"], "reports.generate")
+        self.assertIn({"id": "reports", "version": "0.43.0"}, provenance["producer"]["addons"])
+        self.assertFalse(provenance["source_scope"]["external_targets"])
+        self.assertFalse(provenance["source_scope"]["authentication"])
+        with patch.object(socket, "getaddrinfo", side_effect=AssertionError("network")), \
+                patch.object(socket, "socket", side_effect=AssertionError("network")), \
+                patch("builtins.open", side_effect=AssertionError("file read")):
+            batch = parse_import(raw, "zap-json-plus")
+        self.assertEqual(len(batch["entries"]), 1)
+        entry = batch["entries"][0]
+        self.assertEqual(entry["method"], "GET")
+        self.assertEqual(entry["origin"], provenance["source_scope"]["origin"])
+        self.assertEqual(entry["path"], "/invoice/A")
+        self.assertEqual(entry["headers"], {"pragma": "no-cache", "cache-control": "no-cache"})
+        self.assertFalse(entry["execution_blockers"])
+        self.assertEqual(entry["response"], {"status": 200, "body_retained": False})
+        self.assertEqual(entry["source_assertions"], [{"kind": "source_assertion", "tool": "ZAP", "plugin_id": "10021", "risk_code": "1", "verification": "not_verified"}])
+        self.assertNotIn("synthetic-A", json.dumps(batch))
+
+    def test_genuine_zap_capture_maps_to_separate_controlled_execution(self):
+        from authzledger.experiments import verify_execution
+        raw = (FIXTURES / "zap-real.json").read_bytes()
+        entry = parse_import(raw, "zap-json-plus")["entries"][0]
+        provenance = json.loads((FIXTURES / "zap-real.provenance.json").read_text())
+        execution_bytes = (FIXTURES / "zap-real.execution.json").read_bytes()
+        execution = json.loads(execution_bytes)
+        self.assertEqual(hashlib.sha256(execution_bytes).hexdigest(), provenance["execution"]["sha256"])
+        self.assertEqual(execution["execution_digest"], provenance["execution"]["execution_digest"])
+        self.assertEqual(execution["plan"]["spec"]["sources"], [entry["id"]])
+        self.assertEqual(execution["contract"]["target"], entry["origin"])
+        self.assertEqual(verify_execution(execution), [])
+        self.assertEqual(execution["budget_ledger"]["dispatched_total"], 4)
+        self.assertEqual(execution["findings"][0]["status"], "confirmed")
+        self.assertEqual(execution["findings"][0]["category"], "denial_data_disclosure")
+        self.assertEqual(provenance["capture_request_count"], 1)
+        self.assertEqual(provenance["controlled_execution_request_count"], 4)
+        self.assertEqual(len(provenance["observed_requests"]), 5)
 
 
 if __name__ == "__main__":

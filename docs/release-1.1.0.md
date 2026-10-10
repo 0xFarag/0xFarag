@@ -2,6 +2,8 @@
 
 **Release target. Publication remains blocked while the acceptance ledger contains open or partial scenarios. The current development producer is `1.1.0.dev0`; stable 1.0.0 remains unchanged.**
 
+The 10 October release review adds a genuine ZAP 2.17.0 / Report Generation 0.43.0 Traditional JSON+ capture, its original-byte provenance and a four-request controlled execution. The genuine HAR remains retained. **F01-01 is still partial because a genuine, contract-compatible Burp export has not been demonstrated.** DTD rejection is unchanged. See [the exporter gate record](exporter-gate-1.1.0.md), [the exact release runbook](release-runbook-1.1.0.md) and [prepared channel copy](launch-1.1.0.md).
+
 AuthzLedger turns a selected request into an explicit rule, valid controls, a reproducible finding, a smaller reproducer and a source-bound fix assessment. The local Studio workflow and CLI use the same existing execution engine and shared request budget.
 
 The integrated scope includes offline Burp XML, ZAP JSON-plus and HAR import; controlled authorization contrast; isolated workflow transitions, replay and idempotency; bounded request reduction; source-bound selective comparisons; an assessment workspace with Inspector and command palette; consistent HTML/PDF/JSON reporting; signed file inventories; and explainable change-based retest selection.
@@ -13,7 +15,7 @@ The integrated scope includes offline Burp XML, ZAP JSON-plus and HAR import; co
 3. Build the wheel, install it outside the checkout, run the assessment demo and both verifiers there. The reports extra must include the pinned renderer and licensed fonts. Verify source ZIP and wheel inventory; exclude keys and local assessment data.
 4. Once all 88 cases are verified, set package/runtime version to exactly `1.1.0`, update the release record and rerun the checks on that commit. `python tools/release_gate110.py` must pass. A development version deliberately fails.
 5. Push the exact reviewed commit to `authzledger-v1.1.0`; require both CI jobs to pass. The existing stable branch and old Evidence-Roots are not rewritten.
-6. Run the verification workflow on that branch with `publish_110=true`. Its publication stage repeats the contract/version gate, builds the assets and creates `v1.1.0` on the verified commit. Existing tags/assets are never replaced.
+6. Run the verification workflow on that branch with `publish_110=true`. Its publication stage repeats the contract/version gate, builds the source, wheel, proof ZIP, standalone verifier and checksums, then atomically creates `v1.1.0` on the verified commit. Existing tags/assets are never replaced. A tag left by an interrupted publication requires inspection; it is never silently retargeted or reused.
 
 These are execution gates, not a multi-quarter roadmap. The working implementation, commands, contract and demonstrations already exist in this branch. Remaining evidence gaps have explicit owners and scenarios; they must not be hidden behind a release label.
 

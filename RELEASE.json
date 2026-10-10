@@ -1,85 +1,75 @@
 {
-  "version": "1.0.0",
-  "date": "2026-10-09",
-  "status": "verified-local-release-candidate",
+  "version": "1.1.0.dev0",
+  "target_version": "1.1.0",
+  "date": "2026-10-10",
+  "status": "development-review-stable-publication-blocked",
   "repository": "https://github.com/0xFarag/0xFarag",
-  "distribution_branch": "authzledger-v1.0.0",
-  "release_url": "https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0",
+  "distribution_branch": "authzledger-v1.1.0",
+  "release_url": null,
+  "stable_release": {
+    "version": "1.0.0",
+    "tag": "v1.0.0",
+    "commit": "c0d4446a17ca15fb4e8a71f20f6b02c1a364e90c",
+    "unchanged": true
+  },
   "license": "LicenseRef-Proprietary",
+  "rights_holder": "Nasser Aldin Farag / 0xFarag",
   "runtime_dependencies": [],
-  "signing_requirement": "OpenSSL 3 / Ed25519",
+  "optional_reports_dependencies": [
+    "reportlab==4.4.9"
+  ],
+  "signing_requirement": "OpenSSL with Ed25519 support",
   "build_tools": {
     "setuptools": "84.0.0",
     "wheel": "0.48.0"
   },
-  "tests_passed": 233,
-  "verified_runtime": "Linux / CPython 3.12.14",
-  "browser": "Chromium 155.0.8059.39",
-  "browser_suites_passed": [
-    "preserved v0.3.4 workflows",
-    "new graph/policy/history/reasoning/proof/retest workflows"
-  ],
-  "installed_wheel": "Isolated venv outside checkout: demo, evidence verification, graph, key generation, source-bound signed bundle and trusted-key verification passed",
-  "source_lineage": {
-    "v0.3.4": "a8022b8ca34ea14828151ff97e62cf64260c805a",
-    "foundation": "b9f9892fc411434d78c17185c32b110d115e9c3f"
+  "acceptance": {
+    "total": 88,
+    "verified": 87,
+    "partial": [
+      "F01-01"
+    ],
+    "ledger": "docs/acceptance-1.1.0.md"
   },
-  "protocol_integrations_verified": "OPA and Ollama through loopback protocol fixtures; no external deployment/model certification",
+  "publication_blockers": [
+    "F01-01: genuine Burp exporter capture with provenance and a verified DTD-safe Burp import profile remain incomplete. Native ZAP 2.17.0 / reports 0.43.0 and Playwright HAR captures are verified.",
+    "Producer remains 1.1.0.dev0. Stable 1.1.0 requires complete acceptance, final-version revalidation and successful CI on the exact reviewed commit."
+  ],
+  "version_decision": "Retain 1.1.0.dev0 until F01-01 closes. Then release 1.1.0. No prior 1.1.x stable release exists here to justify 1.1.5 as a fix release.",
+  "prior_verified_snapshot": {
+    "tests_passed": 492,
+    "browser_suites_passed": 6,
+    "evidence_directory": "evidence/1.1.0-dev0",
+    "verification_protocol": "docs/verification-1.1.0.md"
+  },
+  "current_review_evidence_directory": "evidence/1.1.0-release-review",
+  "distribution_receipt": "evidence/1.1.0-release-review/installed-wheel.json",
+  "demonstration_proof_directory": "evidence/1.1.0-release-review/assessment-demos",
+  "remote_ci_status": "Not established by this file; inspect the remote workflow on the exact commit before publishing.",
+  "verification_depth": {
+    "standalone": "Ed25519 signature, inventory, file hashes, JSON structure and report anchor binding; Python standard library plus OpenSSL.",
+    "main": "Adds source-bound report, contract, comparison, finding, snapshot, workflow and renderer semantics for the supported profiles.",
+    "trust": "The public key must be authenticated separately. Neither verifier proves remote execution truth, operator identity or trusted time."
+  },
   "billing_enabled": false,
   "known_limits": [
-    "Hosted multi-user infrastructure and commercial Retest-as-a-Service deployment",
-    "Independent comparative or external security review",
-    "External customer validation",
-    "Other operating systems and browsers",
-    "Full accessibility evaluation",
-    "Local history requires separately retained anchors to resist wholesale replacement"
+    "Local single-operator workbench; hosted multi-user operation is outside this release.",
+    "Three assessment demonstrations use authored synthetic loopback fixtures and do not close genuine Burp exporter acceptance. Native ZAP and Playwright HAR are separately evidenced.",
+    "Default oracle evidence is an evaluation attestation; discarded raw response values cannot be independently reconstructed.",
+    "Selective retests prove only the explicitly retained rule, identity, object and valid controls; omitted findings remain not_retested.",
+    "Only the documented Linux/CPython and Chromium environment is measured; other platforms and full accessibility are not certified.",
+    "No independent comparative review, external customer validation or universal standards compliance is claimed.",
+    "Local history requires separately retained anchors to resist wholesale replacement."
   ],
-  "evidence": {
-    "evidence/1.0.0/acceptance.json": {
-      "sha256": "2e3e1fa01b613c5d7cbfd6d57323c6e61b14e15c4d5ff45b49a3a8fdf1e8bf09",
-      "bytes": 410
-    },
-    "evidence/1.0.0/browser-intelligence.json": {
-      "sha256": "d2a9457e522bb222fa3314cc572d28aa3c35fe16e7fb2684ab98b38f8b726d66",
-      "bytes": 553
-    },
-    "evidence/1.0.0/browser-legacy.json": {
-      "sha256": "0a45cb8e2b08a362f85c1dc4fc64582cef85a6d1839ee2ac952a0410eda5aac6",
-      "bytes": 550
-    },
-    "evidence/1.0.0/differential.png": {
-      "sha256": "153033762a80f15440dc6eedbcd562fa8210d0f3b4a5d49a9ec2f4a46781fd6a",
-      "bytes": 52611
-    },
-    "evidence/1.0.0/graph-after.png": {
-      "sha256": "e04fb0545153c3b34cae7b3a5bd5de10c4d594e2238ee867e4cef39a810b1c19",
-      "bytes": 208503
-    },
-    "evidence/1.0.0/graph-before.png": {
-      "sha256": "ea6a39e2533a1635ba980d3bd4e8837e896cf4df1ee93eab243aac1fa800dbcb",
-      "bytes": 261046
-    },
-    "evidence/1.0.0/tests.txt": {
-      "sha256": "91df0a298c81e9bf3a3d01bb7c01fb5c13088443b72dffbf7913497e46f13bdc",
-      "bytes": 1245
-    },
-    "evidence/1.0.0/film-verification.json": {
-      "sha256": "2b7f1493389714abd645482bdbdd4e976b7dcb2e10827e3ecee80d0d952ce1e8",
-      "bytes": 1786
-    }
-  },
   "release_media": {
-    "media/AuthzLedger_1.0_Release_vertical.mp4": {
-      "sha256": "91dc8c198043e911236f5247e0c42f500c8a2d77fb2009a9c3dd6a5c1e2f2a9c",
-      "bytes": 2226085
-    },
-    "media/AuthzLedger_1.0_Release_wide.mp4": {
-      "sha256": "8a3970f32f2a675355f24ad12f4f9fa1325b24bf54f97d6897599f9fc234d56d",
-      "bytes": 2316801
-    },
-    "media/AuthzLedger_1.0_en.srt": {
-      "sha256": "e95b1cc652dfbae69a7ef2270664cc2f7b631d5e79fe36c63b5776970448653f",
-      "bytes": 1079
-    }
+    "current_1_1_video_verified": false,
+    "note": "Historical 1.0 media do not demonstrate the 1.1 assessment workflow and are excluded from this development package."
+  },
+  "current_review": {
+    "tests_passed": 494,
+    "browser_suites_passed": 6,
+    "check_tools_passed": 5,
+    "verification": "evidence/1.1.0-release-review/verification.json",
+    "stable_gate": "blocked: native compatible Burp export missing"
   }
 }

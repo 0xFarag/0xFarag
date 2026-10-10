@@ -1,0 +1,2636 @@
+{
+  "budget_ledger": {
+    "approved_total": 100,
+    "by_kind": {
+      "advisory": 0,
+      "application": 7,
+      "cleanup": 0,
+      "identity_control": 1,
+      "negative_control": 1,
+      "object_control": 1,
+      "pdp": 0,
+      "reduction": 0,
+      "replay": 0,
+      "setup": 0,
+      "state_probe": 0
+    },
+    "cancel_reason": null,
+    "cancelled": false,
+    "cleanup_remaining": 0,
+    "dispatched_total": 10,
+    "kind": "request-budget-ledger",
+    "leased_pending": 0,
+    "remaining": 90,
+    "requests": [
+      {
+        "elapsed_ms": 2.042,
+        "kind": "identity_control",
+        "operation_id": "actor",
+        "outcome": "pass",
+        "response_bytes": 36,
+        "sequence": 1,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 2.106,
+        "kind": "object_control",
+        "operation_id": "owner",
+        "outcome": "pass",
+        "response_bytes": 25,
+        "sequence": 2,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 1.689,
+        "kind": "negative_control",
+        "operation_id": "negative",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 3,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 1.687,
+        "kind": "application",
+        "operation_id": "target-0",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 4,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 3.918,
+        "kind": "application",
+        "operation_id": "target-1",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 5,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 1.438,
+        "kind": "application",
+        "operation_id": "target-2",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 6,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 1.182,
+        "kind": "application",
+        "operation_id": "target-3",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 7,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 1.273,
+        "kind": "application",
+        "operation_id": "target-4",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 8,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 1.018,
+        "kind": "application",
+        "operation_id": "target-5",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 9,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 1.857,
+        "kind": "application",
+        "operation_id": "target-6",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 10,
+        "state": "finished"
+      }
+    ],
+    "reserved_pending": 0,
+    "schema_version": 1
+  },
+  "contract": {
+    "cases": [
+      {
+        "expect": {
+          "json": {
+            "/principal": "peer",
+            "/tenant": "B"
+          },
+          "status": [
+            200
+          ]
+        },
+        "headers": {},
+        "id": "actor",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/me",
+        "requires": []
+      },
+      {
+        "expect": {
+          "json": {
+            "/marker": "synthetic-A"
+          },
+          "status": [
+            200
+          ]
+        },
+        "headers": {},
+        "id": "owner",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/invoice/A",
+        "requires": []
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "negative",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/known-denial",
+        "requires": [
+          "actor",
+          "owner"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-0",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=0",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-1",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=1",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-2",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=2",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-3",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=3",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-4",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=4",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-5",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=5",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "target-6",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoice/A?view=6",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ]
+      }
+    ],
+    "identities": {
+      "owner": {
+        "headers": {
+          "Authorization": {
+            "env": "SELECTIVE_OWNER"
+          }
+        }
+      },
+      "peer": {
+        "headers": {
+          "Authorization": {
+            "env": "SELECTIVE_PEER"
+          }
+        }
+      }
+    },
+    "limits": {
+      "concurrency": 1,
+      "max_requests": 100,
+      "max_response_bytes": 4096,
+      "timeout_seconds": 2
+    },
+    "name": "Demo C: bounded 100-case baseline",
+    "target": "http://127.0.0.1:46833",
+    "version": 1
+  },
+  "execution_digest": "ca3f0b1c0ab3cf5ab980aec523d8995781d82830c5381288e70dd92d77d7869d",
+  "execution_id": "039645bb-222e-4747-a2b5-0d7619f33e39",
+  "findings": [
+    {
+      "case_id": "target-0",
+      "category": "authorization_rule_violation",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "evidence_refs": [
+        "687004de26b8bdf3981cfdc28d2aa6033b788dc2831dd66c7aaedc5677d5f51b"
+      ],
+      "finding_digest": "7eb2cff3111dbf45c8eb6b3672f6a3e7c46bc89509325415546404d1a5e5e357",
+      "id": "finding-5c0e74f8b65f0c26dd5b3d6a",
+      "identity": "peer",
+      "impact": "Limited to the explicitly evaluated predicate; business impact requires review.",
+      "interpretation": "satisfied",
+      "kind": "finding",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "remediation": "Enforce the configured rule at the resource and response boundary; rerun this experiment with fresh controls.",
+      "resource_id": "invoice-A",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.finding",
+      "schema_version": 1,
+      "status": "rejected",
+      "title": "Selective retest: seven declared views of one synthetic resource",
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "case_id": "target-1",
+      "category": "authorization_rule_violation",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "evidence_refs": [
+        "da8595b5d2c3d261c25d960e6454866bb3a554431855c38612b53ee94d730fee"
+      ],
+      "finding_digest": "06dd793ab73244f099afd23984dae711e59f55ed4e54678cb6fab4750627b28e",
+      "id": "finding-3ace0e8f12001e15834c8592",
+      "identity": "peer",
+      "impact": "Limited to the explicitly evaluated predicate; business impact requires review.",
+      "interpretation": "satisfied",
+      "kind": "finding",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "remediation": "Enforce the configured rule at the resource and response boundary; rerun this experiment with fresh controls.",
+      "resource_id": "invoice-A",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.finding",
+      "schema_version": 1,
+      "status": "rejected",
+      "title": "Selective retest: seven declared views of one synthetic resource",
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "case_id": "target-2",
+      "category": "authorization_rule_violation",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "evidence_refs": [
+        "862e6caf682ffbdf45c98144ec7c310f3d8cd643d7f0a0f093a66353ad162a93"
+      ],
+      "finding_digest": "67941dc125debe2b71cb76113fab30068352545d7b82cf95c726d7c2558f50ad",
+      "id": "finding-1a3df35e5a24cf5ba97950c8",
+      "identity": "peer",
+      "impact": "Limited to the explicitly evaluated predicate; business impact requires review.",
+      "interpretation": "satisfied",
+      "kind": "finding",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "remediation": "Enforce the configured rule at the resource and response boundary; rerun this experiment with fresh controls.",
+      "resource_id": "invoice-A",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.finding",
+      "schema_version": 1,
+      "status": "rejected",
+      "title": "Selective retest: seven declared views of one synthetic resource",
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "case_id": "target-3",
+      "category": "authorization_rule_violation",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "evidence_refs": [
+        "ed9f418c004cd4cbb70ea58a8b407ccef9c0857b44d88f04111fefa891e334c9"
+      ],
+      "finding_digest": "f597bda23fb41ab7f8d557fdfc2e907dc1164aaff39db26c74c81a14da566918",
+      "id": "finding-3b808dceafc6e1325bf3b601",
+      "identity": "peer",
+      "impact": "Limited to the explicitly evaluated predicate; business impact requires review.",
+      "interpretation": "satisfied",
+      "kind": "finding",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "remediation": "Enforce the configured rule at the resource and response boundary; rerun this experiment with fresh controls.",
+      "resource_id": "invoice-A",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.finding",
+      "schema_version": 1,
+      "status": "rejected",
+      "title": "Selective retest: seven declared views of one synthetic resource",
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "case_id": "target-4",
+      "category": "authorization_rule_violation",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "evidence_refs": [
+        "dca8ec08ba1f1a6eb8e6d725916a0c20783145cb37b55f34fbecf44db3ff7357"
+      ],
+      "finding_digest": "a56145a9a6165c486c17c1711092c7df19730cdcfb321205c2b540c64051db0f",
+      "id": "finding-47ea938498ef7edb6494607a",
+      "identity": "peer",
+      "impact": "Limited to the explicitly evaluated predicate; business impact requires review.",
+      "interpretation": "satisfied",
+      "kind": "finding",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "remediation": "Enforce the configured rule at the resource and response boundary; rerun this experiment with fresh controls.",
+      "resource_id": "invoice-A",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.finding",
+      "schema_version": 1,
+      "status": "rejected",
+      "title": "Selective retest: seven declared views of one synthetic resource",
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "case_id": "target-5",
+      "category": "authorization_rule_violation",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "evidence_refs": [
+        "6ed6f2926b0bf7cdf5b2cc9c4ba1741090b03448eaba1ea950a25072ec1017d7"
+      ],
+      "finding_digest": "6cf0d6c4beb472a276848b02d1dee5b0be95fdb1313396efd0335092862a6943",
+      "id": "finding-bfbf3a14c81af91f4f1e87ac",
+      "identity": "peer",
+      "impact": "Limited to the explicitly evaluated predicate; business impact requires review.",
+      "interpretation": "satisfied",
+      "kind": "finding",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "remediation": "Enforce the configured rule at the resource and response boundary; rerun this experiment with fresh controls.",
+      "resource_id": "invoice-A",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.finding",
+      "schema_version": 1,
+      "status": "rejected",
+      "title": "Selective retest: seven declared views of one synthetic resource",
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "case_id": "target-6",
+      "category": "authorization_rule_violation",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "evidence_refs": [
+        "30e8f7ac1d174b3451d7561a9266389ae36eae09076aa673181c2d8889f0e5df"
+      ],
+      "finding_digest": "a229d5a7ad4372c03ac28c1d8c30403ca004235d113a731e4213ec2b02f02775",
+      "id": "finding-91acb888cf876e88c941448b",
+      "identity": "peer",
+      "impact": "Limited to the explicitly evaluated predicate; business impact requires review.",
+      "interpretation": "satisfied",
+      "kind": "finding",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "remediation": "Enforce the configured rule at the resource and response boundary; rerun this experiment with fresh controls.",
+      "resource_id": "invoice-A",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.finding",
+      "schema_version": 1,
+      "status": "rejected",
+      "title": "Selective retest: seven declared views of one synthetic resource",
+      "verification_level": "captured_inputs_replayed"
+    }
+  ],
+  "graph": {
+    "contract_sha256": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+    "coverage": {
+      "anchored_negative": 8,
+      "assessed": 10,
+      "errors": 0,
+      "inconclusive": 0,
+      "intended_known": 10,
+      "observed_known": 10,
+      "policy_known": 0,
+      "total": 10,
+      "unobserved": 0
+    },
+    "edges": [
+      {
+        "case_id": "actor",
+        "controls": {
+          "anchored": false,
+          "negative": [],
+          "other": [],
+          "positive": []
+        },
+        "evidence": {
+          "record_sha256": "83932fa4cbfd16a4f48f8daae7605d61b6ae81a2c4cd90a2323468059a78173d",
+          "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "response_sha256": "b8c5fde2e0acac9f49e5f77d907f2d6170a50f8e9a47df546c8d03f6e6aa995f"
+        },
+        "findings": [],
+        "id": "access:942dd238d93e98d52f9c7951e17d9283",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "b574ac28964b5b1b3744217b8feffc057d3667987c03133164ef5646abde8fa3",
+          "decision": "allow",
+          "source": "contract",
+          "statuses": [
+            200
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "allowed",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            }
+          ],
+          "content_evidence": "matched-positive-assertions",
+          "decision": "allow",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 200
+        },
+        "path": "/me",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:015492e13bfac1050928305ec852b72f"
+      },
+      {
+        "case_id": "negative",
+        "controls": {
+          "anchored": true,
+          "negative": [],
+          "other": [],
+          "positive": [
+            "actor",
+            "owner"
+          ]
+        },
+        "evidence": {
+          "record_sha256": "3c96f361d97d7024173aabb1712bdd8fe111ce80bb8b38da6892e0200f9c7377",
+          "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+        },
+        "findings": [],
+        "id": "access:c91a38cbb574bb6d674a30471f787cc5",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "0243e4f00d058c245cc79690fa905430372e6ece5fd84bc38bb800301ace89f3",
+          "decision": "deny",
+          "source": "contract",
+          "statuses": [
+            403
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "denied",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 403
+        },
+        "path": "/known-denial",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [
+          "actor",
+          "owner"
+        ],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:5b48c33f6fdd1520dd1342dcf3e91d18"
+      },
+      {
+        "case_id": "owner",
+        "controls": {
+          "anchored": false,
+          "negative": [],
+          "other": [],
+          "positive": []
+        },
+        "evidence": {
+          "record_sha256": "af0451978c155631ef64a7c69547070ad7a4e134eee4598fdc402831e2a1c041",
+          "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "response_sha256": "01b875b317da45e4b168a8d335e565b3e6e34f8fbe1979b526cf6c1f6e0f0037"
+        },
+        "findings": [],
+        "id": "access:9ab08637137d44934d260a4899b748ce",
+        "identity": "owner",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "4fc23f8b8c22a4496bef85cfc42076e107ed4151fd54bb284964cbab54bd769a",
+          "decision": "allow",
+          "source": "contract",
+          "statuses": [
+            200
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "allowed",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json"
+            }
+          ],
+          "content_evidence": "matched-positive-assertions",
+          "decision": "allow",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 200
+        },
+        "path": "/invoice/A",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [],
+        "source": "identity:b5fc3efab88190f954f69edd514e8d2b",
+        "target": "resource:c49a8e0b4c26345ae28bad061a7a48ce"
+      },
+      {
+        "case_id": "target-0",
+        "controls": {
+          "anchored": true,
+          "negative": [
+            "negative"
+          ],
+          "other": [],
+          "positive": [
+            "actor",
+            "owner"
+          ]
+        },
+        "evidence": {
+          "record_sha256": "2ee4168b9e1c66863d3a6343bbea005811fded283918d3e5c04f4ff6c3ef785f",
+          "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+        },
+        "findings": [],
+        "id": "access:41772be5674f320162882edbc4b8302f",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "070a5bb5bd38d83561d608153068cc66a1c0165771ddfc3529c9c6728370e470",
+          "decision": "deny",
+          "source": "contract",
+          "statuses": [
+            403
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "denied",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 403
+        },
+        "path": "/invoice/A?view=0",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:dbf4063568ea936776d5cf193656ae5e"
+      },
+      {
+        "case_id": "target-1",
+        "controls": {
+          "anchored": true,
+          "negative": [
+            "negative"
+          ],
+          "other": [],
+          "positive": [
+            "actor",
+            "owner"
+          ]
+        },
+        "evidence": {
+          "record_sha256": "cf0307b40100e84c2d6ce57b7eaef5bc406a51b002c5b1d5248ff3f6360ab89d",
+          "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+        },
+        "findings": [],
+        "id": "access:1726994bc36e679bc735dba561e6cb50",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "070a5bb5bd38d83561d608153068cc66a1c0165771ddfc3529c9c6728370e470",
+          "decision": "deny",
+          "source": "contract",
+          "statuses": [
+            403
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "denied",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 403
+        },
+        "path": "/invoice/A?view=1",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:c62e35acca20693366a844408d72ac75"
+      },
+      {
+        "case_id": "target-2",
+        "controls": {
+          "anchored": true,
+          "negative": [
+            "negative"
+          ],
+          "other": [],
+          "positive": [
+            "actor",
+            "owner"
+          ]
+        },
+        "evidence": {
+          "record_sha256": "bcdfdf551b44c596b80afd550bd1ccd54022e54803d791fea537421cb1643330",
+          "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+        },
+        "findings": [],
+        "id": "access:c2ccde7db2198f2c796068089fdbb7b1",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "070a5bb5bd38d83561d608153068cc66a1c0165771ddfc3529c9c6728370e470",
+          "decision": "deny",
+          "source": "contract",
+          "statuses": [
+            403
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "denied",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 403
+        },
+        "path": "/invoice/A?view=2",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:0a37edc6ef457cffbe9f6af5295e3ee2"
+      },
+      {
+        "case_id": "target-3",
+        "controls": {
+          "anchored": true,
+          "negative": [
+            "negative"
+          ],
+          "other": [],
+          "positive": [
+            "actor",
+            "owner"
+          ]
+        },
+        "evidence": {
+          "record_sha256": "ef5697457adb88acb2c0e7a0f84dca9198a295ba1a2657b6f648c4bed83e6e7c",
+          "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+        },
+        "findings": [],
+        "id": "access:dbf6d410af1bf3a4b4d2fbd0978d4a97",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "070a5bb5bd38d83561d608153068cc66a1c0165771ddfc3529c9c6728370e470",
+          "decision": "deny",
+          "source": "contract",
+          "statuses": [
+            403
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "denied",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 403
+        },
+        "path": "/invoice/A?view=3",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:0cb94d73b5bca2018bb2235e011daea1"
+      },
+      {
+        "case_id": "target-4",
+        "controls": {
+          "anchored": true,
+          "negative": [
+            "negative"
+          ],
+          "other": [],
+          "positive": [
+            "actor",
+            "owner"
+          ]
+        },
+        "evidence": {
+          "record_sha256": "b3c36aafdae4e594cb7f230c9d935b398f4025f2583d6d78f177ced37f3f67c6",
+          "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+        },
+        "findings": [],
+        "id": "access:d81ebecaf2553f424e580b0bc35f5309",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "070a5bb5bd38d83561d608153068cc66a1c0165771ddfc3529c9c6728370e470",
+          "decision": "deny",
+          "source": "contract",
+          "statuses": [
+            403
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "denied",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 403
+        },
+        "path": "/invoice/A?view=4",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:fde3211d47b8eadf8b07c04ccc3e43ce"
+      },
+      {
+        "case_id": "target-5",
+        "controls": {
+          "anchored": true,
+          "negative": [
+            "negative"
+          ],
+          "other": [],
+          "positive": [
+            "actor",
+            "owner"
+          ]
+        },
+        "evidence": {
+          "record_sha256": "5af8295d4e9b3b13fc402e13319da26ba22d412c56c17a450d192f814d925a8d",
+          "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+        },
+        "findings": [],
+        "id": "access:99a7a9d03bccda4e27d960177e21aaf0",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "070a5bb5bd38d83561d608153068cc66a1c0165771ddfc3529c9c6728370e470",
+          "decision": "deny",
+          "source": "contract",
+          "statuses": [
+            403
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "denied",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 403
+        },
+        "path": "/invoice/A?view=5",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:7d637c63c095855c0da71c1d4bb1e132"
+      },
+      {
+        "case_id": "target-6",
+        "controls": {
+          "anchored": true,
+          "negative": [
+            "negative"
+          ],
+          "other": [],
+          "positive": [
+            "actor",
+            "owner"
+          ]
+        },
+        "evidence": {
+          "record_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+          "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730"
+        },
+        "findings": [],
+        "id": "access:7f797882350e00a8dbeef2314e07320a",
+        "identity": "peer",
+        "intended": {
+          "caveats": [
+            "HTTP status families are configured signals; they do not prove identity authentication or complete data isolation."
+          ],
+          "checks_sha256": "070a5bb5bd38d83561d608153068cc66a1c0165771ddfc3529c9c6728370e470",
+          "decision": "deny",
+          "source": "contract",
+          "statuses": [
+            403
+          ]
+        },
+        "method": "GET",
+        "observed": {
+          "assessment": "denied",
+          "checks": [
+            {
+              "passed": true,
+              "type": "status"
+            },
+            {
+              "passed": true,
+              "type": "json_parse"
+            },
+            {
+              "passed": true,
+              "type": "json_absent"
+            }
+          ],
+          "content_evidence": "not-established",
+          "decision": "deny",
+          "outcome": "pass",
+          "reason": "Configured checks passed.",
+          "status": 403
+        },
+        "path": "/invoice/A?view=6",
+        "policy": {
+          "decision": "unknown",
+          "explanation": "No independent policy input supplied.",
+          "provenance": {},
+          "source": "not-evaluated"
+        },
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "source": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "target": "resource:0188ee03e58e1165014c9eceb33caee4"
+      }
+    ],
+    "evidence_report_root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+    "findings": [],
+    "graph_sha256": "caff680c4fc537bd154f1212edc1e6e4ea184b8c8a5a89921d156650b06b1c22",
+    "kind": "authorization-graph",
+    "name": "Demo C: bounded 100-case baseline",
+    "nodes": [
+      {
+        "id": "identity:6aaa85971035de5f102c483dd5de33d2",
+        "identity": "peer",
+        "kind": "identity",
+        "label": "peer"
+      },
+      {
+        "id": "identity:b5fc3efab88190f954f69edd514e8d2b",
+        "identity": "owner",
+        "kind": "identity",
+        "label": "owner"
+      },
+      {
+        "id": "resource:015492e13bfac1050928305ec852b72f",
+        "kind": "resource",
+        "label": "/me",
+        "path": "/me",
+        "target": "http://127.0.0.1:46833"
+      },
+      {
+        "id": "resource:0188ee03e58e1165014c9eceb33caee4",
+        "kind": "resource",
+        "label": "/invoice/A?view=6",
+        "path": "/invoice/A?view=6",
+        "target": "http://127.0.0.1:46833"
+      },
+      {
+        "id": "resource:0a37edc6ef457cffbe9f6af5295e3ee2",
+        "kind": "resource",
+        "label": "/invoice/A?view=2",
+        "path": "/invoice/A?view=2",
+        "target": "http://127.0.0.1:46833"
+      },
+      {
+        "id": "resource:0cb94d73b5bca2018bb2235e011daea1",
+        "kind": "resource",
+        "label": "/invoice/A?view=3",
+        "path": "/invoice/A?view=3",
+        "target": "http://127.0.0.1:46833"
+      },
+      {
+        "id": "resource:5b48c33f6fdd1520dd1342dcf3e91d18",
+        "kind": "resource",
+        "label": "/known-denial",
+        "path": "/known-denial",
+        "target": "http://127.0.0.1:46833"
+      },
+      {
+        "id": "resource:7d637c63c095855c0da71c1d4bb1e132",
+        "kind": "resource",
+        "label": "/invoice/A?view=5",
+        "path": "/invoice/A?view=5",
+        "target": "http://127.0.0.1:46833"
+      },
+      {
+        "id": "resource:c49a8e0b4c26345ae28bad061a7a48ce",
+        "kind": "resource",
+        "label": "/invoice/A",
+        "path": "/invoice/A",
+        "target": "http://127.0.0.1:46833"
+      },
+      {
+        "id": "resource:c62e35acca20693366a844408d72ac75",
+        "kind": "resource",
+        "label": "/invoice/A?view=1",
+        "path": "/invoice/A?view=1",
+        "target": "http://127.0.0.1:46833"
+      },
+      {
+        "id": "resource:dbf4063568ea936776d5cf193656ae5e",
+        "kind": "resource",
+        "label": "/invoice/A?view=0",
+        "path": "/invoice/A?view=0",
+        "target": "http://127.0.0.1:46833"
+      },
+      {
+        "id": "resource:fde3211d47b8eadf8b07c04ccc3e43ce",
+        "kind": "resource",
+        "label": "/invoice/A?view=4",
+        "path": "/invoice/A?view=4",
+        "target": "http://127.0.0.1:46833"
+      }
+    ],
+    "policy_sha256": null,
+    "schema_version": 1,
+    "target": "http://127.0.0.1:46833",
+    "trust": "Local evidence consistency checked; execution, identity binding and supplied policy deployment are not independently attested."
+  },
+  "kind": "experiment-execution",
+  "observations": [
+    {
+      "attempt_id": "target-0:1",
+      "body_complete": true,
+      "body_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+      "capture_profile": "selected-values-v1",
+      "case_id": "target-0",
+      "contract_digest": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "controls_valid": true,
+      "execution_id": "039645bb-222e-4747-a2b5-0d7619f33e39",
+      "headers_retained": false,
+      "interpretation": "satisfied",
+      "kind": "observation",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+      "observation_digest": "687004de26b8bdf3981cfdc28d2aa6033b788dc2831dd66c7aaedc5677d5f51b",
+      "oracle": {
+        "decision": {
+          "interpretation": "satisfied",
+          "reason": "predicate_satisfied"
+        },
+        "input": {
+          "present": false
+        },
+        "input_retained": true,
+        "oracle_id": "forbid_field_equal",
+        "oracle_version": 1
+      },
+      "plan_digest": "1d963736c7e43fa16213797fc3c53b3bc303368d0079f474ec362df3fdc651c1",
+      "report_root": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+      "request_projection_digest": "40c2d2c74e917778837c2ba57da8823e2f31ce2290996193b9a4d41799cce23c",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.observation",
+      "schema_version": 1,
+      "status": 403,
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "attempt_id": "target-1:1",
+      "body_complete": true,
+      "body_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+      "capture_profile": "selected-values-v1",
+      "case_id": "target-1",
+      "contract_digest": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "controls_valid": true,
+      "execution_id": "039645bb-222e-4747-a2b5-0d7619f33e39",
+      "headers_retained": false,
+      "interpretation": "satisfied",
+      "kind": "observation",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+      "observation_digest": "da8595b5d2c3d261c25d960e6454866bb3a554431855c38612b53ee94d730fee",
+      "oracle": {
+        "decision": {
+          "interpretation": "satisfied",
+          "reason": "predicate_satisfied"
+        },
+        "input": {
+          "present": false
+        },
+        "input_retained": true,
+        "oracle_id": "forbid_field_equal",
+        "oracle_version": 1
+      },
+      "plan_digest": "1d963736c7e43fa16213797fc3c53b3bc303368d0079f474ec362df3fdc651c1",
+      "report_root": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+      "request_projection_digest": "f9883e30a0483082ac3d60409063da75a00905eb99172962b2a508bf31578019",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.observation",
+      "schema_version": 1,
+      "status": 403,
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "attempt_id": "target-2:1",
+      "body_complete": true,
+      "body_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+      "capture_profile": "selected-values-v1",
+      "case_id": "target-2",
+      "contract_digest": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "controls_valid": true,
+      "execution_id": "039645bb-222e-4747-a2b5-0d7619f33e39",
+      "headers_retained": false,
+      "interpretation": "satisfied",
+      "kind": "observation",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+      "observation_digest": "862e6caf682ffbdf45c98144ec7c310f3d8cd643d7f0a0f093a66353ad162a93",
+      "oracle": {
+        "decision": {
+          "interpretation": "satisfied",
+          "reason": "predicate_satisfied"
+        },
+        "input": {
+          "present": false
+        },
+        "input_retained": true,
+        "oracle_id": "forbid_field_equal",
+        "oracle_version": 1
+      },
+      "plan_digest": "1d963736c7e43fa16213797fc3c53b3bc303368d0079f474ec362df3fdc651c1",
+      "report_root": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+      "request_projection_digest": "d2d67d58e1e469312a3fd310d5736c88ff66a3236a16296bee4975ad62b606d3",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.observation",
+      "schema_version": 1,
+      "status": 403,
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "attempt_id": "target-3:1",
+      "body_complete": true,
+      "body_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+      "capture_profile": "selected-values-v1",
+      "case_id": "target-3",
+      "contract_digest": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "controls_valid": true,
+      "execution_id": "039645bb-222e-4747-a2b5-0d7619f33e39",
+      "headers_retained": false,
+      "interpretation": "satisfied",
+      "kind": "observation",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+      "observation_digest": "ed9f418c004cd4cbb70ea58a8b407ccef9c0857b44d88f04111fefa891e334c9",
+      "oracle": {
+        "decision": {
+          "interpretation": "satisfied",
+          "reason": "predicate_satisfied"
+        },
+        "input": {
+          "present": false
+        },
+        "input_retained": true,
+        "oracle_id": "forbid_field_equal",
+        "oracle_version": 1
+      },
+      "plan_digest": "1d963736c7e43fa16213797fc3c53b3bc303368d0079f474ec362df3fdc651c1",
+      "report_root": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+      "request_projection_digest": "5b8db42fc556184f77fffdf494d461ba0a8a286a46e3e050046c8973d7c9855d",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.observation",
+      "schema_version": 1,
+      "status": 403,
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "attempt_id": "target-4:1",
+      "body_complete": true,
+      "body_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+      "capture_profile": "selected-values-v1",
+      "case_id": "target-4",
+      "contract_digest": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "controls_valid": true,
+      "execution_id": "039645bb-222e-4747-a2b5-0d7619f33e39",
+      "headers_retained": false,
+      "interpretation": "satisfied",
+      "kind": "observation",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+      "observation_digest": "dca8ec08ba1f1a6eb8e6d725916a0c20783145cb37b55f34fbecf44db3ff7357",
+      "oracle": {
+        "decision": {
+          "interpretation": "satisfied",
+          "reason": "predicate_satisfied"
+        },
+        "input": {
+          "present": false
+        },
+        "input_retained": true,
+        "oracle_id": "forbid_field_equal",
+        "oracle_version": 1
+      },
+      "plan_digest": "1d963736c7e43fa16213797fc3c53b3bc303368d0079f474ec362df3fdc651c1",
+      "report_root": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+      "request_projection_digest": "2a0431df7480bb91e928b1ed1cf0aaf74630caa5e1a185ea9fcba2f7c87369bf",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.observation",
+      "schema_version": 1,
+      "status": 403,
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "attempt_id": "target-5:1",
+      "body_complete": true,
+      "body_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+      "capture_profile": "selected-values-v1",
+      "case_id": "target-5",
+      "contract_digest": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "controls_valid": true,
+      "execution_id": "039645bb-222e-4747-a2b5-0d7619f33e39",
+      "headers_retained": false,
+      "interpretation": "satisfied",
+      "kind": "observation",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+      "observation_digest": "6ed6f2926b0bf7cdf5b2cc9c4ba1741090b03448eaba1ea950a25072ec1017d7",
+      "oracle": {
+        "decision": {
+          "interpretation": "satisfied",
+          "reason": "predicate_satisfied"
+        },
+        "input": {
+          "present": false
+        },
+        "input_retained": true,
+        "oracle_id": "forbid_field_equal",
+        "oracle_version": 1
+      },
+      "plan_digest": "1d963736c7e43fa16213797fc3c53b3bc303368d0079f474ec362df3fdc651c1",
+      "report_root": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+      "request_projection_digest": "f7f843b70061304ae553be404d544f92fa869f8d64d2bf82b5978dbe914527b1",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.observation",
+      "schema_version": 1,
+      "status": 403,
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "attempt_id": "target-6:1",
+      "body_complete": true,
+      "body_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+      "capture_profile": "selected-values-v1",
+      "case_id": "target-6",
+      "contract_digest": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+      "control_refs": [
+        "actor",
+        "negative",
+        "owner"
+      ],
+      "controls_valid": true,
+      "execution_id": "039645bb-222e-4747-a2b5-0d7619f33e39",
+      "headers_retained": false,
+      "interpretation": "satisfied",
+      "kind": "observation",
+      "limitations": [
+        "Remote response authenticity is not established by local signing.",
+        "Only selected oracle inputs are replayed; their projection from the omitted raw body remains signer-attested."
+      ],
+      "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+      "observation_digest": "30e8f7ac1d174b3451d7561a9266389ae36eae09076aa673181c2d8889f0e5df",
+      "oracle": {
+        "decision": {
+          "interpretation": "satisfied",
+          "reason": "predicate_satisfied"
+        },
+        "input": {
+          "present": false
+        },
+        "input_retained": true,
+        "oracle_id": "forbid_field_equal",
+        "oracle_version": 1
+      },
+      "plan_digest": "1d963736c7e43fa16213797fc3c53b3bc303368d0079f474ec362df3fdc651c1",
+      "report_root": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+      "request_projection_digest": "63026634b0305f80f8e531b698a0b74ee9e5eb31698968aeec947c1cf25b10a7",
+      "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+      "schema_id": "authzledger.observation",
+      "schema_version": 1,
+      "status": 403,
+      "verification_level": "captured_inputs_replayed"
+    }
+  ],
+  "plan": {
+    "contract": {
+      "cases": [
+        {
+          "expect": {
+            "json": {
+              "/principal": "peer",
+              "/tenant": "B"
+            },
+            "status": [
+              200
+            ]
+          },
+          "headers": {},
+          "id": "actor",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/me",
+          "requires": []
+        },
+        {
+          "expect": {
+            "json": {
+              "/marker": "synthetic-A"
+            },
+            "status": [
+              200
+            ]
+          },
+          "headers": {},
+          "id": "owner",
+          "identity": "owner",
+          "method": "GET",
+          "path": "/invoice/A",
+          "requires": []
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "negative",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/known-denial",
+          "requires": [
+            "actor",
+            "owner"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-0",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=0",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-1",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=1",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-2",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=2",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-3",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=3",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-4",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=4",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-5",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=5",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "target-6",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoice/A?view=6",
+          "requires": [
+            "actor",
+            "owner",
+            "negative"
+          ]
+        }
+      ],
+      "identities": {
+        "owner": {
+          "headers": {
+            "Authorization": {
+              "env": "SELECTIVE_OWNER"
+            }
+          }
+        },
+        "peer": {
+          "headers": {
+            "Authorization": {
+              "env": "SELECTIVE_PEER"
+            }
+          }
+        }
+      },
+      "limits": {
+        "concurrency": 1,
+        "max_requests": 100,
+        "max_response_bytes": 4096,
+        "timeout_seconds": 2
+      },
+      "name": "Demo C: bounded 100-case baseline",
+      "target": "http://127.0.0.1:46833",
+      "version": 1
+    },
+    "contract_digest": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+    "kind": "experiment-plan",
+    "limitations": [
+      "Explicit variants only; no automatic discovery or deployment-policy attestation.",
+      "Identity and resource claims depend on configured response assertions; marker uniqueness and tenant semantics are operator-declared."
+    ],
+    "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+    "plan_digest": "1d963736c7e43fa16213797fc3c53b3bc303368d0079f474ec362df3fdc651c1",
+    "request_upper_bound": 10,
+    "rule": {
+      "id": "tenant-isolation",
+      "kind": "forbid_field_equal",
+      "pointer": "/marker",
+      "resource_id": "invoice-A",
+      "value": "synthetic-A"
+    },
+    "rule_digest": "d4302c1e4ea6e69db715cb1860dd1a2487aa1a52343172d0cb7609bf7cf5aabb",
+    "schema_id": "authzledger.experiment-plan",
+    "schema_version": 1,
+    "scope": {
+      "target": "http://127.0.0.1:46833"
+    },
+    "spec": {
+      "capture_mode": "safe_values",
+      "contract": {
+        "cases": [
+          {
+            "expect": {
+              "json": {
+                "/principal": "peer",
+                "/tenant": "B"
+              },
+              "status": [
+                200
+              ]
+            },
+            "headers": {},
+            "id": "actor",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/me",
+            "requires": []
+          },
+          {
+            "expect": {
+              "json": {
+                "/marker": "synthetic-A"
+              },
+              "status": [
+                200
+              ]
+            },
+            "headers": {},
+            "id": "owner",
+            "identity": "owner",
+            "method": "GET",
+            "path": "/invoice/A",
+            "requires": []
+          },
+          {
+            "expect": {
+              "json_absent": [
+                "/marker"
+              ],
+              "status": [
+                403
+              ]
+            },
+            "headers": {},
+            "id": "negative",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/known-denial",
+            "requires": [
+              "actor",
+              "owner"
+            ]
+          },
+          {
+            "expect": {
+              "json_absent": [
+                "/marker"
+              ],
+              "status": [
+                403
+              ]
+            },
+            "headers": {},
+            "id": "target-0",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/invoice/A?view=0",
+            "requires": [
+              "actor",
+              "owner",
+              "negative"
+            ]
+          },
+          {
+            "expect": {
+              "json_absent": [
+                "/marker"
+              ],
+              "status": [
+                403
+              ]
+            },
+            "headers": {},
+            "id": "target-1",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/invoice/A?view=1",
+            "requires": [
+              "actor",
+              "owner",
+              "negative"
+            ]
+          },
+          {
+            "expect": {
+              "json_absent": [
+                "/marker"
+              ],
+              "status": [
+                403
+              ]
+            },
+            "headers": {},
+            "id": "target-2",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/invoice/A?view=2",
+            "requires": [
+              "actor",
+              "owner",
+              "negative"
+            ]
+          },
+          {
+            "expect": {
+              "json_absent": [
+                "/marker"
+              ],
+              "status": [
+                403
+              ]
+            },
+            "headers": {},
+            "id": "target-3",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/invoice/A?view=3",
+            "requires": [
+              "actor",
+              "owner",
+              "negative"
+            ]
+          },
+          {
+            "expect": {
+              "json_absent": [
+                "/marker"
+              ],
+              "status": [
+                403
+              ]
+            },
+            "headers": {},
+            "id": "target-4",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/invoice/A?view=4",
+            "requires": [
+              "actor",
+              "owner",
+              "negative"
+            ]
+          },
+          {
+            "expect": {
+              "json_absent": [
+                "/marker"
+              ],
+              "status": [
+                403
+              ]
+            },
+            "headers": {},
+            "id": "target-5",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/invoice/A?view=5",
+            "requires": [
+              "actor",
+              "owner",
+              "negative"
+            ]
+          },
+          {
+            "expect": {
+              "json_absent": [
+                "/marker"
+              ],
+              "status": [
+                403
+              ]
+            },
+            "headers": {},
+            "id": "target-6",
+            "identity": "peer",
+            "method": "GET",
+            "path": "/invoice/A?view=6",
+            "requires": [
+              "actor",
+              "owner",
+              "negative"
+            ]
+          }
+        ],
+        "identities": {
+          "owner": {
+            "headers": {
+              "Authorization": {
+                "env": "SELECTIVE_OWNER"
+              }
+            }
+          },
+          "peer": {
+            "headers": {
+              "Authorization": {
+                "env": "SELECTIVE_PEER"
+              }
+            }
+          }
+        },
+        "limits": {
+          "concurrency": 1,
+          "max_requests": 100,
+          "max_response_bytes": 4096,
+          "timeout_seconds": 2
+        },
+        "name": "Demo C: bounded 100-case baseline",
+        "target": "http://127.0.0.1:46833",
+        "version": 1
+      },
+      "id": "selective100",
+      "identity_bindings": {
+        "peer": {
+          "principal": "peer",
+          "principal_pointer": "/principal",
+          "tenant": "B",
+          "tenant_pointer": "/tenant"
+        }
+      },
+      "kind": "experiment-spec",
+      "mutation_approval": [],
+      "rule": {
+        "id": "tenant-isolation",
+        "kind": "forbid_field_equal",
+        "pointer": "/marker",
+        "resource_id": "invoice-A",
+        "value": "synthetic-A"
+      },
+      "schema_version": 1,
+      "sources": [],
+      "title": "Selective retest: seven declared views of one synthetic resource",
+      "variants": [
+        {
+          "case_id": "target-0",
+          "id": "variant-0",
+          "identity_control": "actor",
+          "negative_control": "negative",
+          "object_control": "owner"
+        },
+        {
+          "case_id": "target-1",
+          "id": "variant-1",
+          "identity_control": "actor",
+          "negative_control": "negative",
+          "object_control": "owner"
+        },
+        {
+          "case_id": "target-2",
+          "id": "variant-2",
+          "identity_control": "actor",
+          "negative_control": "negative",
+          "object_control": "owner"
+        },
+        {
+          "case_id": "target-3",
+          "id": "variant-3",
+          "identity_control": "actor",
+          "negative_control": "negative",
+          "object_control": "owner"
+        },
+        {
+          "case_id": "target-4",
+          "id": "variant-4",
+          "identity_control": "actor",
+          "negative_control": "negative",
+          "object_control": "owner"
+        },
+        {
+          "case_id": "target-5",
+          "id": "variant-5",
+          "identity_control": "actor",
+          "negative_control": "negative",
+          "object_control": "owner"
+        },
+        {
+          "case_id": "target-6",
+          "id": "variant-6",
+          "identity_control": "actor",
+          "negative_control": "negative",
+          "object_control": "owner"
+        }
+      ],
+      "volatile_pointers": []
+    },
+    "variants": [
+      {
+        "case_id": "target-0",
+        "id": "variant-0",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-1",
+        "id": "variant-1",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-2",
+        "id": "variant-2",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-3",
+        "id": "variant-3",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-4",
+        "id": "variant-4",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-5",
+        "id": "variant-5",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      },
+      {
+        "case_id": "target-6",
+        "id": "variant-6",
+        "identity_control": "actor",
+        "negative_control": "negative",
+        "object_control": "owner"
+      }
+    ]
+  },
+  "report": {
+    "contract_sha256": "cba51e72b2acbc56226e704f9799a1a3ceb6ce5a713ade6c7edb07b0a95d6074",
+    "evidence": {
+      "algorithm": "sha256",
+      "metadata_sha256": "ef9e7db1302b32363e2b60302969f422f19420e9470507d297b4aad86aaa8eeb",
+      "records": [
+        {
+          "id": "actor",
+          "previous_sha256": "ef9e7db1302b32363e2b60302969f422f19420e9470507d297b4aad86aaa8eeb",
+          "sha256": "83932fa4cbfd16a4f48f8daae7605d61b6ae81a2c4cd90a2323468059a78173d"
+        },
+        {
+          "id": "owner",
+          "previous_sha256": "83932fa4cbfd16a4f48f8daae7605d61b6ae81a2c4cd90a2323468059a78173d",
+          "sha256": "af0451978c155631ef64a7c69547070ad7a4e134eee4598fdc402831e2a1c041"
+        },
+        {
+          "id": "negative",
+          "previous_sha256": "af0451978c155631ef64a7c69547070ad7a4e134eee4598fdc402831e2a1c041",
+          "sha256": "3c96f361d97d7024173aabb1712bdd8fe111ce80bb8b38da6892e0200f9c7377"
+        },
+        {
+          "id": "target-0",
+          "previous_sha256": "3c96f361d97d7024173aabb1712bdd8fe111ce80bb8b38da6892e0200f9c7377",
+          "sha256": "2ee4168b9e1c66863d3a6343bbea005811fded283918d3e5c04f4ff6c3ef785f"
+        },
+        {
+          "id": "target-1",
+          "previous_sha256": "2ee4168b9e1c66863d3a6343bbea005811fded283918d3e5c04f4ff6c3ef785f",
+          "sha256": "cf0307b40100e84c2d6ce57b7eaef5bc406a51b002c5b1d5248ff3f6360ab89d"
+        },
+        {
+          "id": "target-2",
+          "previous_sha256": "cf0307b40100e84c2d6ce57b7eaef5bc406a51b002c5b1d5248ff3f6360ab89d",
+          "sha256": "bcdfdf551b44c596b80afd550bd1ccd54022e54803d791fea537421cb1643330"
+        },
+        {
+          "id": "target-3",
+          "previous_sha256": "bcdfdf551b44c596b80afd550bd1ccd54022e54803d791fea537421cb1643330",
+          "sha256": "ef5697457adb88acb2c0e7a0f84dca9198a295ba1a2657b6f648c4bed83e6e7c"
+        },
+        {
+          "id": "target-4",
+          "previous_sha256": "ef5697457adb88acb2c0e7a0f84dca9198a295ba1a2657b6f648c4bed83e6e7c",
+          "sha256": "b3c36aafdae4e594cb7f230c9d935b398f4025f2583d6d78f177ced37f3f67c6"
+        },
+        {
+          "id": "target-5",
+          "previous_sha256": "b3c36aafdae4e594cb7f230c9d935b398f4025f2583d6d78f177ced37f3f67c6",
+          "sha256": "5af8295d4e9b3b13fc402e13319da26ba22d412c56c17a450d192f814d925a8d"
+        },
+        {
+          "id": "target-6",
+          "previous_sha256": "5af8295d4e9b3b13fc402e13319da26ba22d412c56c17a450d192f814d925a8d",
+          "sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751"
+        }
+      ],
+      "root_sha256": "6f3bc05804641b66134abf65c356f5c08011a3c1d7a9eda330b7d46196e82751",
+      "version": 1
+    },
+    "finished_at": "2026-10-10T15:23:17.310Z",
+    "name": "Demo C: bounded 100-case baseline",
+    "results": [
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json"
+          },
+          {
+            "passed": true,
+            "type": "json"
+          }
+        ],
+        "control_type": "positive",
+        "duration_ms": 2.042,
+        "id": "actor",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/me",
+        "reason": "Configured checks passed.",
+        "requires": [],
+        "response_sha256": "b8c5fde2e0acac9f49e5f77d907f2d6170a50f8e9a47df546c8d03f6e6aa995f",
+        "status": 200
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json"
+          }
+        ],
+        "control_type": "positive",
+        "duration_ms": 2.106,
+        "id": "owner",
+        "identity": "owner",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/invoice/A",
+        "reason": "Configured checks passed.",
+        "requires": [],
+        "response_sha256": "01b875b317da45e4b168a8d335e565b3e6e34f8fbe1979b526cf6c1f6e0f0037",
+        "status": 200
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json_absent"
+          }
+        ],
+        "control_type": "negative",
+        "duration_ms": 1.689,
+        "id": "negative",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/known-denial",
+        "reason": "Configured checks passed.",
+        "requires": [
+          "actor",
+          "owner"
+        ],
+        "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+        "status": 403
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json_absent"
+          }
+        ],
+        "control_type": "negative",
+        "duration_ms": 1.687,
+        "id": "target-0",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/invoice/A?view=0",
+        "reason": "Configured checks passed.",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+        "status": 403
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json_absent"
+          }
+        ],
+        "control_type": "negative",
+        "duration_ms": 3.918,
+        "id": "target-1",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/invoice/A?view=1",
+        "reason": "Configured checks passed.",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+        "status": 403
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json_absent"
+          }
+        ],
+        "control_type": "negative",
+        "duration_ms": 1.438,
+        "id": "target-2",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/invoice/A?view=2",
+        "reason": "Configured checks passed.",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+        "status": 403
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json_absent"
+          }
+        ],
+        "control_type": "negative",
+        "duration_ms": 1.182,
+        "id": "target-3",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/invoice/A?view=3",
+        "reason": "Configured checks passed.",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+        "status": 403
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json_absent"
+          }
+        ],
+        "control_type": "negative",
+        "duration_ms": 1.273,
+        "id": "target-4",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/invoice/A?view=4",
+        "reason": "Configured checks passed.",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+        "status": 403
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json_absent"
+          }
+        ],
+        "control_type": "negative",
+        "duration_ms": 1.018,
+        "id": "target-5",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/invoice/A?view=5",
+        "reason": "Configured checks passed.",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+        "status": 403
+      },
+      {
+        "checks": [
+          {
+            "passed": true,
+            "type": "status"
+          },
+          {
+            "passed": true,
+            "type": "json_parse"
+          },
+          {
+            "passed": true,
+            "type": "json_absent"
+          }
+        ],
+        "control_type": "negative",
+        "duration_ms": 1.857,
+        "id": "target-6",
+        "identity": "peer",
+        "method": "GET",
+        "outcome": "pass",
+        "path": "/invoice/A?view=6",
+        "reason": "Configured checks passed.",
+        "requires": [
+          "actor",
+          "owner",
+          "negative"
+        ],
+        "response_sha256": "99518fbc036e5d7937f49fc70e801711be7a08c97ffdc102ebb9f6f78403e730",
+        "status": 403
+      }
+    ],
+    "schema_version": 1,
+    "started_at": "2026-10-10T15:23:17.287Z",
+    "summary": {
+      "error": 0,
+      "fail": 0,
+      "inconclusive": 0,
+      "pass": 10,
+      "total": 10
+    },
+    "target": "http://127.0.0.1:46833",
+    "tool": {
+      "name": "AuthzLedger",
+      "version": "1.1.0.dev0"
+    }
+  },
+  "schema_id": "authzledger.execution",
+  "schema_version": 1
+}
