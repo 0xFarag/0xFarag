@@ -1,0 +1,63 @@
+{
+  "actor_identity": "peer",
+  "capture_mode": "safe_values",
+  "id": "invoice-isolation",
+  "identities": {
+    "owner": {
+      "headers": {
+        "Authorization": {
+          "env": "DEMO_OWNER"
+        }
+      }
+    },
+    "peer": {
+      "headers": {
+        "Authorization": {
+          "env": "DEMO_PEER"
+        }
+      }
+    }
+  },
+  "identity_probe": {
+    "expect": {
+      "json": {
+        "/principal": "peer",
+        "/tenant": "B"
+      },
+      "status": [
+        200
+      ]
+    },
+    "path": "/me"
+  },
+  "negative_probe": {
+    "expect": {
+      "json_absent": [
+        "/protected_marker"
+      ],
+      "status": [
+        403
+      ]
+    },
+    "path": "/known-denial"
+  },
+  "owner_identity": "owner",
+  "rule": {
+    "id": "tenant-isolation",
+    "kind": "forbid_field_equal",
+    "pointer": "/protected_marker",
+    "resource_id": "invoice-a",
+    "resource_pointer": "/id",
+    "resource_value": "invoice-a",
+    "value": "SYNTHETIC-INVOICE-A"
+  },
+  "selected_variants": [
+    {
+      "id": "peer-1",
+      "identity": "peer",
+      "path": "/invoices/a"
+    }
+  ],
+  "target": "http://127.0.0.1:44441",
+  "title": "Tenant B must not receive Tenant A invoice content"
+}

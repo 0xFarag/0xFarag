@@ -1,0 +1,47 @@
+{
+  "entries": [
+    {
+      "execution_blockers": [],
+      "gaps": [
+        "transport_header_omitted:host",
+        "missing_response",
+        "response_body_and_headers_omitted"
+      ],
+      "headers": {
+        "accept": "application/json",
+        "accept-language": "en",
+        "pragma": "no-cache"
+      },
+      "id": "import-2f25bea6436b0256dc73f5dd",
+      "method": "GET",
+      "origin": "http://127.0.0.1:44441",
+      "path": "/invoices/a",
+      "response": {
+        "body_retained": false,
+        "status": null
+      },
+      "secret_slots": [],
+      "source_assertions": [],
+      "source_refs": [
+        {
+          "entry_index": 0,
+          "location": "/items/item/0",
+          "profile": "burp-xml"
+        }
+      ]
+    }
+  ],
+  "format_profile": "burp-xml",
+  "hash_basis": "redacted-normalized-projection-v1",
+  "import_sha256": "d8b08dcc8bbb7c0837951da7fde787be604fb0fee698b5531269c171634869d4",
+  "kind": "import-batch",
+  "limitations": [
+    "Source digest binds only the redacted normalized projection, not original bytes.",
+    "Response bodies, response headers, scanner prose and credential values are not retained.",
+    "Imported responses and scanner assertions are unverified; they do not confirm findings.",
+    "All query values and JSON strings require explicit remapping; unknown headers require binding.",
+    "Path identifiers are retained unless credential-labeled or token-like; review paths before persistence.",
+    "Imported origin does not authorize execution; assessment scope and identity mapping are required."
+  ],
+  "schema_version": 1
+}

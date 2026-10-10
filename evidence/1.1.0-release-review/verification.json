@@ -1,0 +1,236 @@
+{
+  "kind": "final-development-release-review",
+  "date": "2026-10-10",
+  "timezone": "Europe/Zurich",
+  "version": "1.1.0.dev0",
+  "target_version": "1.1.0",
+  "base_commit": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+  "commit_binding": "This receipt inventories the frozen working tree. The resulting Git commit and exact-commit remote CI are recorded in PR #3; it does not claim the unmodified base passed new tests.",
+  "unit": {
+    "count": 494,
+    "seconds": 82.906,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "exit_code": 0,
+    "log": "logs/unit-final.log",
+    "sha256": "cec6bdac21e7acc2e5afcfc8f3c60b099dbc49dbca7f418ff6edca9ca66bd5c8"
+  },
+  "browser_suites_passed": 6,
+  "check_tools_passed": 5,
+  "checks": [
+    {
+      "name": "browser_acceptance-pinned",
+      "command": [
+        "node",
+        "tests/browser_acceptance.cjs"
+      ],
+      "environment_overrides": {
+        "AUTHZ_BROWSER_ARTIFACTS": "/workspace/scratch/7b68a7003223/verification/final/browser_acceptance"
+      },
+      "started_at": "2026-10-10T15:26:29.042135+00:00",
+      "seconds": 4.532,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/browser_acceptance-pinned.log",
+      "log_sha256": "3d99b5c80e609e2c46c9ade918f1e5368ec98ab93516b7810d5165a6cbac58db",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/browser_acceptance-pinned.log"
+    },
+    {
+      "name": "browser_v1-pinned",
+      "command": [
+        "node",
+        "tests/browser_v1.cjs"
+      ],
+      "environment_overrides": {
+        "AUTHZ_BROWSER_V1_ARTIFACTS": "/workspace/scratch/7b68a7003223/verification/final/browser_v1"
+      },
+      "started_at": "2026-10-10T15:26:33.574609+00:00",
+      "seconds": 5.195,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/browser_v1-pinned.log",
+      "log_sha256": "45041974879f115522a0e6e37aa4d4ede6bd77dca3f2f926824021c78090f95c",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/browser_v1-pinned.log"
+    },
+    {
+      "name": "browser_comparison-pinned",
+      "command": [
+        "node",
+        "tests/browser_comparison.cjs"
+      ],
+      "environment_overrides": {
+        "AUTHZ_BROWSER_COMPARISON_ARTIFACTS": "/workspace/scratch/7b68a7003223/verification/final/browser_comparison"
+      },
+      "started_at": "2026-10-10T15:26:38.769468+00:00",
+      "seconds": 1.891,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/browser_comparison-pinned.log",
+      "log_sha256": "325d94b50e55ef31a59989dde175f6406ea01b2711c8d26c8da89916837a76f6",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/browser_comparison-pinned.log"
+    },
+    {
+      "name": "browser_assessments-pinned",
+      "command": [
+        "node",
+        "tests/browser_assessments.cjs"
+      ],
+      "environment_overrides": {
+        "AUTHZ_BROWSER_ASSESSMENT_ARTIFACTS": "/workspace/scratch/7b68a7003223/verification/final/browser_assessments"
+      },
+      "started_at": "2026-10-10T15:26:40.661147+00:00",
+      "seconds": 9.715,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/browser_assessments-pinned.log",
+      "log_sha256": "a56469c6258fd68ac39cc7329f5827aa16c4847611a650a318aa934e9f37b73c",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/browser_assessments-pinned.log"
+    },
+    {
+      "name": "browser_assessment_security-pinned",
+      "command": [
+        "node",
+        "tests/browser_assessment_security.cjs"
+      ],
+      "environment_overrides": {
+        "AUTHZ_BROWSER_SECURITY_ARTIFACTS": "/workspace/scratch/7b68a7003223/verification/final/browser_assessment_security"
+      },
+      "started_at": "2026-10-10T15:26:50.376942+00:00",
+      "seconds": 2.366,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/browser_assessment_security-pinned.log",
+      "log_sha256": "33bc84b4cea81f1fc8fe71c08a1db424570d688adff022e0ca379885f21ed49f",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/browser_assessment_security-pinned.log"
+    },
+    {
+      "name": "browser_retest_freshness-pinned",
+      "command": [
+        "node",
+        "tests/browser_retest_freshness.cjs"
+      ],
+      "environment_overrides": {
+        "AUTHZ_BROWSER_FRESHNESS_ARTIFACTS": "/workspace/scratch/7b68a7003223/verification/final/browser_retest_freshness"
+      },
+      "started_at": "2026-10-10T15:26:52.742810+00:00",
+      "seconds": 1.626,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/browser_retest_freshness-pinned.log",
+      "log_sha256": "60fcbd74af0d5cb0603720140019cadd65e0d0c2bc6ebf2d691939c5235e1171",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/browser_retest_freshness-pinned.log"
+    },
+    {
+      "name": "release_check",
+      "command": [
+        "python",
+        "tools/release_check.py",
+        "--out",
+        "/workspace/scratch/7b68a7003223/verification/final/release_check"
+      ],
+      "environment_overrides": {},
+      "started_at": "2026-10-10T15:26:29.042719+00:00",
+      "seconds": 2.081,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/release_check.log",
+      "log_sha256": "5e2ca5d5e9035abd67d458c01a9f64dab01330adc3267afbde4f218a87761867",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/release_check.log"
+    },
+    {
+      "name": "check_comparison",
+      "command": [
+        "python",
+        "tools/check_comparison.py",
+        "--out",
+        "/workspace/scratch/7b68a7003223/verification/final/check_comparison"
+      ],
+      "environment_overrides": {},
+      "started_at": "2026-10-10T15:26:31.124562+00:00",
+      "seconds": 0.331,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/check_comparison.log",
+      "log_sha256": "7c6374240257003fc2c8fbc59a544febfac87eaa2b722a74d2d10b3850053ab7",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/check_comparison.log"
+    },
+    {
+      "name": "check_assessment",
+      "command": [
+        "python",
+        "tools/check_assessment.py",
+        "--out",
+        "/workspace/scratch/7b68a7003223/verification/final/check_assessment"
+      ],
+      "environment_overrides": {},
+      "started_at": "2026-10-10T15:26:31.456649+00:00",
+      "seconds": 1.237,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/check_assessment.log",
+      "log_sha256": "e73a12740c4c7ec076a093afcf7a630051158aca92a62d7aebf256d8e61ab2d3",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/check_assessment.log"
+    },
+    {
+      "name": "check_workflows110",
+      "command": [
+        "python",
+        "tools/check_workflows110.py",
+        "--out",
+        "/workspace/scratch/7b68a7003223/verification/final/check_workflows110"
+      ],
+      "environment_overrides": {},
+      "started_at": "2026-10-10T15:26:32.693902+00:00",
+      "seconds": 0.821,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/check_workflows110.log",
+      "log_sha256": "4cab6b353ec0aeeb6baab9a276a738f3b7198d590cd4c40530a343e6119a41e3",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/check_workflows110.log"
+    },
+    {
+      "name": "check_selective100",
+      "command": [
+        "python",
+        "tools/check_selective100.py",
+        "--out",
+        "/workspace/scratch/7b68a7003223/verification/final/check_selective100"
+      ],
+      "environment_overrides": {},
+      "started_at": "2026-10-10T15:26:33.514808+00:00",
+      "seconds": 4.428,
+      "exit_code": 0,
+      "log": "/workspace/scratch/7b68a7003223/verification/final/check_selective100.log",
+      "log_sha256": "b8beb091fdda5e21729f9c4e730e82088ab49fda7c005b3d30f064ddcde6a319",
+      "initial_head": "0cd203b71e28a408fcbdc48c995c5f5a36aebbca",
+      "included_log": "logs/check_selective100.log"
+    }
+  ],
+  "runtime": {
+    "python": "3.12.14",
+    "platform": "Linux x86_64",
+    "playwright": "1.64.0",
+    "chromium": "153.0.8010.0"
+  },
+  "release_gate": {
+    "exit_code": 2,
+    "result": "blocked",
+    "partial_scenarios": [
+      "F01-01"
+    ],
+    "reason": "Genuine contract-compatible Burp export missing; producer deliberately remains development.",
+    "log": "logs/release-gate.log"
+  },
+  "acceptance": {
+    "verified": 87,
+    "total": 88,
+    "genuine_zap_component": "verified",
+    "genuine_har_component": "verified",
+    "genuine_burp_component": "open"
+  },
+  "stable_evidence_unchanged": true,
+  "source_inventory_sha256": "abbe2a76f787889112ff14e2912881a637f8be211acc88c5480bdbe9b1e7e608",
+  "installed_wheel_receipt": "installed-wheel.json",
+  "publication": "No stable tag, release or social launch is implied by this receipt."
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hmac
 import hashlib
+import copy
 import json
 import os
 import secrets
@@ -116,7 +117,18 @@ class StudioServer(ThreadingHTTPServer):
         self.jobs = {}
         self.reviews = {}
         self.review_settings = {}
+        self.retest_reviews = {}
         self.graph_snapshots = {}
+        self.assessment_reviews = {}
+        self.assessment_executions = {}
+        self.assessment_snapshots = {}
+        self.assessment_imports = {}
+        self.assessment_traces = {}
+        self.session_key_directory = None
+        self.workflow_history_directory = None
+        self.session_workflow_history = None
+        from .credentials import CredentialResolver
+        self.credential_resolver = CredentialResolver()
         self.history = None
         if history_path is not None:
             from .history import HistoryStore
@@ -218,7 +230,7 @@ class StudioServer(ThreadingHTTPServer):
             raise ContractError("Build the authorization graph again; its retained snapshot is unavailable.")
         return record
 
-    def start_job(self, kind, contract=None, *, policy=None, assurance=None, baseline=None):
+    def start_job(self, kind, contract=None, *, policy=None, assurance=None, baseline=None, selected_ids=None):
         with self.lock:
             if self.active:
                 raise ContractError("A job is already running. Wait for its result.")
@@ -265,7 +277,11 @@ class StudioServer(ThreadingHTTPServer):
                     from .intelligence import build_graph, differential_graphs
                     from .assurance import assessment_status, history_snapshot
                     from .engine import _credentials
+                    from .execution import ExecutionContext
                     cycles = (assurance or {}).get("cycles", 1)
+                    scoped_origins = {"application": [contract["target"]], "pdp": [policy["endpoint"]] if policy and policy["engine"] == "opa" else []}
+                    context = ExecutionContext(len(contract["cases"]) * cycles * (2 if scoped_origins["pdp"] else 1),
+                        scoped_origins, contract["limits"]["timeout_seconds"], contract["limits"]["concurrency"], stop_event=cancel)
                     interval = (assurance or {}).get("interval_seconds", 1)
                     records = []
                     previous = baseline
@@ -281,18 +297,25 @@ class StudioServer(ThreadingHTTPServer):
                                 tail = None
                         if previous is None:
                             previous = retained
-                        _credentials(contract)
+                        self.credential_resolver.resolve_contract(contract)
                         from .policy import evaluate_policy
-                        evaluated = evaluate_policy(contract, policy) if policy is not None else None
-                        report = run(contract)
+                        evaluated = evaluate_policy(contract, policy, context=context, credential_resolver=self.credential_resolver) if policy is not None else None
+                        report = run(contract, context=context, credential_resolver=self.credential_resolver)
                         graph = build_graph(contract, report, evaluated)
-                        comparison = differential_graphs(previous["graph"], graph) if previous else None
+                        # A strict subset is not graph removal. Its retained full
+                        # source is compared by ComparisonEnvelope instead.
+                        comparison = differential_graphs(previous["graph"], graph) if previous and selected_ids is None else None
                         status, exit_code, stop_reason = assessment_status(report, graph, comparison)
                         current = self.record_run(contract, report, graph, previous_sha256=tail)
                         result = {"report": report, "graph": graph, "history": current,
                                   "graph_comparison": comparison, "cycles_completed": cycle + 1,
                                   "cycles_requested": cycles, "assurance_status": status,
                                   "exit_code": exit_code, "stopped_reason": stop_reason}
+                        if baseline is not None:
+                            from .comparison import create_comparison
+                            result["comparison_envelope"] = create_comparison(
+                                baseline["contract"], baseline["report"], report, selected_ids)
+                            result["baseline"] = baseline["report"]
                         records.append({"id": current.get("id", current.get("run_id")),
                                         "finished_at": report["finished_at"], "summary": report["summary"]})
                         previous = {"graph": graph}
@@ -321,11 +344,128 @@ class StudioServer(ThreadingHTTPServer):
         threading.Thread(target=execute, daemon=True, name="authzledger-job").start()
         return {"id": job_id, "state": "running"}
 
+    def retain_assessment(self, store, value):
+        identifier = secrets.token_hex(16)
+        with self.lock:
+            while len(store) >= 32:
+                del store[next(iter(store))]
+            store[identifier] = copy.deepcopy(value)
+        return identifier
+
+    def assessment_review(self, kind, plan, *, baseline=None, selected_ids=None):
+        review = secrets.token_urlsafe(24)
+        with self.lock:
+            self.assessment_reviews = {key: value for key, value in self.assessment_reviews.items()
+                                       if value["expires"] > time.monotonic()}
+            while len(self.assessment_reviews) >= 32:
+                del self.assessment_reviews[next(iter(self.assessment_reviews))]
+            self.assessment_reviews[review] = {"kind": kind, "plan": copy.deepcopy(plan),
+                "expires": time.monotonic() + 600, "credentials": self.credential_resolver.metadata(),
+                "baseline": copy.deepcopy(baseline), "selected_ids": selected_ids, "job": None}
+        return review
+
+    def workflow_history(self):
+        """Use configured durable history, or explicitly session-scoped history."""
+        if self.history is not None:
+            return self.history
+        with self.history_lock:
+            if self.session_workflow_history is None:
+                from .history import HistoryStore
+                self.workflow_history_directory = tempfile.TemporaryDirectory(prefix="authzledger-workflow-history-")
+                self.session_workflow_history = HistoryStore(Path(self.workflow_history_directory.name) / "history.sqlite3")
+            return self.session_workflow_history
+
+    def start_assessment_job(self, review):
+        with self.lock:
+            retained = self.assessment_reviews.get(review)
+            if not retained or retained["expires"] <= time.monotonic():
+                raise ContractError("Preview this assessment plan again. Its authorization expired.")
+            if retained["job"]:
+                if retained["job"] not in self.jobs:
+                    raise ContractError("This completed job expired. Review a new plan before another execution.")
+                return {"id": retained["job"], "state": self.jobs[retained["job"]]["state"]}
+            if retained["credentials"] != self.credential_resolver.metadata():
+                raise ContractError("Credential bindings changed. Review the exact plan again.")
+            if self.active:
+                raise ContractError("A job is already running. Reconnect to it before starting another.")
+            self.active = True
+            job_id = secrets.token_hex(12)
+            retained["job"] = job_id
+            while len(self.jobs) >= 8:
+                del self.jobs[next(iter(self.jobs))]
+            self.jobs[job_id] = {"id": job_id, "kind": retained["kind"], "state": "running"}
+            cancel = threading.Event()
+            self.cancellations[job_id] = cancel
+        retained = copy.deepcopy(retained)
+
+        def execute():
+            try:
+                from .execution import ExecutionContext
+                selected_plan = retained["plan"]
+                kind = retained["kind"]
+                if kind == "experiment":
+                    from .experiments import execute_experiment
+                    contract = selected_plan["contract"]
+                    context = ExecutionContext(len(contract["cases"]), [contract["target"]],
+                        contract["limits"]["timeout_seconds"], contract["limits"]["concurrency"], stop_event=cancel)
+                    execution = execute_experiment(selected_plan, context=context, credential_resolver=self.credential_resolver)
+                    execution_id = self.retain_assessment(self.assessment_executions, execution)
+                    report, graph = execution["report"], execution["graph"]
+                    record = self.record_run(execution["contract"], report, graph)
+                    result = {"execution": execution, "execution_id": execution_id, "history": record}
+                    if retained["baseline"] is not None:
+                        from .experiments import compare_executions
+                        result["finding_comparison"] = compare_executions(retained["baseline"], execution)
+                        result["comparison_envelope"] = result["finding_comparison"]["comparison_envelope"]
+                elif kind == "workflow":
+                    from .workflows import execute_workflow
+                    contract = selected_plan["spec"]["contract"]
+                    context = ExecutionContext(selected_plan["request_upper_bound"], [contract["target"]],
+                        contract["limits"]["timeout_seconds"], 1, cleanup_reserve=selected_plan["cleanup_reserve"],
+                        allow_cleanup_after_cancel=True, stop_event=cancel)
+                    execution = execute_workflow(selected_plan, context=context, credential_resolver=self.credential_resolver)
+                    trace_id = self.retain_assessment(self.assessment_traces, execution)
+                    result = {"trace": execution, "trace_id": trace_id}
+                elif kind == "workflow-assurance":
+                    from .workflow_assurance import run_workflow_assurance
+                    execution = run_workflow_assurance(selected_plan, history=self.workflow_history(),
+                        credential_resolver=self.credential_resolver, stop_event=cancel)
+                    trace_id = self.retain_assessment(self.assessment_traces, execution)
+                    result = {"trace": execution, "trace_id": trace_id,
+                              "history_storage": "persistent" if self.history is not None else "session-only"}
+                elif kind == "reduction":
+                    from .minimize import execute_reduction
+                    contract = selected_plan["original_execution"]["contract"]
+                    context = ExecutionContext(selected_plan["max_requests"], [contract["target"]],
+                        contract["limits"]["timeout_seconds"], 1, cleanup_reserve=selected_plan.get("cleanup_reserve", 0),
+                        allow_cleanup_after_cancel=True, stop_event=cancel)
+                    execution = execute_reduction(selected_plan, context=context, credential_resolver=self.credential_resolver)
+                    trace_id = self.retain_assessment(self.assessment_traces, execution)
+                    result = {"trace": execution, "trace_id": trace_id}
+                else:
+                    raise ContractError("Unknown assessment operation.")
+                with self.lock:
+                    self.jobs[job_id].update(state="complete", cancelled=cancel.is_set(), **result)
+            except Exception:
+                with self.lock:
+                    self.jobs[job_id].update(state="error", error="Execution failed. Inspect the plan, control prerequisites and credential bindings; no finding was confirmed.")
+            finally:
+                with self.lock:
+                    self.active = False
+                    self.cancellations.pop(job_id, None)
+        threading.Thread(target=execute, daemon=True, name="authzledger-assessment").start()
+        return {"id": job_id, "state": "running"}
+
     def server_close(self):
         self.stopping.set()
         with self.lock:
             for cancel in self.cancellations.values():
                 cancel.set()
+        self.credential_resolver.clear()
+        if self.session_key_directory is not None:
+            self.session_key_directory.cleanup()
+        if self.workflow_history_directory is not None:
+            self.workflow_history_directory.cleanup()
         super().server_close()
 
 
@@ -382,6 +522,8 @@ class StudioHandler(BaseHTTPRequestHandler):
         assets = {"/": ("web/index.html", "text/html; charset=utf-8"),
                   "/app.js": ("web/app.js", "text/javascript; charset=utf-8"),
                   "/style.css": ("web/style.css", "text/css; charset=utf-8"),
+                  "/assessment.js": ("web/assessment.js", "text/javascript; charset=utf-8"),
+                  "/assessment.css": ("web/assessment.css", "text/css; charset=utf-8"),
                   "/logo.png": ("brand_logo.png", "image/png")}
         if self.path in assets:
             resource, mime = assets[self.path]
@@ -393,7 +535,9 @@ class StudioHandler(BaseHTTPRequestHandler):
                                "local_ai": self.server.reasoning_config is not None,
                                "server_policy_available": self.server.policy_config is not None,
                                "server_policy_engine": self.server.policy_config["engine"] if self.server.policy_config else None,
-                               "assurance": {"max_cycles": 20, "max_total_requests": 1000}})
+                               "assurance": {"max_cycles": 20, "max_total_requests": 1000},
+                               "assessment_jobs": [{"id": job["id"], "kind": job["kind"], "state": job["state"]}
+                                   for job in list(self.server.jobs.values()) if job["kind"] in {"experiment", "workflow", "workflow-assurance", "reduction"}]})
         elif self.path == "/api/history":
             try:
                 self.respond(200, {"runs": self.server.list_runs(),
@@ -424,6 +568,191 @@ class StudioHandler(BaseHTTPRequestHandler):
         else:
             self.respond(404, {"error": "Unknown route."})
 
+    def assessment_route(self, body):
+        route = self.path.removeprefix("/api/assessment/")
+        fields = {
+            "import": {"text", "profile"}, "compile": {"spec", "import_id", "entry_index", "bindings", "mappings"},
+            "plan": {"spec", "import_id", "entry_index", "bindings", "mappings"},
+            "run": {"review", "authorized"}, "credentials": {"env", "value", "identity", "target_origin"},
+            "retest": {"execution_id", "selected_ids"}, "workflow/plan": {"spec"}, "workflow-assurance/plan": {"spec"},
+            "reduction/units": {"execution_id"}, "reduction/plan": {"execution_id", "units", "max_requests"},
+            "freeze": {"execution_ids", "comparisons", "metadata", "trace_ids"},
+            "inspect": {"execution_id", "finding_id"}, "impact": {"execution_id", "changes", "impact_map"},
+            "recover": {"job_id"}, "catalog": set(), "export": {"assessment_id", "format"}, "proof": {"assessment_id"}, "signing": {"create_session_key"}}
+        if route not in fields or set(body) - fields[route]:
+            raise ContractError("Unsupported assessment operation or fields.")
+        if route == "catalog":
+            from .assessment_reports import reporting_catalog
+            self.respond(200, reporting_catalog())
+            return
+        if route == "credentials":
+            with self.server.lock:
+                if self.server.active:
+                    raise ContractError("Credentials cannot change during execution.")
+                result = self.server.credential_resolver.bind_session(body.get("env"), body.get("value"),
+                    identity=body.get("identity"), target_origin=body.get("target_origin"))
+            self.respond(200, {"credential": result})
+            return
+        if route == "import":
+            from .imports import parse_import
+            source = body.get("text")
+            if not isinstance(source, str):
+                raise ContractError("Choose a supported request export.")
+            imported = parse_import(source.encode("utf-8"), body.get("profile"))
+            identifier = self.server.retain_assessment(self.server.assessment_imports, imported)
+            result = {"import": imported, "import_id": identifier}
+        elif route in {"compile", "plan"}:
+            from .experiments import compile_experiment, compile_imported_experiment
+            if body.get("import_id") is not None:
+                imported = self.server.assessment_imports.get(body["import_id"])
+                index = body.get("entry_index", 0)
+                if imported is None or type(index) is not int or not 0 <= index < len(imported["entries"]):
+                    raise ContractError("Select a retained imported request.")
+                entry = imported["entries"][index]
+                if body.get("mappings"):
+                    from .imports import resolve_imported_entry
+                    entry = resolve_imported_entry(entry, body["mappings"])
+                compiled = compile_imported_experiment(entry, body.get("bindings"))
+            else:
+                compiled = compile_experiment(body.get("spec"))
+            result = {"plan": compiled}
+            if route == "plan":
+                result["review"] = self.server.assessment_review("experiment", compiled)
+        elif route == "run":
+            if body.get("authorized") is not True or not isinstance(body.get("review"), str):
+                raise ContractError("Confirm authorization for the reviewed target before execution.")
+            result = self.server.start_assessment_job(body["review"])
+        elif route == "recover":
+            with self.server.lock:
+                job = self.server.jobs.get(body.get("job_id"))
+                if job is None or job["kind"] not in {"experiment", "workflow", "workflow-assurance", "reduction"}:
+                    raise ContractError("This retained assessment job is unavailable.")
+                result = {"job": {key: job[key] for key in ("id", "kind", "state")}, "baseline_execution": None}
+                comparison = job.get("finding_comparison")
+                if comparison is not None:
+                    for identifier, execution in self.server.assessment_executions.items():
+                        if execution["execution_digest"] == comparison["baseline_execution_digest"]:
+                            result["baseline_execution"] = {"id": identifier, "value": copy.deepcopy(execution)}
+                            break
+        elif route == "inspect":
+            from .assessments import inspect_finding
+            execution = self.server.assessment_executions.get(body.get("execution_id"))
+            if execution is None:
+                raise ContractError("Select an available execution.")
+            result = inspect_finding(execution, body.get("finding_id"))
+        elif route == "impact":
+            from .assessments import plan_impacted_retest
+            from .experiments import plan_experiment_retest
+            execution = self.server.assessment_executions.get(body.get("execution_id"))
+            if execution is None:
+                raise ContractError("Select an available baseline execution.")
+            impact = plan_impacted_retest(execution["contract"], body.get("changes"), body.get("impact_map"))
+            selected = [variant["id"] for variant in execution["plan"]["variants"] if variant["case_id"] in impact["selected_ids"]]
+            result = {"impact": impact, "plan": None, "review": None}
+            if selected:
+                compiled = plan_experiment_retest(execution, selected)
+                result.update(plan=compiled, review=self.server.assessment_review("experiment", compiled,
+                    baseline=execution, selected_ids=[variant["case_id"] for variant in compiled["variants"]]))
+        elif route == "retest":
+            from .assurance import retest_plan
+            from .experiments import compile_experiment
+            execution = self.server.assessment_executions.get(body.get("execution_id"))
+            if execution is None:
+                raise ContractError("Select an available baseline execution.")
+            selection = retest_plan(execution["contract"], body.get("selected_ids"), allow_mutations=True)
+            spec = copy.deepcopy(execution["plan"]["spec"])
+            spec["contract"] = selection["contract"]
+            spec["variants"] = [variant for variant in spec["variants"] if variant["case_id"] in selection["selected_ids"]]
+            if not spec["variants"]:
+                raise ContractError("Select at least one experiment variant for retest.")
+            compiled = compile_experiment(spec)
+            result = {"plan": compiled, "retest": {key: value for key, value in selection.items() if key != "contract"},
+                "review": self.server.assessment_review("experiment", compiled, baseline=execution,
+                    selected_ids=selection["selected_ids"])}
+        elif route == "workflow/plan":
+            from .workflows import compile_workflow
+            compiled = compile_workflow(body.get("spec"))
+            result = {"plan": compiled, "review": self.server.assessment_review("workflow", compiled)}
+        elif route == "workflow-assurance/plan":
+            from .workflow_assurance import compile_workflow_assurance
+            compiled = compile_workflow_assurance(body.get("spec"))
+            result = {"plan": compiled, "review": self.server.assessment_review("workflow-assurance", compiled),
+                      "history_storage": "persistent" if self.server.history is not None else "session-only"}
+        elif route in {"reduction/units", "reduction/plan"}:
+            from .minimize import removable_units, plan_reduction
+            execution = self.server.assessment_executions.get(body.get("execution_id"))
+            if execution is None:
+                raise ContractError("Select an available confirmed execution.")
+            if route == "reduction/units":
+                result = {"units": removable_units(execution)}
+            else:
+                compiled = plan_reduction(execution, body.get("units"), max_requests=body.get("max_requests", 40))
+                result = {"plan": compiled, "review": self.server.assessment_review("reduction", compiled)}
+        elif route == "freeze":
+            from .assessment_reports import freeze_assessment
+            ids = body.get("execution_ids")
+            if not isinstance(ids, list) or len(ids) > 32 or len(set(ids)) != len(ids):
+                raise ContractError("Choose distinct retained execution records.")
+            executions = [self.server.assessment_executions.get(identifier) for identifier in ids]
+            if any(item is None for item in executions):
+                raise ContractError("An execution expired. Execute or import verified evidence again.")
+            trace_ids = body.get("trace_ids", [])
+            if not isinstance(trace_ids, list) or len(trace_ids) > 32 or any(identifier not in self.server.assessment_traces for identifier in trace_ids):
+                raise ContractError("Choose available workflow or reduction traces.")
+            traces = [self.server.assessment_traces[identifier] for identifier in trace_ids]
+            snapshot = freeze_assessment(executions, body.get("metadata"), body.get("comparisons"),
+                workflows=[trace for trace in traces if trace["kind"] == "workflow-trace"],
+                reductions=[trace for trace in traces if trace["kind"] == "reduction-trace"],
+                assurances=[trace for trace in traces if trace["kind"] == "workflow-assurance-result"])
+            identifier = self.server.retain_assessment(self.server.assessment_snapshots, snapshot)
+            result = {"assessment": snapshot, "assessment_id": identifier}
+        elif route in {"export", "proof"}:
+            snapshot = self.server.assessment_snapshots.get(body.get("assessment_id"))
+            if snapshot is None:
+                raise ContractError("Freeze the assessment before exporting its reports and proof.")
+            from .assessment_reports import render_assessment_json, render_assessment_html, render_assessment_pdf, create_assessment_bundle
+            if route == "export":
+                renderers = {"json": (render_assessment_json, "application/json"), "html": (render_assessment_html, "text/html; charset=utf-8"),
+                    "pdf": (render_assessment_pdf, "application/pdf")}
+                kind = body.get("format")
+                if kind not in renderers:
+                    raise ContractError("Choose JSON, HTML or PDF.")
+                renderer, mime = renderers[kind]
+                self.respond(200, renderer(snapshot), mime, "authzledger-assessment." + kind)
+            else:
+                if not self.server.signing_key or not self.server.public_key:
+                    raise ContractError("Create a local session signing key or start Studio with your signing key pair.")
+                from .signing import verify_bundle
+                with tempfile.TemporaryDirectory(prefix="authzledger-assessment-proof-") as directory:
+                    folder = Path(directory)
+                    bundle = folder / "proof"
+                    create_assessment_bundle(snapshot, bundle, self.server.signing_key)
+                    if verify_bundle(bundle, self.server.public_key):
+                        raise ContractError("Proof validation failed. No package was exported.")
+                    archive = folder / "authzledger-assessment-proof.zip"
+                    with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as zipped:
+                        for item in sorted(bundle.rglob("*")):
+                            if item.is_file():
+                                zipped.write(item, str(item.relative_to(bundle)))
+                    self.respond(200, archive.read_bytes(), "application/zip", archive.name)
+            return
+        elif route == "signing":
+            if body.get("create_session_key") is not True:
+                raise ContractError("Explicitly request a session signing key.")
+            with self.server.lock:
+                if not self.server.signing_key and not self.server.public_key:
+                    from .signing import generate_keypair
+                    self.server.session_key_directory = tempfile.TemporaryDirectory(prefix="authzledger-session-key-")
+                    folder = Path(self.server.session_key_directory.name)
+                    private, public = folder / "private.pem", folder / "public.pem"
+                    generate_keypair(private, public)
+                    self.server.signing_key, self.server.public_key = private, public
+                if not self.server.signing_key or not self.server.public_key:
+                    raise ContractError("Configure a complete signing key pair before opening Studio.")
+            result = {"signed_proof": True, "key_scope": "session" if self.server.session_key_directory else "configured",
+                "public_key": self.server.public_key.read_text("ascii"), "message": "The private key stays in the local server. Session keys are removed when Studio closes."}
+        self.respond(200, result)
+
     def do_POST(self):
         if not self.permitted(api=True, post=True):
             return
@@ -444,6 +773,9 @@ class StudioHandler(BaseHTTPRequestHandler):
             allow = body.get("allow_mutations", False)
             if type(allow) is not bool:
                 raise ValueError("allow_mutations must be boolean")
+            if self.path.startswith("/api/assessment/"):
+                self.assessment_route(body)
+                return
             if self.path == "/api/parse":
                 source = body.get("text")
                 if not isinstance(source, str):
@@ -497,11 +829,30 @@ class StudioHandler(BaseHTTPRequestHandler):
                 if not isinstance(body.get("before"), dict) or not isinstance(body.get("after"), dict):
                     raise ContractError("Two verified graph JSON objects are required.")
                 result = {"comparison": differential_graphs(body["before"], body["after"])}
-            elif self.path == "/api/plan":
-                contract = studio_contract(body.get("contract"), allow)
+            elif self.path in {"/api/plan", "/api/retest/plan"}:
+                retained = None
+                selection = None
+                if self.path == "/api/retest/plan":
+                    if set(body) - {"baseline_id", "selected_ids", "allow_mutations", "policy", "use_server_policy", "assurance"}:
+                        raise ContractError("Retest previews use only the retained source and explicit case selection.")
+                    from .assurance import retest_plan
+                    from .comparison import create_comparison
+                    baseline_id = history_identifier(body.get("baseline_id"))
+                    retained = self.server.get_run(baseline_id)
+                    if retained is None:
+                        raise ContractError("Select an existing retained baseline.")
+                    # This validates source binding and supported semantics
+                    # before any application or remote policy request.
+                    create_comparison(retained["contract"], retained["report"], retained["report"])
+                    selection = retest_plan(retained["contract"], body.get("selected_ids"), allow_mutations=allow)
+                    contract = selection["contract"]
+                else:
+                    contract = studio_contract(body.get("contract"), allow)
                 config = self.server.resolve_policy(body)
                 request_count = len(contract["cases"]) * (2 if config and config["engine"] == "opa" else 1)
                 settings = assurance_settings(body.get("assurance"), request_count)
+                if retained is not None and settings["cycles"] != 1:
+                    raise ContractError("A source-bound selective retest executes exactly one reviewed cycle.")
                 review = secrets.token_urlsafe(24)
                 with self.server.lock:
                     self.server.reviews = {key: value for key, value in self.server.reviews.items() if value[2] > time.monotonic()}
@@ -509,13 +860,26 @@ class StudioHandler(BaseHTTPRequestHandler):
                                                   if key in self.server.reviews}
                     if len(self.server.reviews) >= 16:
                         del self.server.reviews[next(iter(self.server.reviews))]
+                    self.server.retest_reviews = {key: value for key, value in self.server.retest_reviews.items()
+                                                  if key in self.server.reviews}
                     self.server.reviews[review] = (contract_digest(contract), allow, time.monotonic() + 600)
                     self.server.review_settings[review] = settings_digest(config, settings)
+                    if retained is not None:
+                        self.server.retest_reviews[review] = {"baseline_id": baseline_id,
+                            "baseline": copy.deepcopy(retained), "contract": copy.deepcopy(contract),
+                            "selected_ids": selection["selected_ids"]}
                 environment = sorted({v["env"] for i in contract["identities"].values() for v in i["headers"].values() if isinstance(v, dict)})
                 result = {"plan": plan(contract), "review": review,
                           "assurance": {**settings, "maximum_requests": request_count * settings["cycles"],
                                         "policy_engine": config["engine"] if config else None},
                           "credentials": [{"env": name, "present": bool(os.environ.get(name))} for name in environment]}
+                if selection is not None:
+                    result["retest"] = {"baseline_id": baseline_id, "contract": contract,
+                        "source_contract_sha256": selection["source_contract_sha256"],
+                        "baseline_root_sha256": retained["report"]["evidence"]["root_sha256"],
+                        "selected_ids": selection["selected_ids"], "dependency_ids": selection["dependency_ids"],
+                        "not_retested_ids": [case["id"] for case in retained["contract"]["cases"]
+                                              if case["id"] not in {item["id"] for item in contract["cases"]}]}
             elif self.path in {"/api/run", "/api/retest", "/api/assurance"}:
                 contract = studio_contract(body.get("contract"), allow)
                 config = self.server.resolve_policy(body)
@@ -524,39 +888,82 @@ class StudioHandler(BaseHTTPRequestHandler):
                 with self.server.lock:
                     reviewed = self.server.reviews.get(str(body.get("review", "")))
                     reviewed_settings = self.server.review_settings.get(str(body.get("review", "")))
+                    retest_review = self.server.retest_reviews.get(str(body.get("review", "")))
                 if (not reviewed or reviewed[:2] != (contract_digest(contract), allow)
                         or reviewed[2] <= time.monotonic() or reviewed_settings != settings_digest(config, settings)):
                     raise ContractError("Preview this exact contract before running it. Plans expire after ten minutes.")
                 if body.get("authorized") is not True:
                     raise ContractError("Confirm authorization for the displayed target before execution.")
                 baseline = None
+                selected_ids = None
+                if retest_review is not None and self.path != "/api/retest":
+                    raise ContractError("This review is bound to a retained-baseline retest.")
                 if self.path == "/api/retest":
+                    from .comparison import create_comparison
                     run_id = history_identifier(body.get("baseline_id"))
-                    baseline = self.server.get_run(run_id)
+                    if retest_review is not None:
+                        if (run_id != retest_review["baseline_id"]
+                                or body.get("selected_ids") != retest_review["selected_ids"]):
+                            raise ContractError("Preview this exact baseline and case selection again.")
+                        baseline = retest_review["baseline"]
+                        selected_ids = retest_review["selected_ids"]
+                    else:
+                        if body.get("selected_ids") is not None:
+                            raise ContractError("Preview a selective retest before executing selected cases.")
+                        baseline = self.server.get_run(run_id)
                     if not baseline or baseline["contract"]["target"] != contract["target"]:
                         raise ContractError("Retests require an existing baseline for the exact target origin.")
+                    if retest_review is None and contract_digest(baseline["contract"]) != contract_digest(contract):
+                        raise ContractError("A full retest must preserve the retained source contract. Use the selective retest preview.")
+                    create_comparison(baseline["contract"], baseline["report"], baseline["report"])
                 kind = "assurance" if self.path == "/api/assurance" else "retest" if baseline else "run"
-                result = self.server.start_job(kind, contract, policy=config, assurance=settings, baseline=baseline)
+                if retest_review is not None:
+                    with self.server.lock:
+                        # Claim before dispatch. Two requests can have read the
+                        # same valid review above while the first fast job has
+                        # already finished. The retained object identity makes
+                        # the authorization single-use across that race.
+                        if (self.server.retest_reviews.get(body["review"]) is not retest_review
+                                or self.server.reviews.get(body["review"]) != reviewed
+                                or reviewed[2] <= time.monotonic()):
+                            raise ContractError("This retest review was already consumed or expired. Preview again.")
+                        self.server.reviews.pop(body["review"], None)
+                        self.server.review_settings.pop(body["review"], None)
+                        self.server.retest_reviews.pop(body["review"], None)
+                # A concurrently started job can still reject dispatch. A
+                # consumed retest review is deliberately never restored.
+                result = self.server.start_job(kind, contract, policy=config, assurance=settings, baseline=baseline,
+                                               selected_ids=selected_ids)
             elif self.path == "/api/cancel":
                 with self.server.lock:
                     cancel = self.server.cancellations.get(body.get("id"))
                     if cancel is None:
                         raise ContractError("This job is not active.")
                     cancel.set()
-                result = {"state": "cancelling", "message": "The current bounded request completes before stopping."}
+                result = {"state": "cancelling", "message": "Cancellation prevents further ordinary dispatches. In-flight requests finish within their timeout; only reviewed cleanup may follow."}
             elif self.path == "/api/demo":
                 result = self.server.start_job("demo")
             elif self.path == "/api/benchmark":
                 result = self.server.start_job("benchmark")
             elif self.path == "/api/compare":
                 result = {"comparison": compare_reports(body.get("baseline"), body.get("current"))}
+            elif self.path == "/api/comparison":
+                from .comparison import create_comparison
+                result = {"comparison_envelope": create_comparison(body.get("source_contract"),
+                    body.get("baseline_report"), body.get("current_report"), body.get("selected_ids"))}
+            elif self.path == "/api/comparison/verify":
+                from .comparison import verify_comparison
+                envelope = body.get("comparison_envelope")
+                if verify_comparison(envelope):
+                    raise ContractError("Comparison integrity and source binding validation failed.")
+                result = {"comparison_envelope": envelope}
             elif self.path == "/api/verify":
                 report = body.get("report")
                 if not isinstance(report, dict) or verify_report(report):
                     raise ValueError("Report integrity validation failed")
                 result = {"report": report}
             elif self.path == "/api/proof":
-                if set(body) - {"report", "contract", "policy", "allow_mutations", "history_id", "snapshot_id", "use_server_policy"}:
+                if set(body) - {"report", "contract", "policy", "allow_mutations", "history_id", "snapshot_id", "use_server_policy", "comparison_envelope"}:
                     raise ContractError("Signing keys and filesystem paths cannot be supplied through the browser.")
                 if not self.server.signing_key or not self.server.public_key:
                     raise ContractError("Start Studio with --signing-key and --public-key to export signed proof.")
@@ -592,8 +999,18 @@ class StudioHandler(BaseHTTPRequestHandler):
                     contract_path = folder / "contract.json"
                     contract_path.write_text(json.dumps(contract, sort_keys=True, ensure_ascii=True), encoding="utf-8")
                     bundle = folder / "proof"
+                    attachments = {"graph.json": graph_path, "contract.json": contract_path}
+                    if body.get("comparison_envelope") is not None:
+                        from .comparison import verify_comparison
+                        from .reports import render_comparison_html
+                        envelope = body["comparison_envelope"]
+                        if verify_comparison(envelope) or envelope["current_report"] != report:
+                            raise ContractError("The comparison must verify and bind this exact proof report.")
+                        attachments["comparison.json"] = json.dumps(envelope, sort_keys=True,
+                            ensure_ascii=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                        attachments["comparison.html"] = render_comparison_html(envelope).encode("utf-8")
                     create_bundle(report, bundle, self.server.signing_key,
-                                  attachments={"graph.json": graph_path, "contract.json": contract_path})
+                                  attachments=attachments)
                     errors = verify_bundle(bundle, self.server.public_key)
                     if errors:
                         raise ContractError("Independent signature verification failed; no package exported.")
@@ -606,6 +1023,11 @@ class StudioHandler(BaseHTTPRequestHandler):
                 return
             elif self.path == "/api/export":
                 kind = body.get("kind")
+                if kind == "comparison-envelope":
+                    from .reports import render_comparison_html
+                    self.respond(200, render_comparison_html(body.get("comparison_envelope")),
+                                 "text/html; charset=utf-8", "authzledger-comparison.html")
+                    return
                 if kind == "comparison":
                     comparison = compare_reports(body.get("baseline"), body.get("current"))
                     self.respond(200, render_diff_html(comparison), "text/html; charset=utf-8", "authzledger-retest.html")

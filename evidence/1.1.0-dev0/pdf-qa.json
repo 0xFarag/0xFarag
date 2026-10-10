@@ -1,0 +1,9 @@
+{
+  "snapshot_digest": "91b6ec67aff0ea26b34f20fa9cd5d2e6841223e5c19e8ff58c932d8a49519e45",
+  "snapshot_verified": true,
+  "pdf_sha256": "58d25d8b0d808e5046bce0f725bdc7518f8450b4a7046680c2984406c867c8fc",
+  "pages": 72,
+  "visual_review": "72 pages in 4 rendered contact sheets; no observed clipped or overlapping content",
+  "findings": 50,
+  "renderer_profile": "assessment-html-pdf-v1-reportlab-4.4.9-dejavu-2.37"
+}

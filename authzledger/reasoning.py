@@ -18,6 +18,7 @@ import time
 from urllib.parse import urlsplit
 
 from .intelligence import verify_graph
+from .execution import ExecutionContext, ExecutionError
 
 
 _ALLOWED_STATES = frozenset({"allow", "deny", "unknown", "unobserved", "not_evaluated", "inconclusive", "error"})
@@ -84,7 +85,13 @@ class _LocalConnection(http.client.HTTPConnection):
             raise
         self.sock = sock
 
-    def close(self):
+    def finish(self):
+        """End the entire exchange, including a detached close-delimited body.
+
+        HTTPConnection.getresponse() calls close() to hand a will_close socket
+        to HTTPResponse. Its ordinary close must not shutdown that socket or
+        cancel the watchdog: the response file still owns the readable socket.
+        """
         self._timer.cancel()
         with self._lock:
             sock, self._watched_socket = self._watched_socket, None
@@ -240,8 +247,9 @@ def _model_payload(explanations, model):
     return payload, {alias: real for real, alias in aliases.items()}
 
 
-def _generate(address, port, timeout, maximum, payload):
+def _generate_transport(address, port, timeout, maximum, payload):
     connection = _LocalConnection(address, port, timeout)
+    response = None
     connection._timer.start()
     try:
         connection.request("POST", "/api/generate", body=payload,
@@ -278,7 +286,22 @@ def _generate(address, port, timeout, maximum, payload):
         code = "model_deadline_exceeded" if connection.expired or time.monotonic() >= connection._deadline else "model_unavailable"
         raise _ModelError(code) from None
     finally:
-        connection.close()
+        connection.finish()
+        if response is not None:
+            response.close()
+
+
+def _generate(address, port, timeout, maximum, payload, *, context=None):
+    host = "[" + str(address) + "]" if address.version == 6 else str(address)
+    origin = "http://" + host + (":" + str(port) if port != 80 else "")
+    context = context or ExecutionContext(1, {"advisory": [origin + "/api/generate"]}, max(timeout, 0.1), 1)
+    try:
+        reservation = context.reserve(kind="advisory", operation_id="advisory-explanation", target_origin=origin,
+                                      method="POST", path="/api/generate", deadline=time.monotonic() + timeout)
+        return context.dispatch(reservation, lambda: _generate_transport(address, port,
+                            max(0.001, min(timeout, reservation.deadline - time.monotonic())), maximum, payload))
+    except ExecutionError:
+        raise _ModelError("model_request_not_dispatched") from None
 
 
 def _validate_notes(raw, references):
@@ -315,7 +338,7 @@ def _validate_notes(raw, references):
     return notes
 
 
-def explain_graph(graph, model_config=None):
+def explain_graph(graph, model_config=None, *, context=None):
     """Explain graph facts; optionally request separately labelled local AI notes.
 
     ``model_config`` is an explicit trusted operator configuration, never graph
@@ -345,7 +368,7 @@ def explain_graph(graph, model_config=None):
             result["ai"].update(status="generated", notes=[], edges_shared=0)
             return result
         payload, references = _model_payload(explanations, model)
-        generated = _generate(address, port, timeout, maximum, payload)
+        generated = _generate(address, port, timeout, maximum, payload, context=context)
         notes = _validate_notes(generated, references)
         result["ai"].update(status="generated", notes=notes, edges_shared=len(references),
                            edges_omitted=max(0, len(explanations) - len(references)))

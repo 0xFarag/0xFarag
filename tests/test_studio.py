@@ -246,10 +246,10 @@ class StudioTests(unittest.TestCase):
         entered, release = threading.Event(), threading.Event()
         from authzledger.engine import run
 
-        def held(value):
+        def held(value, **options):
             entered.set()
             release.wait(3)
-            return run(value)
+            return run(value, **options)
 
         with patch.dict(os.environ, {"STUDIO_TEST_TOKEN": "Bearer local-studio-secret"}), patch("authzledger.studio.run", held):
             code, job, _ = self.request("/api/run", body)

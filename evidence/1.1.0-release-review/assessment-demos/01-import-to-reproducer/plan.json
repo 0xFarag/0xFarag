@@ -1,0 +1,289 @@
+{
+  "contract": {
+    "cases": [
+      {
+        "expect": {
+          "json": {
+            "/id": "invoice-a",
+            "/protected_marker": "SYNTHETIC-INVOICE-A"
+          },
+          "status": [
+            200
+          ]
+        },
+        "headers": {},
+        "id": "owner-object",
+        "identity": "owner",
+        "method": "GET",
+        "path": "/invoices/a",
+        "requires": []
+      },
+      {
+        "expect": {
+          "json": {
+            "/principal": "peer",
+            "/tenant": "B"
+          },
+          "status": [
+            200
+          ]
+        },
+        "headers": {},
+        "id": "actor-identity-0",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/me",
+        "requires": []
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/protected_marker"
+          ],
+          "status": [
+            403
+          ]
+        },
+        "headers": {},
+        "id": "known-denial-0",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/known-denial",
+        "requires": [
+          "actor-identity-0",
+          "owner-object"
+        ]
+      },
+      {
+        "expect": {
+          "json_absent": [
+            "/protected_marker"
+          ],
+          "status": [
+            401,
+            403,
+            404
+          ]
+        },
+        "headers": {
+          "accept": "application/json",
+          "accept-language": "en",
+          "pragma": "no-cache"
+        },
+        "id": "variant-peer-1",
+        "identity": "peer",
+        "method": "GET",
+        "path": "/invoices/a",
+        "requires": [
+          "actor-identity-0",
+          "owner-object",
+          "known-denial-0"
+        ]
+      }
+    ],
+    "identities": {
+      "owner": {
+        "headers": {
+          "Authorization": {
+            "env": "DEMO_OWNER"
+          }
+        }
+      },
+      "peer": {
+        "headers": {
+          "Authorization": {
+            "env": "DEMO_PEER"
+          }
+        }
+      }
+    },
+    "limits": {
+      "concurrency": 4,
+      "max_requests": 50,
+      "max_response_bytes": 65536,
+      "timeout_seconds": 5
+    },
+    "name": "Tenant B must not receive Tenant A invoice content",
+    "target": "http://127.0.0.1:44441",
+    "version": 1
+  },
+  "contract_digest": "6a327e2cb9f15f52772fac433173fc15eccca03c03d6d55c0f22c99871b53188",
+  "kind": "experiment-plan",
+  "limitations": [
+    "Explicit variants only; no automatic discovery or deployment-policy attestation.",
+    "Identity and resource claims depend on configured response assertions; marker uniqueness and tenant semantics are operator-declared."
+  ],
+  "normalization_digest": "efdd32ecedfa4643e7ff0a67515a3f47f839049d69b41fd1ee68333ba88c0bf2",
+  "plan_digest": "c21117056e8fe22d30dc2c5d5665513dcff0137728cc5a4c10062368a608e8e1",
+  "request_upper_bound": 4,
+  "rule": {
+    "id": "tenant-isolation",
+    "kind": "forbid_field_equal",
+    "pointer": "/protected_marker",
+    "resource_id": "invoice-a",
+    "resource_pointer": "/id",
+    "resource_value": "invoice-a",
+    "value": "SYNTHETIC-INVOICE-A"
+  },
+  "rule_digest": "b998c742eb0fa660c51a813c5b9a5aecf3385cdd950a870bbb839b48036eb11f",
+  "schema_id": "authzledger.experiment-plan",
+  "schema_version": 1,
+  "scope": {
+    "target": "http://127.0.0.1:44441"
+  },
+  "spec": {
+    "capture_mode": "safe_values",
+    "contract": {
+      "cases": [
+        {
+          "expect": {
+            "json": {
+              "/id": "invoice-a",
+              "/protected_marker": "SYNTHETIC-INVOICE-A"
+            },
+            "status": [
+              200
+            ]
+          },
+          "headers": {},
+          "id": "owner-object",
+          "identity": "owner",
+          "method": "GET",
+          "path": "/invoices/a",
+          "requires": []
+        },
+        {
+          "expect": {
+            "json": {
+              "/principal": "peer",
+              "/tenant": "B"
+            },
+            "status": [
+              200
+            ]
+          },
+          "headers": {},
+          "id": "actor-identity-0",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/me",
+          "requires": []
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/protected_marker"
+            ],
+            "status": [
+              403
+            ]
+          },
+          "headers": {},
+          "id": "known-denial-0",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/known-denial",
+          "requires": [
+            "actor-identity-0",
+            "owner-object"
+          ]
+        },
+        {
+          "expect": {
+            "json_absent": [
+              "/protected_marker"
+            ],
+            "status": [
+              401,
+              403,
+              404
+            ]
+          },
+          "headers": {
+            "accept": "application/json",
+            "accept-language": "en",
+            "pragma": "no-cache"
+          },
+          "id": "variant-peer-1",
+          "identity": "peer",
+          "method": "GET",
+          "path": "/invoices/a",
+          "requires": [
+            "actor-identity-0",
+            "owner-object",
+            "known-denial-0"
+          ]
+        }
+      ],
+      "identities": {
+        "owner": {
+          "headers": {
+            "Authorization": {
+              "env": "DEMO_OWNER"
+            }
+          }
+        },
+        "peer": {
+          "headers": {
+            "Authorization": {
+              "env": "DEMO_PEER"
+            }
+          }
+        }
+      },
+      "limits": {
+        "concurrency": 4,
+        "max_requests": 50,
+        "max_response_bytes": 65536,
+        "timeout_seconds": 5
+      },
+      "name": "Tenant B must not receive Tenant A invoice content",
+      "target": "http://127.0.0.1:44441",
+      "version": 1
+    },
+    "id": "invoice-isolation",
+    "identity_bindings": {
+      "peer": {
+        "principal": "peer",
+        "principal_pointer": "/principal",
+        "tenant": "B",
+        "tenant_pointer": "/tenant"
+      }
+    },
+    "kind": "experiment-spec",
+    "mutation_approval": [],
+    "rule": {
+      "id": "tenant-isolation",
+      "kind": "forbid_field_equal",
+      "pointer": "/protected_marker",
+      "resource_id": "invoice-a",
+      "resource_pointer": "/id",
+      "resource_value": "invoice-a",
+      "value": "SYNTHETIC-INVOICE-A"
+    },
+    "schema_version": 1,
+    "sources": [
+      "import-2f25bea6436b0256dc73f5dd"
+    ],
+    "title": "Tenant B must not receive Tenant A invoice content",
+    "variants": [
+      {
+        "case_id": "variant-peer-1",
+        "id": "peer-1",
+        "identity_control": "actor-identity-0",
+        "negative_control": "known-denial-0",
+        "object_control": "owner-object"
+      }
+    ],
+    "volatile_pointers": []
+  },
+  "variants": [
+    {
+      "case_id": "variant-peer-1",
+      "id": "peer-1",
+      "identity_control": "actor-identity-0",
+      "negative_control": "known-denial-0",
+      "object_control": "owner-object"
+    }
+  ]
+}

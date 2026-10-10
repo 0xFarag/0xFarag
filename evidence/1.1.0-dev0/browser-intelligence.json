@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "browser": "153.0.8010.0",
+  "page_errors": [],
+  "workflows": [
+    "three-layer contract graph with explicit missing policy/evidence",
+    "independent local policy evaluation",
+    "separate policy drift",
+    "real before/after demo",
+    "persistent integer-ID history",
+    "deterministic evidence explanation",
+    "AI disabled without local startup configuration",
+    "signed graph and report ZIP export",
+    "controlled retest requires scope authorization",
+    "390px intelligence viewport without page overflow"
+  ]
+}

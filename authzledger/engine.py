@@ -6,7 +6,6 @@ import concurrent.futures
 import hashlib
 import http.client
 import json
-import os
 import socket
 import ssl
 import threading
@@ -17,6 +16,8 @@ from datetime import datetime, timezone
 from functools import partial
 
 from . import __version__
+from .credentials import CredentialResolver
+from .execution import ExecutionContext, ExecutionError
 from .evidence import seal_report
 from .model import ContractError, contract_digest, load_contract
 
@@ -170,21 +171,8 @@ def _record(case: dict, outcome: str, reason: str) -> dict:
 
 
 def _credentials(contract: dict) -> dict:
-    resolved = {}
-    for identity, config in contract["identities"].items():
-        headers = {}
-        for key, reference in config["headers"].items():
-            if isinstance(reference, dict):
-                value = os.environ.get(reference["env"])
-                if not value:
-                    raise ContractError("a required credential environment variable is missing or empty.")
-                if len(value) > 16384 or any(ord(c) < 32 or ord(c) == 127 or ord(c) > 255 for c in value):
-                    raise ContractError("a credential environment variable is not a valid HTTP header value.")
-                headers[key] = value
-            else:
-                headers[key] = reference
-        resolved[identity] = headers
-    return resolved
+    """Compatibility wrapper; resolution never mutates the source contract."""
+    return CredentialResolver().resolve_contract(contract)
 
 
 _MISSING = object()
@@ -289,7 +277,7 @@ def _read_body(response, limit: int, deadline: float) -> bytes:
         chunks.append(chunk)
 
 
-def _execute(case: dict, target: str, headers: dict, limits: dict) -> dict:
+def _execute(case: dict, target: str, headers: dict, limits: dict, *, observation_sink=None, request_deadline=None) -> dict:
     started = time.monotonic()
     result = _record(case, "error", "Request could not be completed.")
     request_headers = {"user-agent": f"AuthzLedger/{__version__}", "accept": "application/json", "accept-encoding": "identity"}
@@ -300,16 +288,21 @@ def _execute(case: dict, target: str, headers: dict, limits: dict) -> dict:
         body = json.dumps(case["body"], ensure_ascii=True, allow_nan=False, separators=(",", ":")).encode("utf-8")
         request_headers.setdefault("content-type", "application/json")
     request = urllib.request.Request(target + case["path"], data=body, headers=request_headers, method=case["method"])
-    deadline = _RequestDeadline(started + limits["timeout_seconds"])
+    expires = min(started + limits["timeout_seconds"], request_deadline or float("inf"))
+    deadline = _RequestDeadline(expires)
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), _NoRedirect(),
                                          _DeadlineHTTPHandler(deadline), _DeadlineHTTPSHandler(deadline))
     response = None
+    payload = b""
+    captured_headers = []
+    complete = False
     try:
         try:
             response = opener.open(request, timeout=limits["timeout_seconds"])
         except urllib.error.HTTPError as exc:
             response = exc
         result["status"] = response.status
+        captured_headers = list(response.headers.items())
         if 300 <= response.status < 400:
             result["reason"] = "Redirect response refused."
             return result
@@ -317,7 +310,8 @@ def _execute(case: dict, target: str, headers: dict, limits: dict) -> dict:
         if encoding not in {"", "identity"}:
             result["reason"] = "Encoded response refused."
             return result
-        payload = _read_body(response, limits["max_response_bytes"], started + limits["timeout_seconds"])
+        payload = _read_body(response, limits["max_response_bytes"], expires)
+        complete = True
         result["response_sha256"] = hashlib.sha256(payload).hexdigest()
         checks, reason = _checks(case, response.status, payload)
         result["checks"] = checks
@@ -343,7 +337,15 @@ def _execute(case: dict, target: str, headers: dict, limits: dict) -> dict:
         if response is not None:
             response.close()
         if expired:
+            complete = False
             result.update(outcome="error", reason="Request timed out.", checks=[], response_sha256=None)
+        if observation_sink is not None:
+            try:
+                observation_sink({"case_id": case["id"], "status": result["status"],
+                                  "body": payload if complete else b"", "headers": captured_headers,
+                                  "complete": complete, "error_code": None if complete else "capture-incomplete"})
+            except Exception:
+                result.update(outcome="error", reason="Observation could not be evaluated.", checks=[], response_sha256=None)
         elapsed_ms = round((time.monotonic() - started) * 1000, 3)
         # JavaScript JSON.stringify emits 0/7, not 0.0/7.0. Normalize integral
         # durations before sealing so the browser cannot accidentally break hashes.
@@ -351,20 +353,58 @@ def _execute(case: dict, target: str, headers: dict, limits: dict) -> dict:
     return result
 
 
-def run(contract: dict) -> dict:
+def _execute_in_context(case, target, headers, limits, context, observation_sink, kind):
+    try:
+        reservation = context.reserve(kind=kind, operation_id=case["id"], target_origin=target,
+                                      method=case["method"], path=case["path"],
+                                      deadline=time.monotonic() + limits["timeout_seconds"])
+        captured_bytes = [0]
+        def capture(value):
+            captured_bytes[0] = len(value["body"])
+            if observation_sink is not None:
+                observation_sink(value)
+        result = context.dispatch(reservation, lambda: _execute(case, target, headers, limits,
+                                  observation_sink=capture, request_deadline=reservation.deadline))
+        context.finish(reservation, outcome=result["outcome"], elapsed_ms=result["duration_ms"], response_bytes=captured_bytes[0])
+        return result
+    except ExecutionError as exc:
+        if observation_sink is not None:
+            try:
+                observation_sink({"case_id": case["id"], "status": None, "body": b"", "headers": [],
+                                  "complete": False, "error_code": exc.code})
+            except Exception:
+                pass
+        return _record(case, "inconclusive", "Request not sent: " + exc.code + ".")
+
+
+def run(contract: dict, *, context=None, credential_resolver=None, observation_sink=None, request_kind=None) -> dict:
     """Execute a normalized contract, preserving dependency and result order.
 
     Mutating-method permission is granted when loading the contract. Revalidate
     here to prevent raw dictionaries from bypassing scope or limit validation.
     """
     contract = load_contract(contract, allow_mutations=True)
-    credentials = _credentials(contract)  # Resolve all before any HTTP traffic.
+    if observation_sink is not None and not callable(observation_sink):
+        raise ContractError("observation_sink must be callable.")
+    if request_kind is not None and not isinstance(request_kind, (str, dict)):
+        raise ContractError("request_kind must be a kind or case mapping.")
+    from .execution import REQUEST_KINDS
+    kinds = request_kind.values() if isinstance(request_kind, dict) else [request_kind or "application"]
+    if any(not isinstance(kind, str) or kind not in REQUEST_KINDS for kind in kinds) or (isinstance(request_kind, dict) and set(request_kind) - {case["id"] for case in contract["cases"]}):
+        raise ContractError("request_kind contains an unknown kind or case.")
+    credentials = credential_resolver.resolve_contract(contract) if credential_resolver is not None else _credentials(contract)
+    if context is None:
+        context = ExecutionContext(contract["limits"]["max_requests"], [contract["target"]],
+                                   contract["limits"]["timeout_seconds"], contract["limits"]["concurrency"])
+    if not isinstance(context, ExecutionContext):
+        raise ContractError("context must be an ExecutionContext.")
+    concurrency = min(contract["limits"]["concurrency"], context.concurrency)
     started_at = _utc()
     cases = contract["cases"]
     results = {}
     pending = {case["id"]: case for case in cases}
     futures = {}
-    with concurrent.futures.ThreadPoolExecutor(max_workers=contract["limits"]["concurrency"],
+    with concurrent.futures.ThreadPoolExecutor(max_workers=concurrency,
                                                 thread_name_prefix="authzledger") as pool:
         while pending or futures:
             for case_id, case in list(pending.items()):
@@ -374,9 +414,11 @@ def run(contract: dict) -> dict:
                     results[case_id] = _record(case, "inconclusive", "Prerequisite did not pass; request was not sent.")
                     del pending[case_id]
                     continue
-                if len(futures) >= contract["limits"]["concurrency"]:
+                if len(futures) >= concurrency:
                     continue
-                future = pool.submit(_execute, case, contract["target"], credentials[case["identity"]], contract["limits"])
+                kind = request_kind.get(case_id, "application") if isinstance(request_kind, dict) else request_kind or "application"
+                future = pool.submit(_execute_in_context, case, contract["target"], credentials[case["identity"]],
+                                     contract["limits"], context, observation_sink, kind)
                 futures[future] = case
                 del pending[case_id]
             if futures:

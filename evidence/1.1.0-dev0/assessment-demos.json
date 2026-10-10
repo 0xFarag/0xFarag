@@ -1,0 +1,38 @@
+{
+  "baseline_cases": 5,
+  "denial_leakage": "denial_data_disclosure",
+  "error_200": "rejected",
+  "fixture": "synthetic-loopback-only",
+  "import_to_finding": "confirmed",
+  "invalid_controls": "inconclusive",
+  "kind": "assessment-demo-results",
+  "network_requests": 35,
+  "offline_standalone_command": "python tools/verify_bundle.py OUTPUT/proof --public-key OUTPUT/trusted-public.pem",
+  "package_semantics_verified": true,
+  "private_key_retained": false,
+  "reduction": {
+    "label": "1-minimal within approved units",
+    "removed_units": 3,
+    "requests": 12
+  },
+  "retest": [
+    {
+      "baseline_finding_digest": "0d22c52d5754d958b6084a070ff0d1a521fcfe9b2bc906f8d903255be6da93de",
+      "case_id": "variant-peer-1",
+      "current_finding_digest": "9065dc0b563d237c5f556f3ecf5ae68b7222aeb88f8b694113f16f62363da2c8",
+      "finding_id": "finding-cabbe355c68937e2311bb886",
+      "status": "fix_verified",
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "baseline_finding_digest": "51fe166c21d35f5f1f778214ad0003a0f6730a5a02ca9e7872f3f8d4636277b5",
+      "case_id": "variant-peer-2",
+      "current_finding_digest": null,
+      "finding_id": "finding-c05b584f5c488a0155a3397e",
+      "status": "not_retested",
+      "verification_level": "captured_inputs_replayed"
+    }
+  ],
+  "retest_cases": 4,
+  "schema_version": 1
+}
