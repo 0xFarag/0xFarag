@@ -3,18 +3,20 @@ from pathlib import Path
 import hashlib
 import shutil
 import stat
+import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'dist'
 DIST.mkdir(exist_ok=True)
-VERSION = '1.0.0'
+sys.path.insert(0, str(ROOT))
+from authzledger import __version__ as VERSION
 files = []
 for name in ['README.md', 'INSTALL.md', 'RELEASE_NOTES.md', 'RELEASE.json', 'CHANGELOG.md', 'LICENSE', 'NOTICE.txt', 'SECURITY.md', 'CONTRIBUTING.md', 'pyproject.toml', 'MANIFEST.in', 'start.sh', '.gitignore']:
     path = ROOT / name
     if path.is_file():
         files.append(path)
-for name in ['authzledger', 'docs', 'examples', 'tests', 'tools', 'brand', '.github', 'evidence/1.0.0']:
+for name in ['authzledger', 'docs', 'examples', 'fixtures', 'tests', 'tools', 'brand', '.github', 'evidence/1.0.0', 'evidence/1.1.0-dev0']:
     directory = ROOT / name
     if directory.is_dir():
         files.extend(path for path in directory.rglob('*') if path.is_file() and not path.is_symlink()
@@ -29,7 +31,7 @@ with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as output:
         output.writestr(item, path.read_bytes())
 shutil.copyfile(ROOT / 'tools/verify_bundle.py', DIST / 'verify_bundle.py')
 assets = [archive, DIST / f'authzledger-{VERSION}-py3-none-any.whl', DIST / 'verify_bundle.py']
-for filename in ['AuthzLedger_1.0_Release_wide.mp4', 'AuthzLedger_1.0_Release_vertical.mp4', 'AuthzLedger_1.0_en.srt']:
+for filename in (['AuthzLedger_1.0_Release_wide.mp4', 'AuthzLedger_1.0_Release_vertical.mp4', 'AuthzLedger_1.0_en.srt'] if VERSION == '1.0.0' else []):
     source = ROOT / 'media' / filename
     if not source.is_file():
         raise SystemExit('Verified launch media are required before packaging')

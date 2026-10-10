@@ -4,6 +4,16 @@ AuthzLedger 1.0 is distributed with rights reserved. See [LICENSE](LICENSE); pub
 
 ## Run from source
 
+For the integrated **1.1.0 development branch**, use `authzledger-v1.1.0` instead of the stable branch in the clone command below, then install the assessment reporting extra:
+
+```sh
+python3 -m pip install '.[reports]'
+python3 -m authzledger assessment demo --out artifacts/assessment-demo
+python3 -m authzledger studio --open
+```
+
+PDF export requires the pinned ReportLab 4.4.9 extra and the bundled licensed Unicode fonts. HTML/JSON and the core runner do not require ReportLab. The supported assessment workflow and remaining production release gates are recorded in [the acceptance ledger](docs/acceptance-1.1.0.md); the stable instructions below describe the already released 1.0.0 distribution.
+
 Requires Python 3.10 or newer. Linux / CPython 3.12 is locally verified; other platforms have not been certified in this release.
 
 ```sh

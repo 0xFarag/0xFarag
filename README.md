@@ -1,6 +1,6 @@
-# AuthzLedger 1.0
+# AuthzLedger — development toward 1.1.0
 
-**Authorization Intelligence, built on evidence.**
+**Turn a request into a controlled finding, a smaller reproducer and a verifiable fix.**
 
 Know who can do what. Prove what changed.
 
@@ -12,13 +12,26 @@ Built directly on v0.3.4: the access matrix, control dependency scheduler, offli
 
 **[36-second release walkthrough](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/AuthzLedger_1.0_Release_wide.mp4)** · **[Release and downloads](https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0)** · [Installation](INSTALL.md) · [Product architecture](docs/product-1.0.md) · [Release notes](RELEASE_NOTES.md)
 
-## Development toward 1.0.5
+## Integrated assessment workflow for 1.1.0
 
-This development branch adds **ComparisonEnvelope v1**: compare a retained full baseline with an exact dependency-closed retest, keep original report roots and distinguish restored checks from restored testability. Unselected cases remain `not_retested`. Studio history selection, CLI, offline verification and signed comparison JSON/HTML share the same core.
+This development branch extends the released 1.0 foundation and **ComparisonEnvelope v1** with all eight capability areas: offline Burp/ZAP/HAR import and mapping, Contrast Lab, Workflow Contracts, bounded Minimal Reproducer, source-bound selective retests, an integrated Studio assessment workspace, HTML/PDF/JSON assessment reports and explainable impact selection. Studio and CLI call the same services and existing HTTP DAG through one request budget.
 
-[Implemented comparison workflow](docs/comparison-envelope-v1.md) · [Complete eight-capability implementation contract and 88 acceptance scenarios](docs/implementation-1.0.5.md)
+[1.1.0 product and implementation contract](docs/product-1.1.0.md) · [All 88 acceptance scenarios and remaining gates](docs/acceptance-1.1.0.md) · [Executed verification and release boundaries](docs/verification-1.1.0.md) · [ComparisonEnvelope v1](docs/comparison-envelope-v1.md) · [Binding original implementation contract](docs/implementation-1.0.5.md)
 
-Run `python3 tools/check_comparison.py --out artifacts/comparison-demo` for a real local 403-leakage → selective retest → signed proof demonstration. The product version remains 1.0.0 until the full 1.0.5 release gates pass. Offline Burp/ZAP/HAR import, Contrast Lab, Workflow Contracts, Minimal Reproducer and assessment PDF reporting are specified, not delivered by this first increment.
+**This is the integrated 1.1.0.dev0 build, not a published 1.1.0 production release.** The released stable product remains 1.0.0 until the complete contract gates pass. The development producer has its own explicitly registered comparison profile. The acceptance ledger distinguishes implemented behaviour from fully verified scenarios, including exporter compatibility and GUI performance.
+
+```sh
+python3 -m pip install '.[reports]'
+python3 -m authzledger studio --history ./authorization-history.sqlite3 --open
+python3 -m authzledger assessment demo --out artifacts/assessment-demo
+python3 tools/check_workflows110.py --out artifacts/workflow-demo
+```
+
+Choose **Assessment** for request import, explicit principal/object/control mapping, plan review, investigation, reduction, retest and signed handover. Ctrl/Cmd+K opens local commands. Session credentials stay in server memory; reload requires reopening the authenticated session URL. Export assessment evidence before closing the server. New assessment working state is memory-only. With `--history`, bounded workflow assurance retains an additional verified history chain beside the unchanged v1 run history; without it, Studio explicitly labels workflow history as session-only.
+
+The three assessment demos issue real loopback HTTP requests: imported request to reduced finding; 403 disclosure versus invalid controls and a 200 error object; selective fix proof with an omitted finding explicitly `not_retested`. Report generation and package verification happen after the fixture stops. Their Burp input is an authored format fixture. A separate genuine Chromium/Playwright HAR capture is retained and tested; genuine Burp/ZAP exporter acceptance remains open. See [import profile boundaries](fixtures/imports/README.md).
+
+Run `python3 tools/check_assessment.py --out artifacts/assessment-proof` to also invoke the standalone verifier in an isolated Python process. [CLI and reproducible demonstrations](docs/assessment-cli.md) · [Reporting profile and verification limits](docs/reporting-profile-1.1.0.md).
 
 ## Start with evidence
 

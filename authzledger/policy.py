@@ -23,6 +23,7 @@ from urllib.parse import urlsplit
 from .engine import (_DeadlineHTTPHandler, _DeadlineHTTPSHandler, _NoRedirect,
                      _RequestDeadline, _read_body)
 from .model import contract_digest, load_contract
+from .execution import ExecutionContext, ExecutionError
 
 
 class PolicyError(ValueError):
@@ -228,7 +229,7 @@ def _local_decision(case, context, config, digest):
                            else "No rule matched; explicit policy default used."}
 
 
-def _opa_decision(case, context, config, digest, credential):
+def _opa_transport(case, context, config, digest, credential, expires):
     request_input = {"identity": case["identity"], "method": case["method"],
                      "path": case["path"], "context": context}
     payload = _canonical({"input": request_input})
@@ -238,7 +239,7 @@ def _opa_decision(case, context, config, digest, credential):
     if credential:
         headers["Authorization"] = "Bearer " + credential
     request = urllib.request.Request(config["endpoint"], data=payload, headers=headers, method="POST")
-    deadline = _RequestDeadline(time.monotonic() + config["timeout_seconds"])
+    deadline = _RequestDeadline(expires)
     response = None
     try:
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), _NoRedirect(),
@@ -271,7 +272,18 @@ def _opa_decision(case, context, config, digest, credential):
             raise PolicyError("OPA decision request exceeded its deadline")
 
 
-def evaluate_policy(contract, config) -> dict:
+def _opa_decision(case, case_context, config, digest, credential, execution_context):
+    parsed, origin = _origin(config["endpoint"], "OPA endpoint")
+    try:
+        reservation = execution_context.reserve(kind="pdp", operation_id=case["id"], target_origin=origin,
+            method="POST", path=parsed.path, deadline=time.monotonic() + config["timeout_seconds"])
+        return execution_context.dispatch(reservation, lambda: _opa_transport(case, case_context, config, digest,
+                                               credential, reservation.deadline))
+    except ExecutionError as exc:
+        raise PolicyError("OPA request not dispatched: " + exc.code + ".") from None
+
+
+def evaluate_policy(contract, config, *, context=None, credential_resolver=None) -> dict:
     """Evaluate independent policy input for every case; never infer intent.
 
     Explicit context may be supplied by the operator. Identity credential
@@ -280,6 +292,12 @@ def evaluate_policy(contract, config) -> dict:
     """
     contract = load_contract(contract, allow_mutations=True)
     config = load_policy(config)
+    execution_context = context
+    if config["engine"] == "opa" and execution_context is None:
+        execution_context = ExecutionContext(len(contract["cases"]), {"pdp": [config["endpoint"]]},
+                                             config["timeout_seconds"], 1)
+    if execution_context is not None and not isinstance(execution_context, ExecutionContext):
+        raise PolicyError("context must be an ExecutionContext")
     if config["engine"] == "local":
         selectors = sum(sum(len(rule.get(field, ["*"])) for field in ("identities", "methods", "paths"))
                         for rule in config["rules"])
@@ -290,14 +308,21 @@ def evaluate_policy(contract, config) -> dict:
     digest = hashlib.sha256(_canonical(config)).hexdigest()
     credential = None
     if config["engine"] == "opa" and "credential_env" in config:
-        credential = os.environ.get(config["credential_env"])
+        if credential_resolver is None:
+            credential = os.environ.get(config["credential_env"])
+        else:
+            try:
+                credential = credential_resolver.resolve("env://" + config["credential_env"], identity="pdp",
+                                                         target_origin=_origin(config["endpoint"], "OPA endpoint")[1])
+            except ValueError:
+                raise PolicyError("OPA credential environment is missing or invalid") from None
         if (not credential or len(credential) > 16384 or any(ord(char) < 33 or ord(char) > 126 for char in credential)):
             raise PolicyError("OPA credential environment is missing or invalid")
     decisions = {}
     for case in contract["cases"]:
         context = dict(config.get("context", {}), **config.get("case_context", {}).get(case["id"], {}))
         value = (_local_decision(case, context, config, digest) if config["engine"] == "local"
-                 else _opa_decision(case, context, config, digest, credential))
+                 else _opa_decision(case, context, config, digest, credential, execution_context))
         value["input_sha256"] = hashlib.sha256(_canonical({"identity": case["identity"],
                                                          "method": case["method"], "path": case["path"],
                                                          "context": context})).hexdigest()

@@ -194,6 +194,9 @@ def _attachment_semantics(report: dict, contents: Mapping[str, bytes]) -> None:
     Other attachment names remain opaque integrity-bound bytes. Never contact a
     policy endpoint or model while verifying an existing package.
     """
+    if any(name in contents for name in ("attachments/assessment.json", "attachments/assessment.html", "attachments/assessment.pdf")):
+        from .assessment_reports import verify_assessment_attachments
+        verify_assessment_attachments(report, contents)
     comparison_name = "attachments/comparison.json"
     comparison_html = "attachments/comparison.html"
     if comparison_html in contents and comparison_name not in contents:
@@ -487,7 +490,8 @@ def _verify_cryptographic(bundle_path: str | Path, public_key: str | Path) -> tu
             raise ValueError("private key material is present in bundle")
         if name in ("report.json", "public.pem", "attachments/contract.json",
                     "attachments/graph.json", "attachments/explanation.json",
-                    "attachments/comparison.json", "attachments/comparison.html"):
+                    "attachments/comparison.json", "attachments/comparison.html",
+                    "attachments/assessment.json", "attachments/assessment.html", "attachments/assessment.pdf"):
             payloads[name] = raw
     if _public_der(payloads["public.pem"]) != trusted_der:
         raise ValueError("embedded public key differs from trusted public key")

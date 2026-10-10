@@ -25,11 +25,13 @@ _DOMAIN = b"AuthzLedger:comparison-envelope:v1\n"
 _STATUSES = ("regression", "resolved_check", "testability_restored",
              "testability_lost", "inconclusive", "unchanged", "not_retested")
 # An explicit format compatibility registration, not a wildcard for future 1.x
-# engines. The 1.0.5 entry describes the unchanged v1 observation semantics; it
+# engines. The listed release/development entries describe unchanged v1 observation semantics; this
 # does not certify any future executable merely because it claims this version.
 _PROFILES = {
     "1.0.0": "authzledger-1.0.0-report-v1-checks-v1",
     "1.0.5": "authzledger-1.0.5-report-v1-checks-v1",
+    "1.1.0": "authzledger-1.1.0-report-v1-checks-v1",
+    "1.1.0.dev0": "authzledger-1.1.0.dev0-report-v1-checks-v1",
 }
 _LIMITATIONS = [
     "resolved_check means the same configured assertion now passes; it does not establish vulnerability remediation.",

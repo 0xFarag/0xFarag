@@ -142,6 +142,28 @@ class ComparisonTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             compare_reports(self.before, self.after)
 
+    def test_explicit_development_profile_compares_with_stable_without_resealing(self):
+        current = report(self.selection['contract'], version='1.1.0.dev0')
+        original = copy.deepcopy(current)
+        envelope = create_comparison(self.source, self.before, current, ['peer-denied'])
+        self.assertEqual(verify_comparison(envelope), [])
+        self.assertEqual(current, original)
+        self.assertEqual(envelope['profiles']['current'], 'authzledger-1.1.0.dev0-report-v1-checks-v1')
+        self.assertEqual(envelope['baseline_report']['tool']['version'], '1.0.0')
+        # The registration admits this exact producer profile, not future dev builds.
+        unregistered = report(self.selection['contract'], version='1.1.0.dev1')
+        with self.assertRaises(ComparisonError):
+            create_comparison(self.source, self.before, unregistered, ['peer-denied'])
+
+    def test_explicit_110_profile_keeps_v1_semantics_and_original_roots(self):
+        current = report(self.selection['contract'], version='1.1.0')
+        original = copy.deepcopy(current)
+        envelope = create_comparison(self.source, self.before, current, ['peer-denied'])
+        self.assertEqual(verify_comparison(envelope), [])
+        self.assertEqual(current, original)
+        self.assertEqual(envelope['current_report']['evidence']['root_sha256'], original['evidence']['root_sha256'])
+        self.assertEqual(envelope['profiles']['current'], 'authzledger-1.1.0-report-v1-checks-v1')
+
     def test_full_comparison_across_explicit_profiles_without_reseal(self):
         current = report(self.source, version="1.0.5")
         root = current["evidence"]["root_sha256"]
@@ -263,7 +285,7 @@ class ComparisonTests(unittest.TestCase):
 
     def test_unknown_tool_profiles_and_metadata_are_rejected(self):
         for tool in ({"name": "Other", "version": "1.0.0"}, {"name": "AuthzLedger", "version": "1.0.4"},
-                     {"name": "AuthzLedger", "version": "1.1.0"}, {"name": "AuthzLedger", "version": "1.0.5-dev"},
+                     {"name": "AuthzLedger", "version": "1.1.1"}, {"name": "AuthzLedger", "version": "1.0.5-dev"},
                      {"name": "AuthzLedger", "version": "1.0.0", "build": "unregistered"}):
             current = copy.deepcopy(self.after)
             current["tool"] = tool
