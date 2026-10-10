@@ -2,7 +2,7 @@
 
 # Nasser Aldin Farag · 0xFarag
 
-**[AuthzLedger 1.0 — release, source and downloads →](https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0)**
+**[AuthzLedger 1.1.0 — release, source and downloads →](https://github.com/0xFarag/0xFarag/releases/tag/v1.1.0)**
 
 **Penetration Testing · Web & API Security · Security Engineering**  
 Zürich, Switzerland
@@ -15,24 +15,28 @@ My focus is application security, authorization testing and security automation.
 
 [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [GitHub projects](https://github.com/0xFarag?tab=repositories) · [YouTube](https://www.youtube.com/@0xFarag) · [TryHackMe](https://tryhackme.com/p/0xFarag)
 
-## AuthzLedger 1.0
+## AuthzLedger 1.1.0
 
-**Authorization Intelligence, built on evidence.**  
+**Controlled findings. Verifiable evidence.**  
 Know who can do what. Prove what changed.
 
-AuthzLedger connects three separate layers: intended permission, an independent policy decision and controlled application behavior. A Living Authorization Graph makes their differences inspectable; differential intelligence retains policy, identity, prerequisite and coverage changes instead of treating them as proven fixes.
+AuthzLedger is a local Studio and CLI for authorization testing: import native Burp raw messages, ZAP JSON+ or HAR; define access rules and test identities; validate controls; reduce a reproducer; retest selected cases; and hand over a frozen assessment with verifiable evidence.
 
-**[Download AuthzLedger 1.0 →](https://github.com/0xFarag/0xFarag/releases/tag/v1.0.0)** · [Source and installation](https://github.com/0xFarag/0xFarag/tree/authzledger-v1.0.0)
+**[Download AuthzLedger 1.1.0 →](https://github.com/0xFarag/0xFarag/releases/tag/v1.1.0)** · [Installation guide](https://github.com/0xFarag/0xFarag/blob/v1.1.0/INSTALL.md) · [Watch the 52-second release film](https://www.youtube.com/watch?v=vEaYxBpsLGw)
 
-[Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/authzledger-1.0.0-source.zip) · [Installable wheel](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/authzledger-1.0.0-py3-none-any.whl) · [36-second release film](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/AuthzLedger_1.0_Release_wide.mp4) · [Independent verifier](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/verify_bundle.py)
+[Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v1.1.0/authzledger-1.1.0-source.zip) · [Installable wheel](https://github.com/0xFarag/0xFarag/releases/download/v1.1.0/authzledger-1.1.0-py3-none-any.whl) · [Synthetic proof package](https://github.com/0xFarag/0xFarag/releases/download/v1.1.0/authzledger-1.1.0-proof.zip) · [Independent verifier](https://github.com/0xFarag/0xFarag/releases/download/v1.1.0/verify_bundle.py) · [SHA-256 checksums](https://github.com/0xFarag/0xFarag/releases/download/v1.1.0/SHA256SUMS.txt)
 
-Studio and CLI provide control-aware tests, local policy rules or an opt-in OPA adapter, graph and change analysis, selective retests, bounded assurance and hash-chained local history. Ed25519-signed packages bind the source contract, graph and report. The application validates these relationships; a standalone verifier checks authenticity and integrity against a public key trusted outside the package. Optional local reasoning explains existing evidence and never changes verdicts.
+Protected data inside a 403 response can still establish a finding when the configured controls are valid. Reduction retains original evidence; selective retests distinguish `fix_verified` from `not_retested`. JSON, HTML and PDF derive from one frozen snapshot, with an Ed25519-signed file inventory. Verification uses a separately trusted public key. Signatures establish integrity, not truthful remote execution.
 
-**233 automated tests passed locally and in [GitHub CI](https://github.com/0xFarag/0xFarag/actions/runs/37874324250).** Both local Chromium acceptance suites and an isolated installed-wheel proof workflow passed. The release film uses actual Studio captures and synthetic local data: two boundary failures, same-contract remediation, retest and independent verification.
+**88/88 acceptance scenarios, 530 Python tests and seven Chromium browser suites.** The [release CI](https://github.com/0xFarag/0xFarag/actions/runs/38080406879) checks the frozen product commit `a7160e13289ea0983946e03c978bc6af1841a7e6` and all five published asset hashes. [Inspect the retained evidence](https://github.com/0xFarag/0xFarag/blob/v1.1.0/evidence/1.1.0-final/README.md).
 
-Source-visible; proprietary rights reserved by **Nasser Aldin Farag / 0xFarag**. [Rights and commercial licensing](AUTHZLEDGER_RIGHTS.md). This is a local workbench. Hosted team Retest-as-a-Service, external customer evaluation and independent comparative validation are subsequent gates.
+The public labs and product footage use synthetic local data. Native Burp support is the documented raw-message profile; DTD-bearing Burp XML remains unsupported. Optional local AI is advisory and does not decide findings.
 
-[Product architecture and competitive position](https://github.com/0xFarag/0xFarag/blob/authzledger-v1.0.0/docs/product-1.0.md) · [Launch and 30-/90-day execution plan](https://github.com/0xFarag/0xFarag/blob/authzledger-v1.0.0/docs/launch-1.0.md) · [Development direction](AUTHZLEDGER_DIRECTION.md)
+**Pilot partners and early-stage investors in security tooling:** [contact me on LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) to discuss practical evaluation, repeat usage and reproducible handovers.
+
+Source-visible; proprietary rights reserved by **Nasser Aldin Farag / 0xFarag**. [Rights and commercial licensing](AUTHZLEDGER_RIGHTS.md). Hosted team services and external customer validation remain future work.
+
+[Release scope](https://github.com/0xFarag/0xFarag/blob/v1.1.0/docs/release-1.1.0.md) · [Burp import profile](https://github.com/0xFarag/0xFarag/blob/v1.1.0/docs/burp-native-import-v1.md) · [Development direction](AUTHZLEDGER_DIRECTION.md)
 
 ## Selected engineering work
 
