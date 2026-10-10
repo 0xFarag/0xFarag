@@ -1,0 +1,10 @@
+Looking in links: /workspace/scratch/5ee9d8409b8d/phase2-final/dependency-wheels
+Processing ./git-source-1
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: authzledger
+  Building wheel for authzledger (pyproject.toml): started
+  Building wheel for authzledger (pyproject.toml): finished with status 'done'
+  Created wheel for authzledger: filename=authzledger-1.1.0-py3-none-any.whl size=1405983 sha256=f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f
+  Stored in directory: /root/.cache/pip/wheels/a1/20/e8/2240960a7ae23e50e658ae96ec0bd5f1122764f6bc10307e1a
+Successfully built authzledger

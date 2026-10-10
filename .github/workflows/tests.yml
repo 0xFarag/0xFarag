@@ -57,7 +57,7 @@ jobs:
           cd dist
           sha256sum --check SHA256SUMS.txt
           sha256sum --check <<'CHECKSUMS'
-          77ffbef884f881c615f177164bf43b75abe006ec363b53c407936a61b97d6b9b  authzledger-1.1.0-py3-none-any.whl
+          f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f  authzledger-1.1.0-py3-none-any.whl
           6a3871c86b24bcd1ed3f87d54f98310ed894d42535819f9d7449f9c9a9f98ce7  authzledger-1.1.0-proof.zip
           66a16919c13d04fe5012a45bf20297a8d89f45ae064e1b80e68955d8bcb5c287  verify_bundle.py
           CHECKSUMS
@@ -173,7 +173,7 @@ jobs:
           cd dist
           sha256sum --check SHA256SUMS.txt
           sha256sum --check <<'CHECKSUMS'
-          77ffbef884f881c615f177164bf43b75abe006ec363b53c407936a61b97d6b9b  authzledger-1.1.0-py3-none-any.whl
+          f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f  authzledger-1.1.0-py3-none-any.whl
           6a3871c86b24bcd1ed3f87d54f98310ed894d42535819f9d7449f9c9a9f98ce7  authzledger-1.1.0-proof.zip
           66a16919c13d04fe5012a45bf20297a8d89f45ae064e1b80e68955d8bcb5c287  verify_bundle.py
           CHECKSUMS

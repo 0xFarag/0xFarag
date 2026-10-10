@@ -1,0 +1,10 @@
+{
+  "build_env": {
+    "SOURCE_DATE_EPOCH": "1767225600",
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
+  },
+  "commit": "43c5a5b036790310f8dad0991cd18aef7c8a467b",
+  "driver_sha256": "cca6d061862e164dad7d86c5bcef68957317788839bf8bde737ca404b13ce09e",
+  "git_archive_sha256": "519ee7e3ecff8a1041e6cc7b50988f585142b5bf3b2fd96806ce469d1c54a1e2"
+}

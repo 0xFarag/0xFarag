@@ -1,0 +1,95 @@
+{
+  "passed": true,
+  "proofs": {
+    "assessment-demos": {
+      "key_sha256": "ad3dffed93378c8bb2049228e640a2be30f6a47d46501358b3e2b2705b4bab46",
+      "proof": {
+        "attachments/assessment.html": "cf969d8b208a4d096bf71d1ab26fcc59ee246f1758be7c4e8cc16e630597262c",
+        "attachments/assessment.json": "c585715e07a1886602bd3ccf765fd383c8457326b11281bef3eb78809f677182",
+        "attachments/assessment.pdf": "2e74e22d563fb1102638b46a6e56e595007db3d934766db4173876adbd6b06de",
+        "manifest.json": "0b79912829df988e5e578e9fc88bb64df631d928f2f2e64e03bc723e73cee592",
+        "public.pem": "ad3dffed93378c8bb2049228e640a2be30f6a47d46501358b3e2b2705b4bab46",
+        "report.json": "e0d45e16e7999b3bb06a8f7eb59ce285ecab7f4993683522ad235110a4cf442e",
+        "signature.base64": "5277cf89a8ae3327d085709d6298425550f5d64408c1cce962c65152af7b75b0"
+      }
+    },
+    "historical-assessment-demos": {
+      "key_sha256": "3ce73cf55ca3c228b54ef6f13f002dbfbb056ca3ff3a06477da73ef83a0f7d41",
+      "proof": {
+        "attachments/assessment.html": "cb60ee5449cbd81a0dce59f2e214227aaa1ade9e58d1d25e103b2ad351c0dfb1",
+        "attachments/assessment.json": "ab3bf96751a52f44d2288ffb800dc6f313b4b91a001720c581c52ede9b86a8bc",
+        "attachments/assessment.pdf": "b163c00bfa3e0c85db7e3dbcf51393a3c5b41060967630ab70070a3c7d579e2d",
+        "manifest.json": "8894b4abe09166344ac58f0987b284129396f53ebbb9548226fd35e84256d063",
+        "public.pem": "3ce73cf55ca3c228b54ef6f13f002dbfbb056ca3ff3a06477da73ef83a0f7d41",
+        "report.json": "9f0dab308de9f1929e8d8c3fa5c7d225d6bb399b8c2ab17d482daecf39c4b99d",
+        "signature.base64": "530c0935e2e654fc1708e97585b75ef7aa72c0e70b5ed5deeb2f98183ad89770"
+      }
+    },
+    "historical-selective100": {
+      "key_sha256": "2fbf4e0fae28e05ee2d461428b4a65c6f909e39339419b555ae1ae3cde4e8a02",
+      "proof": {
+        "attachments/assessment.html": "20d9ce8cb694b1280642b8332f0fc8d10b69ae4cb7b6624aa3fc52c16a99452c",
+        "attachments/assessment.json": "57f2ff815caf60279e2186d3880ca1e9a3ad8b4ac20c970a396843ec2d0dfc65",
+        "attachments/assessment.pdf": "496885a7ebc5a5c5081cb0dcdfdf270dbba959cc35caba0aeff4a6753eb120aa",
+        "attachments/comparison.html": "1696dd1a3e6cd4d8bc7a8f2633bf9e3d0eeffb3dab7f4f38ddb25f35ae9e6620",
+        "attachments/comparison.json": "13eb628e5e3d25465aa7952c5ffa88dbb7fa09151bfe49c016a346388931e0b7",
+        "attachments/request-receipts.json": "46ec595491f01e71ba7bcbd24a3c81a485822d2178fffcb781a01204db18899c",
+        "manifest.json": "2f79ea708b5ceef0a741a8333b7645940fe3a94956ca48cad77798f2101ba4d6",
+        "public.pem": "2fbf4e0fae28e05ee2d461428b4a65c6f909e39339419b555ae1ae3cde4e8a02",
+        "report.json": "5968727c3477c9f9313ac054a44c991a8e775e2c88bb8c0058f2fa4e301eb3b5",
+        "signature.base64": "89bd36bde384953c11b9fc9e76c13f08c0c41d0e585c9d5fd108350060847d2f"
+      }
+    },
+    "report-50": {
+      "key_sha256": "a7c9ef4bb20ce843ad30803251031fac6b8851c67087372a4d9c58b0cbc0f5d5",
+      "proof": {
+        "attachments/assessment.html": "bf51cae944e8db1d7afe571c61829e3a0d2cd38ceb518152ae974e13bf769007",
+        "attachments/assessment.json": "8e108c9339652e729910b39387c0e30e7590dadb9c5153b5d5e21ec800ba374b",
+        "attachments/assessment.pdf": "565ad7840983164c164856bfd1f14fa204f3f4a7c308b4ff646d13f995798348",
+        "manifest.json": "b195f1ea44b472b9dc9929ce4ff490914891877a38322499755c69e971980ab1",
+        "public.pem": "a7c9ef4bb20ce843ad30803251031fac6b8851c67087372a4d9c58b0cbc0f5d5",
+        "report.json": "134ec158fea9dd2a19b2dbeec7bf8c011f2f752f44977b2738ed4f8e5b77f440",
+        "signature.base64": "5a82e2228b802e6f981ba935188480f01b4646f751b0fe878f573c64c1103e0f"
+      }
+    },
+    "selective100": {
+      "key_sha256": "d1e2bee944922b86d84fc84f11d14eede5f2c04808e24927eb7a526fd2253f44",
+      "proof": {
+        "attachments/assessment.html": "4befad660c4c845699cffc76d78078741b74d9ebdef0ed749579737d160ff3ad",
+        "attachments/assessment.json": "fd27be167de4cebb36db05961a34493a038b6686785653d3b9c247b3398bd5f8",
+        "attachments/assessment.pdf": "f741faf2a5daa3c466aa366611ecc74ef75a29a3b6a8111c468b5c4b891db529",
+        "attachments/comparison.html": "97e671ae7013b95513492e35aa418035621e058c57e43143692b460e55f82912",
+        "attachments/comparison.json": "5db9635d7aae78853fa833f9d212ace3298f130193198c08fedc4fe65424912a",
+        "attachments/request-receipts.json": "5345367e117248706a2ffd4fe715e07eb46266ae56b8309de436a85a881e869f",
+        "manifest.json": "9774f15ba7696ab1092e3ece94a39f30f0819dea040e69df0cf6f04e45def6f4",
+        "public.pem": "d1e2bee944922b86d84fc84f11d14eede5f2c04808e24927eb7a526fd2253f44",
+        "report.json": "ad67b584c3a11448b676d71de461416d51994192ad4daaeb46ed5983abd2d32d",
+        "signature.base64": "3cec5669b8bad691b54ff131d2919251fe35be344b469bce8ad4aad0291adf6d"
+      }
+    },
+    "workflow-safe": {
+      "key_sha256": "e074813dcdf30069af07ef78be9ec0c977e6e61fd432cbdb798cfaf215172de4",
+      "proof": {
+        "attachments/assessment.html": "134227fe21dfeba2586d426911477e5c72193329556ee64b667399110c31cd09",
+        "attachments/assessment.json": "fabbf1f6bf1317034ed42df55c3c464f29b9bcdec1b6c6da880ce35d05b5bfff",
+        "attachments/assessment.pdf": "01938cf40d6604299a81d7af321eecc0b159e4446ef81ef7ce4c0e2fe7adff6b",
+        "manifest.json": "8aa915be1ad03942854302dd06a25a76712db7d7c5961f5f68eb4553c01e7dd5",
+        "public.pem": "e074813dcdf30069af07ef78be9ec0c977e6e61fd432cbdb798cfaf215172de4",
+        "report.json": "76a1e8d7d8e3ea9dec9273bdd930056e3aa1f0ae72dbc2554f59fa01ff1f15b3",
+        "signature.base64": "e423f3d6d0405615a973f3ce1c47ffa41fd4ebc3d7a75fe36877b6b7962880f6"
+      }
+    },
+    "workflow-violation": {
+      "key_sha256": "7cf634cd629ae768ac4ca5dced5a94f0a0447d2324fc0ac56bda9e41379d52f3",
+      "proof": {
+        "attachments/assessment.html": "7bb1392b2b4814eb8d94a26fb37354e21e70950bb256f3646e0b76502f8a52db",
+        "attachments/assessment.json": "20cbf11dcab251e457613a2794ab7c1666c0859099536a9e3c6f1003b22dcde3",
+        "attachments/assessment.pdf": "72d6e575824f440d4bb1533bddcdd06a0b02e713ec97b4da565e173c82b03892",
+        "manifest.json": "4ed07a5c943f8d4863f76554c428e9d6de4519eb2b0f37d2acc6405c9261de00",
+        "public.pem": "7cf634cd629ae768ac4ca5dced5a94f0a0447d2324fc0ac56bda9e41379d52f3",
+        "report.json": "666aa00d1f9e7a6107440df238ed9050c33b050878ef9ce8fe687f74e55a70e7",
+        "signature.base64": "ce068952878e4b49c5a48e473d11ccc0a0ff462a3cf7268e2b829747b68dda34"
+      }
+    }
+  }
+}

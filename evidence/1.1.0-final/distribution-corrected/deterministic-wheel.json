@@ -1,0 +1,16 @@
+{
+  "build_backend": {
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
+  },
+  "bytes": 1405983,
+  "notice_included": true,
+  "passed": true,
+  "sha256": "f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f",
+  "source_commit": "43c5a5b036790310f8dad0991cd18aef7c8a467b",
+  "source_date_epoch": 1767225600,
+  "wheels": [
+    "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/wheel-1/authzledger-1.1.0-py3-none-any.whl",
+    "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/wheel-2/authzledger-1.1.0-py3-none-any.whl"
+  ]
+}

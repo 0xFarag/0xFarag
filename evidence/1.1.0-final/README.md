@@ -14,11 +14,13 @@ The latest measured 1,000-case GUI fixture used 20 local interactions: P95 selec
 
 ## Distribution and report verification
 
-`installed-wheel.json` and `distribution/` bind the exact wheel, two deterministic builds, clean external installation, dependency/font versions and commands. `assessment-demos/` and `selective100/` are public synthetic labs and portable signed proofs. The independent public keys are retained outside the bundles; they are demonstration anchors, not publisher identity certification.
+`installed-wheel.json` and `distribution-corrected/` bind the exact wheel, two deterministic builds, clean external installation, dependency/font versions and commands. `assessment-demos/` and `selective100/` are public synthetic labs and portable signed proofs. The independent public keys are retained outside the bundles; they are demonstration anchors, not publisher identity certification.
 
 `report-qa/` contains the 50-finding Unicode snapshot, signed inventory and PDF; all 72 PDF pages were rasterized. Contact sheets, selected detail pages and the visual review are retained. The canonical report profile is invariant across absent, zero, release and malformed SOURCE_DATE_EPOCH values. Both verifiers are exercised in each environment. The full unit suite additionally checks negative and overflowing epoch values, original no-environment byte compatibility, and absence of process-global mutations.
 
 A first pre-publication distribution attempt exposed ReportLab's inherited environment timestamp. That attempt is superseded and is not included here. The renderer was corrected and the complete 530-test/seven-browser gate and distribution checks were repeated. Historical 1.0.0/dev0/release-review evidence remains unchanged.
+
+A final cross-check against GitHub CI found that the original external build harness copied `NOTICE` instead of the repository's `NOTICE.txt`. The earlier wheel therefore omitted that notice. Two full Git-checkout builds now reproduce the same complete wheel as CI (`f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f`, 1,405,983 bytes, 51 entries). `distribution-corrected/` records both legal files, clean installation, both verifiers on seven retained bundles, fresh demos/workflows, and the unchanged 50-finding reports across four epoch environments. All product payloads and retained proof bytes are unchanged. Original `distribution/`, `installed-wheel/` and `installed-wheel-superseded.json` receipts are retained as superseded wheel-build/install evidence; they are not the release wheel acceptance. Earlier report and visual receipts remain applicable and are reconfirmed by the correction.
 
 ## Reading the receipts
 

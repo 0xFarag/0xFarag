@@ -87,7 +87,7 @@
     "reports_reproducible": true,
     "report_qa_findings": 50,
     "report_qa_pdf_pages": 72,
-    "wheel_sha256": "77ffbef884f881c615f177164bf43b75abe006ec363b53c407936a61b97d6b9b",
+    "wheel_sha256": "f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f",
     "source_date_epoch_independent": true,
     "verification": "evidence/1.1.0-final/README.md"
   }

@@ -1,0 +1,448 @@
+[
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/build-venv/bin/python",
+      "-c",
+      "import importlib.metadata as m,json; print(json.dumps({x:m.version(x) for x in (\"setuptools\",\"wheel\")})); assert m.version(\"setuptools\")==\"84.0.0\"; assert m.version(\"wheel\")==\"0.48.0\""
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "00-backend-versions",
+    "seconds": 0.055,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/build-venv/bin/python",
+      "-m",
+      "pip",
+      "wheel",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/wheel-1",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/git-source-1"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "01-build-1",
+    "seconds": 0.676,
+    "source_date_epoch": "1767225600"
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/build-venv/bin/python",
+      "-m",
+      "pip",
+      "wheel",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/wheel-2",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/git-source-2"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "01-build-2",
+    "seconds": 0.703,
+    "source_date_epoch": "1767225600"
+  },
+  {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-m",
+      "venv",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "02-clean-venv",
+    "seconds": 1.687,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-m",
+      "pip",
+      "install",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/wheel-1/authzledger-1.1.0-py3-none-any.whl[reports]",
+      "pypdf==6.10.0",
+      "pillow==12.3.0"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "03-install-reports",
+    "seconds": 1.338,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-m",
+      "pip",
+      "check"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "04-pip-check",
+    "seconds": 0.186,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-m",
+      "pip",
+      "freeze",
+      "--all"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "05-pip-freeze",
+    "seconds": 0.175,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "-c",
+      "import authzledger,importlib.metadata as m,hashlib,json,sys\nfrom pathlib import Path\np=Path(authzledger.__file__).resolve().parent\nfonts={n:hashlib.sha256((p/'fonts'/n).read_bytes()).hexdigest() for n in ('DejaVuSans.ttf','DejaVuSans-Bold.ttf')}\nif 'site-packages' not in p.parts or authzledger.__version__!='1.1.0' or m.version('reportlab')!='4.4.9':raise RuntimeError('wrong installed runtime')\nexpected={'DejaVuSans.ttf':'ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280','DejaVuSans-Bold.ttf':'5c1247acef7f2b8522a31742c76d6adcb5569bacc0be7ceaa4dc39dd252ce895'}\nif fonts!=expected:raise RuntimeError('font mismatch')\nvalue={'passed':True,'module_path':str(p),'python':sys.version,'prefix':sys.prefix,'versions':{n:m.version(n) for n in ('authzledger','reportlab','pillow','pypdf')},'font_sha256':fonts,'wheel_sha256':sys.argv[2]}\nPath(sys.argv[1]).write_text(json.dumps(value,indent=2)+'\\n')\nprint(json.dumps(value))\n",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-provenance.json",
+      "f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "06-installed-provenance",
+    "seconds": 0.06,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/assessment-demos/proof",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/assessment-demos-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/assessment-demos-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "07-verify-assessment-demos",
+    "seconds": 0.333,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/selective100/proof",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/selective100-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/selective100-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "07-verify-selective100",
+    "seconds": 0.943,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/proof-a",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/report-50-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/report-50-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "07-verify-report-50",
+    "seconds": 1.039,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/workflow-assurance-safe/proof",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/workflow-safe-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/workflow-safe-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "07-verify-workflow-safe",
+    "seconds": 0.345,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/workflow-assurance-violation/proof",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/workflow-violation-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/workflow-violation-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "07-verify-workflow-violation",
+    "seconds": 0.324,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/7b68a7003223/authzledger/evidence/1.1.0-release-review/assessment-demos/proof",
+      "--public-key",
+      "/workspace/scratch/7b68a7003223/authzledger/evidence/1.1.0-release-review/assessment-demos/trusted-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/historical-assessment-demos-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "07-verify-historical-assessment-demos",
+    "seconds": 0.354,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/7b68a7003223/authzledger/evidence/1.1.0-release-review/selective100/proof",
+      "--public-key",
+      "/workspace/scratch/7b68a7003223/authzledger/evidence/1.1.0-release-review/selective100/trusted-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/historical-selective100-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "07-verify-historical-selective100",
+    "seconds": 1.062,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/check_assessment.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/fresh-demos"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "08-fresh-demos",
+    "seconds": 0.934,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/check_workflows110.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/fresh-workflows"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "09-fresh-workflows",
+    "seconds": 0.793,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "render",
+      "--snapshot",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/snapshot-50.json",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/render-unset"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "10-render-unset",
+    "seconds": 1.022,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/proof-a",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/report-50-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/report-unset-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "11-verify-report-unset",
+    "seconds": 1.08,
+    "source_date_epoch": null
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "render",
+      "--snapshot",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/snapshot-50.json",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/render-release"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "10-render-release",
+    "seconds": 1.113,
+    "source_date_epoch": "1767225600"
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/proof-a",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/report-50-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/report-release-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "11-verify-report-release",
+    "seconds": 1.088,
+    "source_date_epoch": "1767225600"
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "render",
+      "--snapshot",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/snapshot-50.json",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/render-zero"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "10-render-zero",
+    "seconds": 1.176,
+    "source_date_epoch": "0"
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/proof-a",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/report-50-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/report-zero-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "11-verify-report-zero",
+    "seconds": 1.231,
+    "source_date_epoch": "0"
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "render",
+      "--snapshot",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/snapshot-50.json",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/render-invalid"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "10-render-invalid",
+    "seconds": 1.182,
+    "source_date_epoch": "invalid"
+  },
+  {
+    "argv": [
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/installed-venv/bin/python",
+      "-I",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/proof_qa.py",
+      "verify",
+      "--bundle",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/report-qa/proof-a",
+      "--public-key",
+      "/workspace/scratch/5ee9d8409b8d/phase2-final/run-canonical/trust-anchors/report-50-public.pem",
+      "--standalone",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/harness/tools/verify_bundle.py",
+      "--out",
+      "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction/report-invalid-verification.json"
+    ],
+    "cwd": "/workspace/scratch/5ee9d8409b8d/wheel-diagnostic/correction",
+    "exit_code": 0,
+    "name": "11-verify-report-invalid",
+    "seconds": 1.286,
+    "source_date_epoch": "invalid"
+  }
+]
