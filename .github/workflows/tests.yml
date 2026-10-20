@@ -57,7 +57,7 @@ jobs:
 
   publish150:
     needs: [verify]
-    if: github.repository == '0xFarag/0xFarag' && github.event_name == 'push' && github.ref == 'refs/heads/authzledger-v1.5.0' && needs.verify.outputs.stable == 'true'
+    if: false # Release hold: final local browser regression must be resolved first.
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
