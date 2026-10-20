@@ -2,7 +2,7 @@
 
 # Nasser Aldin Farag · 0xFarag
 
-**[AuthzLedger 1.1.0 — release, source and downloads →](https://github.com/0xFarag/0xFarag/releases/tag/v1.1.0)**
+**[AuthzLedger 1.5.0 — assessment suite, source and downloads →](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0)**
 
 **Penetration Testing · Web & API Security · Security Engineering**  
 Zürich, Switzerland
@@ -15,53 +15,41 @@ My focus is application security, authorization testing and security automation.
 
 [LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [GitHub projects](https://github.com/0xFarag?tab=repositories) · [YouTube](https://www.youtube.com/@0xFarag) · [TryHackMe](https://tryhackme.com/p/0xFarag)
 
-## AuthzLedger 1.1.0
+## AuthzLedger 1.5.0
 
-### Find the authorization gap. Prove the fix.
+### From permitted scope to reproducible evidence.
 
-**The local authorization testing and evidence workbench for pentesters and AppSec teams.**
+**One local assessment suite for expert pentesters and AppSec teams.**
 
-Bring captured traffic into controlled experiments. Turn a finding into a smaller reproducer. Retest the fix and deliver the evidence behind it — through one Studio and CLI.
+Connect permitted scope, captured traffic, discovery, controlled checks, reproducible findings, selective retests and signed handover. Studio and CLI share the same services and execution context.
 
-[![Watch the AuthzLedger 1.1.0 launch film with Nasser Aldin Farag](assets/authzledger-1.1.0/founder-film.jpg)](https://www.youtube.com/watch?v=vEaYxBpsLGw)
+**[DOWNLOAD 1.5.0 →](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0)** · **[EXPLORE THE SUITE →](AUTHZLEDGER.md)** · **[RUN THE LOCAL DEMOS →](AUTHZLEDGER.md#run-the-150-suite)**
 
-**[WATCH THE 52-SECOND FILM →](https://www.youtube.com/watch?v=vEaYxBpsLGw)** · **[EXPLORE ALL CAPABILITIES →](AUTHZLEDGER.md)** · **[DOWNLOAD 1.1.0 →](https://github.com/0xFarag/0xFarag/releases/tag/v1.1.0)**
+### Discover → Assess → Prove → Retest → Handover
 
-### Eight capabilities. One evidence trail.
-
-| Capability | What you can do |
+| Capability | Delivered in 1.5.0 |
 | :--- | :--- |
-| **01 · Bring your traffic** | Import native Burp raw request/response pairs, ZAP JSON+ and HAR. Review redaction and bind the source to an explicit test scope. |
-| **02 · Contrast Lab** | Test BOLA/IDOR, tenant isolation and denial-data leakage with identity, owner and denial controls attached to each finding. |
-| **03 · Workflow Contracts** | Exercise ordered business flows, skipped approvals, replay and idempotency. Verify the effect through independent state reads. |
-| **04 · Minimal Reproducer** | Remove selected request fields through bounded, controlled experiments. Retain the original finding and evidence for every accepted reduction. |
-| **05 · Source-bound retests** | Retest selected cases with fresh controls and unchanged rule bindings. Keep verified fixes and untested cases visibly distinct. |
-| **06 · One Studio and CLI** | Work through a keyboard-first assessment workspace, shared matrix/graph selection, persistent Inspector and the same underlying execution services. |
-| **07 · Evidence handover** | Freeze JSON, HTML and PDF from one assessment. Include reviewed standards mappings and an Ed25519-signed file inventory. |
-| **08 · Change and assurance** | Explain impacted-case selection, inspect evidence relationships and run bounded assurance cycles with checked history and shared request budgets. |
+| **Engagement workspace** | Persistent assessments with explicit scope, rules-of-engagement references, credential references, expiry and budgets. |
+| **Recon and inventory** | Bounded HTTP/API discovery and explicit TCP service probes; one surface catalog with retained provenance. |
+| **Specialist-tool integration** | Burp raw, ZAP JSON+, HAR and OpenAPI; selected offline Nmap XML and Nuclei JSONL result adapters. Imported assertions remain hints. |
+| **Controlled assessment** | Versioned authorization, business-logic and selected web checks with prerequisite controls, observable predicates and explicit evidence levels. |
+| **Controlled PoCs** | Reproducible experiments, bounded Minimal Reproducer and explicitly approved static playbooks. |
+| **Selective retest** | Source-bound comparisons preserve the original evidence and keep omitted work visible as `not_retested`. |
+| **Reporting and handover** | JSON, HTML and PDF from one frozen snapshot; impact, remediation, coverage and an Ed25519-signed file inventory. |
 
-[![AuthzLedger Studio: actual authorization assessment, controls and evidence Inspector](https://raw.githubusercontent.com/0xFarag/0xFarag/v1.1.0/brand/release-1.1.0/launch-landscape.png)](AUTHZLEDGER.md#walk-through-the-product)
+**682/682 tests · 8/8 browser suites · 3 reproducible demos.** [Inspect the passing release pipeline](https://github.com/0xFarag/0xFarag/actions/runs/39477528355) · [Download the exact-commit verification receipt](https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/verification.json).
 
-*Actual Studio capture · Synthetic local fixture. [Walk through the product, with real screens →](AUTHZLEDGER.md#walk-through-the-product)*
+The A/B/C demos use owned loopback fixtures: a 403 with protected data is confirmed only with valid controls; scoped discovery leads to a narrow configuration finding; a selective fix proof retains `not_retested`. Changing one signed report byte is rejected by both verifiers.
 
-### See what changes the finding
+[Installation](https://github.com/0xFarag/0xFarag/blob/v1.5.0/INSTALL.md) · [Versioned source](https://github.com/0xFarag/0xFarag/tree/v1.5.0) · [Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-source.zip) · [Wheel](https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-py3-none-any.whl) · [Proof package with JSON/HTML/PDF](https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-proof.zip)
 
-| In the local lab | What AuthzLedger establishes |
-| :--- | :--- |
-| **403 response, protected data still present** | A confirmed disclosure when the identity, owner and denial controls are valid. |
-| **A request with removable fields** | A smaller reproducer with fresh controls and a retained chain back to the original. |
-| **100-case baseline; seven variants selected** | Ten retest requests including three controls. The other 90 cases stay explicitly `not_retested`. |
-| **A report ready for handover** | JSON, HTML and PDF from one frozen assessment, with a signed file inventory and separate verification. |
+The native checks cover documented predicates, not universal vulnerability coverage. Nmap/Nuclei adapters import supported results; they do not launch the scanners. [Read the exact supported scope and trust boundaries](https://github.com/0xFarag/0xFarag/blob/v1.5.0/docs/suite-1.5.0.md).
 
-**88/88 acceptance scenarios · 530 Python tests · 7 Chromium suites.** [Inspect the release checks](https://github.com/0xFarag/0xFarag/actions/runs/38080406879) · [Read the acceptance ledger](https://github.com/0xFarag/0xFarag/blob/v1.1.0/docs/acceptance-1.1.0.md).
+Built on the unchanged [1.1.0 authorization foundation](https://github.com/0xFarag/0xFarag/releases/tag/v1.1.0). [Watch the historical 1.1.0 film](https://www.youtube.com/watch?v=vEaYxBpsLGw); it shows that earlier release.
 
-### Run it. Inspect it. Bring a pilot.
+**AppSec teams and pentest consultancies:** [contact me on LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) to discuss an authorized pilot and reproducible developer handover.
 
-**[Start the local lab →](AUTHZLEDGER.md#run-the-local-lab)** · [Installation guide](https://github.com/0xFarag/0xFarag/blob/v1.1.0/INSTALL.md) · [Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v1.1.0/authzledger-1.1.0-source.zip) · [Wheel](https://github.com/0xFarag/0xFarag/releases/download/v1.1.0/authzledger-1.1.0-py3-none-any.whl) · [Proof package](https://github.com/0xFarag/0xFarag/releases/download/v1.1.0/authzledger-1.1.0-proof.zip)
-
-**AppSec teams, pentest consultancies and security-tooling investors:** [contact me on LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) to discuss a pilot, reproducible handovers and the path from local assessments to team workflows.
-
-Built by **Nasser Aldin Farag / 0xFarag**, Switzerland. Source-visible, with proprietary rights reserved. [Commercial licensing](AUTHZLEDGER_RIGHTS.md) · [Technical boundaries](AUTHZLEDGER.md#evidence-and-operating-boundaries) · [Development direction](AUTHZLEDGER_DIRECTION.md).
+Built by **Nasser Aldin Farag / 0xFarag**, Switzerland. Source-visible, with proprietary rights reserved. [Commercial licensing](AUTHZLEDGER_RIGHTS.md) · [Product scope](AUTHZLEDGER.md) · [Development direction](AUTHZLEDGER_DIRECTION.md).
 
 ## Selected engineering work
 

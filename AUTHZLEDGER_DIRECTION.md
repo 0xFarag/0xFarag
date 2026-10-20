@@ -1,4 +1,33 @@
-# AuthzLedger — released 1.0 and next validation gates
+# AuthzLedger — released 1.5.0 and validation priorities
+
+**Discover → Assess → Prove → Retest → Handover**
+
+AuthzLedger **1.5.0 was released on 20 October 2026** as one integrated local assessment suite on the 1.1.0 foundation.
+
+- [Current release and six downloadable assets](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0)
+- [Versioned source and installation](https://github.com/0xFarag/0xFarag/blob/v1.5.0/INSTALL.md)
+- [Passing exact-commit CI: 682 tests and eight browser suites](https://github.com/0xFarag/0xFarag/actions/runs/39477528355)
+- [Suite architecture, supported checks, adapters and acceptance criteria](https://github.com/0xFarag/0xFarag/blob/v1.5.0/docs/suite-1.5.0.md)
+- [Demos, verification boundaries and release contract](https://github.com/0xFarag/0xFarag/blob/v1.5.0/docs/release-1.5.0.md)
+
+## Delivered together in 1.5.0
+
+Persistent engagement workspaces, explicit scope/RoE and budgets; bounded HTTP/TCP discovery; selected offline Nmap/Nuclei adapters; versioned control-bound checks; static approved playbooks; source-bound retests; offline surface deltas and a small reviewed knowledge pack; finite explicitly invoked schedules; frozen JSON/HTML/PDF and Ed25519-signed handover.
+
+Studio and CLI share the existing services and execution context. The full release includes the A/B/C work packages; they are not deferred 1.2/1.3/1.4 releases.
+
+## Next validation priorities
+
+1. Measure operator effort and handover quality in explicitly authorized pilot assessments.
+2. Obtain independent security and method review, retaining unsupported and inconclusive cases.
+3. Expand validated check coverage through control/oracle fixtures and per-domain comparison methodology.
+4. Validate demand before introducing hosted team operation, distributed agents or billing.
+
+The public fixtures establish specific reproducible behavior. Competitive superiority and production-wide coverage require separate evidence.
+
+## Historical 1.0 release record
+
+The following record documents the earlier 1.0 foundation, its original metrics and validation priorities. Current installation and scope are linked above.
 
 **Authorization Intelligence, built on evidence.**  
 Know who can do what. Prove what changed.
@@ -11,7 +40,7 @@ AuthzLedger **1.0.0 was released on 9 October 2026** after its GitHub verificati
 - [Architecture, feature interactions and official-source competitive comparison](https://github.com/0xFarag/0xFarag/blob/authzledger-v1.0.0/docs/product-1.0.md)
 - [Immediate priorities, channel copy and 30-/90-day adoption plan](https://github.com/0xFarag/0xFarag/blob/authzledger-v1.0.0/docs/launch-1.0.md)
 
-## Shipped in 1.0
+### Shipped in 1.0
 
 The Living Authorization Graph separates intended permission, independently evaluated policy and controlled application observation. Differential intelligence records policy, contract, identity, control and coverage changes. Positive-control prerequisites, selective retests, finite assurance sessions and hash-chained local history retain the validity of evidence.
 
@@ -19,7 +48,7 @@ Studio and CLI expose the same core capabilities. Local rules and opt-in OPA use
 
 The release includes the installable wheel, curated source ZIP, independent verifier, checksums, two verified 36-second films and subtitles. **233 automated tests passed locally and in GitHub CI**. Both local Chromium acceptance suites and the installed-distribution workflow passed. The release source tree matches the locally verified tree; wheel, source and film checksums match the published GitHub assets.
 
-## Next gates, in order
+### Next gates, in order
 
 1. Run controlled pilots on explicitly authorized applications; measure time to a reproducible finding, control validity and retest precision.
 2. Obtain an independent security and authorization-method review. Publish limitations and comparative methodology alongside results.
@@ -28,6 +57,6 @@ The release includes the installable wheel, curated source ZIP, independent veri
 
 The current product is a local workbench. Authored synthetic fixtures establish specific reproducible behavior; they do not establish universal scanner superiority, a world-first claim or guaranteed market adoption.
 
-## Lineage
+### Lineage
 
 The released source preserves and extends [v0.3.4](https://github.com/0xFarag/0xFarag/releases/tag/v0.3.4) and the hardened [1.0 foundation](https://github.com/0xFarag/0xFarag/tree/authzledger-1.0-foundation). The standard branch remains the public engineering profile; product distributions have their own versioned branches and tags.
