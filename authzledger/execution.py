@@ -16,7 +16,7 @@ from urllib.parse import urlsplit
 from .model import _target, ContractError
 
 REQUEST_KINDS = frozenset({"application", "identity_control", "object_control", "negative_control",
-                           "pdp", "setup", "state_probe", "replay", "reduction", "cleanup", "advisory"})
+                           "pdp", "setup", "state_probe", "replay", "reduction", "cleanup", "advisory", "discovery", "service"})
 
 
 class ExecutionError(ValueError):
@@ -38,7 +38,7 @@ class Reservation:
 class ExecutionContext:
     def __init__(self, max_requests, allowed_origins, timeout_seconds, concurrency,
                  cleanup_reserve=0, allow_cleanup_after_cancel=False, *, stop_event=None,
-                 approved_operations=None):
+                 approved_operations=None, scope_policy=None):
         if type(max_requests) is not int or not 1 <= max_requests <= 1000000:
             raise ExecutionError("invalid-budget")
         if type(concurrency) is not int or not 1 <= concurrency <= 16:
@@ -51,6 +51,14 @@ class ExecutionContext:
             raise ExecutionError("invalid-cleanup-policy")
         if stop_event is not None and not isinstance(stop_event, threading.Event):
             raise ExecutionError("invalid-stop-event")
+        self.scope_policy = None
+        self.max_response_bytes = 1048576
+        if scope_policy is not None:
+            from .scope import validate_scope
+            self.scope_policy = validate_scope(scope_policy)
+            self.max_response_bytes = self.scope_policy["limits"]["max_response_bytes"]
+            if max_requests > self.scope_policy["limits"]["max_requests"] or concurrency > self.scope_policy["limits"]["concurrency"] or timeout_seconds > self.scope_policy["limits"]["timeout_seconds"]:
+                raise ExecutionError("scope-limits-exceeded")
         scopes = allowed_origins if isinstance(allowed_origins, dict) else {"application": allowed_origins}
         if set(scopes) - {"application", "pdp", "advisory"}:
             raise ExecutionError("invalid-scope")
@@ -60,7 +68,13 @@ class ExecutionContext:
         if not isinstance(app_origins, (list, tuple, set)) or not isinstance(pdp_endpoints, (list, tuple, set)) or not isinstance(advisory_endpoints, (list, tuple, set)):
             raise ExecutionError("invalid-scope")
         try:
-            self._application_origins = frozenset(_target(value) for value in app_origins)
+            if self.scope_policy is not None:
+                from .scope import canonical_origin
+                self._application_origins = frozenset(canonical_origin(value) for value in app_origins)
+                if not self._application_origins <= set(self.scope_policy["origins"]):
+                    raise ExecutionError("origin-outside-scope")
+            else:
+                self._application_origins = frozenset(_target(value) for value in app_origins)
             endpoints = []
             for value in pdp_endpoints:
                 if (not isinstance(value, str) or len(value) > 2048 or not value.isascii()
@@ -93,12 +107,18 @@ class ExecutionContext:
         if approved_operations is not None:
             try:
                 self._operations = frozenset(tuple(item) for item in approved_operations)
-                if any(len(item) != 3 or any(not isinstance(part, str) for part in item) for item in self._operations):
+                if any(len(item) not in {3, 4} or any(not isinstance(part, str) for part in item) for item in self._operations):
                     raise ValueError
             except (ValueError, TypeError):
                 raise ExecutionError("invalid-operation-scope") from None
         else:
             self._operations = None
+        if self.scope_policy is not None:
+            scoped_operations = frozenset((op["origin"], op["purpose"], op["method"], op["path"]) for op in self.scope_policy["operations"])
+            if self._operations is None:
+                self._operations = scoped_operations
+            elif any(len(item) != 4 for item in self._operations) or not self._operations <= scoped_operations:
+                raise ExecutionError("operation-outside-scope")
         self.max_requests = max_requests
         self.timeout_seconds = timeout_seconds
         self.concurrency = concurrency
@@ -138,8 +158,15 @@ class ExecutionContext:
         if not isinstance(kind, str) or kind not in REQUEST_KINDS:
             raise ExecutionError("invalid-request-kind")
         try:
-            origin = _target(target_origin)
-        except ContractError:
+            if self.scope_policy is not None:
+                from .scope import canonical_origin, assert_scope_active
+                assert_scope_active(self.scope_policy)
+                origin = canonical_origin(target_origin)
+            else:
+                origin = _target(target_origin)
+        except ValueError as exc:
+            if isinstance(exc, ExecutionError):
+                raise
             raise ExecutionError("origin-outside-scope") from None
         if kind == "pdp":
             if method != "POST" or not isinstance(path, str) or origin + path not in self._pdp_endpoints:
@@ -149,9 +176,18 @@ class ExecutionContext:
                 raise ExecutionError("advisory-operation-outside-scope")
         elif origin not in self._application_origins:
             raise ExecutionError("origin-outside-scope")
-        if self._operations is not None and (kind, method, path) not in self._operations:
-            raise ExecutionError("operation-outside-scope")
+        if self._operations is not None:
+            exact = (origin, kind, method, path) in self._operations
+            legacy = self.scope_policy is None and (kind, method, path) in self._operations
+            if not exact and not legacy:
+                raise ExecutionError("operation-outside-scope")
         return origin
+
+    def connection_policy(self, origin, *, kind="application"):
+        if self.scope_policy is None:
+            return None
+        from .scope import BoundSocketPolicy
+        return BoundSocketPolicy(self, origin, kind=kind)
 
     def _remaining(self, kind, lease=None):
         if lease is not None:
@@ -180,6 +216,9 @@ class ExecutionContext:
         if type(deadline) not in (int, float) or not 0 < deadline < 1e20 or not math.isfinite(deadline):
             raise ExecutionError("invalid-deadline")
         deadline = min(deadline, time.monotonic() + self.timeout_seconds)
+        if self.scope_policy is not None:
+            from .scope import seconds_remaining
+            deadline = min(deadline, time.monotonic() + max(0, seconds_remaining(self.scope_policy)))
         with self._condition:
             while True:
                 if self._is_cancelled() and not (kind == "cleanup" and self.allow_cleanup_after_cancel):
@@ -206,7 +245,8 @@ class ExecutionContext:
             self._next += 1
             reservation = Reservation(self._next, kind, operation_id, origin, deadline)
             self._records[reservation.sequence] = {"reservation": reservation, "state": "reserved",
-                                                  "outcome": None, "elapsed_ms": 0, "response_bytes": 0, "lease": _lease}
+                                                  "outcome": None, "elapsed_ms": 0, "response_bytes": 0, "lease": _lease,
+                                                  "method": method, "path": path}
             return reservation
 
     def _entry(self, reservation):
@@ -278,6 +318,13 @@ class ExecutionContext:
             entry = self._entry(reservation)
             if entry["state"] != "reserved":
                 raise ExecutionError("reservation-already-used")
+            if self.scope_policy is not None:
+                try:
+                    self._check_scope(reservation.kind, reservation.target_origin, entry["method"], entry["path"])
+                except ExecutionError:
+                    self._release_entry(entry)
+                    self._condition.notify_all()
+                    raise
             if self._is_cancelled() and not (reservation.kind == "cleanup" and self.allow_cleanup_after_cancel):
                 self._release_entry(entry)
                 self._condition.notify_all()
@@ -353,6 +400,14 @@ class _LeasedContext(ExecutionContext):
         self.timeout_seconds = parent.timeout_seconds
         self.cleanup_reserve = parent.cleanup_reserve
         self.allow_cleanup_after_cancel = parent.allow_cleanup_after_cancel
+        self.scope_policy = parent.scope_policy
+        self.max_response_bytes = parent.max_response_bytes
+
+    def _is_cancelled(self):
+        return self._parent._is_cancelled()
+
+    def connection_policy(self, origin, *, kind="application"):
+        return self._parent.connection_policy(origin, kind=kind)
 
     def reserve(self, **kwargs):
         if "_lease" in kwargs:

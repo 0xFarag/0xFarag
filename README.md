@@ -1,119 +1,112 @@
-# AuthzLedger 1.1.0 — local authorization proof workbench
+# AuthzLedger 1.5 — controlled assessment suite
 
-**Turn a request into a controlled finding, a smaller reproducer and a verifiable fix.**
+**From permitted scope to reproducible evidence.**
 
-Know who can do what. Prove what changed.
+Find the authorization gap. Prove the fix. Extend the same discipline to discovery and selected web/API checks.
 
 ![AuthzLedger by 0xFarag](brand/hero.svg)
 
-An authorization decision has three sources: what the contract intends, what a policy engine decides, and what the application actually does. AuthzLedger connects them in a versioned authorization graph, exposes disagreements and preserves verifiable evidence through retests.
+AuthzLedger is a local assessment workbench for expert pentesters and AppSec teams. It connects explicit scope, captured traffic, discovered surfaces, control-bound checks, source-bound retests and signed handover. Studio and CLI use the same services and execution context.
 
-Built directly on v0.3.4: the access matrix, control dependency scheduler, offline OpenAPI import, redacted HTTP evidence, Studio and CLI remain the foundation. Version 1.0 adds policy evaluation, differential intelligence, durable history, bounded continuous assurance, grounded advisory reasoning and Ed25519 proof packages.
+**1.5 development candidate.** The source is under integration and release review. This README does not declare a stable release, a published tag or completed final CI. See the [release record](docs/release-1.5.0.md) for gates and the [suite implementation map](docs/suite-1.5.0.md) for supported domains and limitations. Historical 1.1.0 evidence and schemas retain their original versions.
 
-[Installation](INSTALL.md) · [1.1.0 release record](docs/release-1.1.0.md) · [Product architecture](docs/product-1.1.0.md) · [Release notes](RELEASE_NOTES.md) · [Published releases](https://github.com/0xFarag/0xFarag/releases)
+[Installation](INSTALL.md) · [Suite architecture and acceptance](docs/suite-1.5.0.md) · [1.5 release record](docs/release-1.5.0.md) · [Release notes](RELEASE_NOTES.md) · [Published releases](https://github.com/0xFarag/0xFarag/releases)
 
-The [1.0 walkthrough](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/AuthzLedger_1.0_Release_wide.mp4) documents the earlier release; it is not a recording of the 1.1 assessment workflow.
+## Start locally
 
-## Integrated assessment workflow for 1.1.0
-
-This release candidate extends the released 1.0 foundation and **ComparisonEnvelope v1** with all eight capability areas: offline Burp/ZAP/HAR import and mapping, Contrast Lab, Workflow Contracts, bounded Minimal Reproducer, source-bound selective retests, an integrated Studio assessment workspace, HTML/PDF/JSON assessment reports and explainable impact selection. Studio and CLI call the same services and existing HTTP DAG through one request budget.
-
-[1.1.0 product and implementation contract](docs/product-1.1.0.md) · [All 88 acceptance scenarios](docs/acceptance-1.1.0.md) · [Executed verification and release boundaries](docs/verification-1.1.0.md) · [ComparisonEnvelope v1](docs/comparison-envelope-v1.md) · [Binding original implementation contract](docs/implementation-1.0.5.md)
-
-**1.1.0 stable release candidate.** Publication requires the final version, acceptance, build and exact-commit CI gates in the [release runbook](docs/release-runbook-1.1.0.md). This document does not assert that the tag or download assets have already been published. Existing 1.0.0 artifacts and historical evidence remain unchanged.
+From an authorized source checkout, with Python 3.10+ and OpenSSL with Ed25519 support:
 
 ```sh
 python3 -m pip install '.[reports]'
-python3 -m authzledger studio --history ./authorization-history.sqlite3 --open
-python3 -m authzledger assessment demo --out artifacts/assessment-demo
-python3 tools/check_workflows110.py --out artifacts/workflow-demo
+python3 -m authzledger studio --open
 ```
 
-Choose **Assessment** for request import, explicit principal/object/control mapping, plan review, investigation, reduction, retest and signed handover. Ctrl/Cmd+K opens local commands. Session credentials stay in server memory; reload requires reopening the authenticated session URL. Export assessment evidence before closing the server. New assessment working state is memory-only. With `--history`, bounded workflow assurance retains an additional verified history chain beside the unchanged v1 run history; without it, Studio explicitly labels workflow history as session-only.
+Studio listens on loopback and prints a private authenticated session URL. By default, local history and the platform workspace persist at `~/.authzledger/history.sqlite3`. Choose `--history ./engagement.sqlite3` for an explicit file or `--session-only` for an ephemeral session. Runtime credentials do not persist. Reopening an assessment does not replay interrupted network work.
 
-Studio retains the existing Navy/Blue and Gold identity across the assessment workspace and the original Matrix, Graph, History, Policy and Evidence views. Contrast exposes explicit variants, methods, headers, bodies, typed markers, optional tenant binding and execution limits. Workflow exposes per-step identities and requests, state/effect oracles and bounded assurance. Investigation supports multiple selected retests; reduction and handover preserve their source evidence. Editing a reviewed plan or report invalidates its previous execution or export approval. Advanced versioned specifications remain available alongside the graphical controls.
+Choose **Assessment** and create or open a persistent assessment. Set scope and engagement/RoE references, import a source, review discovery or a check, execute the exact approved plan, inspect controls, retest selected findings, and freeze the handover. The Inspector keeps the selected context visible. Advanced JSON remains available for complex specifications. The existing Matrix, Graph, History, Policy and Evidence views remain available.
 
-The three assessment demos issue real loopback HTTP requests: imported request to reduced finding; 403 disclosure versus invalid controls and a 200 error object; selective fix proof with an omitted finding explicitly `not_retested`. Report generation and package verification happen after the fixture stops. Their Burp XML input is an authored format fixture. Separate unchanged native captures cover Burp Community 2026.9.2 raw request/response files, Chromium/Playwright HAR and ZAP Traditional JSON+. The [native Burp addendum](docs/burp-native-import-v1.md) adds an explicit raw-message profile; DTD-bearing Burp XML remains rejected. See [import profile boundaries and provenance](fixtures/imports/README.md).
+## Reproduce the three proof workflows
 
-The [release execution order](docs/release-runbook-1.1.0.md), [exporter gate record](docs/exporter-gate-1.1.0.md) and [channel copy](docs/launch-1.1.0.md) separate verified product behavior from publication status. `python3 tools/check_selective100.py --out artifacts/selective100-proof` reproduces the separate 100-case baseline → seven selected cases plus three controls, with 90 cases explicitly `not_retested`.
-
-Run `python3 tools/check_assessment.py --out artifacts/assessment-proof` to also invoke the standalone verifier in an isolated Python process. [CLI and reproducible demonstrations](docs/assessment-cli.md) · [Reporting profile and verification limits](docs/reporting-profile-1.1.0.md).
-
-## Start with evidence
-
-For a copy you are authorised to use; Python 3.10+:
+These commands create owned, disposable loopback fixtures and use actual product services:
 
 ```sh
-git clone --branch authzledger-v1.1.0 --single-branch https://github.com/0xFarag/0xFarag.git authzledger
-cd authzledger
-python3 -m authzledger studio --history ./authorization-history.sqlite3 --open
+python3 -m authzledger assessment demo150 --out artifacts/platform150-demo
+python3 tools/check_platform150.py --out artifacts/platform150-check
 ```
 
-Choose **Run eight-scenario lab** to execute real loopback HTTP tests against synthetic fixtures. Inspect the access matrix, prerequisite controls, graph and evidence. The original six-case demonstration remains available. No cloud account, credentials or paid services are required for these fixtures.
+Each output directory must be new. PDF requires the `reports` extra. The demos cover:
 
-For an authorised API, define identities and resources, review each permission, generate the contract and authorise its exact scope. Unknown permissions block generation; failed controls leave dependent observations inconclusive. Credential values remain in environment variables, outside reports and graph exports.
+| Demo | Evidence |
+|---|---|
+| A — authorization | Imported request, valid controls, a finding and bounded reduction; separate denial-data disclosure, failed-control and 200-error cases |
+| B — discovery to check | Explicit TCP service probe and bounded HTTP discovery, then a supported check confirming the exact configured missing header |
+| C — fix proof | Two-finding baseline, one selected retest, `fix_verified` beside `not_retested`, signed reports and rejection after one copied package byte changes |
 
-## Three layers. One accountable workflow.
+The receipts record actual requests, service connections, limits, runtime and timings. Fixtures stop before reports are exported or signed. The workspace is closed and reopened. No request count is a product-wide performance claim, and these authored fixtures do not prove production coverage or comparative scanner superiority.
 
-| Capability | Delivered behaviour |
-| --- | --- |
-| Living Authorization Graph | Stable relationships connect explicit intent, independently supplied policy and verified observations. Missing layers remain unknown. |
-| Differential intelligence | Policy drift, changed intent, behavioral regressions, escalation candidates and removed coverage remain distinct. Relaxing a permission never counts as fixing the original vulnerability. |
-| Control orchestration | Positive and negative assertions run in an explicit dependency DAG. A blocked request is never represented as executed. |
-| Policy-as-Code / Evidence-as-Code | Independent JSON policy rules and an explicitly scoped OPA adapter join canonical contracts and sealed reports. Local rules are identified as a local evaluator. |
-| Explainable reasoning | Evidence-linked deterministic explanations; optional local Ollama annotations are separately labelled and never alter decisions or CI outcomes. |
-| Continuous assurance | Finite runs with request budgets, bounded intervals and checked history. Assurance applies to configured relationships and observation windows. |
-| Retest workflow | Select affected cases with their complete prerequisite closure; review before executing. Studio exposes authenticated local retest jobs. |
-| Instant Proof | Sign report and attachments with Ed25519; validate against a separately trusted public key. A standalone verifier does not import AuthzLedger. |
-| Studio and CLI | Matrix, graph, history, policy, controlled execution and exports share domain logic. |
-
-## Reproduce a finding and verify its retest
+For an installed wheel outside the checkout, supply the independent verifier asset:
 
 ```sh
-python3 -m authzledger demo --out artifacts/demo
-python3 -m authzledger graph artifacts/demo/contract.json --report artifacts/demo/vulnerable/report.json --policy examples/authorization-policy.json --out before-graph.json
-python3 -m authzledger graph artifacts/demo/contract.json --report artifacts/demo/fixed/report.json --policy examples/authorization-policy.json --out after-graph.json
-python3 -m authzledger intelligence-diff before-graph.json after-graph.json --out intelligence-diff.json
-python3 -m authzledger explain after-graph.json --out explanation.json
+python -I -m authzledger assessment demo150 --out platform150-demo \
+  --standalone-verifier /absolute/path/verify_bundle.py
 ```
 
-The same contract runs before and after the fixture fix. Reports retain outcomes and hashes rather than raw response bodies or resolved credentials. Operational metadata, paths and expected fixture values in contracts still need review before sharing.
+## One assessment, connected evidence
 
-## Sign the proof. Verify independently.
+| Capability | Supported behavior |
+|---|---|
+| Persistent workspace | Explicit engagement/RoE references, revision checks, typed evidence, retained source lineage and interrupted-job records |
+| Inventory and discovery | Offline traffic/OpenAPI metadata; selected Nmap XML/Nuclei JSONL result adapters; bounded HTTP discovery and explicit TCP service probes |
+| Controlled checks | Existing authorization and workflow contracts plus selected configuration, information and arithmetic-expression predicates; each declares controls and an evidence ceiling |
+| Static playbooks | Reviewed discovery/check plans composed under one scope and budget; no dynamic attack chaining or arbitrary executable plugins |
+| Reproduction and retest | Exact recipes, approved minimal-reproducer reduction and source-bound selected retests; omitted work stays visible |
+| Local operational workflows | Finite explicitly invoked schedules, offline surface deltas and a small reviewed CVE knowledge pack with hints only |
+| Reports and proof | Frozen JSON/HTML/PDF, full source inventory, Ed25519 packages, main semantic verification and an independent integrity verifier |
 
-OpenSSL 3 with Ed25519 support is required for these commands:
+A banner match is a hint. CORS response headers are not proof of browser-readable data. The injection check confirms only two configured arithmetic expressions, not SQL injection or remote code execution. A missing configured header is a configuration finding, not an exploitability claim. Profile names do not authorize unsafe requests or imply complete coverage. See the [exact capability boundaries](docs/suite-1.5.0.md).
+
+Nmap and Nuclei adapters import supported offline result profiles; AuthzLedger does not launch those scanners. Burp, ZAP and HAR profiles retain their explicit parsing and provenance boundaries. Discovery never grants permission for a newly observed target.
+
+## Use the same services from CLI
+
+```sh
+python3 -m authzledger assessment registry
+python3 -m authzledger assessment create --store engagement.sqlite3 \
+  --title 'Authorized API assessment' --scope reviewed-scope.json
+python3 -m authzledger assessment list --store engagement.sqlite3
+```
+
+Create returns an assessment ID. Use it with `surface-import`, `discover-plan`, `check-plan`, `playbook-plan`, `check-retest-plan` and `freeze`. Active `*-run` actions require the exact retained plan ID and `--approve` digest. Run `python3 -m authzledger assessment ACTION --help` for each action's required fields. Planning, import, catalog comparison and evidence verification send no target requests.
+
+Scope binds origin, method, path, purpose, declared effect, allowed networks, expiry and limits. Transport pins validated destinations, disables ambient proxies and does not follow redirects automatically. Controls and active checks share the budget. An operator-supplied authorization reference records context; it does not independently establish target ownership.
+
+## Sign and verify the handover
 
 ```sh
 python3 -m authzledger keygen --private operator-private.pem --public operator-public.pem
-python3 -m authzledger bundle artifacts/demo/fixed/report.json --key operator-private.pem --contract artifacts/demo/contract.json --graph after-graph.json --explanation explanation.json --out proof
+python3 -m authzledger assessment freeze ASSESSMENT_ID --store engagement.sqlite3 --out snapshot.json
+python3 -m authzledger assessment report snapshot.json --out reports
+python3 -m authzledger assessment bundle snapshot.json --key operator-private.pem --out proof
 python3 -m authzledger verify-bundle proof --public-key operator-public.pem
 python3 -I tools/verify_bundle.py proof --public-key operator-public.pem
 ```
 
-The trusted public key is supplied separately. Signatures establish signed content integrity and key possession; they do not prove truthful execution, operator identity or a trusted timestamp. History is tamper-evident relative to retained records and anchors, not an immutable external ledger.
+Supply a separately trusted public key in a real handover. Signatures bind file bytes and key possession; they do not witness remote execution, prove legal authorization, identify the operator by themselves or provide a trusted timestamp. The main verifier checks supported retained semantics; the standalone verifier checks the signed inventory and anchors without importing AuthzLedger. Neither establishes whole-application security.
 
-## Assurance in your existing pipeline
+## Built on the authorization foundation
 
-```sh
-python3 -m authzledger plan authorization.json
-python3 -m authzledger assure authorization.json --policy policy.json --history authorization-history.sqlite3 --out artifacts/current
-python3 -m authzledger watch authorization.json --policy policy.json --history authorization-history.sqlite3 --iterations 3 --interval 5 --max-requests 150 --out artifacts/watch
-python3 -m authzledger retest authorization.json --case cross-user-denied --out retest-plan.json
-python3 -m authzledger history authorization-history.sqlite3
-```
+The original intent/policy/observation graph, Contrast Lab, Workflow Contracts, bounded Minimal Reproducer, ComparisonEnvelope v1, selective retests, CLI/Studio services and signed evidence remain the foundation. Existing proof roots and historical records are not rewritten. The [1.1 architecture](docs/product-1.1.0.md), [88-scenario historical acceptance ledger](docs/acceptance-1.1.0.md) and [verification record](docs/verification-1.1.0.md) describe that baseline; their counts are not the final 1.5 gate counts.
 
-Retest planning sends no requests; add `--execute` with a new output directory to execute. Mutating methods require explicit `--allow-mutations`. Exit codes: `0` configured success, `1` conclusive failures/regressions, `2` invalid configuration, execution errors or inconclusive evidence. A pass establishes only the configured assertions and scope.
-
-## Why a dedicated authorization workbench?
-
-Burp Suite, ZAP and Tenable already provide access-control testing capabilities. AuthzLedger focuses on intended permission, evaluated policy, observed enforcement, control validity and portable proof. The authored corpus compares against a status-only reference check; it is not an independent benchmark against those products. [Positioning and primary sources](docs/product-1.0.md).
+AuthzLedger concentrates on explainable, reproducible claims in supported domains. Nessus, Qualys, Rapid7 and Greenbone have broad assessment and vulnerability-management capabilities; Burp and ZAP remain useful specialist tools. No market-wide replacement or benchmark superiority is claimed. The suite map defines a fair per-domain comparison method.
 
 ## Documentation and rights
 
-- [Access matrix](docs/matrix.md) · [Contracts](docs/contract.md) · [OpenAPI](docs/openapi.md)
-- [Signatures](docs/signatures.md) · [Assurance and history](docs/assurance.md) · [Advisory AI](docs/reasoning.md)
-- [Product architecture](docs/product-1.0.md) · [Launch and adoption plan](docs/launch-1.0.md)
-- [Security model](docs/security-model.md) · [Validation](docs/validation.md) · [Contributing](CONTRIBUTING.md)
+- [1.5 suite and gates](docs/suite-1.5.0.md) · [1.5 release record](docs/release-1.5.0.md) · [Unpublished channel drafts and film plan](docs/launch-1.5.0.md)
+- [Contracts](docs/contract.md) · [OpenAPI](docs/openapi.md) · [Assessment CLI](docs/assessment-cli.md)
+- [Signatures](docs/signatures.md) · [Assurance/history](docs/assurance.md) · [Security model](docs/security-model.md)
+- [Validation](docs/validation.md) · [Contributing](CONTRIBUTING.md) · [Historical 1.1 release record](docs/release-1.1.0.md)
+
+The [1.0 walkthrough](https://github.com/0xFarag/0xFarag/releases/download/v1.0.0/AuthzLedger_1.0_Release_wide.mp4) records the earlier release, not the 1.5 suite. A new film is planned; its production is not claimed here.
 
 AuthzLedger is the product project of **Nasser Aldin Farag (0xFarag)**. He directs its product vision, technical scope and principal design decisions. All exclusive rights legally held by him in his own protectable contributions remain reserved to him. Publication, presentation or delivery does not itself transfer ownership or grant a general commercial licence. Commercial reuse requires a separate written agreement, subject to applicable law and permissions already validly granted.
 

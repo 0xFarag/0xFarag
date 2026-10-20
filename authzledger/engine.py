@@ -35,8 +35,9 @@ class _RequestDeadline:
     An OS resolver blocked in getaddrinfo remains outside Python's control.
     """
 
-    def __init__(self, deadline: float):
+    def __init__(self, deadline: float, connection_policy=None):
         self.deadline = deadline
+        self.connection_policy = connection_policy
         self.expired = False
         self._closed = False
         self._lock = threading.Lock()
@@ -81,7 +82,9 @@ class _RequestDeadline:
         # to each candidate, which could otherwise multiply the time budget.
         host, port = address
         last_error = None
-        for family, kind, protocol, _, destination in socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM):
+        addresses = (self.connection_policy.resolve(host, port, self.deadline) if self.connection_policy is not None
+                     else socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM))
+        for family, kind, protocol, _, destination in addresses:
             if time.monotonic() >= self.deadline:
                 raise TimeoutError
             sock = socket.socket(family, kind, protocol)
@@ -277,7 +280,7 @@ def _read_body(response, limit: int, deadline: float) -> bytes:
         chunks.append(chunk)
 
 
-def _execute(case: dict, target: str, headers: dict, limits: dict, *, observation_sink=None, request_deadline=None) -> dict:
+def _execute(case: dict, target: str, headers: dict, limits: dict, *, observation_sink=None, request_deadline=None, connection_policy=None) -> dict:
     started = time.monotonic()
     result = _record(case, "error", "Request could not be completed.")
     request_headers = {"user-agent": f"AuthzLedger/{__version__}", "accept": "application/json", "accept-encoding": "identity"}
@@ -289,7 +292,7 @@ def _execute(case: dict, target: str, headers: dict, limits: dict, *, observatio
         request_headers.setdefault("content-type", "application/json")
     request = urllib.request.Request(target + case["path"], data=body, headers=request_headers, method=case["method"])
     expires = min(started + limits["timeout_seconds"], request_deadline or float("inf"))
-    deadline = _RequestDeadline(expires)
+    deadline = _RequestDeadline(expires, connection_policy=connection_policy)
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), _NoRedirect(),
                                          _DeadlineHTTPHandler(deadline), _DeadlineHTTPSHandler(deadline))
     response = None
@@ -317,6 +320,8 @@ def _execute(case: dict, target: str, headers: dict, limits: dict, *, observatio
         result["checks"] = checks
         result["outcome"] = "pass" if all(check["passed"] for check in checks) else "fail"
         result["reason"] = reason
+    except ExecutionError as exc:
+        result["reason"] = "Transport refused: " + exc.code + "."
     except OverflowError:
         result["reason"] = "Response exceeded the configured byte limit."
     except (TimeoutError, socket.timeout):
@@ -363,8 +368,11 @@ def _execute_in_context(case, target, headers, limits, context, observation_sink
             captured_bytes[0] = len(value["body"])
             if observation_sink is not None:
                 observation_sink(value)
-        result = context.dispatch(reservation, lambda: _execute(case, target, headers, limits,
-                                  observation_sink=capture, request_deadline=reservation.deadline))
+        effective_limits = dict(limits)
+        effective_limits["max_response_bytes"] = min(limits["max_response_bytes"], context.max_response_bytes)
+        result = context.dispatch(reservation, lambda: _execute(case, target, headers, effective_limits,
+                                  observation_sink=capture, request_deadline=reservation.deadline,
+                                  connection_policy=context.connection_policy(target, kind=kind)))
         context.finish(reservation, outcome=result["outcome"], elapsed_ms=result["duration_ms"], response_bytes=captured_bytes[0])
         return result
     except ExecutionError as exc:

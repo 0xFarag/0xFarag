@@ -126,6 +126,8 @@ class StudioServer(ThreadingHTTPServer):
         self.assessment_snapshots = {}
         self.assessment_imports = {}
         self.assessment_traces = {}
+        self.platform_reviews = {}
+        self.platform_snapshots = {}
         self.session_key_directory = None
         self.workflow_history_directory = None
         self.session_workflow_history = None
@@ -135,6 +137,10 @@ class StudioServer(ThreadingHTTPServer):
         if history_path is not None:
             from .history import HistoryStore
             self.history = HistoryStore(history_path)
+        from .workbench import WorkbenchStore, WorkbenchService
+        self.workbench_store = WorkbenchStore(history_path if history_path is not None else ":memory:")
+        self.workbench = WorkbenchService(self.workbench_store)
+        self.platform_persistent = history_path is not None
         self.memory_history = {}
         self.signing_key = Path(signing_key) if signing_key else None
         self.public_key = Path(public_key) if public_key else None
@@ -492,6 +498,99 @@ class StudioServer(ThreadingHTTPServer):
         threading.Thread(target=execute, daemon=True, name="authzledger-assessment").start()
         return {"id": job_id, "state": "running"}
 
+    def platform_review(self, assessment_id, artifact, operation):
+        """Retain the exact offline plan and its revision in this authenticated session."""
+        record = self.workbench.get(assessment_id)
+        review = secrets.token_urlsafe(24)
+        with self.lock:
+            self.platform_reviews = {key: value for key, value in self.platform_reviews.items()
+                                     if value["expires"] > time.monotonic()}
+            while len(self.platform_reviews) >= 32:
+                del self.platform_reviews[next(iter(self.platform_reviews))]
+            self.platform_reviews[review] = {"assessment_id": assessment_id,
+                "artifact_id": artifact["artifact_id"], "operation": operation,
+                "plan_digest": artifact["value"]["plan_digest"],
+                "revision": record["assessment"]["revision"],
+                "credentials": self.credential_resolver.metadata(),
+                "expires": time.monotonic() + 600, "job": None}
+        return review
+
+    def start_platform_job(self, review, approval):
+        with self.lock:
+            retained = self.platform_reviews.get(review)
+            if not retained or retained["expires"] <= time.monotonic():
+                raise ContractError("Review this plan again; its session approval expired.")
+            if not isinstance(approval, str) or not hmac.compare_digest(retained["plan_digest"], approval):
+                raise ContractError("Approve the exact reviewed plan digest before execution.")
+            if retained["job"]:
+                job = self.jobs.get(retained["job"])
+                if job is None:
+                    raise ContractError("This job is no longer retained; inspect assessment evidence before replanning.")
+                return {"id": job["id"], "state": job["state"]}
+            if retained["credentials"] != self.credential_resolver.metadata():
+                raise ContractError("Credential bindings changed; review the plan again.")
+            if retained["revision"] != self.workbench.get(retained["assessment_id"])["assessment"]["revision"]:
+                raise ContractError("The assessment changed; review its current plan again.")
+            if self.active:
+                raise ContractError("A job is already running. Reconnect to it before starting another.")
+            self.active = True
+            job_id = secrets.token_hex(12)
+            while len(self.jobs) >= 8:
+                del self.jobs[next(iter(self.jobs))]
+            retained["job"] = job_id
+            cancel = threading.Event()
+            self.cancellations[job_id] = cancel
+            self.jobs[job_id] = {"id": job_id, "kind": "platform", "state": "running",
+                                 "assessment_id": retained["assessment_id"], "operation": retained["operation"]}
+            retained = copy.deepcopy(retained)
+
+        def execute():
+            try:
+                method = {"discovery": self.workbench.discover_execute,
+                          "check": self.workbench.check_execute,
+                          "playbook": self.workbench.playbook_execute,
+                          "retest": self.workbench.retest_execute}[retained["operation"]]
+                artifact = method(retained["assessment_id"], retained["artifact_id"], approval,
+                    credential_resolver=self.credential_resolver, stop_event=cancel, request_id=review)
+                with self.lock:
+                    self.jobs[job_id].update(state="complete", artifact=artifact, cancelled=cancel.is_set())
+            except Exception:
+                with self.lock:
+                    self.jobs[job_id].update(state="error", error="Execution did not complete. Inspect retained evidence and prerequisites before preparing a new plan.")
+            finally:
+                with self.lock:
+                    self.active = False
+                    self.cancellations.pop(job_id, None)
+        threading.Thread(target=execute, daemon=True, name="authzledger-platform").start()
+        return {"id": job_id, "state": "running"}
+
+    def start_platform_due_job(self, assessment_id):
+        self.workbench.get(assessment_id)
+        with self.lock:
+            if self.active:
+                raise ContractError("A job is already running. Reconnect before starting due work.")
+            self.active = True
+            job_id = secrets.token_hex(12)
+            cancel = threading.Event()
+            self.cancellations[job_id] = cancel
+            self.jobs[job_id] = {"id": job_id, "kind": "platform", "state": "running",
+                "assessment_id": assessment_id, "operation": "due-schedules"}
+
+        def execute():
+            try:
+                records = self.workbench.run_due(assessment_id, credential_resolver=self.credential_resolver, stop_event=cancel)
+                with self.lock:
+                    self.jobs[job_id].update(state="complete", schedules=records, cancelled=cancel.is_set())
+            except Exception:
+                with self.lock:
+                    self.jobs[job_id].update(state="error", error="Due work could not complete. Review retained schedule and evidence states.")
+            finally:
+                with self.lock:
+                    self.active = False
+                    self.cancellations.pop(job_id, None)
+        threading.Thread(target=execute, daemon=True, name="authzledger-platform-due").start()
+        return {"id": job_id, "state": "running"}
+
     def server_close(self):
         self.stopping.set()
         with self.lock:
@@ -502,6 +601,7 @@ class StudioServer(ThreadingHTTPServer):
             self.session_key_directory.cleanup()
         if self.workflow_history_directory is not None:
             self.workflow_history_directory.cleanup()
+        self.workbench_store.close()
         super().server_close()
 
 
@@ -560,6 +660,8 @@ class StudioHandler(BaseHTTPRequestHandler):
                   "/style.css": ("web/style.css", "text/css; charset=utf-8"),
                   "/assessment.js": ("web/assessment.js", "text/javascript; charset=utf-8"),
                   "/assessment.css": ("web/assessment.css", "text/css; charset=utf-8"),
+                  "/platform.js": ("web/platform.js", "text/javascript; charset=utf-8"),
+                  "/platform.css": ("web/platform.css", "text/css; charset=utf-8"),
                   "/logo.png": ("brand_logo.png", "image/png")}
         if self.path in assets:
             resource, mime = assets[self.path]
@@ -579,6 +681,12 @@ class StudioHandler(BaseHTTPRequestHandler):
                                "assurance": {"max_cycles": 20, "max_total_requests": 1000},
                                "assessment_jobs": [{"id": job["id"], "kind": job["kind"], "state": job["state"]}
                                    for job in list(self.server.jobs.values()) if job["kind"] in {"experiment", "workflow", "workflow-assurance", "reduction"}]})
+        elif self.path == "/api/platform":
+            self.respond(200, {"capabilities": self.server.workbench.capabilities(),
+                "assessments": self.server.workbench.list(),
+                "storage": "persistent" if self.server.platform_persistent else "session-only",
+                "jobs": [{key: value for key, value in job.items() if key in {"id", "kind", "state", "assessment_id", "operation"}}
+                         for job in list(self.server.jobs.values()) if job["kind"] == "platform"]})
         elif self.path == "/api/history":
             try:
                 self.respond(200, {"runs": self.server.list_runs(),
@@ -846,6 +954,10 @@ class StudioHandler(BaseHTTPRequestHandler):
             allow = body.get("allow_mutations", False)
             if type(allow) is not bool:
                 raise ValueError("allow_mutations must be boolean")
+            if self.path.startswith("/api/platform/"):
+                from .studio_platform import platform_route
+                platform_route(self, body)
+                return
             if self.path.startswith("/api/assessment/"):
                 self.assessment_route(body)
                 return

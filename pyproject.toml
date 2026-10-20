@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "authzledger"
-version = "1.1.0"
-description = "Authorization intelligence: intent, policy, observations and independently verifiable evidence."
+version = "1.5.0"
+description = "Expert assessment suite: scoped discovery, controlled checks and source-bound signed evidence."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "LicenseRef-Proprietary"}
@@ -21,8 +21,8 @@ reports = ["reportlab==4.4.9"]
 authzledger = "authzledger.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/0xFarag/0xFarag/tree/authzledger-v1.1.0"
-Repository = "https://github.com/0xFarag/0xFarag/tree/authzledger-v1.1.0"
+Homepage = "https://github.com/0xFarag/0xFarag/tree/authzledger-v1.5.0"
+Repository = "https://github.com/0xFarag/0xFarag/tree/authzledger-v1.5.0"
 Issues = "https://github.com/0xFarag/0xFarag/issues"
 
 [tool.setuptools]

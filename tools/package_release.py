@@ -7,6 +7,7 @@ from pathlib import Path
 import argparse
 import base64
 import hashlib
+import json
 import re
 import shutil
 import stat
@@ -21,7 +22,7 @@ from authzledger import __version__ as VERSION
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--proof-source', type=Path,
-                    default=ROOT / ('evidence/1.1.0-final' if VERSION == '1.1.0' else 'evidence/1.1.0-release-review'),
+                    default=ROOT / ('artifacts/release150/platform150' if VERSION.startswith('1.5.') else 'evidence/1.1.0-final' if VERSION == '1.1.0' else 'evidence/1.1.0-release-review'),
                     help='Public synthetic proof root containing assessment-demos and selective100')
 args = parser.parse_args()
 PRIVATE_PEM = re.compile(rb'^-----BEGIN (?:[A-Z0-9 ]+ )?PRIVATE KEY-----', re.M)
@@ -46,7 +47,7 @@ def validate_public_pem(path):
 def permitted(path, *, public_proof=False):
     if not path.is_file() or path.is_symlink() or '__pycache__' in path.parts:
         return False
-    if path.suffix in {'.pyc', '.sqlite3', '.db'} or path.name.endswith(('-wal', '-shm')):
+    if path.suffix in {'.pyc', '.sqlite3', '.db', '.lock'} or path.name.endswith(('-wal', '-shm')):
         return False
     if path.suffix == '.pem':
         if not public_proof:
@@ -126,6 +127,60 @@ publisher authentication. Authenticate the trusted public key separately for
 real handover. The main verifier checks supported evidence semantics; the
 standalone verifier checks signature, inventory, hashes and report anchors.
 Neither proves remote execution truth. No private signing keys are retained.
+'''
+        item = zipfile.ZipInfo('authzledger-proof/README.md', (2026, 1, 1, 0, 0, 0))
+        item.compress_type = zipfile.ZIP_DEFLATED
+        output.writestr(item, readme)
+    assets.append(proof_archive)
+if VERSION in {'1.5.0.dev0', '1.5.0'}:
+    from authzledger.signing import verify_bundle
+    proof_root = args.proof_source
+    results = json.loads((proof_root / 'results.json').read_text())
+    if (results.get('producer_version') != VERSION or results.get('main_verifier_errors')
+            or results.get('standalone_verification', {}).get('returncode') != 0
+            or results.get('tamper', {}).get('changed_bytes') != 1
+            or not results.get('tamper', {}).get('main_errors')
+            or results.get('tamper', {}).get('standalone', {}).get('returncode') == 0):
+        raise SystemExit('The three-demo and byte-tamper receipt must pass for this producer.')
+    public = proof_root / 'trusted-public.pem'
+    validate_public_pem(public)
+    problems = verify_bundle(proof_root / 'C-retest-proof/proof', public)
+    if problems:
+        raise SystemExit('Public demonstration proof failed verification: ' + str(problems))
+    proof_files = [proof_root / 'results.json', public]
+    for directory_name in ['A-authorization', 'B-discovery-detect', 'C-retest-proof']:
+        directory = proof_root / directory_name
+        for required_name in ['receipt.json', 'snapshot.json', 'reports/platform.json', 'reports/platform.html', 'reports/platform.pdf']:
+            required_path = directory / required_name
+            if not required_path.is_file() or required_path.is_symlink():
+                raise SystemExit('Required public proof is missing: ' + str(required_path))
+        proof_files.extend(path for path in directory.rglob('*')
+                           if 'tampered-proof' not in path.parts and permitted(path, public_proof=True))
+    proof_archive = DIST / f'authzledger-{VERSION}-proof.zip'
+    with zipfile.ZipFile(proof_archive, 'w', zipfile.ZIP_DEFLATED) as output:
+        for path in sorted(set(proof_files)):
+            add_zip_file(output, path, f'authzledger-proof/{path.relative_to(proof_root).as_posix()}')
+        for name in ['INSTALL.md', 'LICENSE', 'NOTICE.txt', 'tools/verify_bundle.py', 'docs/release-1.5.0.md', 'docs/suite-1.5.0.md']:
+            add_zip_file(output, ROOT / name, 'authzledger-proof/' + name)
+        readme = '''# AuthzLedger 1.5 public synthetic proof
+
+These are authored, disposable local fixtures, not customer findings or a
+competitive benchmark. The runtime receipt records actual HTTP requests and
+TCP probes. No private keys, databases or operator sessions are included.
+
+Install the matching wheel and reports extra, then verify offline:
+
+    python -I -m authzledger verify-bundle C-retest-proof/proof --public-key trusted-public.pem
+    python -I tools/verify_bundle.py C-retest-proof/proof --public-key trusted-public.pem
+
+Reproduce A/B/C into a new directory:
+
+    python -I -m authzledger assessment demo150 --out fresh-demos --standalone-verifier tools/verify_bundle.py
+
+The included public key is a demo trust anchor only. The standalone verifier
+checks signature and inventory integrity; the product verifier also validates
+supported evidence semantics. Neither proves remote execution truth. A separate
+trusted channel is needed to authenticate the key for a real engagement.
 '''
         item = zipfile.ZipInfo('authzledger-proof/README.md', (2026, 1, 1, 0, 0, 0))
         item.compress_type = zipfile.ZIP_DEFLATED

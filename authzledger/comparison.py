@@ -32,6 +32,8 @@ _PROFILES = {
     "1.0.5": "authzledger-1.0.5-report-v1-checks-v1",
     "1.1.0": "authzledger-1.1.0-report-v1-checks-v1",
     "1.1.0.dev0": "authzledger-1.1.0.dev0-report-v1-checks-v1",
+    "1.5.0.dev0": "authzledger-1.5.0.dev0-report-v1-checks-v1",
+    "1.5.0": "authzledger-1.5.0-report-v1-checks-v1",
 }
 _LIMITATIONS = [
     "resolved_check means the same configured assertion now passes; it does not establish vulnerability remediation.",

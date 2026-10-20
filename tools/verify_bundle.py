@@ -285,6 +285,15 @@ def _verify_cryptographic(bundle_path: str | Path, public_key: str | Path) -> di
     if _public_der(payloads["public.pem"]) != trusted_der:
         raise ValueError("embedded public key differs from trusted public key")
     report = _json(payloads["report.json"])
+    if report.get("kind") == "platform-anchor":
+        fields = {"schema_version", "kind", "snapshot_digest", "scope_digest", "contract_sha256", "evidence", "claim"}
+        if (set(report) != fields or type(report.get("schema_version")) is not int or report["schema_version"] != 1
+                or any(not isinstance(report.get(key), str) or not _SHA256.fullmatch(report[key]) for key in ("snapshot_digest", "scope_digest"))
+                or report["evidence"] != {"root_sha256": report["snapshot_digest"]}
+                or report["contract_sha256"] != report["scope_digest"]
+                or report["claim"] != "frozen_assessment_snapshot_not_network_execution"
+                or "attachments/platform.json" not in records):
+            raise ValueError("invalid platform snapshot anchor")
     if (not isinstance(report.get("evidence"), dict)
             or report["evidence"].get("root_sha256") != manifest["report"]["root_sha256"]
             or report.get("contract_sha256") != manifest["report"]["contract_sha256"]):

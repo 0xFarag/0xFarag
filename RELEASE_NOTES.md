@@ -1,3 +1,42 @@
+# AuthzLedger 1.5 — development candidate
+
+**An integrated local assessment suite: permitted scope → discovery → controlled checks → reproducible evidence → selective retest → signed handover.**
+
+This candidate builds directly on the 1.1.0 authorization and workflow foundation. It is not a declaration of stable publication, a complete final CI run or a live release asset. The whole A/B/C work package belongs to one 1.5 release. See the [suite implementation map and S15 acceptance gates](docs/suite-1.5.0.md) and [release record](docs/release-1.5.0.md).
+
+## Candidate changes
+
+- Persistent local assessment workspaces with engagement/RoE references, revision checks, verified evidence chains and interrupted-job records. Studio now defaults to `~/.authzledger/history.sqlite3`; `--history` selects another file and `--session-only` makes ephemeral use explicit. Credentials remain runtime-only and interrupted work is not automatically replayed.
+- Scope policies bind origin, method, path, purpose and effect with explicit network boundaries, expiry and limits. Validated destinations are pinned; ambient proxies and automatic redirects remain disabled.
+- Provenance-bound surface catalogs from supported traffic/OpenAPI data, bounded HTTP discovery and explicit TCP service probes. Selected Nmap XML and Nuclei JSONL imports retain safe source hints; they do not execute external scanners.
+- A curated versioned check registry wraps existing Contrast/Workflow contracts and adds selected configuration, information and arithmetic-template predicates. Controls, evidence ceilings and limitations remain visible. Static approved playbooks compose sealed plans under one shared budget and stop after inconclusive prerequisites.
+- Source-bound check retests preserve legacy Contrast semantics, including `fix_verified` and `not_retested`. Offline surface deltas remain distinct from retests. Local finite schedules require an explicit running invocation; no daemon is installed.
+- A small offline reviewed CVE knowledge pack records source/version prerequisites and produces candidates only. No broad vulnerability feed or universal version interpretation is claimed.
+- Frozen platform snapshots retain typed sources, nested controls, findings, comparisons and review decisions. JSON/HTML/PDF and Ed25519 packages share the same evidence inventory; the independent verifier remains a separate asset.
+- CLI and Studio expose the same main assessment path. Three actual loopback demos cover authorization/reduction, discovery-to-check and selective fix proof with one-byte tamper rejection.
+
+## Reproduce the candidate
+
+Follow [INSTALL.md](INSTALL.md). From an installed wheel outside the checkout:
+
+```sh
+python -I -m authzledger assessment demo150 --out platform150-demo \
+  --standalone-verifier /absolute/independent/verify_bundle.py
+python -I -m authzledger studio --history ./engagement.sqlite3 --open
+```
+
+PDF requires `reportlab==4.4.9`; signing requires OpenSSL with Ed25519 support. Use a new demo output path. Actual counts, timings and versions belong to its receipts; no final 1.5 test total is asserted here. All fixtures stop before the evidence is exported and signed. The demo key is a local consistency anchor, not proof of publisher identity.
+
+## Scope and release boundaries
+
+The arithmetic check confirms only its two curated expression predicates. CORS header reflection and information signatures remain hints; a required-header omission confirms only the configured omission. Native network support is bounded connection/banner observation, not an exhaustive host vulnerability scanner. Arbitrary plugins, dynamic attack chains, C2, credential attacks, Internet-wide scanning, distributed agents, hosted multi-tenancy and enterprise RBAC are outside this local candidate.
+
+Existing scanners already provide evidence, quality models and retests. AuthzLedger's proposed advantage is traceable contract/control/oracle/source continuity in selected domains; no competitor benchmark or whole-market replacement is claimed. Standards mappings are partial, and signatures bind exact bytes rather than truth of execution.
+
+Final stability requires complete regression, browser gates, actual A/B/C receipts, installed-wheel verification, historical compatibility and exact-version publication checks. Film/channel material is prepared as [unpublished drafts](docs/launch-1.5.0.md). Historical release notes below remain unchanged.
+
+---
+
 # AuthzLedger 1.1.0 — stable release candidate
 
 **Controlled experiment → traceable finding → bounded reproducer → targeted fix evidence.**

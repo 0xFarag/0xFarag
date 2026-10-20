@@ -1,19 +1,19 @@
 {
-  "version": "1.1.0",
-  "target_version": "1.1.0",
-  "date": "2026-10-10",
-  "status": "stable-ready-awaiting-exact-commit-ci-and-publication",
+  "version": "1.5.0",
+  "target_version": "1.5.0",
+  "status": "stable-candidate-awaiting-exact-commit-gates",
   "repository": "https://github.com/0xFarag/0xFarag",
-  "distribution_branch": "authzledger-v1.1.0",
+  "distribution_branch": "authzledger-v1.5.0",
   "release_url": null,
   "stable_release": {
-    "version": "1.0.0",
-    "tag": "v1.0.0",
-    "commit": "c0d4446a17ca15fb4e8a71f20f6b02c1a364e90c",
+    "version": "1.1.0",
+    "tag": "v1.1.0",
+    "commit": "a7160e13289ea0983946e03c978bc6af1841a7e6",
     "unchanged": true
   },
-  "license": "LicenseRef-Proprietary",
   "rights_holder": "Nasser Aldin Farag / 0xFarag",
+  "license": "LicenseRef-Proprietary",
+  "billing_enabled": false,
   "runtime_dependencies": [],
   "optional_reports_dependencies": [
     "reportlab==4.4.9"
@@ -23,72 +23,45 @@
     "setuptools": "84.0.0",
     "wheel": "0.48.0"
   },
-  "acceptance": {
-    "total": 88,
-    "verified": 88,
-    "partial": [],
-    "ledger": "docs/acceptance-1.1.0.md",
-    "amendment": "docs/burp-native-import-v1.md"
-  },
+  "product_promise": "Discover → Assess → Prove → Retest → Handover",
+  "release_contract": "docs/suite-1.5.0.md",
+  "release_gate": "tools/release_gate150.py",
+  "verification_runner": "tools/verify_release150.py",
   "publication_blockers": [
-    "Remote verify/browser jobs must pass on the final commit before immutable publication."
+    "Complete same-source unit, integration, eight browser, demo, isolated wheel and package gates remain mandatory.",
+    "Exact stable version 1.5.0 and exact-commit CI must pass before the immutable v1.5.0 tag."
   ],
-  "version_decision": "Native Burp acceptance completed under the explicit F01 addendum. Candidate producer is 1.1.0; final-version verification and immutable publication remain separate gates.",
-  "prior_verified_snapshot": {
-    "tests_passed": 492,
-    "browser_suites_passed": 6,
-    "evidence_directory": "evidence/1.1.0-dev0",
-    "verification_protocol": "docs/verification-1.1.0.md"
-  },
-  "current_review_evidence_directory": "evidence/1.1.0-final",
-  "distribution_receipt": "evidence/1.1.0-final/installed-wheel.json",
-  "demonstration_proof_directory": "evidence/1.1.0-final/assessment-demos",
-  "remote_ci_status": "Not established by this file; inspect the remote workflow on the exact commit before publishing.",
-  "verification_depth": {
-    "standalone": "Ed25519 signature, inventory, file hashes, JSON structure and report anchor binding; Python standard library plus OpenSSL.",
-    "main": "Adds source-bound report, contract, comparison, finding, snapshot, workflow and renderer semantics for the supported profiles.",
-    "trust": "The public key must be authenticated separately. Neither verifier proves remote execution truth, operator identity or trusted time."
-  },
-  "billing_enabled": false,
-  "known_limits": [
-    "Local single-operator workbench; hosted multi-user operation is outside this release.",
-    "Three assessment demonstrations use public synthetic loopback fixtures. Native Burp Community 2026.9.2 raw messages, ZAP 2.17.0 / reports 0.43.0 and Playwright HAR exports have separately retained provenance. Native DTD-bearing Burp XML remains rejected.",
-    "Default oracle evidence is an evaluation attestation; discarded raw response values cannot be independently reconstructed.",
-    "Selective retests prove only the explicitly retained rule, identity, object and valid controls; omitted findings remain not_retested.",
-    "Only the documented Linux/CPython and Chromium environment is measured; other platforms and full accessibility are not certified.",
-    "No independent comparative review, external customer validation or universal standards compliance is claimed.",
-    "Local history requires separately retained anchors to resist wholesale replacement."
-  ],
-  "release_media": {
-    "current_1_1_video_verified": false,
-    "note": "Actual final 1.1.0 Studio captures, reproducible landscape/portrait artwork, ready channel drafts, 60-second storyboard and captions are included. No recorded 1.1.0 video or social publication is claimed.",
-    "assets_directory": "brand/release-1.1.0"
-  },
-  "previous_review": {
-    "tests_passed": 494,
-    "browser_suites_passed": 6,
-    "check_tools_passed": 5,
-    "verification": "evidence/1.1.0-release-review/verification.json",
-    "stable_gate": "blocked: native compatible Burp export missing"
+  "acceptance_baseline": {
+    "version": "1.1.0",
+    "scenarios": 88,
+    "tests": 530,
+    "browser_suites": 7,
+    "preserved": true
   },
   "current_review": {
-    "status": "All final local gates and canonical distribution checks passed.",
-    "evidence_directory": "evidence/1.1.0-final",
-    "native_burp_gate": "passed: unchanged native raw pair, pinned producer, one capture and four controlled requests",
-    "browser_suites_required": 7,
-    "tests_passed": 530,
-    "tests_failed": 0,
-    "tests_skipped": 0,
-    "browser_suites_passed": 7,
-    "check_tools_passed": 5,
-    "native_check_passed": true,
-    "stable_gate": "passed",
-    "wheel_reproducible": true,
-    "reports_reproducible": true,
-    "report_qa_findings": 50,
-    "report_qa_pdf_pages": 72,
-    "wheel_sha256": "f01fbe3340bc5c1a29334a923c147206f3b48bf4d77a4244fea38978dc00c67f",
-    "source_date_epoch_independent": true,
-    "verification": "evidence/1.1.0-final/README.md"
+    "status": "All component, browser, demo and installed-wheel executions passed during integration; the frozen final-version gate must complete on the publication commit.",
+    "receipt_path": "artifacts/release150/verification.json",
+    "browser_suites_required": 8
+  },
+  "verification_depth": {
+    "standalone": "Ed25519 signature, signed inventory, byte hashes and report anchors; standard library plus OpenSSL.",
+    "main": "Adds source-bound controls, observations, findings, comparisons, snapshots, workflows and supported report semantics.",
+    "trust": "Authenticate the public key separately. Neither verifier proves remote execution truth, operator identity or trusted time."
+  },
+  "known_limits": [
+    "Local, single-operator suite; no hosted multi-user RBAC or C2.",
+    "Imported scanner assertions and product/version matches remain hints until an explicitly authorized controlled check establishes evidence.",
+    "Curated declarative checks only; no arbitrary plugin code or autonomous exploitation chain.",
+    "Discovery requests only explicitly authorized operations and targets; observed surface is not a completeness claim.",
+    "Oracle projections may attest evaluation of discarded response data; signatures do not reconstruct discarded raw responses.",
+    "Standards references describe partial evidence mappings, not certification.",
+    "No independent head-to-head competitor benchmark or universal scanner replacement is claimed.",
+    "Public demonstrations use synthetic disposable loopback fixtures."
+  ],
+  "release_media": {
+    "recorded_release_film": false,
+    "social_publication": false,
+    "drafts": "docs/launch-1.5.0.md",
+    "note": "Screen-capture concept and draft channel copy; no produced film or posted messages claimed."
   }
 }

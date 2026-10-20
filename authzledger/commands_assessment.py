@@ -9,6 +9,11 @@ from pathlib import Path
 def add_commands(commands):
     parser = commands.add_parser("assessment", help="Import, prove, reduce, retest and hand over an explicit assessment")
     actions = parser.add_subparsers(dest="assessment_action", required=True)
+    from .commands_platform import add_commands as add_platform_commands
+    add_platform_commands(actions)
+    command = actions.add_parser("demo150", help="Reproduce the complete platform acceptance demonstrations on loopback")
+    command.add_argument("--out", type=Path, required=True)
+    command.add_argument("--standalone-verifier", type=Path)
     command = actions.add_parser("demo", help="Reproduce three bounded proofs against synthetic loopback fixtures")
     command.add_argument("--out", type=Path, required=True)
     command = actions.add_parser("import", help="Parse a bounded offline Burp, ZAP or HAR export")
@@ -105,6 +110,28 @@ def _approved(plan, approval):
 
 def _verifier(document):
     kind = document.get("kind")
+    platform_verifiers = {
+        "check-plan": ("detectors", "verify_check_plan"),
+        "discovery-plan": ("discovery", "verify_discovery_plan"),
+        "discovery-execution": ("discovery", "verify_discovery"),
+        "surface-catalog": ("surface", "verify_catalog"),
+        "surface-delta": ("surface", "verify_surface_delta"),
+        "delta-check-plan": ("surface", "verify_delta_check_plan"),
+        "knowledge-result": ("knowledge", "verify_knowledge_result"),
+        "adapter-receipt": ("adapters", "verify_adapter_receipt"),
+        "playbook-plan": ("playbooks", "verify_playbook_plan"),
+        "playbook-execution": ("playbooks", "verify_playbook"),
+    }
+    if kind in platform_verifiers:
+        import importlib
+        module, name = platform_verifiers[kind]
+        return getattr(importlib.import_module("." + module, __package__), name)(document)
+    if kind == "platform-snapshot":
+        from .platform_reports import verify_platform
+        return verify_platform(document)
+    if kind == "check-execution":
+        from .detectors import verify_check_execution
+        return verify_check_execution(document)
     if kind == "assessment-snapshot":
         from .assessment_reports import verify_assessment
         return verify_assessment(document)
@@ -127,6 +154,14 @@ def execute_command(args):
     if args.command != "assessment":
         return None
     action = args.assessment_action
+    from .commands_platform import execute_command as execute_platform_command
+    platform_result = execute_platform_command(args)
+    if platform_result is not None:
+        return platform_result
+    if action == "demo150":
+        from .demo150 import run_demos
+        print(json.dumps(run_demos(args.out, standalone_verifier=args.standalone_verifier), sort_keys=True, indent=2, ensure_ascii=True))
+        return 0
     if action == "demo":
         from .assessment_demo import run_demos
         result = run_demos(args.out)
@@ -253,12 +288,22 @@ def execute_command(args):
         return 0
     if action == "report":
         from .assessment_reports import export_assessment
-        export_assessment(_read(args.snapshot), args.out, formats=tuple(args.formats))
+        snapshot = _read(args.snapshot)
+        if snapshot.get("kind") == "platform-snapshot":
+            from .platform_reports import export_platform
+            export_platform(snapshot, args.out, formats=tuple(args.formats))
+        else:
+            export_assessment(snapshot, args.out, formats=tuple(args.formats))
         print("Assessment reports written from one snapshot: " + str(args.out))
         return 0
     if action == "bundle":
         from .assessment_reports import create_assessment_bundle
-        create_assessment_bundle(_read(args.snapshot), args.out, args.key)
+        snapshot = _read(args.snapshot)
+        if snapshot.get("kind") == "platform-snapshot":
+            from .platform_reports import create_platform_bundle
+            create_platform_bundle(snapshot, args.out, args.key)
+        else:
+            create_assessment_bundle(snapshot, args.out, args.key)
         print("Signed assessment proof written: " + str(args.out))
         return 0
     document = _read(args.document)
@@ -268,8 +313,16 @@ def execute_command(args):
         return 2
     if action == "inspect":
         if args.finding:
-            from .assessments import inspect_finding
-            document = inspect_finding(document, args.finding)
+            if document.get("kind") == "check-execution":
+                selected = [finding for finding in document["findings"] if finding["id"] == args.finding]
+                if len(selected) != 1:
+                    raise ValueError("Select one retained finding identifier")
+                document = {"finding": selected[0], "plan": document["plan"],
+                    "observations": document["observations"], "reproducer": document["reproducer"],
+                    "budget_ledger": document["budget_ledger"]}
+            else:
+                from .assessments import inspect_finding
+                document = inspect_finding(document, args.finding)
         print(json.dumps(document, sort_keys=True, indent=2, ensure_ascii=True, allow_nan=False))
     else:
         print("Assessment source bindings and derived semantics verified offline; remote execution truth is not independently attested.")

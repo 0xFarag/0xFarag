@@ -194,6 +194,9 @@ def _attachment_semantics(report: dict, contents: Mapping[str, bytes]) -> None:
     Other attachment names remain opaque integrity-bound bytes. Never contact a
     policy endpoint or model while verifying an existing package.
     """
+    if report.get("kind") == "platform-anchor" or any(name in contents for name in ("attachments/platform.json", "attachments/platform.html", "attachments/platform.pdf")):
+        from .platform_reports import verify_platform_attachments
+        verify_platform_attachments(report, contents)
     if any(name in contents for name in ("attachments/assessment.json", "attachments/assessment.html", "attachments/assessment.pdf")):
         from .assessment_reports import verify_assessment_attachments
         verify_assessment_attachments(report, contents)
@@ -292,6 +295,13 @@ def _attachment_semantics(report: dict, contents: Mapping[str, bytes]) -> None:
         raise ValueError("invalid advisory explanation error category")
 
 
+def _verify_anchor(report: dict) -> list[str]:
+    if isinstance(report, dict) and report.get("kind") == "platform-anchor":
+        from .platform_reports import verify_platform_anchor
+        return verify_platform_anchor(report)
+    return verify_report(report)
+
+
 def create_bundle(report: dict, out: str | Path, private_key: str | Path,
                   attachments: Mapping[str, bytes | str | Path] | None = None) -> dict:
     """Sign a valid sealed report and explicit, bounded attachments into a new directory.
@@ -304,7 +314,7 @@ def create_bundle(report: dict, out: str | Path, private_key: str | Path,
     if len(report_raw) > MAX_REPORT_BYTES:
         raise ValueError("report exceeds size limit")
     report = _json(report_raw)
-    errors = verify_report(report)
+    errors = _verify_anchor(report)
     if errors:
         raise ValueError("cannot sign invalid sealed report: " + "; ".join(errors))
     destination = Path(out).absolute()
@@ -491,7 +501,8 @@ def _verify_cryptographic(bundle_path: str | Path, public_key: str | Path) -> tu
         if name in ("report.json", "public.pem", "attachments/contract.json",
                     "attachments/graph.json", "attachments/explanation.json",
                     "attachments/comparison.json", "attachments/comparison.html",
-                    "attachments/assessment.json", "attachments/assessment.html", "attachments/assessment.pdf"):
+                    "attachments/assessment.json", "attachments/assessment.html", "attachments/assessment.pdf",
+                    "attachments/platform.json", "attachments/platform.html", "attachments/platform.pdf"):
             payloads[name] = raw
     if _public_der(payloads["public.pem"]) != trusted_der:
         raise ValueError("embedded public key differs from trusted public key")
@@ -511,7 +522,7 @@ def verify_bundle(bundle_path: str | Path, public_key: str | Path) -> list[str]:
     """
     try:
         report, payloads = _verify_cryptographic(bundle_path, public_key)
-        errors = ["invalid sealed report: " + error for error in verify_report(report)]
+        errors = ["invalid sealed report: " + error for error in _verify_anchor(report)]
         if not errors:
             _attachment_semantics(report, payloads)
         return errors

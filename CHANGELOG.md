@@ -1,5 +1,19 @@
 # AuthzLedger changelog
 
+## 1.5.0.dev0 — integrated suite candidate, 2026-10-20
+
+One local platform candidate incorporating all A/B/C work packages; no stable publication is declared. Final claims are governed by `docs/release-1.5.0.md` and the S15 acceptance contract in `docs/suite-1.5.0.md`.
+
+- Added persistent assessment workspaces beside legacy history, revision checks, interruption records, explicit engagement/RoE references and runtime-only credential bindings. Studio defaults to local persistence with an explicit `--session-only` option.
+- Added composite scope/network/expiry enforcement, pinned transport, provenance-bound surface catalogs, bounded HTTP discovery and explicit TCP service probes.
+- Added selected offline Nmap XML/Nuclei JSONL result adapters with safe projections and hint-only source claims; no external scanner invocation.
+- Added curated versioned check manifests/profiles over existing Contrast/Workflow engines and selected new predicates. Static approved playbooks share a single scope/budget and halt on inconclusive prerequisites.
+- Added source-bound check retests, offline catalog delta, a small reviewed CVE candidate pack and finite manually invoked local schedules.
+- Added frozen platform JSON/HTML/PDF reports, typed evidence inventory and signed handover through the existing signature/verification infrastructure.
+- Added integrated Studio/CLI paths and actual A/B/C loopback demonstrations including persistence reopen, source-bound omitted coverage and one-byte tamper rejection. Final regression/browser/wheel/publication receipts remain release gates; numbers are not inferred from feature presence.
+
+Historical producer metadata, schemas, evidence roots and notes below remain unchanged.
+
 ## 1.1.0 — stable release candidate, 2026-10-10
 
 PDF rendering now binds a canonical UTC-2000 clock locally. Build-environment `SOURCE_DATE_EPOCH` values no longer change signed report bytes or cause independent semantic verification to fail; historical no-environment PDF bytes remain compatible.

@@ -1,0 +1,17 @@
+/* Persistent assessments extend the existing workspace and inspector. */
+.platform-steps{display:flex;gap:6px;overflow:auto;padding:5px;border:1px solid var(--line);border-radius:var(--radius);margin:16px 0 22px}
+.platform-steps button{flex:1;white-space:nowrap;min-height:44px;font-size:11px;border:0}
+.platform-steps button[aria-current=step]{background:var(--gold-surface);color:var(--gold)}
+.platform-page{display:none}.platform-page.active{display:block}
+.platform-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px}
+.platform-heading h2{margin:0}.platform-context{padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);font-size:12px;overflow-wrap:anywhere;line-height:1.8}
+.platform-context strong{color:var(--gold)}.platform-context small{display:block;color:var(--muted)}
+.platform-records{max-height:450px;overflow:auto;overscroll-behavior:contain}.platform-records:empty:after{content:'No retained records in this view.';display:block;padding:22px;color:var(--muted);font-size:12px}
+.platform-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 16px;margin:8px 0;border:1px solid var(--line);background:var(--surface)}
+.platform-row>div{flex:1;min-width:0}.platform-row strong,.platform-row small{display:block;overflow-wrap:anywhere}.platform-row small{font-size:10px;color:var(--muted);margin-top:6px}.platform-row[aria-selected=true]{border-color:var(--gold);background:var(--gold-surface)}
+.platform-subtitle{font-size:12px;line-height:1.7;color:var(--muted)}.platform-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}.platform-summary>div{padding:14px;border:1px solid var(--line);border-radius:var(--radius)}.platform-summary strong{display:block;color:var(--gold);font-size:22px;font-weight:500}.platform-summary span{display:block;font-size:10px;color:var(--muted);margin-top:6px}
+#p-review{border-top:2px solid var(--gold)}#p-plan-json{max-height:280px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px;line-height:1.6;background:var(--bg);padding:16px;border:1px solid var(--line)}
+#p-coverage,#p-report-status,#p-run-status,#p-storage{overflow-wrap:anywhere;font-size:12px;line-height:1.8}#p-job-list button{font-size:11px}.platform-inline{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.platform-inline>label{flex:1;min-width:160px}.platform-inline>button{margin-bottom:0}
+.platform-signing{border-top:1px solid var(--line);padding-top:22px;margin-top:28px}.platform-signing h3{font-size:16px}
+.platform-page .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.platform-page .full{grid-column:1/-1}.platform-page textarea{resize:vertical}.platform-page :focus-visible,.platform-row:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+@media(max-width:800px){.platform-heading{align-items:flex-start;flex-direction:column}.platform-page .form-grid{grid-template-columns:1fr}.platform-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.platform-steps button{flex:none}.platform-context{font-size:11px}.platform-page .actions{flex-wrap:wrap}.platform-row{align-items:flex-start}.platform-row .badge{font-size:9px}.platform-records{max-height:350px}}

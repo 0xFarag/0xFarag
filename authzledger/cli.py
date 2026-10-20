@@ -79,7 +79,8 @@ def main(argv: list[str] | None = None) -> int:
     studio = commands.add_parser("studio", help="Launch the local loopback workbench")
     studio.add_argument("--port", type=int, default=0, help="Loopback port; default selects a free port")
     studio.add_argument("--open", action="store_true", help="Open the session URL in your default browser")
-    studio.add_argument("--history", type=Path, help="Persist verified runs in this local SQLite history")
+    studio.add_argument("--history", type=Path, default=Path.home() / ".authzledger" / "history.sqlite3", help="Persistent local history/workspace (default: ~/.authzledger/history.sqlite3)")
+    studio.add_argument("--session-only", action="store_true", help="Use an explicitly ephemeral local session")
     studio.add_argument("--signing-key", type=Path, help="Local Ed25519 private key used only for requested proof exports")
     studio.add_argument("--public-key", type=Path, help="Externally trusted public key for proof verification")
     studio.add_argument("--reasoning-config", help="Explicit local Ollama configuration; inference remains opt-in")
@@ -136,7 +137,7 @@ def main(argv: list[str] | None = None) -> int:
             if not 0 <= args.port <= 65535:
                 raise ValueError("Invalid loopback port")
             from .studio import serve
-            return serve(args.port, open_browser=args.open, history_path=args.history,
+            return serve(args.port, open_browser=args.open, history_path=None if args.session_only else args.history,
                          signing_key=args.signing_key, public_key=args.public_key,
                          reasoning_config=read_json(args.reasoning_config) if args.reasoning_config else None,
                          policy_config=read_json(args.policy_config) if args.policy_config else None)
