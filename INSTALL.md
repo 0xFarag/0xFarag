@@ -1,6 +1,6 @@
-# Install and reproduce AuthzLedger 1.5
+# Install and reproduce AuthzLedger 1.5.0
 
-**Development candidate instructions.** No stable release or live 1.5 download is asserted. Use the exact candidate wheel/source selected by the release owner and preserve its producer version and hash. Final publication requires the [1.5 release gates](docs/release-1.5.0.md). Historical 1.1.0 documentation and evidence remain under their original versioned paths.
+**Versioned installation and verification instructions.** Use the exact 1.5.0 wheel/source identified by the release evidence and preserve its producer version and hash. Version metadata does not establish gate completion or download availability. Publication requires the [1.5 release gates](docs/release-1.5.0.md). Historical 1.1.0 documentation and evidence remain under their original versioned paths.
 
 Use is subject to [LICENSE](LICENSE), [NOTICE.txt](NOTICE.txt) and any separately agreed permissions. Publication does not grant a general commercial licence.
 
@@ -10,7 +10,7 @@ Python 3.10+ and `venv`; OpenSSL with Ed25519 support for signing and both signa
 
 The authored loopback labs need no administrator privileges, external credentials or paid service. Product execution is local; active work contacts only the explicitly approved targets.
 
-## Run from the candidate checkout
+## Run from the source checkout
 
 From the supplied source directory:
 
@@ -26,19 +26,19 @@ A preparation branch may change. Record the exact commit for evidence and prefer
 
 ## Install a wheel outside the checkout
 
-Create a new working directory outside the repository. Replace the wheel filename with the exact downloaded or locally built candidate asset; its current development version may include `dev0`:
+Create a new working directory outside the repository. Replace the wheel path with the exact downloaded or locally built 1.5.0 asset:
 
 ```sh
 mkdir authzledger-work
 cd authzledger-work
 python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install --no-index --no-deps /absolute/path/to/candidate.whl
+python -m pip install --no-index --no-deps /absolute/path/to/authzledger-1.5.0-py3-none-any.whl
 python -m pip install 'reportlab==4.4.9'
 python -I -c 'import authzledger; print(authzledger.__version__); print(authzledger.__file__)'
 ```
 
-The printed producer must match the tested asset and its module must resolve inside the new environment. `candidate.whl` is a placeholder: use the actual valid wheel filename. For offline installation, prepare a trusted wheelhouse and replace the ReportLab installation with `python -m pip install --no-index --find-links /path/to/wheelhouse 'reportlab==4.4.9'`.
+The printed producer must match the tested asset and its module must resolve inside the new environment. The absolute wheel path is a placeholder: use the location of the exact tested asset. For offline installation, prepare a trusted wheelhouse and replace the ReportLab installation with `python -m pip install --no-index --find-links /path/to/wheelhouse 'reportlab==4.4.9'`.
 
 When verified release assets and their checksum list exist, keep them together and run `sha256sum -c SHA256SUMS.txt`. Authenticate that checksum list or its delivery channel separately. A checksum list beside files detects corruption but is not publisher authentication on its own.
 
@@ -153,14 +153,14 @@ python tools/check_platform150.py --out artifacts/platform150-proof
 python -m pip wheel --no-deps --no-build-isolation --wheel-dir dist .
 ```
 
-The integrated candidate gate executes and records the complete prescribed checks:
+The integrated release gate executes and records the complete prescribed checks:
 
 ```sh
 python tools/verify_release150.py --out artifacts/release150
-python tools/release_gate150.py --receipt-dir artifacts/release150 --allow-development
+python tools/release_gate150.py --receipt-dir artifacts/release150
 ```
 
-Use a new output directory. `--allow-development` validates candidate receipts and does not authorize stable publication. The stable publication gate uses `--publication` against the exact clean tracked commit after the stable version is set; it must not be substituted with the development flag. `verification.json` records executed commands, outcomes, runtime and log hashes rather than deriving success from a feature list.
+Use a new output directory. `--allow-development` is reserved for explicitly prerelease producer versions and does not authorize publication. Publication additionally requires `--publication` against the exact clean tracked versioned commit; the development flag is not a substitute. `verification.json` records executed commands, outcomes, runtime and log hashes rather than deriving success from a feature list.
 
 Use the pinned build dependencies in `pyproject.toml`. The release owner also runs the existing regression/acceptance scripts, historical proof verification, all eight browser suites including `tests/browser_platform150.cjs`, the outside-checkout wheel gate, final exact-version CI and verified publication checks. Browser tests need their documented Playwright/Chromium environment; those are development dependencies, not product dependencies. A missing browser or skipped suite is an unresolved gate, not a pass.
 

@@ -1,12 +1,12 @@
-# AuthzLedger 1.5 release record
+# AuthzLedger 1.5.0 release contract
 
-**Development candidate.** This record does not declare a stable release, a published tag or completed remote CI. The complete approved 1.5 scope must pass its acceptance gates on the exact release commit before the stable version is set and published. Historical 1.1.0 artifacts and proof roots remain unchanged.
+**Release contract and verification boundaries.** This document defines the 1.5.0 scope and required release evidence. Publication requires successful acceptance gates on the exact versioned commit and verification of the published assets. Version metadata alone does not establish either condition. Historical 1.1.0 artifacts and proof roots remain unchanged.
 
 AuthzLedger extends the local authorization workbench into an integrated assessment suite for supported domains: explicit scope, retained traffic and discovery observations, versioned checks, prerequisite controls, findings, selective retests and signed handover. Studio and CLI use the same application services and execution context.
 
 The [suite contract](suite-1.5.0.md) maps native capabilities, selected adapters, module boundaries, Studio workflow and S15-01 through S15-30 acceptance gates. The entire A/B/C scope belongs to this one release.
 
-## Implemented surfaces under release review
+## Implemented scope
 
 - A persistent local assessment store with revision checks, retained typed artifacts and interruption records. Runtime credentials are not workspace settings; interrupted work is not automatically replayed.
 - Offline surface inventory from supported traffic imports and OpenAPI declarations, with provenance, uncertainty and missing prerequisites. Selected Nmap XML and Nuclei JSONL result adapters retain source hints through bounded safe projections; they do not launch those scanners. Inventory is not authorization to contact a target.
@@ -17,11 +17,11 @@ The [suite contract](suite-1.5.0.md) maps native capabilities, selected adapters
 - Offline surface deltas and a reviewed, limited CVE data pack preserve candidate status and unsupported version schemes. They are not new executions or proof of exploitability.
 - Local finite scheduling requires a running explicit scheduler invocation. It does not install a background daemon or create remote monitoring.
 
-The final release must reconcile this list with the exact tested source and the binding roadmap. A feature's presence in code or in the registry is not sufficient evidence of its entire promised domain.
+Release acceptance reconciles this list with the exact tested source and the binding roadmap. A feature's presence in code or in the registry is not sufficient evidence of its entire promised domain.
 
 ## Reproduce the three demonstrations
 
-From a development checkout with the report dependencies installed:
+From a source checkout with the report dependencies installed:
 
 ```sh
 python3 tools/check_platform150.py --out artifacts/platform150-proof
@@ -52,7 +52,7 @@ The isolated verifier is launched with `python -I`. It verifies package integrit
 
 ## Mandatory final gates
 
-The integrated runner is `python tools/verify_release150.py --out artifacts/release150`. Its `verification.json` records actual command results, runtime, source/commit binding and log hashes. Validate candidate receipts with `python tools/release_gate150.py --receipt-dir artifacts/release150 --allow-development`. Use a fresh output directory. Development acceptance is not publication acceptance: the stable gate uses `--publication` and requires the exact clean tracked release commit.
+The integrated runner is `python tools/verify_release150.py --out artifacts/release150`. Its `verification.json` records actual command results, runtime, source/commit binding and log hashes. Validate versioned receipts with `python tools/release_gate150.py --receipt-dir artifacts/release150`. Use a fresh output directory. Use `--allow-development` only for explicitly prerelease producer versions. Publication additionally requires `--publication` and the exact clean tracked release commit.
 
 1. Map every required item in the approved 1.5 roadmap to implemented behavior and an executed acceptance receipt. Unsupported or incomplete domains remain visible and prevent a complete stable-release claim.
 2. Run the complete existing regression plus all new scope, discovery, adapter, check, playbook, knowledge, persistence, scheduling and report tests on the final tree. Retain failures and skips explicitly.
@@ -61,7 +61,7 @@ The integrated runner is `python tools/verify_release150.py --out artifacts/rele
 5. Build the wheel, install it outside the checkout and run the installed package's main paths. Bind receipts to the tested wheel hash and exact commit.
 6. Verify historical 1.1.0 packages without changing their bytes or producer metadata.
 7. Reconcile product documentation, CLI help, registry limitations and report semantics. Report narrow check support accurately; do not turn a hint into a confirmed exploit.
-8. Only then set the stable version, run the exact-commit CI/publication gates, publish immutable-version assets and verify their checksums and availability.
+8. Run the gates on the exact versioned commit. Publish immutable-version assets only after all required gates pass, then verify their checksums and availability.
 
 ## Release assets
 

@@ -30,7 +30,9 @@ async function run(){
  server=spawn(process.env.PYTHON||'python3',['-u','-c',fixture,temp],{cwd:work,stdio:['ignore','pipe','pipe']});
  let err='';server.stderr.on('data',data=>err+=data);
  const info=await new Promise((resolve,reject)=>{let output='';server.stdout.on('data',data=>{output+=data;const line=output.split('\n')[0];if(output.includes('\n')){try{resolve(JSON.parse(line));}catch(error){reject(error);}}});server.once('exit',code=>reject(Error('Fixture exited '+code+': '+err)));});
- browser=await chromium.launch({headless:true,executablePath:process.env.AUTHZ_CHROMIUM_EXECUTABLE||chromium.executablePath()});const page=await browser.newPage({viewport:{width:1500,height:1040},acceptDownloads:true});const errors=[];
+ // Omit executablePath by default so Playwright can use a --only-shell install.
+ const executablePath=process.env.AUTHZ_CHROMIUM_EXECUTABLE||process.env.CHROME_EXECUTABLE;
+ browser=await chromium.launch({headless:true,...(executablePath?{executablePath}:{})});const page=await browser.newPage({viewport:{width:1500,height:1040},acceptDownloads:true});const errors=[];
  page.on('pageerror',error=>errors.push(error.message));await page.goto(info.url);await page.waitForFunction(()=>document.getElementById('session').textContent.includes('Local'));
  const click=async selector=>{await page.locator(selector).focus();await page.keyboard.press('Enter');};
  const fill=async(selector,value)=>{await page.locator(selector).focus();await page.keyboard.press('ControlOrMeta+A');await page.keyboard.insertText(value);};

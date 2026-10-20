@@ -1,4 +1,4 @@
-# AuthzLedger 1.5 — controlled assessment suite
+# AuthzLedger 1.5.0 — controlled assessment suite
 
 **From permitted scope to reproducible evidence.**
 
@@ -8,7 +8,7 @@ Find the authorization gap. Prove the fix. Extend the same discipline to discove
 
 AuthzLedger is a local assessment workbench for expert pentesters and AppSec teams. It connects explicit scope, captured traffic, discovered surfaces, control-bound checks, source-bound retests and signed handover. Studio and CLI use the same services and execution context.
 
-**1.5 development candidate.** The source is under integration and release review. This README does not declare a stable release, a published tag or completed final CI. See the [release record](docs/release-1.5.0.md) for gates and the [suite implementation map](docs/suite-1.5.0.md) for supported domains and limitations. Historical 1.1.0 evidence and schemas retain their original versions.
+**AuthzLedger 1.5.0 release scope.** Release status is established by exact-commit verification receipts and verified published assets; version metadata alone does not establish gate completion or publication. See the [release record](docs/release-1.5.0.md) for gates and the [suite implementation map](docs/suite-1.5.0.md) for supported domains and limitations. Historical 1.1.0 evidence and schemas retain their original versions.
 
 [Installation](INSTALL.md) · [Suite architecture and acceptance](docs/suite-1.5.0.md) · [1.5 release record](docs/release-1.5.0.md) · [Release notes](RELEASE_NOTES.md) · [Published releases](https://github.com/0xFarag/0xFarag/releases)
 

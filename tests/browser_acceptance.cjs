@@ -3,18 +3,26 @@ const work=path.resolve(__dirname,'..');
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const out=path.resolve(process.env.AUTHZ_BROWSER_ARTIFACTS||path.join(work,'artifacts/browser'));
 fs.mkdirSync(out,{recursive:true});
-let server,browser;
+let server,browser,page,serverStderr='';
+const errors=[],consoleErrors=[],jobStates=[],requestFailures=[];
 async function download(page,id,name){const event=page.waitForEvent('download');await page.locator(id).click();const d=await event;await d.saveAs(path.join(out,name));return fs.readFileSync(path.join(out,name),'utf8');}
 (async()=>{
- server=spawn(process.env.PYTHON||'python3',['-u','-m','authzledger','studio'],{cwd:work});
+ // This corpus suite is intentionally independent of the operator's durable
+ // workspace. Persistence is exercised by the v1 and platform browser suites.
+ server=spawn(process.env.PYTHON||'python3',['-u','-m','authzledger','studio','--session-only'],{cwd:work});
+ server.stderr.on('data',b=>{serverStderr=(serverStderr+b).slice(-16384);});
  const url=await new Promise((resolve,reject)=>{let text='';server.stdout.on('data',b=>{text+=b;const m=text.match(/http:\/\/127\.0\.0\.1:\d+\/#[A-Za-z0-9_-]+/);if(m)resolve(m[0]);});server.on('error',reject);setTimeout(()=>reject(Error('Studio startup timeout')),10000).unref();});
  browser=await chromium.launch({headless:true,...(process.env.CHROME_EXECUTABLE?{executablePath:process.env.CHROME_EXECUTABLE}:{})});
  const context=await browser.newContext({viewport:{width:1600,height:1050},acceptDownloads:true});
- const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
+ page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ page.on('requestfailed',request=>requestFailures.push({path:new URL(request.url()).pathname,error:request.failure()?.errorText}));
+ page.on('response',async response=>{if(new URL(response.url()).pathname.startsWith('/api/jobs/')){const job=await response.json().catch(()=>null);if(job){jobStates.push({state:job.state,kind:job.kind,error:job.error,accepted:job.accepted});if(jobStates.length>100)jobStates.shift();}}});
  await page.goto(url);await page.locator('#access-matrix .matrix-cell').nth(23).waitFor();
  assert.equal(await page.locator('#access-matrix .matrix-cell').count(),24);
  await page.locator('#benchmark').click();
- await page.waitForFunction(()=>document.getElementById('run-state').textContent.startsWith('Eight local scenarios completed'),{},{timeout:60000});
+ await page.waitForFunction(()=>/Eight local scenarios completed|terminal state|Connection interrupted/.test(document.getElementById('run-state').textContent)||(!document.getElementById('notice').hidden&&document.getElementById('notice').classList.contains('error')),{},{timeout:60000});
+ assert.match(await page.locator('#run-state').innerText(),/^Eight local scenarios completed/,await page.locator('#notice').innerText());
  assert.equal(await page.locator('.scenario').count(),8);
  const choose=async name=>{await page.locator('.scenario').filter({has:page.locator('b',{hasText:new RegExp('^'+name+'$')})}).click();await page.waitForFunction(n=>document.getElementById('run-state').textContent.startsWith('Local corpus / '+n),name);};
  await choose('expired-credential');
@@ -61,4 +69,13 @@ async function download(page,id,name){const event=page.waitForEvent('download');
   fs.writeFileSync(path.join(out,'acceptance.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
  }
  await context.close();await browser.close();server.kill();
-})().catch(async e=>{console.error(e);if(browser)await browser.close();if(server)server.kill();process.exit(1)});
+})().catch(async e=>{
+ const failure={passed:false,error:e.stack||e.message,page_errors:errors,console_errors:consoleErrors,request_failures:requestFailures,job_states:jobStates,server_stderr:serverStderr};
+ if(page&&!page.isClosed()){
+  failure.run_state=await page.locator('#run-state').textContent({timeout:1000}).catch(()=>null);
+  failure.notice=await page.locator('#notice').textContent({timeout:1000}).catch(()=>null);
+  await page.screenshot({path:path.join(out,'failure.png'),fullPage:true,timeout:5000}).catch(()=>{});
+ }
+ fs.writeFileSync(path.join(out,'failure.json'),JSON.stringify(failure,null,2));
+ console.error(JSON.stringify(failure,null,2));if(browser)await browser.close();if(server)server.kill();process.exit(1)
+});

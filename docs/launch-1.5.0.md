@@ -1,6 +1,6 @@
 # AuthzLedger 1.5 launch drafts and film plan
 
-**Prepared drafts. Not published. No release film has been produced by this document.** Activate publication only after the full 1.5 release gates pass, the stable release resolves to the verified commit and the downloads pass checksum verification. Until then, use development-candidate language in any demonstration.
+**Prepared drafts. Not published. No release film has been produced by this document.** Activate publication only after the full 1.5 release gates pass, the stable release resolves to the verified commit and the downloads pass checksum verification. While publication gates remain open, identify demonstrations as pre-publication builds.
 
 The public message is: **From permitted scope to reproducible evidence.**
 

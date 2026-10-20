@@ -1,8 +1,8 @@
 # AuthzLedger changelog
 
-## 1.5.0.dev0 — integrated suite candidate, 2026-10-20
+## 1.5.0 — integrated suite scope
 
-One local platform candidate incorporating all A/B/C work packages; no stable publication is declared. Final claims are governed by `docs/release-1.5.0.md` and the S15 acceptance contract in `docs/suite-1.5.0.md`.
+One local platform release scope incorporating all A/B/C work packages. Publication requires the exact-commit gate receipt and verified release assets. Scope and acceptance requirements are governed by `docs/release-1.5.0.md` and the S15 acceptance contract in `docs/suite-1.5.0.md`.
 
 - Added persistent assessment workspaces beside legacy history, revision checks, interruption records, explicit engagement/RoE references and runtime-only credential bindings. Studio defaults to local persistence with an explicit `--session-only` option.
 - Added composite scope/network/expiry enforcement, pinned transport, provenance-bound surface catalogs, bounded HTTP discovery and explicit TCP service probes.

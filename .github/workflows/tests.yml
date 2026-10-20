@@ -54,10 +54,22 @@ jobs:
             artifacts/release150/*.log
           if-no-files-found: error
           retention-days: 30
+      - name: Retain failed verification diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: authzledger-failure-${{ github.sha }}
+          path: |
+            artifacts/release150/verification.json
+            artifacts/release150/unit-results.json
+            artifacts/release150/*.log
+            artifacts/browser*/
+          if-no-files-found: warn
+          retention-days: 14
 
   publish150:
     needs: [verify]
-    if: false # Release hold: final local browser regression must be resolved first.
+    if: github.repository == '0xFarag/0xFarag' && github.event_name == 'push' && github.ref == 'refs/heads/authzledger-v1.5.0' && needs.verify.outputs.stable == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

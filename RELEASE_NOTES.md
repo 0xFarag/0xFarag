@@ -1,10 +1,10 @@
-# AuthzLedger 1.5 — development candidate
+# AuthzLedger 1.5.0 — controlled assessment suite
 
 **An integrated local assessment suite: permitted scope → discovery → controlled checks → reproducible evidence → selective retest → signed handover.**
 
-This candidate builds directly on the 1.1.0 authorization and workflow foundation. It is not a declaration of stable publication, a complete final CI run or a live release asset. The whole A/B/C work package belongs to one 1.5 release. See the [suite implementation map and S15 acceptance gates](docs/suite-1.5.0.md) and [release record](docs/release-1.5.0.md).
+AuthzLedger 1.5.0 builds directly on the 1.1.0 authorization and workflow foundation. These notes describe the version’s scope; verification and publication status are established by the exact-commit release receipts and published assets. The whole A/B/C work package belongs to one 1.5 release. See the [suite implementation map and S15 acceptance gates](docs/suite-1.5.0.md) and [release record](docs/release-1.5.0.md).
 
-## Candidate changes
+## Changes in 1.5.0
 
 - Persistent local assessment workspaces with engagement/RoE references, revision checks, verified evidence chains and interrupted-job records. Studio now defaults to `~/.authzledger/history.sqlite3`; `--history` selects another file and `--session-only` makes ephemeral use explicit. Credentials remain runtime-only and interrupted work is not automatically replayed.
 - Scope policies bind origin, method, path, purpose and effect with explicit network boundaries, expiry and limits. Validated destinations are pinned; ambient proxies and automatic redirects remain disabled.
@@ -15,7 +15,7 @@ This candidate builds directly on the 1.1.0 authorization and workflow foundatio
 - Frozen platform snapshots retain typed sources, nested controls, findings, comparisons and review decisions. JSON/HTML/PDF and Ed25519 packages share the same evidence inventory; the independent verifier remains a separate asset.
 - CLI and Studio expose the same main assessment path. Three actual loopback demos cover authorization/reduction, discovery-to-check and selective fix proof with one-byte tamper rejection.
 
-## Reproduce the candidate
+## Reproduce the three demonstrations
 
 Follow [INSTALL.md](INSTALL.md). From an installed wheel outside the checkout:
 
@@ -29,11 +29,11 @@ PDF requires `reportlab==4.4.9`; signing requires OpenSSL with Ed25519 support. 
 
 ## Scope and release boundaries
 
-The arithmetic check confirms only its two curated expression predicates. CORS header reflection and information signatures remain hints; a required-header omission confirms only the configured omission. Native network support is bounded connection/banner observation, not an exhaustive host vulnerability scanner. Arbitrary plugins, dynamic attack chains, C2, credential attacks, Internet-wide scanning, distributed agents, hosted multi-tenancy and enterprise RBAC are outside this local candidate.
+The arithmetic check confirms only its two curated expression predicates. CORS header reflection and information signatures remain hints; a required-header omission confirms only the configured omission. Native network support is bounded connection/banner observation, not an exhaustive host vulnerability scanner. Arbitrary plugins, dynamic attack chains, C2, credential attacks, Internet-wide scanning, distributed agents, hosted multi-tenancy and enterprise RBAC are outside the supported local scope.
 
 Existing scanners already provide evidence, quality models and retests. AuthzLedger's proposed advantage is traceable contract/control/oracle/source continuity in selected domains; no competitor benchmark or whole-market replacement is claimed. Standards mappings are partial, and signatures bind exact bytes rather than truth of execution.
 
-Final stability requires complete regression, browser gates, actual A/B/C receipts, installed-wheel verification, historical compatibility and exact-version publication checks. Film/channel material is prepared as [unpublished drafts](docs/launch-1.5.0.md). Historical release notes below remain unchanged.
+Release acceptance requires complete regression, browser gates, actual A/B/C receipts, installed-wheel verification, historical compatibility and exact-version publication checks. Film/channel material is prepared as [unpublished drafts](docs/launch-1.5.0.md). Historical release notes below remain unchanged.
 
 ---
 

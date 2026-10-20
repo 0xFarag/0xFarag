@@ -52,6 +52,9 @@ def main():
         save()
         print(identifier + ': ' + ('passed' if code == 0 else 'FAILED; ' + str(log)), flush=True)
         if code:
+            # CI must expose the actual failure even when verification stops
+            # before the successful-release artifact upload step.
+            print('\n'.join(log.read_text(errors='replace').splitlines()[-80:]), flush=True)
             raise SystemExit(code)
 
     save()

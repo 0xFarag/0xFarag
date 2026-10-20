@@ -1,6 +1,6 @@
-# AuthzLedger 1.5 — integrated assessment suite
+# AuthzLedger 1.5.0 — integrated assessment suite
 
-**Development candidate and implementation map.** This document describes the local 1.5 candidate, its release contract and its current supported boundaries. It does not declare a stable release, completed final gates, a published tag or a completed release film. The [release record](release-1.5.0.md) defines publication gates. All three work packages below belong to one 1.5 release; they are not future versions.
+**Implementation map and release contract.** This document describes AuthzLedger 1.5.0 and its supported boundaries. Acceptance and publication status require the exact-build receipts and verified release assets; this implementation map alone establishes neither. The [release record](release-1.5.0.md) defines publication gates. All three work packages below belong to one 1.5 release; they are not future versions.
 
 ## 1. Product promise and intended users
 
@@ -54,7 +54,7 @@ The local store is not an encrypted vault or a hosted multi-user service. Creden
 
 ## 3. Native capabilities, adapters and controlled PoCs
 
-| Domain | Native behavior in the candidate | Evidence boundary |
+| Domain | Native behavior in 1.5.0 | Evidence boundary |
 |---|---|---|
 | Authorization | Object, tenant, role and denial-data disclosure recipes; configured response policy; existing Contrast controls | Ownership, protected markers, role ordering and tenant claims require explicit bindings and valid controls. |
 | Business logic | Existing workflow engine exposed through skipped-approval, role-transition and idempotency recipes | Fresh fixture, pre/post state, declared effect and cleanup requirements; no universal inference of business rules. |
@@ -120,7 +120,7 @@ Measure any superiority claim per dimension on a shared eligible corpus, using n
 
 ## 7. One-release priorities and acceptance gates
 
-The A/B/C grouping is an internal delivery order for the same 1.5 release. A preserves and integrates AuthZ/API/web evidence; B adds controlled inventory/discovery and selected checks/adapters; C adds local operational durability, finite scheduling, explicit knowledge packs and verifiable handover. Enterprise readiness here means these selected local properties. Distributed agents, SaaS tenancy, organization-wide RBAC, fleet management, a broad live CVE feed, credential attacks, C2 and Internet-scale scanning are outside the candidate.
+The A/B/C grouping is an internal delivery order for the same 1.5 release. A preserves and integrates AuthZ/API/web evidence; B adds controlled inventory/discovery and selected checks/adapters; C adds local operational durability, finite scheduling, explicit knowledge packs and verifiable handover. Enterprise readiness here means these selected local properties. Distributed agents, SaaS tenancy, organization-wide RBAC, fleet management, a broad live CVE feed, credential attacks, C2 and Internet-scale scanning are outside the supported local scope.
 
 Release integration proceeds in dependency order: (1) scope and transport; (2) persistent workspace and recovery; (3) sources/catalog/discovery; (4) curated checks and static composition; (5) retests/knowledge/schedules; (6) unified Studio/CLI/reporting; (7) exact-build regression, demos, installed-wheel verification and publication gates. The source tree contains implementation for these areas; the release owner must bind each acceptance result to the final tested build. A green unit test alone does not close a complete user workflow.
 
@@ -157,7 +157,7 @@ Release integration proceeds in dependency order: (1) scope and transport; (2) p
 | S15-29 | Built wheel works outside checkout; independent verifier imports no product code | Final installed-distribution receipt |
 | S15-30 | Historical proof bytes remain valid; final regression, exact-version CI and published assets are verified | Final release owner's immutable gate record |
 
-This table is an acceptance contract, not a declaration that all rows have passed. Missing native captures, browser results, final package receipts or release artifacts must remain explicit blockers. Release metrics and test totals belong to the actual final receipts; none is invented here. `tools/verify_release150.py` executes the integrated gate and writes `verification.json`; `tools/release_gate150.py` distinguishes candidate receipt validation from exact-commit publication acceptance. All eight browser suites remain required.
+This table is an acceptance contract, not a declaration that all rows have passed. Missing native captures, browser results, final package receipts or release artifacts must remain explicit blockers. Release metrics and test totals belong to the actual final receipts; none is invented here. `tools/verify_release150.py` executes the integrated gate and writes `verification.json`; `tools/release_gate150.py` distinguishes receipt validation from exact-commit publication acceptance. All eight browser suites remain required.
 
 ### Source references for comparison
 

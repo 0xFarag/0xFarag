@@ -1,16 +1,10 @@
 {
   "version": "1.5.0",
   "target_version": "1.5.0",
-  "status": "stable-candidate-awaiting-exact-commit-gates",
+  "status": "release-contract",
   "repository": "https://github.com/0xFarag/0xFarag",
   "distribution_branch": "authzledger-v1.5.0",
-  "release_url": null,
-  "stable_release": {
-    "version": "1.1.0",
-    "tag": "v1.1.0",
-    "commit": "a7160e13289ea0983946e03c978bc6af1841a7e6",
-    "unchanged": true
-  },
+  "release_url": "https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0",
   "rights_holder": "Nasser Aldin Farag / 0xFarag",
   "license": "LicenseRef-Proprietary",
   "billing_enabled": false,
@@ -27,21 +21,12 @@
   "release_contract": "docs/suite-1.5.0.md",
   "release_gate": "tools/release_gate150.py",
   "verification_runner": "tools/verify_release150.py",
-  "publication_blockers": [
-    "Complete same-source unit, integration, eight browser, demo, isolated wheel and package gates remain mandatory.",
-    "Exact stable version 1.5.0 and exact-commit CI must pass before the immutable v1.5.0 tag."
-  ],
   "acceptance_baseline": {
     "version": "1.1.0",
     "scenarios": 88,
     "tests": 530,
     "browser_suites": 7,
     "preserved": true
-  },
-  "current_review": {
-    "status": "All component, browser, demo and installed-wheel executions passed during integration; the frozen final-version gate must complete on the publication commit.",
-    "receipt_path": "artifacts/release150/verification.json",
-    "browser_suites_required": 8
   },
   "verification_depth": {
     "standalone": "Ed25519 signature, signed inventory, byte hashes and report anchors; standard library plus OpenSSL.",
@@ -59,9 +44,25 @@
     "Public demonstrations use synthetic disposable loopback fixtures."
   ],
   "release_media": {
-    "recorded_release_film": false,
-    "social_publication": false,
     "drafts": "docs/launch-1.5.0.md",
-    "note": "Screen-capture concept and draft channel copy; no produced film or posted messages claimed."
+    "scope": "Screen-capture concept and draft channel copy.",
+    "completion_evidence": "A produced film or posted message requires its own artifact and publication receipt; neither is asserted by this contract."
+  },
+  "release_url_role": "intended_versioned_destination; availability requires verified publication",
+  "previous_stable_release": {
+    "version": "1.1.0",
+    "tag": "v1.1.0",
+    "commit": "a7160e13289ea0983946e03c978bc6af1841a7e6",
+    "unchanged": true
+  },
+  "publication_requirements": [
+    "Complete same-source unit, integration, eight browser, demo, isolated wheel and package gates remain mandatory.",
+    "Exact version 1.5.0 and exact-commit CI must pass before publishing the immutable v1.5.0 tag; published asset checksums and availability must then be verified."
+  ],
+  "verification_contract": {
+    "scope": "1.5.0 release scope; publication requires an exact-commit gate receipt and verified published assets.",
+    "required_receipt_path": "artifacts/release150/verification.json",
+    "browser_suites_required": 8,
+    "results_source": "Execution outcomes, source binding and log hashes belong to the actual verification receipt; this metadata does not assert gate success."
   }
 }
