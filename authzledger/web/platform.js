@@ -26,7 +26,7 @@ function pPage(name){
 function pContext(){
  const a=platform.record?.assessment, node=$('p-context');node.replaceChildren();
  node.append(element('strong',a?a.title:'No assessment selected'),element('small',a?
-   'Revision '+a.revision+' · '+a.scope.origins.join(', ')+' · '+a.scope.limits.max_requests+' requests per execution · Expires '+a.scope.expires_at:
+   'Revision '+a.revision+' · '+(a.authorization_policy?.state==='revoked'?'Authorization revoked · ':'')+a.scope.origins.join(', ')+' · '+a.scope.limits.max_requests+' requests per execution · Expires '+a.scope.expires_at:
    'Set explicit scope before making any target requests.'));
  if(a&&$('a-platform').classList.contains('active')){
   $('a-context-title').textContent=a.title;$('a-context-origin').textContent=a.scope.origins.join(', ');
@@ -257,7 +257,7 @@ async function pLoad(id){
  $('p-expires').value=pLocalDate(s.expires_at);$('p-budget').value=s.limits.max_requests;$('p-timeout').value=s.limits.timeout_seconds;
  $('p-paths').value=[...new Set(s.operations.filter(o=>o.origin===$('p-origin').value&&o.method==='GET').map(o=>o.path))].join('\n');
  $('p-scope-json').value=pretty(s);$('p-source-origin').value=$('p-origin').value;$('p-credential-origin').value=$('p-origin').value;
- $('p-seed-paths').value=$('p-paths').value;$('p-update').disabled=false;
+ $('p-seed-paths').value=$('p-paths').value;$('p-update').disabled=false;$('p-revoke').disabled=a.authorization_policy?.state==='revoked';
  if(!$('p-check-path').value)$('p-check-path').value=$('p-paths').value.split('\n')[0]||'';
  pContext();pRenderSurface();pRenderEvidence();pRenderPlaybook();
 }
@@ -343,7 +343,7 @@ async function pPresent(result,draftRevision){
  $('p-plan-title').textContent='Review '+result.operation+' plan';$('p-plan-json').textContent=pretty(platform.plan);
  const scope=platform.plan.scope||platform.record.assessment.scope;
  $('p-plan-meta').textContent=scope.origins.join(', ')+' · Maximum '+scope.limits.max_requests+' requests including controls · Effects: '+scope.allowed_effects.join(', ')+' · Authorization expires '+scope.expires_at;
- $('p-plan-digest').textContent='SHA-256 · '+platform.plan.plan_digest;$('p-approved').checked=false;$('p-run').disabled=true;$('p-schedule').disabled=true;
+ $('p-plan-digest').textContent='Approval SHA-256 · '+platform.artifact.approval_digest;$('p-approved').checked=false;$('p-run').disabled=true;$('p-schedule').disabled=true;
  $('p-review').hidden=false;await pLoad(platform.id);$('p-review').scrollIntoView({block:'nearest'});
  pInspect('Reviewed '+result.operation,'Offline planning has sent no target requests',{'Plan digest':platform.plan.plan_digest,Scope:scope,Plan:platform.plan,Approval:'Waiting for explicit authorization'});
 }
@@ -377,9 +377,15 @@ $('p-index-related').onclick = () => pIndexObservations(frozenIndex.selected);
 $('p-index-all').onclick = () => pIndexObservations(null);
 $('p-index-save').onclick = () => { if (frozenIndex) download(frozenIndex.data, 'federated-surface-index.json'); };
 $('p-assessment').onchange=guarded(async()=>{pInvalidate();platform.selected=null;$('p-retest').disabled=true;platform.id=$('p-assessment').value||null;if(platform.id)await pLoad(platform.id);else{platform.record=null;pContext();}});
-$('p-new').onclick=()=>{pInvalidate();platform.loadSequence++;platform.id=null;platform.record=null;platform.selected=null;platform.endpoint=null;$('p-assessment').value='';$('p-scope-json').value='';$('p-title').value='Security assessment';$('p-update').disabled=true;$('p-read-attestation').checked=false;pPage('scope');};
+$('p-new').onclick=()=>{pInvalidate();platform.loadSequence++;platform.id=null;platform.record=null;platform.selected=null;platform.endpoint=null;$('p-assessment').value='';$('p-scope-json').value='';$('p-title').value='Security assessment';$('p-update').disabled=true;$('p-revoke').disabled=true;$('p-read-attestation').checked=false;pPage('scope');};
 $('p-expires').value=pLocalDate(new Date(Date.now()+3600000));
 $('p-create').onclick=guarded(async()=>{const result=await api('/api/platform/create',{title:$('p-title').value.trim(),scope:await pScope(),engagement:pEngagement()});pInvalidate();await pRefresh(result.assessment.id);pPage('surface');});
+$('p-revoke').onclick=guarded(async()=>{
+ const id=pRequire(),revision=platform.record.assessment.revision;
+ if(!window.confirm('Permanently revoke authorization for this assessment? Pending schedules will be blocked.'))return;
+ await api('/api/platform/revoke-authorization',{assessment_id:id,expected_revision:revision});
+ pInvalidate();await pRefresh(id);notify('Assessment authorization revoked.');
+});
 $('p-update').onclick=guarded(async()=>{const id=pRequire(),scope=await pScope();await api('/api/platform/update',{assessment_id:id,title:$('p-title').value.trim(),scope,engagement:pEngagement(),expected_revision:platform.record.assessment.revision});pInvalidate();await pRefresh(id);notify('Assessment scope updated; all previous plan reviews were invalidated.');});
 for(const id of ['p-origin','p-paths','p-networks','p-authorization-ref','p-expires','p-budget','p-timeout'])$(id).addEventListener('input',()=>{$('p-scope-json').value='';pInvalidate();});
 for(const id of ['p-title','p-engagement-ref','p-roe-ref','p-engagement-notes','p-scope-json','p-spec','p-check-path','p-baseline-status','p-required-headers','p-seeds-json','p-seed-paths'])$(id).addEventListener('input',pInvalidate);
@@ -405,7 +411,7 @@ $('p-bind').onclick=guarded(async()=>{pRequire();const body={env:$('p-credential
 $('p-check-plan').onclick=guarded(async()=>{pRequire();const revision=platform.revision,spec=await strictJSON($('p-spec').value);await pPresent(await api('/api/platform/check-plan',{assessment_id:platform.id,spec}),revision);});
 $('p-playbook-plan').onclick=guarded(async()=>{pRequire();const selected=[...$('p-playbook-plans').querySelectorAll('input:checked')];if(!selected.length)throw Error('Select at least one retained plan.');const revision=platform.revision,steps=selected.map((node,index)=>({id:'step-'+(index+1),plan_id:node.dataset.planId,requires:index?['step-'+index]:[]}));await pPresent(await api('/api/platform/playbook-plan',{assessment_id:platform.id,steps}),revision);});
 $('p-approved').onchange=()=>{const allowed=!!platform.review&&$('p-approved').checked&&!platform.busy;$('p-run').disabled=!allowed;$('p-schedule').disabled=!allowed;};
-$('p-run').onclick=guarded(async()=>{if(!platform.review||!$('p-approved').checked||platform.busy)throw Error('Review and authorize the exact current plan first.');const job=await api('/api/platform/run',{review:platform.review,approve:platform.plan.plan_digest,authorized:true});await pWatch(job);});
+$('p-run').onclick=guarded(async()=>{if(!platform.review||!$('p-approved').checked||platform.busy)throw Error('Review and authorize the exact current plan first.');const job=await api('/api/platform/run',{review:platform.review,approve:platform.artifact.approval_digest,authorized:true});await pWatch(job);});
 $('p-plan-save').onclick=()=>{if(platform.plan)download(platform.plan,'assessment-plan.json');};
 $('p-cancel').onclick=guarded(async()=>{if(platform.job){await api('/api/cancel',{id:platform.job});$('p-run-status').textContent='Stopping further ordinary requests. In-flight requests remain bounded by their timeout.';}});
 $('p-reconnect').onclick=guarded(async()=>{if(platform.job)await pWatch({id:platform.job});});
@@ -435,7 +441,7 @@ $('p-annotations-apply').onclick=guarded(async()=>{if(!platform.snapshot)throw E
 document.querySelectorAll('[data-platform-export]').forEach(button=>button.onclick=guarded(async()=>{if(!platform.snapshot)throw Error('Freeze an assessment first.');const format=button.dataset.platformExport;download(await api('/api/platform/export',{snapshot_id:platform.snapshot.snapshot_id,format},true),'authzledger-assessment.'+format);}));
 $('p-signing').onclick=guarded(async()=>{const signing=await api('/api/assessment/signing',{create_session_key:true});$('p-fingerprint').textContent='Public key SHA-256 · '+signing.public_key_sha256;download(signing.public_key,'authzledger-verification-key.pem','application/x-pem-file');});
 $('p-proof').onclick=guarded(async()=>{if(!platform.snapshot)throw Error('Freeze an assessment first.');download(await api('/api/platform/proof',{snapshot_id:platform.snapshot.snapshot_id},true),'authzledger-assessment-proof.zip');});
-$('p-schedule').onclick=guarded(async()=>{if(!platform.review||!$('p-approved').checked)throw Error('Authorize the reviewed plan first.');const result=await api('/api/platform/schedule',{assessment_id:pRequire(),plan_id:platform.artifact.artifact_id,approve:platform.plan.plan_digest,authorized:true,interval_seconds:Number($('p-schedule-interval').value),iterations:Number($('p-schedule-iterations').value),request_budget:Number($('p-schedule-budget').value)});$('p-schedule-status').textContent='Registered '+result.schedule.id+' · '+result.schedule.iterations+' iterations. No background runner was started.';});
+$('p-schedule').onclick=guarded(async()=>{if(!platform.review||!$('p-approved').checked)throw Error('Authorize the reviewed plan first.');const result=await api('/api/platform/schedule',{assessment_id:pRequire(),plan_id:platform.artifact.artifact_id,approve:platform.artifact.approval_digest,authorized:true,interval_seconds:Number($('p-schedule-interval').value),iterations:Number($('p-schedule-iterations').value),request_budget:Number($('p-schedule-budget').value)});$('p-schedule-status').textContent='Registered '+result.schedule.id+' · '+result.schedule.iterations+' iterations. No background runner was started.';});
 $('p-run-due').onclick=guarded(async()=>{pRequire();if(!$('p-due-authorized').checked)throw Error('Confirm execution of currently due approved work.');const job=await api('/api/platform/run-due',{assessment_id:platform.id,authorized:true});$('p-due-authorized').checked=false;await pWatch(job);});
 $('p-delta').onclick=guarded(async()=>{pRequire();const result=await api('/api/platform/delta',{assessment_id:platform.id,baseline_catalog_id:$('p-delta-before').value,current_catalog_id:$('p-delta-after').value});pInvalidate();await pLoad(platform.id);$('p-delta-status').textContent='Surface comparison retained · '+result.delta.artifact_id;pInspect('Surface delta','Offline comparison; no behavior was retested',{Result:result.delta.value,'Check selection':result.check_plan?.value||'No new check plan requested','Retest coverage':'Unselected behavior remains not_retested'});});
 $('p-knowledge').onclick=guarded(async()=>{pRequire();const observations=[{product:$('p-knowledge-product').value.trim(),version:$('p-knowledge-version').value.trim(),source_ref:$('p-knowledge-source').value.trim(),source_kind:$('p-knowledge-kind').value}],pack=$('p-knowledge-pack').value.trim()?await strictJSON($('p-knowledge-pack').value):null;const result=await api('/api/platform/knowledge',{assessment_id:platform.id,observations,pack});pInvalidate();await pLoad(platform.id);$('p-knowledge-status').textContent='Knowledge result retained · '+result.artifact.artifact_id;pInspect('Knowledge candidates','Evidence-bound hints; exploitability is not established',{Result:result.artifact.value});});

@@ -509,7 +509,7 @@ class StudioServer(ThreadingHTTPServer):
                 del self.platform_reviews[next(iter(self.platform_reviews))]
             self.platform_reviews[review] = {"assessment_id": assessment_id,
                 "artifact_id": artifact["artifact_id"], "operation": operation,
-                "plan_digest": artifact["value"]["plan_digest"],
+                "approval_digest": artifact["approval_digest"],
                 "revision": record["assessment"]["revision"],
                 "credentials": self.credential_resolver.metadata(),
                 "expires": time.monotonic() + 600, "job": None}
@@ -520,7 +520,7 @@ class StudioServer(ThreadingHTTPServer):
             retained = self.platform_reviews.get(review)
             if not retained or retained["expires"] <= time.monotonic():
                 raise ContractError("Review this plan again; its session approval expired.")
-            if not isinstance(approval, str) or not hmac.compare_digest(retained["plan_digest"], approval):
+            if not isinstance(approval, str) or not hmac.compare_digest(retained["approval_digest"], approval):
                 raise ContractError("Approve the exact reviewed plan digest before execution.")
             if retained["job"]:
                 job = self.jobs.get(retained["job"])
