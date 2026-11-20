@@ -15,6 +15,7 @@ Die 45 am installierten Wheel ausgeführten Tests überschneiden sich mit der Qu
 
 | Beleg | Inhalt |
 |---|---|
+| [Abnahmestand](gate-status.json) | Alle 18 Kriterien, technische Nachweise und formelle Freigabe. 12 sind technisch belegt, 5 teilweise und 1 offen. Formell attestiert sind 0. |
 | [Demos A–D](demos.json) | A prüft archivierte Controls offline. B bindet native Headerbeobachtung, HAR und passiven ZAP-Export. C weist einen geprüften Fix und ein offenes Retest-Element aus. Beide Package-Verifier erkennen eine Ein-Byte-Änderung. D erhält Quellenherkunft und Evidence-Level der drei Importprofile. |
 | [Regression](regression.json) | Getrennte Zähler für frühere und neue Tests, Auslassungen und historische Referenz |
 | [Distribution](distribution.json) | Wheel-Digest, Installationsprüfung und Bytevergleich historischer Fixtures und Belege |

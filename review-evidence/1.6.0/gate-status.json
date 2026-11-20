@@ -1,0 +1,142 @@
+{
+  "schema": "authzledger.public-gate-status/v1",
+  "target": "1.6.0",
+  "source_commit": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+  "source_tree": "aedd13378b49dfc651e4771c5d8b0ba836147eb1",
+  "as_of_utc": "2026-11-20T22:43:38.608505+00:00",
+  "gate": "HOLD",
+  "stable_release": "v1.5.0",
+  "archived_evidence_reference_count": 33,
+  "full_matrix_sha256": "03edab89984e27cbe7a2ab7e440aef607dfb9d553c983957bd1305ba500b9b65",
+  "number_of_criteria": 18,
+  "engineering_status_counts": {
+    "engineering-belegt": 12,
+    "teilbelegt": 5,
+    "offen": 1
+  },
+  "formally_attested_criteria": 0,
+  "criteria": [
+    {
+      "id": "S16-01",
+      "title": "Basis und Archiv",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-02",
+      "title": "Mandat und Freigabe",
+      "engineering_status": "teilbelegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-03",
+      "title": "Budget und Unterbrechung",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-04",
+      "title": "Transaktion und Migration",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-05",
+      "title": "Readervertrag und Schutz",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-06",
+      "title": "Herkunft und Zielidentität",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-07",
+      "title": "Drei-Familien-Demo D",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-08",
+      "title": "Registry und statische Auswahl",
+      "engineering_status": "teilbelegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-09",
+      "title": "Demo A",
+      "engineering_status": "teilbelegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-10",
+      "title": "Demo B mit zwei Quellarten",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-11",
+      "title": "Selective Retest und Delta",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-12",
+      "title": "Gefrorene Reports",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-13",
+      "title": "Demo C und Signatur",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-14",
+      "title": "Studio-/CLI-Parität",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-15",
+      "title": "Regression und Browser",
+      "engineering_status": "teilbelegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-16",
+      "title": "Distribution und Kundenpfad",
+      "engineering_status": "teilbelegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-17",
+      "title": "Geheimnisse und Unveränderlichkeit",
+      "engineering_status": "engineering-belegt",
+      "formal_approval": "nicht attestiert"
+    },
+    {
+      "id": "S16-18",
+      "title": "Release-Attest und Kommunikation",
+      "engineering_status": "offen",
+      "formal_approval": "nicht attestiert"
+    }
+  ],
+  "demo_evidence_scope": {
+    "A": "Drei archivierte Originalbeobachtungen aus 1.5.0 auf dem Zielcommit geprüft. Derselbe rekonstruierte 403-Inhalt ergibt mit fehlendem Pflicht-Control inconclusive. Eine vollständige neue Aufzeichnung mit dem Ziel-Wheel steht aus.",
+    "B": "Im lokalen Konfigurationsfall stammen native Discovery, Chromium-HAR und passiver ZAP-Export aus demselben Assessment. Der eigene kontrollierte Headercheck bestätigt das konfigurierte Prädikat. Die ZAP-Aussage bleibt not_verified.",
+    "C": "Die gemischte Baseline hat einen verifizierten Fix und einen ausgelassenen Retest. Beide Package-Verifier akzeptierten das Original und lehnten die Ein-Byte-Änderung ab. Der Schlüssel gilt für das Demo-Paket.",
+    "D": "Drei Offline-Fixtures liefern fünf Quellrecords, vier Beobachtungen, einen Scope-Ausschluss und einen Hinweis. Die Zahl der bestätigten Findings ist null."
+  },
+  "separate_pull_request": {
+    "url": "https://github.com/0xFarag/0xFarag/pull/5",
+    "source_commit": "6621f1b76b3b641ae1f25a195d50cad677d96091",
+    "scope": "Separat geprüfte Änderung zum Scope-Widerruf. Die obige Matrix gilt für den dort genannten Quellcommit.",
+    "focused_offline_tests_passed": 62,
+    "full_regression_on_this_patch": "ausstehend",
+    "browser_tests_on_this_patch": "ausstehend"
+  }
+}
