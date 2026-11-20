@@ -13,6 +13,9 @@ env:
 
 jobs:
   verify:
+    # The 1.6 review branch has its own exact-source CI. This job is the
+    # historical 1.5 verifier and includes the 1.5-specific publication path.
+    if: github.ref != 'refs/heads/review/authzledger-1.6-offline-federation' && github.head_ref != 'review/authzledger-1.6-offline-federation'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     outputs:

@@ -1,0 +1,126 @@
+{
+  "format": "authzledger.demo-d.projection/v1",
+  "graph": {
+    "assets": [
+      "192.0.2.10"
+    ],
+    "endpoints": [
+      {
+        "key": "https://192.0.2.10/docs",
+        "service": "tcp://192.0.2.10:443"
+      }
+    ],
+    "findings": [
+      {
+        "evidence_level": "hint",
+        "records": [
+          "nuclei.jsonl#line:1"
+        ],
+        "target": "https://192.0.2.10/docs"
+      }
+    ],
+    "observations": [
+      {
+        "asserted": {
+          "confidence": 3,
+          "method": "table",
+          "name": "https",
+          "reason": "syn-ack",
+          "state": "open"
+        },
+        "evidence_level": "hint",
+        "kind": "service_state",
+        "record": "nmap.xml#/nmaprun/host[1]/ports/port[1]",
+        "target": "tcp://192.0.2.10:443"
+      },
+      {
+        "asserted": {
+          "length": 107,
+          "method": null,
+          "status": 200
+        },
+        "evidence_level": "hint",
+        "kind": "http_result",
+        "record": "ffuf.json#/results/0",
+        "target": "https://192.0.2.10/docs"
+      },
+      {
+        "asserted": {
+          "matched": true,
+          "matcher": "doc-marker",
+          "source_severity": "medium",
+          "template_id": "demo-doc-marker"
+        },
+        "evidence_level": "hint",
+        "kind": "template_match",
+        "record": "nuclei.jsonl#line:1",
+        "target": "https://192.0.2.10/docs"
+      },
+      {
+        "asserted": {
+          "matched": false,
+          "matcher": "other-marker",
+          "source_severity": "high",
+          "template_id": "demo-doc-other"
+        },
+        "evidence_level": null,
+        "kind": "template_match",
+        "record": "nuclei.jsonl#line:2",
+        "target": "https://192.0.2.10/docs"
+      }
+    ],
+    "services": [
+      {
+        "asset": "192.0.2.10",
+        "key": "tcp://192.0.2.10:443",
+        "port": 443,
+        "transport": "tcp"
+      }
+    ]
+  },
+  "receipts": [
+    {
+      "records": [
+        {
+          "disposition": "accepted",
+          "locator": "/nmaprun/host[1]/ports/port[1]"
+        }
+      ],
+      "sha256": "9885a02dc028840f7ec8dce648c40d4eab6c0028ce8a21f82f778d83e6d6bc7a",
+      "source": "nmap.xml"
+    },
+    {
+      "records": [
+        {
+          "disposition": "accepted",
+          "locator": "/results/0"
+        },
+        {
+          "disposition": "out_of_scope",
+          "locator": "/results/1"
+        }
+      ],
+      "sha256": "f93742ef58a993156a6cf97a8fde40a9c96bbcde73a9c11e5a3ce8f251d69339",
+      "source": "ffuf.json"
+    },
+    {
+      "records": [
+        {
+          "disposition": "accepted",
+          "locator": "line:1"
+        },
+        {
+          "disposition": "accepted",
+          "locator": "line:2"
+        }
+      ],
+      "sha256": "79e8030fddd5147878d2cdc9a994f4f6661654084b31dfc8a952cc143dbae70f",
+      "source": "nuclei.jsonl"
+    }
+  ],
+  "scope": {
+    "allowed_services": [
+      "tcp://192.0.2.10:443"
+    ]
+  }
+}

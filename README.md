@@ -1,3 +1,9 @@
+# AuthzLedger 1.6.0 — release target under review
+
+The 1.6.0 distribution is under final review. Its release gate is open, and the wheel is retained for internal verification. The current public stable release is [v1.5.0](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0). See the [target notes](docs/release-target-1.6.md) and [acceptance contract](review/1.6/README.md). The following documentation describes v1.5.0.
+
+---
+
 # AuthzLedger 1.5.0 — controlled assessment suite
 
 **From permitted scope to reproducible evidence.**

@@ -14,6 +14,13 @@ from .model import ContractError, _target
 
 _ENV = re.compile(r"[A-Za-z_][A-Za-z0-9_]{0,127}\Z")
 
+_BEARER_MARKER = re.compile(r"\bBearer\s+[A-Za-z0-9._~+/-]{8,}", re.IGNORECASE)
+
+
+def contains_credential_marker(text):
+    """Recognize the explicit credential markers disallowed in platform evidence."""
+    return "PRIVATE KEY-----" in text or _BEARER_MARKER.search(text) is not None
+
 
 def _value(value):
     if not isinstance(value, str) or not value or len(value) > 16384 or any(ord(c) < 32 or ord(c) == 127 or ord(c) > 255 for c in value):

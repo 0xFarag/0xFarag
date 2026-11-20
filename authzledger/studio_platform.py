@@ -10,6 +10,28 @@ from pathlib import Path
 from .model import ContractError
 
 
+def _federation_sources(body):
+    from .federation_offline import MAX_TOTAL_BYTES
+    encoded = body.get("sources")
+    if not isinstance(encoded, dict) or not 1 <= len(encoded) <= 3 or set(encoded) - {"nmap", "ffuf", "nuclei"}:
+        raise ContractError("Choose saved Nmap XML, ffuf JSON or Nuclei JSONL exports.")
+    sources = []
+    maximum = MAX_TOTAL_BYTES
+    total = 0
+    for profile, value in encoded.items():
+        if not isinstance(value, str) or len(value) > 4 * ((maximum - total + 2) // 3):
+            raise ContractError("Choose files totalling at most 2 MiB.")
+        try:
+            raw = base64.b64decode(value, validate=True)
+        except (ValueError, binascii.Error):
+            raise ContractError("Invalid source file encoding.") from None
+        total += len(raw)
+        if total > maximum:
+            raise ContractError("Choose files totalling at most 2 MiB.")
+        sources.append((profile, raw))
+    return sources
+
+
 def platform_route(handler, body):
     route = handler.path.removeprefix("/api/platform/")
     fields = {
@@ -27,13 +49,50 @@ def platform_route(handler, body):
         "delta": {"assessment_id", "baseline_catalog_id", "current_catalog_id", "checks"},
         "knowledge": {"assessment_id", "observations", "pack"},
         "recover": {"assessment_id"},
+        "federation-preview": {"allowed_services", "sources", "with_review"},
+        "federation-index": {"snapshot_id"},
+        "federation-retain": {"assessment_id", "allowed_services", "sources", "expected_revision", "preview_digest", "release_sources"},
         "annotate": {"assessment_id", "annotations", "expected_revision"},
     }
     if route not in fields or set(body) - fields[route]:
         raise ContractError("Unsupported platform operation or fields.")
     service = handler.server.workbench
     identifier = body.get("assessment_id")
-    if route == "create":
+    if route == "federation-index":
+        from .federation_index import build_surface_index
+        snapshot_id = body.get("snapshot_id")
+        snapshot = handler.server.platform_snapshots.get(snapshot_id) if isinstance(snapshot_id, str) else None
+        if snapshot is None:
+            raise ContractError("Select a frozen assessment snapshot from this Studio session.")
+        result = build_surface_index(snapshot)
+    elif route == "federation-preview":
+        from .federation_offline import project_federation
+        if type(body.get("with_review", False)) is not bool:
+            raise ContractError("Invalid review option.")
+        result = project_federation(body.get("allowed_services"), _federation_sources(body))
+        if body.get("with_review"):
+            from .federation_records import federation_preview_digest
+            result = {"projection": result, "preview_digest": federation_preview_digest(result)}
+    elif route == "federation-retain":
+        revision = body.get("expected_revision")
+        if (body.get("release_sources") is not True or not isinstance(body.get("preview_digest"), str)
+                or type(revision) is not int or revision < 1):
+            raise ContractError("Review the projection and approve retaining its redacted evidence.")
+        try:
+            artifact = service.retain_federation(identifier, body.get("allowed_services"), _federation_sources(body),
+                                                 expected_revision=revision, preview_digest=body["preview_digest"])
+        except ValueError as exc:
+            messages = {
+                "assessment_revision_conflict": "Refresh the assessment and review the sources again.",
+                "federation_scope_revision_conflict": "The scope changed. Review the sources against the current assessment.",
+                "federation_service_outside_assessment_scope": "Every inventory service needs a matching TCP CONNECT grant and permitted address in the assessment.",
+                "federation_preview_digest_mismatch": "The sources or filter differ from the reviewed projection. Preview the files again.",
+            }
+            if str(exc) in messages:
+                raise ContractError(messages[str(exc)]) from None
+            raise
+        result = {"artifact": artifact}
+    elif route == "create":
         result = {"assessment": service.create(body.get("title"), body.get("scope"), body.get("engagement"))}
     elif route == "get":
         result = service.get(identifier)

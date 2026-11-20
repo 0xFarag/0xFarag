@@ -1,0 +1,171 @@
+{
+  "schema": "authzledger.release-gate.design/v1",
+  "target_release": "1.6.0",
+  "baseline_commit": "03aea857e35358ddeb13d2a861b633e60c1ca873",
+  "kind": "acceptance-contract",
+  "release_status": "not_gated",
+  "required_criteria": [
+    {
+      "id": "S16-01",
+      "owner": "R",
+      "title": "Basis und Archiv",
+      "pass_condition": "Alle erfassten Altassets entsprechen dem veröffentlichten SHA-256. Die Versionen der historischen Reader/Verifier und die externen Schlüsselquellen sind festgehalten.",
+      "negative_control": "Kopie mit einem geänderten Byte scheitert.",
+      "evidence_path": "baseline-inventory.json",
+      "required": true
+    },
+    {
+      "id": "S16-02",
+      "owner": "P",
+      "title": "Mandat und Freigabe",
+      "pass_condition": "Scope-, RoE- und Assetbindung bleiben im selben Assessment, Freigabe ist an Digest und aktuelle Revision gebunden.",
+      "negative_control": "Fremdes Mandat, widerrufene Policy oder veraltete Revision werden zurückgewiesen.",
+      "evidence_path": "scope-boundaries.json",
+      "required": true
+    },
+    {
+      "id": "S16-03",
+      "owner": "P",
+      "title": "Budget und Unterbrechung",
+      "pass_condition": "Belegte Kosten aller reservierten Vorgänge einschliesslich Controls liegen innerhalb der gemeinsamen Grenze. Unterbrechung lässt offene Arbeit sichtbar.",
+      "negative_control": "Parallelitätsgrenze, Ablauf und Neustart erzeugen weder Doppel-Dispatch noch stille Fortsetzung.",
+      "evidence_path": "execution-ledger.json",
+      "required": true
+    },
+    {
+      "id": "S16-04",
+      "owner": "P",
+      "title": "Transaktion und Migration",
+      "pass_condition": "Atomarer Import; zwei Writer erzeugen höchstens eine neue Belegrevision. Historische DB ist nach Backup/Restore mit gleichem Inhalt lesbar.",
+      "negative_control": "Crash vor/nach Commit, stale writer und identischer Retry erhalten konsistente Köpfe und Belege.",
+      "evidence_path": "store-recovery.json",
+      "required": true
+    },
+    {
+      "id": "S16-05",
+      "owner": "F",
+      "title": "Readervertrag und Schutz",
+      "pass_condition": "Jedes freigegebene Profil hat definierte Versionen, Feldmatrix, Ressourcenlimits, Auslassungen und native Referenzfixture für jede behauptete Produzentenversion.",
+      "negative_control": "Unerlaubte XML-/JSON-Struktur, Mehrdeutigkeit, Grösse, ausgeschlossene Protokolle und Geheimnis-Canary bleiben sichtbar oder blockieren.",
+      "evidence_path": "adapter-support.json",
+      "required": true
+    },
+    {
+      "id": "S16-06",
+      "owner": "F",
+      "title": "Herkunft und Zielidentität",
+      "pass_condition": "Jede publizierte Quellenbehauptung besitzt einen erreichbaren Locator, typisierten Digest und eindeutige Mandatszuordnung. Positive, negative und unbekannte Werte bleiben getrennt.",
+      "negative_control": "Ein abweichender Host/Port, achtlos angenommene Methode oder widersprüchlicher Herstellerwert kann keine zulässige Bindung erzeugen.",
+      "evidence_path": "source-traceability.json",
+      "required": true
+    },
+    {
+      "id": "S16-07",
+      "owner": "F",
+      "title": "Drei-Familien-Demo D",
+      "pass_condition": "Produktpfad verarbeitet die drei Dateien und erzielt die exakten Kardinalitäten aus Abschnitt 8. Der wiedergeöffnete Store hat dieselben Belegidentitäten.",
+      "negative_control": "Erfundene Bestätigung, falscher Digest, fehlende Negativbeobachtung oder doppelte Identität wird erkannt.",
+      "evidence_path": "demo-d/results.json",
+      "required": true
+    },
+    {
+      "id": "S16-08",
+      "owner": "A",
+      "title": "Registry und statische Auswahl",
+      "pass_condition": "Checks und Profile deklarieren Version, Controls, Oracle, Ceiling, unterstützte Aussage, erlaubten Effekt sowie Stoppgrund.",
+      "negative_control": "Manipulierter Plan, ungedecktes Control oder geänderte Checkversion verhindert Freigabe oder Bestätigung.",
+      "evidence_path": "registry-and-plans.json",
+      "required": true
+    },
+    {
+      "id": "S16-09",
+      "owner": "A",
+      "title": "Demo A",
+      "pass_condition": "Alle drei festgelegten AuthZ-Fälle erreichen genau den erwarteten fachlichen Status samt Beleg- und Control-IDs.",
+      "negative_control": "Gleiches HTTP-Ergebnis mit ungültiger Kontrolle ergibt inconclusive.",
+      "evidence_path": "demo-a/results.json",
+      "required": true
+    },
+    {
+      "id": "S16-10",
+      "owner": "A",
+      "title": "Demo B mit zwei Quellarten",
+      "pass_condition": "Native Discovery und externer Scannerbeleg liegen bei demselben Assessment. Nur der kontrollierte Check belegt das konkrete konfigurierte Prädikat.",
+      "negative_control": "Entfernte Kontrollbindung belässt den Scannerhinweis unverändert und verhindert Bestätigung.",
+      "evidence_path": "demo-b/results.json",
+      "required": true
+    },
+    {
+      "id": "S16-11",
+      "owner": "A",
+      "title": "Selective Retest und Delta",
+      "pass_condition": "Jede Baseline-ID erhält genau eine Coverage-Zeile. Semantische Vergleiche prüfen Identität, Objekt, Inputs und Kontrollabschluss. Alle Statusfamilien behalten ihre Aussagegrenze.",
+      "negative_control": "404 einer fehlenden Fixture, geänderte Bindung oder fehlende Abdeckung ergeben keinen verifizierten Fix.",
+      "evidence_path": "comparison-coverage.json",
+      "required": true
+    },
+    {
+      "id": "S16-12",
+      "owner": "H",
+      "title": "Gefrorene Reports",
+      "pass_condition": "JSON, HTML und PDF beziehen ihre publizierten Aussagen, IDs, Retest-Zähler und Redaktionsregeln aus einem verifizierten Freeze.",
+      "negative_control": "Spätere Änderungen am Workspace oder an Renderermetadaten verändern keinen historischen Snapshot.",
+      "evidence_path": "render-parity.json",
+      "required": true
+    },
+    {
+      "id": "S16-13",
+      "owner": "H",
+      "title": "Demo C und Signatur",
+      "pass_condition": "Gemischte Quellen, zwei Baseline-Finding-IDs, ein Fix und ein ausgelassener Fall. Beide Verifier akzeptieren das Original mit dem externen Schlüssel.",
+      "negative_control": "Beide verwerfen die Ein-Byte-Kopie, falschen Schlüssel, zusätzliche bzw. fehlende Paketdateien.",
+      "evidence_path": "demo-c/results.json",
+      "required": true
+    },
+    {
+      "id": "S16-14",
+      "owner": "S",
+      "title": "Studio-/CLI-Parität",
+      "pass_condition": "Echter Tastaturablauf über das Assessment, sichtbarer Inspector, ausgeführter Export und semantisch gleiche Serviceergebnisse mit denselben Fixtures.",
+      "negative_control": "Ungültige Datei, Scope-Wechsel, Revisionskonflikt, fehlender Schlüssel und Abbruch ändern keinen historischen Beleg.",
+      "evidence_path": "ui-parity.json",
+      "required": true
+    },
+    {
+      "id": "S16-15",
+      "owner": "R",
+      "title": "Regression und Browser",
+      "pass_condition": "Alle 1.5-Regressionsfälle und acht historischen Browser-Suiten plus neue Fälle sind erfasst, ausgeführt und bestanden. Zähler nach Suite, Feature und Baseline aufschlüsseln.",
+      "negative_control": "Skip, fehlende Browserinteraktion oder anderer Source-Digest sperrt die Freigabe.",
+      "evidence_path": "regression.json",
+      "required": true
+    },
+    {
+      "id": "S16-16",
+      "owner": "R",
+      "title": "Distribution und Kundenpfad",
+      "pass_condition": "Zwei saubere Builds mit gepinnten Abhängigkeiten liefern das gleiche Wheel. In frischer Umgebung ausserhalb Checkout funktionieren Demos A–D, Studio-Assets, Reports und separater Verifier.",
+      "negative_control": "Fehlender Paketbestandteil, Abhängigkeit aus Checkout oder falscher Release-Identifier sperrt die Freigabe.",
+      "evidence_path": "distribution.json",
+      "required": true
+    },
+    {
+      "id": "S16-17",
+      "owner": "H",
+      "title": "Geheimnisse und Unveränderlichkeit",
+      "pass_condition": "Runtime-Refs bleiben funktional. Bekannte Secret-Canaries erscheinen weder im Store einschliesslich WAL noch in Log, UI-Fehler oder Handover. Historische Bytes bleiben gleich.",
+      "negative_control": "Secret-bearing Fixture, neue Parserrevision und revidierter Redaktionswunsch erzeugen sichere Ableitung oder Abbruch.",
+      "evidence_path": "privacy-and-history.json",
+      "required": true
+    },
+    {
+      "id": "S16-18",
+      "owner": "R",
+      "title": "Release-Attest und Kommunikation",
+      "pass_condition": "Jeder Pflichtbeleg hat SHA-256, Release-Commit, Testumgebung, eindeutigen Befund, Prüfer und reproduzierbaren Eingang. Supportmatrix und öffentliche Aussagen stimmen überein.",
+      "negative_control": "Fehlender Beleg, uneinheitlicher Commit oder unbelegte Überlegenheitsaussage sperrt Tag und Publikation.",
+      "evidence_path": "release-verification.json",
+      "required": true
+    }
+  ]
+}

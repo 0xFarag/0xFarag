@@ -2,8 +2,16 @@
 // The existing authenticated Studio session owns all state. No browser storage.
 const platform = {id:null, record:null, registry:null, review:null, plan:null, operation:null,
  artifact:null, selected:null, snapshot:null, job:null, busy:false, revision:0, loaded:false,loadSequence:0};
+const federationProfiles = ['nmap', 'ffuf', 'nuclei'];
+let federationRevision = 0;
+let federationProjection = null;
+let federationReview = null;
+let frozenIndex = null;
+const indexPageSize = 50;
 
 function pInvalidate(){
+ pClearFederation();
+ pClearFrozenIndex();
  platform.revision++;platform.review=null;platform.plan=null;platform.snapshot=null;
  $('p-approved').checked=false;$('p-run').disabled=true;$('p-schedule').disabled=true;$('p-review').hidden=true;
  document.querySelectorAll('[data-platform-export]').forEach(b=>b.disabled=true);$('p-proof').disabled=true;
@@ -33,6 +41,184 @@ function pRow(title,detail,status,action){
  button.onclick=()=>{button.parentNode.querySelectorAll('[aria-selected]').forEach(n=>n.removeAttribute('aria-selected'));button.setAttribute('aria-selected','true');action();};return button;
 }
 function pInspect(title,subtitle,value){aInspect(title,subtitle,value);}
+function pClearFrozenIndex(){
+ frozenIndex = null;
+ $('p-index-open').disabled = true;
+ $('p-index-results').hidden = true;
+ $('p-index-rows').replaceChildren();
+ $('p-index-status').textContent = 'Freeze the assessment to inspect surface provenance.';
+ if ($('a-inspector-subtitle').textContent === 'Frozen surface index') {
+  pInspect('Evidence inspector', 'Select a record to inspect its provenance.', {});
+ }
+}
+function pIndexRows(){
+ const view = frozenIndex;
+ if (!view) return;
+ const kind = $('p-index-kind').value;
+ const rows = view.filter ? view.data.observations.filter(row => view.filter.has(row.id)) : view.data[kind];
+ const end = Math.min(view.offset + indexPageSize, rows.length);
+ const list = $('p-index-rows');
+ list.replaceChildren();
+ view.selected = null;
+ $('p-index-related').hidden = true;
+ $('p-index-all').hidden = !view.filter;
+ $('p-index-previous').hidden = view.offset === 0;
+ $('p-index-next').hidden = end === rows.length;
+ const summary = view.data.summary;
+ $('p-index-status').textContent = 'Services ' + summary.services + ' · Endpoints ' + summary.endpoints +
+  ' · Source observations ' + summary.observations + ' · Omissions ' + view.data.omissions.length +
+  '. Showing ' + (rows.length ? (view.offset + 1) + '–' + end + ' of ' + rows.length : '0') + ' ' + kind + '.';
+ pInspect('Federated surface', 'Frozen surface index', {
+  'Snapshot SHA-256': view.data.snapshot_digest, 'Index SHA-256': view.data.index_digest,
+  'Services with mixed sources': summary.mixed_services, 'Endpoints with mixed sources': summary.mixed_endpoints
+ });
+ for (const row of rows.slice(view.offset, end)){
+  let title, detail, badge, fields;
+  if (row.source_families) {
+   title = kind === 'services' ? row.origin : row.scheme + ' · ' + row.path_digest;
+   detail = row.source_families.join(' · ');
+   badge = 'Observations ' + row.observation_ids.length;
+   fields = kind === 'services' ? {'Service ID': row.id, 'TCP service': row.origin} : {
+    'Endpoint ID': row.id, 'Service ID': row.service_id, Scheme: row.scheme, 'Path digest': row.path_digest
+   };
+   fields['Source families'] = row.source_families;
+   fields['Source observations'] = row.observation_ids;
+  } else {
+   title = kind === 'omissions' ? row.reason : row.source_kind;
+   detail = [row.source_family, row.method, row.source_ref.locator].filter(Boolean).join(' · ');
+   badge = kind === 'omissions' ? 'omitted' : row.evidence_level || 'observation';
+   fields = kind === 'omissions' ? {'Reason for omission': row.reason} : {
+    'Observation ID': row.id, 'Service ID': row.service_id, 'Endpoint ID': row.endpoint_id, Method: row.method,
+    'Evidence level': row.evidence_level, 'Scope state': row.scope_state, 'Source assertions': row.asserted
+   };
+   Object.assign(fields, {'Source family': row.source_family, 'Source format': row.source_kind,
+    'Source record': row.source_ref, 'Frozen artifact references': row.artifact_refs});
+  }
+  list.append(pRow(title, detail, badge, () => {
+   pInspect(title, 'Frozen surface index', fields);
+   view.selected = row.observation_ids;
+   $('p-index-related').hidden = !view.selected?.length;
+  }));
+ }
+}
+async function pOpenFrozenIndex(){
+ const snapshot = platform.snapshot;
+ if (!snapshot) throw Error('Freeze the assessment first.');
+ if (!frozenIndex) {
+  $('p-index-open').disabled = true;
+  try {
+   const data = await api('/api/platform/federation-index', {snapshot_id: snapshot.snapshot_id});
+   if (snapshot !== platform.snapshot) return;
+   frozenIndex = {data, offset: 0, selected: null, filter: null};
+   $('p-index-kind').value = 'services';
+   $('p-index-results').hidden = false;
+   pIndexRows();
+  } finally {
+   if (snapshot === platform.snapshot) $('p-index-open').disabled = false;
+  }
+ }
+ $('p-index-kind').focus();
+}
+function pIndexObservations(ids){
+ frozenIndex.filter = ids ? new Set(ids) : null;
+ frozenIndex.offset = 0;
+ $('p-index-kind').value = 'observations';
+ pIndexRows();
+ ($('p-index-rows').querySelector('button') || $('p-index-kind')).focus();
+}
+function pClearFederation(){
+ federationRevision++;
+ federationProjection = null;
+ federationReview = null;
+ $('p-federation-consent').checked = false;
+ $('p-federation-consent').disabled = true;
+ $('p-federation-retain').disabled = true;
+ $('p-federation-save').disabled = true;
+ $('p-federation-status').textContent = '';
+ $('p-federation-observations').replaceChildren();
+ if ($('a-inspector-subtitle').textContent === 'Offline federation observation'){
+  pInspect('Evidence inspector', 'Select an observation to inspect its source.', {});
+ }
+}
+function pResetFederationInputs(){
+ pClearFederation();
+ $('p-federation-scope').value = '';
+ for (const profile of federationProfiles) $('p-fed-' + profile).value = '';
+}
+function pShowFederation(projection){
+ federationProjection = projection;
+ const {graph, receipts} = projection;
+ const excluded = receipts.flatMap(receipt => receipt.records).filter(row => row.disposition !== 'accepted').length;
+ const entries = graph.observations.slice(0, 50);
+ const quantity = (count, label) => count + ' ' + label + (count === 1 ? '' : 's');
+ $('p-federation-status').textContent = [quantity(receipts.length, 'source'), quantity(graph.assets.length, 'asset'),
+  quantity(graph.endpoints.length, 'endpoint'), quantity(graph.observations.length, 'observation'), quantity(excluded, 'excluded record')].join(' · ') +
+  '.' + (graph.observations.length > entries.length ? ' Showing the first 50 observations.' : '');
+ for (const observation of entries){
+  const receipt = receipts.find(item => observation.record.startsWith(item.source + '#'));
+  $('p-federation-observations').append(pRow(observation.kind, observation.record,
+   observation.evidence_level || 'observation', () => pInspect(observation.kind, 'Offline federation observation', {
+    'Source record': observation.record, 'Source SHA-256': receipt?.sha256, Target: observation.target,
+    'Evidence level': observation.evidence_level, 'Producer assertion': observation.asserted
+   })));
+ }
+ $('p-federation-save').disabled = false;
+}
+async function pSendFederation(route, files, body, revision){
+ const sources = {};
+ try {
+  for (const [profile, file] of files) sources[profile] = await aImportFileBase64(file);
+  if (revision !== federationRevision) return null;
+  return await api('/api/platform/' + route, {...body, sources});
+ } finally {
+  for (const profile of Object.keys(sources)) delete sources[profile];
+ }
+}
+async function pPreviewFederation(){
+ pClearFederation();
+ const revision = federationRevision;
+ const services = $('p-federation-scope').value.split('\n').map(line => line.trim()).filter(Boolean);
+ const files = federationProfiles.map(profile => [profile, $('p-fed-' + profile).files[0]]).filter(([, file]) => file);
+ if (!services.length || services.length > 32) throw Error('Specify 1 to 32 exact inventory services.');
+ if (!files.length) throw Error('Choose at least one saved tool export.');
+ if (files.reduce((total, [, file]) => total + file.size, 0) > 2 * 1024 * 1024) throw Error('Choose files totalling at most 2 MiB.');
+ $('p-federation-preview').disabled = true;
+ try {
+  const assessment = platform.record?.assessment;
+  const result = await pSendFederation('federation-preview', files, {allowed_services: services, with_review: true}, revision);
+  if (result && revision === federationRevision) {
+   pShowFederation(result.projection);
+   if (assessment && assessment.id === platform.id) {
+    federationReview = {files, services, digest: result.preview_digest, assessment: assessment.id, revision: assessment.revision};
+    $('p-federation-consent').disabled = false;
+   }
+  }
+ } finally {
+  if (revision === federationRevision) for (const [profile] of files) $('p-fed-' + profile).value = '';
+  $('p-federation-preview').disabled = false;
+ }
+}
+async function pRetainFederation(){
+ const review = federationReview, revision = federationRevision;
+ if (!review || !$('p-federation-consent').checked || platform.id !== review.assessment) throw Error('Review and release these sources first.');
+ $('p-federation-retain').disabled = true;
+ $('p-federation-consent').disabled = true;
+ try {
+  const result = await pSendFederation('federation-retain', review.files, {
+   assessment_id: review.assessment, allowed_services: review.services, preview_digest: review.digest,
+   expected_revision: review.revision, release_sources: true
+  }, revision);
+  if (!result || revision !== federationRevision) return;
+  pInvalidate();
+  await pRefresh(review.assessment);
+  if (platform.id === review.assessment) $('p-federation-status').textContent = 'Retained federation receipt · ' + result.artifact.artifact_id;
+ } finally {
+  if (revision === federationRevision) {
+   $('p-federation-consent').checked = false;
+   $('p-federation-consent').disabled = false;
+  }
+ }
+}
 function pRenderRegistry(){
  const select=$('p-profile'),old=select.value;select.replaceChildren();
  for(const name of Object.keys(platform.registry?.profiles||{})){const option=element('option',name);option.value=name;select.append(option);}
@@ -175,6 +361,21 @@ async function pWatch(job){
 document.querySelectorAll('[data-platform-page]').forEach(button=>button.onclick=()=>pPage(button.dataset.platformPage));
 $('p-open').addEventListener('click',guarded(async()=>{if(!platform.loaded)await pRefresh();pContext();}));
 $('p-refresh').onclick=guarded(()=>pRefresh());
+$('p-federation-scope').addEventListener('input', pClearFederation);
+for (const profile of federationProfiles) $('p-fed-' + profile).addEventListener('change', pClearFederation);
+for (const id of ['p-assessment','p-new','p-create']) $(id).addEventListener(id === 'p-assessment' ? 'change' : 'click', pResetFederationInputs);
+$('p-federation-preview').onclick = guarded(pPreviewFederation);
+$('p-federation-save').onclick = () => { if (federationProjection) download(federationProjection, 'federation-projection.json'); };
+$('p-federation-consent').onchange = () => { $('p-federation-retain').disabled = !federationReview || !$('p-federation-consent').checked; };
+$('p-federation-retain').onclick = guarded(pRetainFederation);
+$('p-index-open').onclick = guarded(pOpenFrozenIndex);
+$('p-index-kind').onchange = () => { frozenIndex.filter = null; frozenIndex.offset = 0; pIndexRows(); };
+for (const [id, delta] of [['p-index-previous', -indexPageSize], ['p-index-next', indexPageSize]]) {
+ $(id).onclick = () => { frozenIndex.offset += delta; pIndexRows(); $('p-index-rows').querySelector('button')?.focus(); };
+}
+$('p-index-related').onclick = () => pIndexObservations(frozenIndex.selected);
+$('p-index-all').onclick = () => pIndexObservations(null);
+$('p-index-save').onclick = () => { if (frozenIndex) download(frozenIndex.data, 'federated-surface-index.json'); };
 $('p-assessment').onchange=guarded(async()=>{pInvalidate();platform.selected=null;$('p-retest').disabled=true;platform.id=$('p-assessment').value||null;if(platform.id)await pLoad(platform.id);else{platform.record=null;pContext();}});
 $('p-new').onclick=()=>{pInvalidate();platform.loadSequence++;platform.id=null;platform.record=null;platform.selected=null;platform.endpoint=null;$('p-assessment').value='';$('p-scope-json').value='';$('p-title').value='Security assessment';$('p-update').disabled=true;$('p-read-attestation').checked=false;pPage('scope');};
 $('p-expires').value=pLocalDate(new Date(Date.now()+3600000));
@@ -211,7 +412,23 @@ $('p-reconnect').onclick=guarded(async()=>{if(platform.job)await pWatch({id:plat
 $('p-recover').onclick=guarded(async()=>{pRequire();if(platform.busy)throw Error('Reconnect to the active job before attempting interrupted-work recovery.');await api('/api/platform/recover',{assessment_id:platform.id});pInvalidate();await pRefresh();$('p-run-status').textContent='Local interrupted-work state reconciled. No requests were sent and no uncertain execution was retried.';});
 $('p-retest').onclick=guarded(async()=>{pRequire();if(!platform.selected)throw Error('Select retained check evidence first.');const revision=platform.revision,selected=platform.selected;await pPresent(await api('/api/platform/retest-plan',{assessment_id:platform.id,execution_id:selected.artifact.artifact_id,selection:selected.finding?[selected.finding.finding_id||selected.finding.id]:null}),revision);});
 $('p-inspector-focus').onclick=()=>{$('a-inspector-disclosure').open=true;$('a-inspector-fields').focus();};
-$('p-freeze').onclick=guarded(async()=>{pRequire();const revision=platform.revision,result=await api('/api/platform/freeze',{assessment_id:platform.id});if(revision!==platform.revision)throw Error('The assessment changed during snapshot preparation. Freeze it again.');platform.snapshot=result;$('p-report-status').textContent='Frozen snapshot · '+result.snapshot.snapshot_digest+' · Includes explicit coverage and not_retested states.';document.querySelectorAll('[data-platform-export]').forEach(b=>b.disabled=false);$('p-proof').disabled=false;pRenderAnnotations();pInspect('Frozen assessment','One evidence snapshot for every format',{Digest:result.snapshot.snapshot_digest,Coverage:result.snapshot.coverage,Scope:result.snapshot.assessment?.scope||platform.record.assessment.scope});});
+$('p-freeze').onclick = guarded(async () => {
+ pRequire();
+ const revision = platform.revision;
+ const result = await api('/api/platform/freeze', {assessment_id: platform.id});
+ if (revision !== platform.revision) throw Error('The assessment changed during snapshot preparation. Freeze it again.');
+ pClearFrozenIndex();
+ platform.snapshot = result;
+ $('p-report-status').textContent = 'Frozen snapshot · ' + result.snapshot.snapshot_digest + ' · Includes explicit coverage and not_retested states.';
+ $('p-index-status').textContent = 'Ready to inspect sources in this snapshot.';
+ $('p-index-open').disabled = false;
+ document.querySelectorAll('[data-platform-export]').forEach(button => button.disabled = false);
+ $('p-proof').disabled = false;
+ pRenderAnnotations();
+ pInspect('Frozen assessment', 'One evidence snapshot for every format', {
+  Digest: result.snapshot.snapshot_digest, Coverage: result.snapshot.coverage, Scope: result.snapshot.assessment?.scope || platform.record.assessment.scope
+ });
+});
 $('p-annotation-finding').onchange=pAnnotationFields;
 $('p-annotation-save').onclick=guarded(async()=>{if(!platform.snapshot||!$('p-annotation-finding').value)throw Error('Freeze and select an exact finding record first.');const rationale=$('p-annotation-rationale').value.trim();if(!rationale)throw Error('Provide a rationale for the review and technical severity.');const included=$('p-annotation-included').checked,annotation={included,severity:$('p-annotation-severity').value,review:$('p-annotation-review').value,rationale};if(!included){annotation.exclusion_reason=$('p-annotation-exclusion').value.trim();if(!annotation.exclusion_reason)throw Error('Excluded evidence requires a retained reason.');}const risk=$('p-annotation-risk').value.trim(),cvss=$('p-annotation-cvss').value.trim();if(risk)annotation.business_risk=risk;if(cvss)annotation.cvss_vector=cvss;const remediation=$('p-annotation-remediation').value.trim();if(remediation)annotation.remediation=remediation;const impact=$('p-annotation-impact').value.trim();if(impact)annotation.impact=impact;const annotations={...(platform.record.assessment.finding_annotations||{})},id=$('p-annotation-finding').value;annotations[id]={...(annotations[id]||{}),...annotation};if(included)delete annotations[id].exclusion_reason;await pSaveAnnotations(annotations);});
 $('p-annotations-apply').onclick=guarded(async()=>{if(!platform.snapshot)throw Error('Freeze a snapshot before reviewing exact finding references.');await pSaveAnnotations(await strictJSON($('p-annotations-json').value));});

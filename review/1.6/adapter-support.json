@@ -1,0 +1,111 @@
+{
+  "schema": "authzledger.adapter-support/v1",
+  "baseline_commit": "03aea857e35358ddeb13d2a861b633e60c1ca873",
+  "projection_format": "authzledger.demo-d.projection/v1",
+  "coverage": "Three offline federation readers in the patch. Other 1.5 import entry points use different contracts.",
+  "reader_identity": "Matrix profile revision plus reader_source_sha256. At runtime the receipt carries logical source name and raw SHA-256; the envelope carries the projection format. No producer-version gate.",
+  "reader_source": "authzledger/federation_offline.py",
+  "reader_source_sha256": "106b62b82bf57b48ef70d91dcfc2e54326a7e8248543af24a184a40006083cdd",
+  "shared_limits": {
+    "input_bytes_total": 2097152, "input_bytes_per_source": 2097152,
+    "records_per_source": 1000, "scope_services_min": 1, "scope_services_max": 32,
+    "scope_service_chars_max": 100, "distinct_profiles_max": 3,
+    "service_api_input_pairs_max": 12, "http_target_chars_max": 8192, "identifier_chars_max": 96
+  },
+  "shared_semantics": {
+    "identity": "Canonical TCP literal-IP service and port. HTTP endpoints also bind scheme and path. No DNS, remote references or command execution.",
+    "provenance": "Observation.record = logical source name + '#' + locator. Each source receipt includes SHA-256 over every original input byte. Different bytes under the same profile are rejected within a preview. Identical inputs deduplicate; each submission consumes byte budget.",
+    "omissions": "One receipt disposition per recognized source unit. Unmapped producer fields and structures outside that unit have no per-field counter; original bytes are required to inspect them.",
+    "bad_document": "Validation error aborts the entire preview without a partial result.",
+    "retention": "Preview presents approved field subset and accepted paths. Retention binds service, typed fields, locator and source digest. HTTP paths, Nmap reason/name and Nuclei template/matcher become domain-separated digests. Original files stay with the operator. Hashes support checking source identity and are not encryption.",
+    "http_target": "Accepts canonical literal HTTP(S) authorities, allowed path grammar and default-port normalization. Query, userinfo, fragment, encoded path, sensitive-looking path segments and ambiguous paths are unsupported. Nonliteral hostname is unresolved. Literal service outside the whitelist is out_of_scope."
+  },
+  "profiles": [
+    {
+      "profile_id": "nmap", "reader_revision": 1, "logical_source": "nmap.xml",
+      "record_type": "service_state", "record_unit": "host/ports/port", "locator": "/nmaprun/host[N]/ports/port[M], indices from 1",
+      "producer_format": "Nmap XML nmaprun, selected TCP service observations",
+      "producer_version_gate": false, "evidence_ceiling": "hint",
+      "field_map": {
+        "host/address[@addrtype=ipv4|ipv6]/@addr, port/@protocol, port/@portid": "target TCP service",
+        "port/state/@state": "asserted.state", "port/state/@reason": "asserted.reason",
+        "port/service/@name": "asserted.name", "port/service/@method": "asserted.method",
+        "port/service/@conf": "asserted.confidence"
+      },
+      "nulls": "Optional reason/name/method/confidence may be null. Service method table or probed is kept as reported. Confidence 0..10 is manufacturer confidence.",
+      "omitted": ["host status, addresses other than IPv4/IPv6, hostnames", "aggregated extraports, run statistics and timestamps", "product, version, CPE, OS, scripts, arguments, XML stylesheets"],
+      "source_units_without_rows": "Hosts with no port elements, extraports, absent ports and non-port XML elements produce no record; absence does not establish closed ports.",
+      "dispositions": ["accepted","out_of_scope","unresolved_scope","unsupported_protocol"],
+      "classification": "Each port with zero or multiple distinct host IPs is unresolved; otherwise non-TCP is unsupported. Open/closed/filtered and composite accepted states are source observations, not vulnerabilities.",
+      "limits": {"xml_depth":32,"xml_nodes":20000,"attributes_per_element":64,"attribute_key_chars":128,"attribute_value_chars":262144,"port_min":1,"port_max":65535},
+      "atomic_rejections": ["root other than nmaprun or explicit foreign scanner", "external/internal DTD subsets, entity declarations, non-UTF-8 or malformed XML", "multiple ports containers, duplicate state or service declarations, unsupported port state/method/confidence, invalid declared IP family"],
+      "tests": ["tests/test_federation_offline.py::test_multihomed_host_is_unresolved_and_udp_is_unsupported","tests/test_federation_offline.py::test_ambiguous_port_locator_and_non_utf8_rejected"],
+      "format_reference": "https://nmap.org/book/output-formats-xml-output.html",
+      "fixture": {"path":"demo_d/fixtures/nmap.xml","sha256":"9885a02dc028840f7ec8dce648c40d4eab6c0028ce8a21f82f778d83e6d6bc7a","origin":"synthetic","producer_version_claimed":null,"records":{"accepted":1},"levels":{"hint":1}}
+    },
+    {
+      "profile_id":"ffuf","reader_revision":2,"logical_source":"ffuf.json",
+      "record_type":"http_result","record_unit":"results[]","locator":"/results/N, JSON Pointer index from 0",
+      "producer_format":"ffuf v2-style result-array JSON; limited file-export field subset",
+      "producer_version_gate":false,"evidence_ceiling":"hint",
+      "field_map":{"results[].url":"target HTTP endpoint","results[].status":"asserted.status","results[].length":"asserted.length","config.method":"asserted.method","results[].host":"authority consistency check"},
+      "nulls":"Missing length is null; zero is retained. Absent, null or empty config.method gives null. Accepted public method is copied verbatim.",
+      "omitted":["input, position, words, lines, content-type, redirectlocation, duration, resultfile, scraper","commandline and unsupported producer settings"],
+      "source_units_without_rows":"Empty results produces zero rows. Top-level metadata and custom producer fields do not count as observations.",
+      "dispositions":["accepted","out_of_scope","unresolved_scope","unsupported_target","unsupported_request_context"],
+      "classification":"Unrecognized method or nonempty routing/credential context places each result in unsupported_request_context. Host inconsistency is unresolved. HTTP status alone creates no finding.",
+      "unsupported_nonempty_config":["headers","requestfile","rawrequest","cookies","data","postdata","sni","follow_redirects","proxyurl","replayproxyurl","client-cert","client-key"],
+      "methods":["GET","HEAD","POST","PUT","PATCH","DELETE","OPTIONS"],
+      "limits":{"json_depth":40,"status_min":100,"status_max":599,"length_min":0,"length_max":9007199254740991},
+      "atomic_rejections":["malformed/non-UTF-8 JSON, duplicate keys, nonfinite numbers, exceeded depth","non-object document, non-array results, non-object row or config","for an admitted request context: missing/invalid status or present invalid length"],
+      "tests":["tests/test_federation_offline.py::test_ffuf_declared_request_context_and_virtual_host","tests/test_federation_offline.py::test_ffuf_routing_overrides_are_outside_the_narrow_profile","tests/test_federation_offline.py::test_no_raw_paths_from_ffuf_configuration_are_retained"],
+      "format_reference":"https://pkg.go.dev/github.com/ffuf/ffuf/v2/pkg/output#JsonResult",
+      "fixture":{"path":"demo_d/fixtures/ffuf.json","sha256":"f93742ef58a993156a6cf97a8fde40a9c96bbcde73a9c11e5a3ce8f251d69339","origin":"synthetic","producer_version_claimed":null,"records":{"accepted":1,"out_of_scope":1},"levels":{"hint":1}}
+    },
+    {
+      "profile_id":"nuclei","reader_revision":1,"logical_source":"nuclei.jsonl",
+      "record_type":"template_match","record_unit":"nonempty JSONL line","locator":"line:N, physical line from 1",
+      "producer_format":"Nuclei v3-style HTTP ResultEvent JSONL; selected fields only",
+      "producer_version_gate":false,"evidence_ceiling":"hint",
+      "field_map":{"matched-at":"target HTTP endpoint","host/ip/port/scheme/url":"optional consistent source identity; base path can differ","template-id":"asserted.template_id","matcher-name":"asserted.matcher","matcher-status":"asserted.matched","info.severity":"asserted.source_severity","type":"protocol selection"},
+      "nulls":"Missing or null matcher status remains unknown. False remains a negative source assertion. Both receive a null observation level and no finding. Only explicit true creates a hint; a template ID is required.",
+      "omitted":["timestamp, metadata, extracted contents, template bodies/paths, arguments","CVE classification, tags, author, issue trackers, interaction, line references and extra fields"],
+      "source_units_without_rows":"Blank lines count toward the physical-line cap but create no receipt row. Other protocols create unsupported_protocol receipt rows.",
+      "dispositions":["accepted","out_of_scope","unresolved_scope","unsupported_protocol","unsupported_target","unsupported_raw_record"],
+      "classification":"Nonempty request, response, curl-command or extracted-results gives unsupported_raw_record. Disagreeing optional origin fields give unresolved_scope. Positive records at the same endpoint share one hint group, each with its own source locator.",
+      "unsupported_nonempty_fields":["request","response","curl-command","extracted-results"],
+      "severity_values":["info","low","medium","high","critical","unknown"],
+      "limits":{"json_depth":40,"physical_lines":1000,"nonblank_line_bytes":262144},
+      "atomic_rejections":["malformed/non-UTF-8 JSON, duplicate keys, nonfinite numbers, exceeded depth or topology limits","invalid admitted HTTP info object, severity or matcher-status type, invalid identifiers or explicit true with missing template ID"],
+      "tests":["tests/test_federation_offline.py::test_raw_nuclei_fields_and_negative_evidence","tests/test_federation_offline.py::test_nuclei_conflicting_identity_is_unresolved_and_groups_share_only_target","tests/test_federation_offline.py::test_nuclei_optional_service_claims_must_agree","tests/test_federation_offline.py::test_nuclei_ipv6_port_scope_is_consistent_across_producer_fields"],
+      "format_reference":"https://pkg.go.dev/github.com/projectdiscovery/nuclei/v3/pkg/output#ResultEvent",
+      "fixture":{"path":"demo_d/fixtures/nuclei.jsonl","sha256":"79e8030fddd5147878d2cdc9a994f4f6661654084b31dfc8a952cc143dbae70f","origin":"synthetic","producer_version_claimed":null,"records":{"accepted":2},"levels":{"hint":1,"null":1}}
+    }
+  ],
+  "conformance_evidence": {
+    "golden":{"path":"demo_d/expected/projection.json","sha256":"b1f9b3ec355f3ae7d94f4e3b562ba3b52d831484f91fc280e10e71fb41122bd6"},
+    "recorded_product_projection":{"path":"demo-d-proof/projection.json","sha256":"11836dffb6bf31450033bb36bebb2b4a38bf2f4b0d2a30484fb903f91fdf3758"},
+    "expected":{"sources":3,"records":5,"accepted":4,"out_of_scope":1,"assets":1,"services":1,"endpoints":1,"observations":4,"finding_groups":1,"confirmed":0},
+    "common_tests":["tests/test_federation_offline.py::test_all_callers_share_the_same_combined_byte_budget","tests/test_federation_offline.py::test_three_formats_build_one_graph_without_network_or_process","tests/test_federation_entrypoints.py::test_cli_and_studio_use_exact_bytes_and_equal_projections","tests/test_federation_retention.py::test_hash_only_free_text_and_all_omissions_remain_visible"]
+  },
+  "published_reference": {
+    "profile":"nmap","kind":"community_published_sample_in_upstream_issue","classification":"envelope_only",
+    "checkout_path":"fixtures/adapters/nmap-7.92-publishedsample.xml","bytes":999,
+    "sha256":"9ad6c819c2e29b7cb3d9aa6d1627d3f3eb11932e0013d28d9e35afd9b4f7e088",
+    "declared_producer":"Nmap 7.92","declared_xml_version":"1.05",
+    "source":"https://github.com/nmap/nmap/issues/2371","provenance_record":"docs/adapters-1.5.0.md",
+    "test":"tests/test_adapters150.py::test_actual_published_sample_preserves_bytes_and_provenance_label",
+    "expected_federation_records":0,"redistributed_in_kit":false,
+    "permission_status":"No separate redistribution grant for the submitted example was verified. Reference and checksum only; optional checkout check uses the file already present.",
+    "limitations":"Host-only example, no service row. Native tool execution and provenance of the author's production run have not been independently witnessed."
+  },
+  "native_compatibility_gate": {
+    "status":"bounded_profile_reference_cases_passed",
+    "manifest":"vendor-proof/provenance.json",
+    "verification":"vendor-proof/verify.py",
+    "scope":"Selected format fields only. Operator-provided files do not authenticate the producer version. These cases do not establish the full release gate.",
+    "native_producers":{"nmap":"5.51 / XML 1.03 original four-port export","ffuf":"2.1.0 native file writer with synthetic input objects","nuclei":"3.3.10 native JSONL writer with synthetic input objects"},
+    "optional_vendor_boundaries":"Pinned upstream Nmap 3.75 TCP/UDP, 5.51SVN service identifier rejection and 5.59BETA1 encoding rejection.",
+    "excluded":"Universal producer-version ranges, full scanner execution, launcher integration and unknown format options."
+  }
+}

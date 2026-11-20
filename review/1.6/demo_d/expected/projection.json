@@ -1,0 +1,126 @@
+{
+  "format": "authzledger.demo-d.projection/v1",
+  "scope": {
+    "allowed_services": [
+      "tcp://192.0.2.10:443"
+    ]
+  },
+  "graph": {
+    "assets": [
+      "192.0.2.10"
+    ],
+    "services": [
+      {
+        "key": "tcp://192.0.2.10:443",
+        "asset": "192.0.2.10",
+        "transport": "tcp",
+        "port": 443
+      }
+    ],
+    "endpoints": [
+      {
+        "key": "https://192.0.2.10/docs",
+        "service": "tcp://192.0.2.10:443"
+      }
+    ],
+    "observations": [
+      {
+        "record": "nmap.xml#/nmaprun/host[1]/ports/port[1]",
+        "kind": "service_state",
+        "target": "tcp://192.0.2.10:443",
+        "evidence_level": "hint",
+        "asserted": {
+          "state": "open",
+          "reason": "syn-ack",
+          "name": "https",
+          "method": "table",
+          "confidence": 3
+        }
+      },
+      {
+        "record": "ffuf.json#/results/0",
+        "kind": "http_result",
+        "target": "https://192.0.2.10/docs",
+        "evidence_level": "hint",
+        "asserted": {
+          "status": 200,
+          "length": 107,
+          "method": null
+        }
+      },
+      {
+        "record": "nuclei.jsonl#line:1",
+        "kind": "template_match",
+        "target": "https://192.0.2.10/docs",
+        "evidence_level": "hint",
+        "asserted": {
+          "template_id": "demo-doc-marker",
+          "matcher": "doc-marker",
+          "matched": true,
+          "source_severity": "medium"
+        }
+      },
+      {
+        "record": "nuclei.jsonl#line:2",
+        "kind": "template_match",
+        "target": "https://192.0.2.10/docs",
+        "evidence_level": null,
+        "asserted": {
+          "template_id": "demo-doc-other",
+          "matcher": "other-marker",
+          "matched": false,
+          "source_severity": "high"
+        }
+      }
+    ],
+    "findings": [
+      {
+        "target": "https://192.0.2.10/docs",
+        "evidence_level": "hint",
+        "records": [
+          "nuclei.jsonl#line:1"
+        ]
+      }
+    ]
+  },
+  "receipts": [
+    {
+      "source": "nmap.xml",
+      "sha256": "9885a02dc028840f7ec8dce648c40d4eab6c0028ce8a21f82f778d83e6d6bc7a",
+      "records": [
+        {
+          "locator": "/nmaprun/host[1]/ports/port[1]",
+          "disposition": "accepted"
+        }
+      ]
+    },
+    {
+      "source": "ffuf.json",
+      "sha256": "f93742ef58a993156a6cf97a8fde40a9c96bbcde73a9c11e5a3ce8f251d69339",
+      "records": [
+        {
+          "locator": "/results/0",
+          "disposition": "accepted"
+        },
+        {
+          "locator": "/results/1",
+          "disposition": "out_of_scope"
+        }
+      ]
+    },
+    {
+      "source": "nuclei.jsonl",
+      "sha256": "79e8030fddd5147878d2cdc9a994f4f6661654084b31dfc8a952cc143dbae70f",
+      "records": [
+        {
+          "locator": "line:1",
+          "disposition": "accepted"
+        },
+        {
+          "locator": "line:2",
+          "disposition": "accepted"
+        }
+      ]
+    }
+  ]
+}

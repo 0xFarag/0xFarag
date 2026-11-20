@@ -1,3 +1,9 @@
+# AuthzLedger 1.6.0 — release target under review
+
+This target adds selected offline tool-export federation and a source-linked index for frozen assessment evidence. The public 1.6 release gate is open. The wheel is reserved for internal acceptance. See the [target notes](docs/release-target-1.6.md). The notes below describe earlier versions.
+
+---
+
 # AuthzLedger 1.5.0 — controlled assessment suite
 
 **An integrated local assessment suite: permitted scope → discovery → controlled checks → reproducible evidence → selective retest → signed handover.**

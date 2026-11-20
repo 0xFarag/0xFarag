@@ -1,3 +1,9 @@
+# Install the internal 1.6.0 review wheel
+
+Use the exact internally supplied 1.6.0 wheel and the instructions in the [target notes](docs/release-target-1.6.md) for verification. Production publication awaits release acceptance. The following installation instructions refer to the public stable v1.5.0.
+
+---
+
 # Install and reproduce AuthzLedger 1.5.0
 
 **Versioned installation and verification instructions.** Use the exact 1.5.0 wheel/source identified by the release evidence and preserve its producer version and hash. Version metadata does not establish gate completion or download availability. Publication requires the [1.5 release gates](docs/release-1.5.0.md). Historical 1.1.0 documentation and evidence remain under their original versioned paths.

@@ -1,0 +1,86 @@
+{
+  "bundled_nmap": {
+    "commit": "f9887fc9add90e2e0b3c59671ec5ecd9bee8fcd3",
+    "declared_version": "5.51",
+    "license": "Apache-2.0; unmodified sample, original LICENCE/NOTICE and full text in third-party/python-libnmap/",
+    "original_file": "fixtures/nmap-5.51-native.xml",
+    "path": "libnmap/test/files/1_hosts_banner_ports.xml",
+    "privacy_review": "Public historical loopback export; local aliases and historic public software banners remain in source bytes. No customer data, credentials, raw transactions or external addresses. Additional host labels and command line excluded from projection.",
+    "sha256": "782e4283dc1996d6dce47fb1ddd4cb9cc4ab75a413b245b0704a27bd5fac8bf2",
+    "source": "python-libnmap historical localhost test export",
+    "url": "https://raw.githubusercontent.com/savon-noir/python-libnmap/f9887fc9add90e2e0b3c59671ec5ecd9bee8fcd3/libnmap/test/files/1_hosts_banner_ports.xml",
+    "xmloutputversion": "1.03"
+  },
+  "compiler": {
+    "archive": "go1.24.12.linux-amd64.tar.gz",
+    "sha256": "bddf8e653c82429aea7aec2520774e79925d4bb929fe20e67ecc00dd5af44c50",
+    "version": "go1.24.12"
+  },
+  "native_writers": {
+    "ffuf": {
+      "captured_outputs": {
+        "ffuf-context.json": "56a4bf392c92675a967bb3242d65ddaddc8b51d45dd64feb05aa66403f565b40",
+        "ffuf.json": "b8302eb1e72a0a4846210cc85d365e38ba5e99c883cc448e889488bcb6a63952"
+      },
+      "commit": "7a2756a8f367c69c261544ae83d52e86b1ca52d0",
+      "fixture_origin": "Unmodified native writer given synthetic in-memory inputs under Linux socket denial",
+      "fixtures_are_scanner_runs": false,
+      "module_checksum": "h1:0w+MBVMhc52tb5y5onzdkNJVt+hkStH6rVGRdorxd+o=",
+      "repo": "ffuf/ffuf",
+      "revision": "v2.1.0",
+      "tree": "04da2ed23ba6d4076fe726ddf0e7088363c525a7",
+      "writer": "output.Stdoutput.SaveFile(\"json\")"
+    },
+    "nuclei": {
+      "captured_outputs": {
+        "nuclei.jsonl": "7510052c3fb8cd5c7a37cda81ebe616ea08fd9723ad423210944cc434e2de128"
+      },
+      "commit": "a7e44912f99eff51071f89d2ff180ede4ce1b49c",
+      "fixture_origin": "Unmodified native writer given synthetic in-memory inputs under Linux socket denial",
+      "fixtures_are_scanner_runs": false,
+      "module_checksum": "h1:QzcgdNScjiTpdPq02n1BOgFkw2RqDirRcu9VkE3HvjQ=",
+      "repo": "projectdiscovery/nuclei",
+      "revision": "v3.3.10",
+      "tree": "72f671ed27f99b6222e8f6625f4b5eb4b9362be6",
+      "writer": "output.StandardWriter.Write with JSONL and OmitRawRequests"
+    }
+  },
+  "schema": "authzledger.offline-writer-provenance/v1",
+  "vendor_nmap": {
+    "commit": "80dd68b8d88cbc89e584941e9ba68e57247d2230",
+    "external_bytes": "Obtain directly from the vendor or use a local exact copy; the release includes digests only.",
+    "files": {
+      "xml_test13.xml": {
+        "declared_version": "5.51SVN",
+        "expect": "unsupported_identifier",
+        "git_blob": "15a3044a5562ac745156a8d8bf60abdced1a9b5c",
+        "sha256": "88b5ff6f43aa8ff9dfd52beae24a8e2d148e4c3e98b0c4d061292bb1f9001cd3",
+        "url": "https://raw.githubusercontent.com/nmap/nmap/80dd68b8d88cbc89e584941e9ba68e57247d2230/zenmap/test/xml_test13.xml"
+      },
+      "xml_test16.xml": {
+        "declared_version": "5.59BETA1",
+        "expect": "xml_utf8_required",
+        "git_blob": "3c786d191fa7d5adb16ee134ea8a225967848209",
+        "sha256": "611650294eaf3b4ff0cea4ef6e22d3d5f564bf9e33542c8bfaee459b95a45018",
+        "url": "https://raw.githubusercontent.com/nmap/nmap/80dd68b8d88cbc89e584941e9ba68e57247d2230/zenmap/test/xml_test16.xml"
+      },
+      "xml_test3.xml": {
+        "declared_version": "3.75",
+        "expect": "accepted_tcp",
+        "git_blob": "bcfaf24e960b6ebfda26c8745dbf72244693e74c",
+        "sha256": "606d1dce54516839e4157e3eee828796695cd50bef7c86cec70b8acb928af0bd",
+        "url": "https://raw.githubusercontent.com/nmap/nmap/80dd68b8d88cbc89e584941e9ba68e57247d2230/zenmap/test/xml_test3.xml"
+      },
+      "xml_test5.xml": {
+        "declared_version": "3.75",
+        "expect": "unsupported_udp",
+        "git_blob": "9a5497024694e0e54297b4ad37ea31dbda30cc74",
+        "sha256": "4630a07beae2f7da002b9f91c030f9070963c0bc5e00684f40bd36b8deb6fe13",
+        "url": "https://raw.githubusercontent.com/nmap/nmap/80dd68b8d88cbc89e584941e9ba68e57247d2230/zenmap/test/xml_test5.xml"
+      }
+    },
+    "repo": "nmap/nmap",
+    "revision": "80dd68b8d88cbc89e584941e9ba68e57247d2230",
+    "tree": "0176eed64137666e8c1b03a50aec213bab9a862c"
+  }
+}
