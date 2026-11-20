@@ -1,0 +1,17 @@
+{
+  "time": "2024-01-01T00:00:02Z",
+  "results": [
+    {
+      "input": {"FUZZ": "docs"},
+      "position": 1, "status": 200, "length": 107, "words": 14, "lines": 3,
+      "content-type": "text/plain", "redirectlocation": "", "duration": 1350000,
+      "resultfile": "", "url": "https://192.0.2.10/docs", "host": "192.0.2.10"
+    },
+    {
+      "input": {"FUZZ": "help"},
+      "position": 2, "status": 200, "length": 28, "words": 5, "lines": 1,
+      "content-type": "text/plain", "redirectlocation": "", "duration": 1000000,
+      "resultfile": "", "url": "https://198.51.100.20/help", "host": "198.51.100.20"
+    }
+  ]
+}
