@@ -1,3 +1,9 @@
+# Install the internal 1.6.0rc1 engineering review wheel
+
+For internal binary verification use the exact wheel and instructions in [the candidate notes](docs/private-rc160.md). The source is available for engineering review. Previous stable installation instructions follow for historical reference.
+
+---
+
 # Install and reproduce AuthzLedger 1.5.0
 
 **Versioned installation and verification instructions.** Use the exact 1.5.0 wheel/source identified by the release evidence and preserve its producer version and hash. Version metadata does not establish gate completion or download availability. Publication requires the [1.5 release gates](docs/release-1.5.0.md). Historical 1.1.0 documentation and evidence remain under their original versioned paths.

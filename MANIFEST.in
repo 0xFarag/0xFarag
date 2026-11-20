@@ -1,4 +1,4 @@
-include LICENSE NOTICE.txt README.md INSTALL.md CHANGELOG.md SECURITY.md CONTRIBUTING.md
+include LICENSE NOTICE.txt README.md INSTALL.md CHANGELOG.md SECURITY.md CONTRIBUTING.md docs/private-rc160.md
 recursive-include authzledger/web *.html *.css *.js *.json
 include authzledger/brand_logo.png
 recursive-include authzledger/fonts *.ttf *.txt

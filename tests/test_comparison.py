@@ -155,6 +155,19 @@ class ComparisonTests(unittest.TestCase):
         with self.assertRaises(ComparisonError):
             create_comparison(self.source, self.before, unregistered, ['peer-denied'])
 
+    def test_rc160_profile_preserves_source_roots_and_rejects_unknown_versions(self):
+        baseline = report(self.source, version="1.5.0")
+        current = report(self.selection["contract"], version="1.6.0rc1")
+        originals = copy.deepcopy((baseline, current))
+        envelope = create_comparison(self.source, baseline, current, ["peer-denied"])
+        self.assertEqual(verify_comparison(envelope), [])
+        self.assertEqual((baseline, current), originals)
+        self.assertEqual(envelope["profiles"]["current"], "authzledger-1.6.0rc1-report-v1-checks-v1")
+        self.assertEqual(envelope["bindings"]["current_root_sha256"], current["evidence"]["root_sha256"])
+        for version in ("1.6.0rc2", "1.6.0"):
+            with self.subTest(version=version), self.assertRaises(ComparisonError):
+                create_comparison(self.source, baseline, report(self.selection["contract"], version=version), ["peer-denied"])
+
     def test_explicit_110_profile_keeps_v1_semantics_and_original_roots(self):
         current = report(self.selection['contract'], version='1.1.0')
         original = copy.deepcopy(current)

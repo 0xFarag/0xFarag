@@ -1,5 +1,9 @@
 # AuthzLedger changelog
 
+## 1.6.0rc1 — engineering review
+
+Added reviewed offline federation receipts and a read-only, source-bound index for frozen assessments. The 1.6 release decision remains open.
+
 ## 1.5.0 — integrated suite scope
 
 One local platform release scope incorporating all A/B/C work packages. Publication requires the exact-commit gate receipt and verified release assets. Scope and acceptance requirements are governed by `docs/release-1.5.0.md` and the S15 acceptance contract in `docs/suite-1.5.0.md`.

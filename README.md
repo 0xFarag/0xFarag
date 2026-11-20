@@ -1,3 +1,9 @@
+# AuthzLedger 1.6.0rc1 — engineering review
+
+The source is available for engineering review. RC wheels are built for internal verification. See the [candidate notes](docs/private-rc160.md) and [review evidence and gate](review/1.6/README.md). The 1.6 public release gate is open. The following documentation describes the preceding stable release.
+
+---
+
 # AuthzLedger 1.5.0 — controlled assessment suite
 
 **From permitted scope to reproducible evidence.**

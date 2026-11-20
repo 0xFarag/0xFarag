@@ -1,6 +1,6 @@
 # AuthzLedger 1.6 · offline engineering review
 
-The public stable reference is [v1.5.0](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0). This branch reviews the new offline import and surface index. Its package metadata still identifies the 1.5 baseline. A separate release-candidate build must establish its own provenance.
+The public stable reference is [v1.5.0](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0). This branch reviews the new offline import and surface index. The distribution and runtime identify this source as `1.6.0rc1`. Source review is public. RC binary builds are retained internally and their verification receipts bind the exact Git commit and tree. The 1.6 production release gate remains open.
 
 From the repository root, run the product against the three synthetic, bundled exports in a new output directory. Standard Python and OpenSSL are required. Install the pinned reports extra for PDF output.
 

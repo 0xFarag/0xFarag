@@ -1,3 +1,9 @@
+# AuthzLedger 1.6.0rc1 — engineering review
+
+This candidate adds selected offline tool-export federation and a source-linked index for frozen assessment evidence. The public 1.6 release gate is open. Source review is public. RC binaries are internal. See [the candidate notes](docs/private-rc160.md). The notes below describe earlier versions.
+
+---
+
 # AuthzLedger 1.5.0 — controlled assessment suite
 
 **An integrated local assessment suite: permitted scope → discovery → controlled checks → reproducible evidence → selective retest → signed handover.**
