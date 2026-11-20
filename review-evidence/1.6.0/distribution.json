@@ -1,0 +1,40 @@
+{
+  "byte_identical": true,
+  "clean_build_environments": 2,
+  "gate": "OPEN",
+  "historical_assets": {
+    "byte_identical_to_stable": true,
+    "tracked_files": 446,
+    "trees": [
+      "evidence/",
+      "fixtures/",
+      "release/"
+    ]
+  },
+  "installation": {
+    "console_and_module_cli": "1.6.0",
+    "isolated": true,
+    "module": "1.6.0",
+    "outside_checkout": true,
+    "package": "1.6.0",
+    "pip_check_exit": 0,
+    "reportlab": "4.4.9"
+  },
+  "installed_tests": {
+    "errors": 0,
+    "failures": 0,
+    "run": 45,
+    "skipped": 0
+  },
+  "reviewed_commit": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+  "reviewed_tree": "aedd13378b49dfc651e4771c5d8b0ba836147eb1",
+  "source_receipt_sha256": "d31599708e4e966f52abcbf83f23c49cc6c5eb4c6478a8f95e8fd09fb98774ec",
+  "status": "passed_selected_offline_checks",
+  "version": "1.6.0",
+  "wheel": {
+    "bytes": 1515083,
+    "sha256": "fd9234e6dc0dd55d105b01e4c010f68f3f2afc208027fcf057d5f179b31c3197",
+    "source_archive_sha256": "e4ccded8e458cd5332cef0004b737c22e06f6feb9ad64d507e2bf9c1cf613a72",
+    "wheel": "authzledger-1.6.0-py3-none-any.whl"
+  }
+}

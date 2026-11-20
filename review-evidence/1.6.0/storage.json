@@ -1,0 +1,27 @@
+{
+  "credential_canaries": {
+    "checked_surfaces": 15,
+    "detected_in_retained_outputs": 0,
+    "positive_control_detections": 5
+  },
+  "journal_modes": [
+    "delete",
+    "wal"
+  ],
+  "legacy_restore": {
+    "logical_sha256_before_and_after": "6850cb7a5c43caa2ff9230e50017a9ad2de4b3388265a73be8e55cfed3bfa37d",
+    "original_db_sha256_before_and_after": "78a3bc14fe5080c004a9ed45b857fa8b664aef91e47238f8ed2ceb4de19bf158",
+    "producer_version": "1.5.0",
+    "restored_artifacts": 2,
+    "restored_revision": 3
+  },
+  "recovery": {
+    "credential_marker_rejected_before_write": true,
+    "parallel_first_open_both_succeeded": true,
+    "rollback_and_retry_passed": true
+  },
+  "reviewed_commit": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+  "reviewed_tree": "aedd13378b49dfc651e4771c5d8b0ba836147eb1",
+  "source_receipt_sha256": "e2eb5ec032fdd93ce8e1fbc10f352e3181d82ce70fb61447f39f59bf48e9e830",
+  "sqlite": "3.53.1"
+}

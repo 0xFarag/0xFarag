@@ -1,0 +1,40 @@
+{
+  "interpretation": "The offline source workflow passed. The two 1.5 push/PR workflows were skipped. This does not certify the missing historical regression executions.",
+  "retrieved_utc": "2026-11-20T22:26:56.699103+00:00",
+  "rows": [
+    {
+      "conclusion": "skipped",
+      "event": "pull_request",
+      "head_sha": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+      "html_url": "https://github.com/0xFarag/0xFarag/actions/runs/44828753388",
+      "id": 44828753388,
+      "name": "Verify and release AuthzLedger 1.5",
+      "path": ".github/workflows/tests.yml",
+      "status": "completed",
+      "updated_at": "2026-11-20T22:24:54Z"
+    },
+    {
+      "conclusion": "skipped",
+      "event": "push",
+      "head_sha": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+      "html_url": "https://github.com/0xFarag/0xFarag/actions/runs/44828742634",
+      "id": 44828742634,
+      "name": "Verify and release AuthzLedger 1.5",
+      "path": ".github/workflows/tests.yml",
+      "status": "completed",
+      "updated_at": "2026-11-20T22:24:50Z"
+    },
+    {
+      "conclusion": "success",
+      "event": "push",
+      "head_sha": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+      "html_url": "https://github.com/0xFarag/0xFarag/actions/runs/44828742578",
+      "id": 44828742578,
+      "name": "AuthzLedger 1.6 offline source review",
+      "path": ".github/workflows/review160.yml",
+      "status": "completed",
+      "updated_at": "2026-11-20T22:25:04Z"
+    }
+  ],
+  "source": "https://api.github.com/repos/0xFarag/0xFarag/actions/runs?head_sha=bb34603a99ba96b6fb23ae9f09d332b335a98b3d"
+}

@@ -1,0 +1,130 @@
+{
+  "cases": {
+    "A": {
+      "archived_cases": {
+        "200-error": {
+          "controls_valid": true,
+          "evidence_ref": "9c858750786321600cf4011f2cec7ab24eaae9262141729066fe8452bf71e032",
+          "http_status": 200,
+          "interpretation": "satisfied",
+          "status": "rejected"
+        },
+        "denial-disclosure": {
+          "controls_valid": true,
+          "evidence_ref": "2f05037396afa811ed4bfcf9316893db1dc61c08c151865c836ca9906869a16c",
+          "http_status": 403,
+          "interpretation": "violation",
+          "status": "confirmed"
+        },
+        "invalid-controls": {
+          "controls_valid": false,
+          "evidence_ref": "bfdad3f4db9c197c92b08cf25a00df9b2c0996772344bf6afc9a97f99106e0d1",
+          "http_status": null,
+          "interpretation": "inconclusive",
+          "status": "candidate"
+        }
+      },
+      "legacy_archive_sha256": "54b21858a89d498ba3b5050ad85f5969068bf79bcf5a07467297b3c3d1d5e817",
+      "missing_control_counterfactual": {
+        "comparison_sha256": "70fb877d7b8de569cb13bd40d0d33bf0f4b65dc431f75a8e3fb51ce374aad007",
+        "decision": {
+          "interpretation": "inconclusive",
+          "reason": "invalid_controls"
+        },
+        "kind": "Derived using the same reconstructed, digest-bound 403 response with one required control omitted."
+      },
+      "mode": "Offline re-evaluation of three original v1.5.0 executions and snapshot with 1.6.0.",
+      "source_receipt_sha256": "f7cd2f0e475a6b932b58cfa3c8d9c5de71dd12939c3ca81ff75b2942ec7324cb"
+    },
+    "B": {
+      "missing_controls": "explicit_distinct_controls_required",
+      "mode": "Controlled loopback header-configuration check with a Chromium HAR and native ZAP passive output.",
+      "native_finding": {
+        "check_id": "misconfig.security_headers",
+        "check_version": "1.0.0",
+        "control_refs": [
+          "reference"
+        ],
+        "evidence_level": "confirmed",
+        "finding_digest": "ef2113c767d437f8ba0023042b8549dfc9acd42e2afa7e54c9c4f5312e46be0b"
+      },
+      "original_har_sha256": "09929d30d5a759db4132efb96b8150dd97569749366a31714c198b83e9130c3d",
+      "original_zap_sha256": "c4470f6510d9c487599d3cd375dc50a4fa78d62ea2a6a587dd6c2fc1131bc7b8",
+      "same_scope_digest": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+      "scanner_assertion_unchanged": true,
+      "source_receipt_sha256": "81d604114d57d05e3a8c34117ecb0810e2bd5c7b326d1e539d3bd47540786632",
+      "zap_rule_10021": "not_verified"
+    },
+    "C": {
+      "mode": "Retest of a configuration finding in the same fixture engagement. Ed25519 verification used a demo-specific trust anchor.",
+      "order": [
+        "product",
+        "standalone"
+      ],
+      "report_member_sha256": {
+        "platform.html": "94fc2882677ebc679418638d08d4048e08b9846f2452d6fe792eb77a899db5e0",
+        "platform.json": "cf7b8f76c95f43414c7288aaeede84186ec658d6e93a0272b03bf4235bc464c5",
+        "platform.pdf": "c782dc2a126d163478d2b46238cd31aed641db856c2fc9b84bdf58234ee3cfee"
+      },
+      "retest": {
+        "fix_verified": 1,
+        "not_retested": 1
+      },
+      "same_scope_digest": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+      "snapshot_digest": "15158eb8c3c8c429b52d16a6b4f0333214468f9f4768e56b78f890de2a2b1dfb",
+      "source_receipt_sha256": "e88fa8b182ad1d7b3477516c1432e24a919d1882a4221bf2cb8e25265cff4bd8",
+      "verifier_exit_codes": {
+        "extra_file": [
+          2,
+          1
+        ],
+        "missing_file": [
+          2,
+          1
+        ],
+        "one_byte": [
+          2,
+          1
+        ],
+        "original": [
+          0,
+          0
+        ],
+        "wrong_key": [
+          2,
+          1
+        ]
+      }
+    },
+    "D": {
+      "confirmed": 0,
+      "evidence_levels": {
+        "hint": 1
+      },
+      "graph": {
+        "endpoints": 1,
+        "mixed_endpoints": 0,
+        "mixed_services": 0,
+        "observations": 4,
+        "omissions": 1,
+        "services": 1
+      },
+      "mode": "Deterministic three-profile fixture and subsequent import of identical bytes.",
+      "profiles": [
+        "Nmap",
+        "ffuf",
+        "Nuclei"
+      ],
+      "report_sha256": {
+        "platform.html": "17819c742e8394936ef4c5443e9e2685eb82fcb24f829bc2a593528b880b1c88",
+        "platform.json": "83378e650e8a2db0d3e322660d4975a0ec028f9b25f4b77d553472c9fbc25aac",
+        "platform.pdf": "d30c61e110eb309859f959c85df3c15a237467ead45962930407f3fa51dbcf19"
+      },
+      "snapshot_sha256": "500412370280f3ce1cf8be219ed96ca375a7e778efedf83b35a0ff4b5b4f2cd7",
+      "source_records": 5
+    }
+  },
+  "reviewed_commit": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+  "reviewed_tree": "aedd13378b49dfc651e4771c5d8b0ba836147eb1",
+  "wheel_sha256": "fd9234e6dc0dd55d105b01e4c010f68f3f2afc208027fcf057d5f179b31c3197"
+}

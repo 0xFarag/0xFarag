@@ -1,0 +1,19 @@
+{
+  "legacy_ffuf_snapshot_and_stale_review_checked": true,
+  "limits": [
+    "Format-profile evidence only. No scanner execution or support claim for other producer versions or contexts.",
+    "This report is an unsigned test receipt, not a release attestation."
+  ],
+  "provenance_manifest_sha256": "f7a56c26bb358c781446f08584159032a79d1278a15a57b16d6635a959fa2d17",
+  "reader_source_sha256": "106b62b82bf57b48ef70d91dcfc2e54326a7e8248543af24a184a40006083cdd",
+  "reviewed_commit": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+  "reviewed_tree": "aedd13378b49dfc651e4771c5d8b0ba836147eb1",
+  "source_and_installed_wheel_outputs_identical": true,
+  "source_receipt_sha256": "b4d0ae4a5bc25f33c85ef33e2be5e76549414157281d33e839e13c0bfde8d5ed",
+  "sources": {
+    "ffuf": "ffuf v2.1.0 native SaveFile writer on synthetic objects with network sockets kernel-denied. Positive GET, scope exclusion, separately generated native postdata rejected.",
+    "nmap": "Apache-2.0 original Nmap 5.51/XML 1.03 historical loopback export. Four exact TCP records, plus restricted scope positive/negative.",
+    "nuclei": "Nuclei v3.3.10 native StandardWriter JSONL on synthetic objects with network sockets kernel-denied. True/false polarity preserved. One hint and zero confirmed."
+  },
+  "status": "PASS_SELECTED_NATIVE_FORMATS"
+}

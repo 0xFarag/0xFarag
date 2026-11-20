@@ -1,0 +1,77 @@
+{
+  "boundary": "Test sources unchanged. Offline and benign fixture cases executed. Excluded test setups and scenarios create live cross-tenant proof, fault benchmarks, reproducer reduction or mutating workflows. The Python runner restricted instrumented connects/binds to loopback; this is not a whole-system network attestation.",
+  "chromium": {
+    "coverage_receipt_sha256": "4074afd8fa2ae543b73238c9499977d8c6053916c5407a13532e9da1ac7c5e18",
+    "from_v150": {
+      "declared": 8,
+      "passed": [
+        "platform150"
+      ]
+    },
+    "introduced_since_v150": {
+      "declared": 2,
+      "passed": [
+        "federation_index",
+        "federation_offline"
+      ]
+    },
+    "not_executed": [
+      "acceptance",
+      "assessment_security",
+      "assessments",
+      "comparison",
+      "feature_coverage",
+      "retest_freshness",
+      "v1"
+    ]
+  },
+  "completed_utc": "2026-11-20T22:26:00.311125+00:00",
+  "full_regression": "OPEN",
+  "historical_reference_only": {
+    "chromium_passed": 8,
+    "commit": "03aea857e35358ddeb13d2a861b633e60c1ca873",
+    "python_passed": 682,
+    "sha256": "4cb0d557238a9c46194241c78540dace69643e597e4d8b68200ff72097cd47e0",
+    "url": "https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/verification.json"
+  },
+  "python": {
+    "coverage_receipt_sha256": "25aab531d44ccd6947a3b47b464fa3073e6f5067e1a7a6716e47a6a7ab6a95f2",
+    "errors": 0,
+    "from_v150": {
+      "discovered": 682,
+      "passed": 523
+    },
+    "introduced_since_v150": {
+      "discovered": 51,
+      "passed": 51
+    },
+    "not_executed": 159,
+    "skips_in_selection": 0,
+    "total_unique_passed": 574,
+    "unit_log_sha256": "b44dfd715d053c6f7fb72a12fe7afcbae91a05c2404ed7e1fef1fc849096309d"
+  },
+  "schema": "authzledger.defensive-coverage/v1",
+  "separate_review_tests": {
+    "adapter_support": {
+      "exit": 0,
+      "log_sha256": "6555f97b571b9a54a391f8850e50386d34fd2ce11b1041f13be4e817f1a44b6b",
+      "passed_without_skips": true,
+      "unittest_run": 5
+    },
+    "demo_d_contract": {
+      "exit": 0,
+      "log_sha256": "ac9798b95a76f0a07e1558b13d530cdd7828f23f75f44e9e43d555e5cb205c9e",
+      "passed_without_skips": true,
+      "unittest_run": 14
+    },
+    "release_gate_selftests": {
+      "exit": 0,
+      "log_sha256": "70c6844eacd792b571d5d7bb713dd1c73303cb7c62110d9695b02b4d274d2897",
+      "passed_without_skips": true,
+      "unittest_run": 15
+    }
+  },
+  "started_utc": "2026-11-20T22:25:11.678801+00:00",
+  "target_commit": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+  "tree": "aedd13378b49dfc651e4771c5d8b0ba836147eb1"
+}
