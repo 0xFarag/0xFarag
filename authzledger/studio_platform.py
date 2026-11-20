@@ -37,6 +37,7 @@ def platform_route(handler, body):
     fields = {
         "create": {"title", "scope", "engagement"}, "get": {"assessment_id"},
         "update": {"assessment_id", "title", "scope", "engagement", "expected_revision"},
+        "revoke-authorization": {"assessment_id", "expected_revision"},
         "import": {"assessment_id", "profile", "text", "request_base64", "response_base64", "source_origin", "expected_revision"},
         "discover-plan": {"assessment_id", "seeds"},
         "check-plan": {"assessment_id", "spec"},
@@ -96,6 +97,8 @@ def platform_route(handler, body):
         result = {"assessment": service.create(body.get("title"), body.get("scope"), body.get("engagement"))}
     elif route == "get":
         result = service.get(identifier)
+    elif route == "revoke-authorization":
+        result = {"assessment": service.revoke_authorization(identifier, body.get("expected_revision"))}
     elif route == "update":
         if handler.server.active:
             raise ContractError("Wait for active execution to finish before changing its scope.")

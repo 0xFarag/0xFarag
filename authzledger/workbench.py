@@ -26,6 +26,26 @@ class WorkbenchError(ValueError):
     pass
 
 
+_PLAN_KINDS = {"check-plan", "discovery-plan", "retest-plan", "playbook-plan"}
+
+
+def _check_plan_authority(assessment, artifact, approval):
+    policy = assessment.get("authorization_policy")
+    if policy is None:
+        raise WorkbenchError("historical_approval_replan_required")
+    if policy["state"] != "active":
+        raise WorkbenchError("authorization_revoked")
+    if artifact["scope_digest"] != assessment["scope"]["scope_digest"]:
+        raise WorkbenchError("scope_changed_replan_required")
+    if artifact.get("authorization_revision") != policy["revision"]:
+        raise WorkbenchError("authorization_changed_replan_required")
+    if not isinstance(approval, str) or artifact.get("approval_digest") != approval:
+        raise WorkbenchError("exact_plan_approval_required")
+    from .scope import seconds_remaining
+    if seconds_remaining(assessment["scope"]) <= 0:
+        raise WorkbenchError("authorization-expired")
+
+
 def _now():
     return datetime.now(timezone.utc).isoformat()
 
@@ -206,7 +226,7 @@ class WorkbenchStore:
         value = {"schema_version": 1, "kind": "workbench-assessment", "id": "assessment-" + uuid.uuid4().hex,
                  "title": title, "scope": scope, "revision": 1, "created_at": _now(), "updated_at": _now(),
                  "storage": "persistent" if self.persistent else "session_only", "artifact_head": "0" * 64,
-                 "engagement": _engagement(engagement)}
+                 "engagement": _engagement(engagement), "authorization_policy": {"state": "active", "revision": 1}}
         with self._lock:
             self._db.execute("BEGIN IMMEDIATE")
             try:
@@ -232,8 +252,21 @@ class WorkbenchStore:
                 self._db.execute("ROLLBACK")
                 raise
 
+    def _change_authority(self, assessment, state):
+        aid = assessment["id"]
+        running = self._db.execute("SELECT 1 FROM wb_jobs WHERE assessment_id=? AND state='running' LIMIT 1", (aid,)).fetchone()
+        schedules = self._db.execute("SELECT id,value FROM wb_schedules WHERE assessment_id=?", (aid,)).fetchall()
+        schedules = [(row["id"], json.loads(row["value"])) for row in schedules]
+        if running or any(s["state"] == "running" for _, s in schedules):
+            raise WorkbenchError("scope_change_requires_stopped_execution")
+        assessment["authorization_policy"] = {"state": state, "revision": assessment["revision"] + 1}
+        for schedule_id, schedule in schedules:
+            if schedule["state"] == "scheduled":
+                schedule.update(state="blocked", reason="authorization_revoked" if state == "revoked" else "authorization_changed_replan_required")
+                self._db.execute("UPDATE wb_schedules SET value=? WHERE id=?", (_json(schedule), schedule_id))
+
     def update(self, assessment_id, patch, expected_revision):
-        if not isinstance(patch, dict) or not patch or set(patch) - {"title", "scope", "engagement", "finding_annotations"}:
+        if not isinstance(patch, dict) or not patch or set(patch) - {"title", "scope", "engagement", "finding_annotations", "revoke_authorization"}:
             raise WorkbenchError("invalid_assessment_patch")
         with self._lock:
             self._db.execute("BEGIN IMMEDIATE")
@@ -241,6 +274,16 @@ class WorkbenchStore:
                 value = self._read(assessment_id)
                 if type(expected_revision) is not int or value["revision"] != expected_revision:
                     raise WorkbenchError("assessment_revision_conflict")
+                original_scope = value["scope"]["scope_digest"]
+                binding = ("reference", "roe_ref")
+                original_engagement = tuple(value.get("engagement", {}).get(k) for k in binding)
+                if "revoke_authorization" in patch:
+                    if patch != {"revoke_authorization": True} or patch["revoke_authorization"] is not True:
+                        raise WorkbenchError("invalid_revocation")
+                    if value.get("authorization_policy", {}).get("state") == "revoked":
+                        self._db.execute("COMMIT")
+                        return value
+                    self._change_authority(value, "revoked")
                 if "title" in patch:
                     value["title"] = _text(patch["title"], "assessment_title")
                 if "engagement" in patch:
@@ -251,6 +294,11 @@ class WorkbenchStore:
                     from .scope import validate_scope
                     value["scope"] = validate_scope(patch["scope"])
                     _secret_free(value["scope"])
+                changed_binding = original_engagement != tuple(value.get("engagement", {}).get(k) for k in binding)
+                if changed_binding or original_scope != value["scope"]["scope_digest"]:
+                    if value.get("authorization_policy", {}).get("state") == "revoked":
+                        raise WorkbenchError("authorization_revoked")
+                    self._change_authority(value, "active")
                 if "finding_annotations" in patch:
                     from .platform_reports import freeze_platform
                     value["finding_annotations"] = copy.deepcopy(patch["finding_annotations"])
@@ -269,7 +317,22 @@ class WorkbenchStore:
     def _append_artifact(self, current, kind, value):
         assessment_id = current["id"]
         previous = current["artifact_head"]
-        artifact = seal("workbench-artifact", {"artifact_id": "artifact-" + uuid.uuid4().hex,
+        binding = {}
+        if kind in _PLAN_KINDS:
+            if "authorization_policy" not in current:
+                # Historical observations and approvals are never rewritten. Only
+                # newly retained plans can use this workspace's new authority.
+                current["authorization_policy"] = {"state": "active", "revision": current["revision"]}
+            policy = current["authorization_policy"]
+            if policy["state"] != "active":
+                raise WorkbenchError("authorization_revoked")
+            plan_digest = value.get("plan_digest")
+            if not isinstance(plan_digest, str) or not plan_digest:
+                raise WorkbenchError("plan_digest_required")
+            approval = plan_digest if policy["revision"] == 1 else digest("workbench-approval", {
+                "assessment_id": assessment_id, "authorization_revision": policy["revision"], "plan_digest": plan_digest})
+            binding = {"authorization_revision": policy["revision"], "approval_digest": approval}
+        artifact = seal("workbench-artifact", {**binding, "artifact_id": "artifact-" + uuid.uuid4().hex,
             "assessment_id": assessment_id, "kind": kind, "created_at": _now(), "assessment_revision": current["revision"],
             "scope_digest": current["scope"].get("scope_digest"), "previous_digest": previous, "value": copy.deepcopy(value)}, "artifact_digest")
         self._db.execute("INSERT INTO wb_artifacts(artifact_id,assessment_id,kind,value) VALUES(?,?,?,?)", (artifact["artifact_id"], assessment_id, kind, _json(artifact)))
@@ -383,6 +446,9 @@ class WorkbenchService:
 
     def update(self, assessment_id, patch, expected_revision):
         return self.store.update(assessment_id, patch, expected_revision)
+
+    def revoke_authorization(self, assessment_id, expected_revision):
+        return self.store.update(assessment_id, {"revoke_authorization": True}, expected_revision)
 
     def annotate(self, assessment_id, annotations, expected_revision):
         return self.store.update(assessment_id, {"finding_annotations": annotations}, expected_revision)
@@ -518,6 +584,7 @@ class WorkbenchService:
             source = index.get(step["plan_id"])
             if source is None or source["kind"] not in {"discovery-plan", "check-plan", "retest-plan"}:
                 raise WorkbenchError("playbook_requires_existing_plan")
+            _check_plan_authority(current, source, source.get("approval_digest"))
             resolved.append({"id": step["id"], "plan": source["value"], "requires": step["requires"]})
         plan = plan_playbook(current["scope"], resolved)
         return self.store.add_artifact(assessment_id, "playbook-plan", plan, expected_revision=current["revision"])
@@ -526,7 +593,7 @@ class WorkbenchService:
         from .scope import context_for_scope
         plan_record = self.store.artifact(assessment_id, plan_id)
         plan = plan_record["value"]
-        if plan_record["kind"] != expected_kind or not isinstance(approval, str) or approval != plan.get("plan_digest"):
+        if plan_record["kind"] != expected_kind:
             raise WorkbenchError("exact_plan_approval_required")
         request_id = _text(request_id or plan_id, "request_id", 256)
         with self.store.execution_guard():
@@ -538,8 +605,7 @@ class WorkbenchService:
                 self.store._db.execute("BEGIN IMMEDIATE")
                 try:
                     current = self.store._read(assessment_id)
-                    if plan_record["scope_digest"] != current["scope"].get("scope_digest"):
-                        raise WorkbenchError("scope_changed_replan_required")
+                    _check_plan_authority(current, plan_record, approval)
                     if _schedule_claim is not None:
                         claim_id, claim_value = _schedule_claim
                         claimed = self.store._db.execute("SELECT value FROM wb_schedules WHERE id=? AND assessment_id=?", (claim_id, assessment_id)).fetchone()
@@ -627,7 +693,7 @@ class WorkbenchService:
 
     def schedule(self, assessment_id, plan_id, approval, interval_seconds, iterations, request_budget):
         artifact = self.store.artifact(assessment_id, plan_id)
-        if artifact["kind"] not in {"check-plan", "discovery-plan", "retest-plan", "playbook-plan"} or artifact["value"].get("plan_digest") != approval:
+        if artifact["kind"] not in _PLAN_KINDS:
             raise WorkbenchError("exact_plan_approval_required")
         if type(iterations) is not int or not 1 <= iterations <= 1000 or type(interval_seconds) is not int or not 1 <= interval_seconds <= 86400 * 30:
             raise WorkbenchError("bounded_schedule_required")
@@ -642,8 +708,7 @@ class WorkbenchService:
             self.store._db.execute("BEGIN IMMEDIATE")
             try:
                 current = self.store._read(assessment_id)
-                if artifact["scope_digest"] != current["scope"]["scope_digest"]:
-                    raise WorkbenchError("scope_changed_replan_required")
+                _check_plan_authority(current, artifact, approval)
                 self.store._db.execute("INSERT INTO wb_schedules VALUES(?,?,?)", (value["id"], assessment_id, _json(value)))
                 self.store._db.execute("COMMIT")
             except BaseException:
@@ -668,9 +733,15 @@ class WorkbenchService:
             artifact = self.store.artifact(aid, schedule["plan_id"])
             # Conservatively reserve the full scope budget per cycle. Unused
             # reservations are not made available to uncertain/crashed runs.
-            maximum = self.store.get(aid)["scope"]["limits"]["max_requests"]
-            if schedule["reserved_requests"] + maximum > schedule["request_budget"]:
+            current = self.store.get(aid)
+            maximum = current["scope"]["limits"]["max_requests"]
+            try:
+                _check_plan_authority(current, artifact, schedule["approval"])
+            except WorkbenchError as error:
+                schedule.update(state="blocked", reason=str(error))
+            if schedule["state"] == "scheduled" and schedule["reserved_requests"] + maximum > schedule["request_budget"]:
                 schedule["state"] = "budget_exhausted"
+            if schedule["state"] != "scheduled":
                 with self.store._lock:
                     changed = self.store._db.execute("UPDATE wb_schedules SET value=? WHERE id=? AND value=?", (_json(schedule), schedule["id"], row[0])).rowcount
                 if changed:

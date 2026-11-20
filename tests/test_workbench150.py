@@ -322,7 +322,7 @@ class Workbench150Tests(unittest.TestCase):
             self.assertEqual(retest['value']['scope'], updated['scope'])
             self.assertEqual(retest['value']['spec']['retest_of']['source_scope_digest'], original['value']['plan']['scope']['scope_digest'])
             state['headers'] = True
-            result = self.service.retest_execute(aid, retest['artifact_id'], retest['value']['plan_digest'])
+            result = self.service.retest_execute(aid, retest['artifact_id'], retest['approval_digest'])
             self.assertEqual(verify_check_execution(result['value']), [])
             self.assertEqual(self.store.artifact(aid, baseline['artifact_id']), original)
             self.assertEqual(len(self.store.artifacts(aid, 'check-comparison')), 1)

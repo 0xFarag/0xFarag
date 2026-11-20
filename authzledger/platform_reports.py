@@ -303,6 +303,13 @@ def freeze_platform(assessment, artifacts, *, comparisons=None):
     scope = validate_scope(meta['scope'])
     if canonical(scope) != canonical(meta['scope']):
         meta['scope'] = scope
+    if 'authorization_policy' in assessment:
+        policy = assessment['authorization_policy']
+        if (not isinstance(policy, dict) or set(policy) != {'state', 'revision'}
+                or policy['state'] not in ('active', 'revoked') or type(policy['revision']) is not int
+                or not 1 <= policy['revision'] <= meta['revision']):
+            raise ValueError('invalid assessment authorization')
+        meta['authorization_policy'] = copy.deepcopy(policy)
     if 'engagement' in assessment:
         engagement = assessment['engagement']
         if not isinstance(engagement, dict) or set(engagement) - {'reference', 'roe_ref', 'notes'}:
@@ -472,6 +479,9 @@ def _sections(snapshot):
         ('Expires at', scope['expires_at']), ('Allowed origins', '\n'.join(scope['origins'])),
         ('Approved operations', '\n'.join(op['method'] + ' ' + op['origin'] + op['path'] + ' [' + op['purpose'] + ' / ' + op.get('effect', 'read') + ']' for op in scope['operations'])),
         ('Allowed networks', ', '.join(scope['allowed_networks'])), ('Execution limits', _display(scope['limits']))]
+    if 'authorization_policy' in assessment:
+        policy = assessment['authorization_policy']
+        yield 'Assessment authorization', [('State', policy['state']), ('Since revision', str(policy['revision']))]
     if assessment.get('engagement'):
         yield 'Engagement and rules of engagement', [(key.replace('_', ' ').title(), value) for key, value in sorted(assessment['engagement'].items())]
     yield 'Coverage and result accounting', [('Summary', _display(snapshot['summary'])), ('Coverage', _display(snapshot['coverage']))]

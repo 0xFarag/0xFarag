@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 _ACTIONS = {"create", "list", "show", "registry", "surface-import", "discover-plan", "discover-run",
-            "check-plan", "check-run", "check-retest-plan", "check-retest-run", "freeze", "schedule", "run-due", "delta", "knowledge", "playbook-plan", "playbook-run", "recover", "annotate"}
+            "check-plan", "check-run", "check-retest-plan", "check-retest-run", "freeze", "schedule", "run-due", "delta", "knowledge", "playbook-plan", "playbook-run", "recover", "annotate", "revoke-authorization"}
 
 
 def add_commands(actions):
@@ -27,6 +27,7 @@ def add_commands(actions):
     retain.add_argument("--release-sources", required=True, action="store_true", help="Approve retaining source digests and redacted evidence")
     for action in sorted(_ACTIONS):
         parser = actions.add_parser(action, help={
+            "revoke-authorization": "Permanently revoke authority for future work in this stopped assessment",
             "create": "Create a persistent assessment with explicit authorization scope",
             "list": "List retained local assessments", "show": "Inspect one assessment and its evidence offline",
             "registry": "List supported versioned checks and profiles",
@@ -48,6 +49,8 @@ def add_commands(actions):
             parser.add_argument("--store", type=Path, required=True, help="Local SQLite history/workbench file")
         if action not in {"create", "list", "registry", "run-due"}:
             parser.add_argument("assessment_id")
+        if action == "revoke-authorization":
+            parser.add_argument("--expected-revision", type=int, required=True)
         if action == "create":
             parser.add_argument("--title", required=True)
             parser.add_argument("--scope", type=Path, required=True)
@@ -69,7 +72,7 @@ def add_commands(actions):
             parser.add_argument("--finding", action="append", dest="selection")
         if action in {"discover-run", "check-run", "check-retest-run", "schedule", "playbook-run"}:
             parser.add_argument("plan_id")
-            parser.add_argument("--approve", required=True, help="Exact plan_digest of the reviewed retained plan")
+            parser.add_argument("--approve", required=True, help="Exact approval_digest of the reviewed retained plan artifact")
         if action == "schedule":
             parser.add_argument("--interval-seconds", type=int, required=True)
             parser.add_argument("--iterations", type=int, required=True)
@@ -126,7 +129,7 @@ def execute_command(args):
         result = catalog()
     else:
         from .workbench import WorkbenchStore, WorkbenchService
-        if action == "federation-retain" and not args.store.is_file():
+        if action in {"federation-retain", "revoke-authorization"} and not args.store.is_file():
             raise ValueError("Choose the existing assessment store")
         store = WorkbenchStore(args.store)
         service = WorkbenchService(store)
@@ -138,6 +141,8 @@ def execute_command(args):
                                                    expected_revision=args.expected_revision, preview_digest=preview_digest)
             elif action == "create":
                 result = service.create(args.title, _read(args.scope), _read(args.engagement) if args.engagement else None)
+            elif action == "revoke-authorization":
+                result = service.revoke_authorization(args.assessment_id, args.expected_revision)
             elif action == "list":
                 result = {"assessments": service.list()}
             elif action == "show":
