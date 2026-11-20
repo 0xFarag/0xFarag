@@ -58,7 +58,7 @@ def _no_credentials(value):
             raise ValueError('credential material is not permitted in platform artifacts')
 
 
-def _verify_artifact(value):
+def _verify_artifact(value, assessment):
     if not isinstance(value, dict):
         raise ValueError('platform artifact must be a typed object')
     kind = value.get('kind')
@@ -89,6 +89,9 @@ def _verify_artifact(value):
         errors = validator(value)
         if errors:
             raise ValueError('invalid ' + kind + ': ' + '; '.join(errors))
+    elif kind == 'federation-receipt':
+        from .federation_records import validate_federation_receipt
+        validate_federation_receipt(value, assessment)
     elif kind == 'workflow-plan':
         from .workflows import compile_workflow
         if canonical(compile_workflow(value['spec'])) != canonical(value):
@@ -213,6 +216,19 @@ def _rows(artifact):
                 reproduction={'kind': 'external-hint-review', 'executable': False,
                               'source_projection_digest': value['source_projection_digest'],
                               'reason': 'Prepare an explicit scoped check with controls; an imported claim is not a reproducer.'}))
+    elif kind == 'federation-receipt':
+        observed = {(s['sha256'], r['locator']): r for s in value['sources'] if s['profile'] == 'nuclei'
+                    for r in s['records'] if r['disposition'] == 'accepted'}
+        for hint in value['catalog']['source_hints']:
+            ref = hint['source_sha256'] + '#' + hint['locator']
+            finding = {'id': ref, 'title': 'External template match / ' + hint['locator'],
+                       'status': 'hint', 'evidence_level': 'hint', 'interpretation': 'inconclusive',
+                       'reason': 'source_attested_template_match', 'verification_level': 'source_attested',
+                       'observation_refs': [ref], 'endpoint_id': hint['endpoint_id']}
+            source = observed[(hint['source_sha256'], hint['locator'])]
+            rows.append(_finding(artifact, finding, controls=[], observations=[source],
+                                 reproduction={'kind': 'offline-source-review', 'executable': False,
+                                               'receipt_digest': value['receipt_digest']}))
     elif kind in {'assessment-snapshot', 'workflow-assurance-result', 'reduction-trace', 'playbook-execution'}:
         for execution in _contained_executions(value):
             rows.extend(_rows({**artifact, 'value': execution}))
@@ -301,7 +317,11 @@ def freeze_platform(assessment, artifacts, *, comparisons=None):
         if aid in seen:
             raise ValueError('duplicate platform artifact id')
         seen.add(aid)
-        _verify_artifact(artifact['value'])
+        _verify_artifact(artifact['value'], meta)
+        if artifact['value']['kind'] == 'federation-receipt':
+            if (artifact.get('scope_digest', artifact['value']['scope_digest_at_import']) != artifact['value']['scope_digest_at_import']
+                    or artifact.get('kind', 'federation-receipt') != 'federation-receipt'):
+                raise ValueError('federation workspace artifact binding mismatch')
         included = artifact.get('included', True)
         if type(included) is not bool:
             raise ValueError('artifact inclusion must be boolean')
@@ -474,6 +494,14 @@ def _sections(snapshot):
                 fields = [('Import profile', value['profile']), ('External evidence projections', _display(value['records'])),
                           ('Import inventory', _display(value['inventory'])), ('Source inventory and omissions', _display(value['source_inventory'])),
                           ('Safe source projection digest', value['source_projection_digest']), ('Limitations', _display(value['limitations']))]
+            elif kind == 'federation-receipt':
+                fields = [('Inventory scope at import', value['scope_digest_at_import']),
+                          ('Selected TCP services', _display(value['allowed_services'])),
+                          ('Bound source inventory', _display([{k: s[k] for k in ('profile', 'sha256')} for s in value['sources']])),
+                          ('Offline catalog and source-attested hints', _display(value['catalog'])),
+                          ('Provenance', 'Typed source records and omissions are retained in platform.json; '
+                           'free-form identifiers and paths are digest-bound. Raw source bytes remain external. '
+                           'A projection cannot verify a scanner assertion or a fix.')]
             elif kind == 'experiment-candidates':
                 fields = [('Unexecuted experiment candidates and blockers', _display(value['candidates']))]
             elif kind == 'surface-delta':

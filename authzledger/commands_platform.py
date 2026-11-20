@@ -9,6 +9,22 @@ _ACTIONS = {"create", "list", "show", "registry", "surface-import", "discover-pl
 
 
 def add_commands(actions):
+    index = actions.add_parser("federation-index", help="Inspect surface provenance from a frozen assessment snapshot offline")
+    index.add_argument("snapshot", type=Path, help="Frozen platform snapshot JSON from assessment freeze")
+    index.add_argument("--out", type=Path, help="New index JSON file; stdout when omitted")
+    preview = actions.add_parser("federation-preview", help="Compare local tool exports in one offline inventory projection")
+    retain = actions.add_parser("federation-retain", help="Retain a reviewed federation receipt on an existing assessment")
+    for command in (preview, retain):
+        command.add_argument("--scope-service", dest="allowed_services", action="append", required=True,
+                             help="Exact TCP service with a literal IP and port, e.g. tcp://192.0.2.10:443 (repeatable)")
+        for profile, label in (("nmap", "Nmap XML"), ("ffuf", "ffuf JSON"), ("nuclei", "Nuclei JSONL")):
+            command.add_argument("--" + profile, type=Path, action="append", metavar="FILE", help=label + " export (one file)")
+        command.add_argument("--out", type=Path, help="New JSON file; stdout when omitted")
+    retain.add_argument("assessment_id")
+    retain.add_argument("--store", required=True, type=Path, help="Existing assessment store")
+    retain.add_argument("--expected-revision", required=True, type=int)
+    retain.add_argument("--reviewed-projection", required=True, type=Path, help="Exact projection JSON reviewed from federation-preview")
+    retain.add_argument("--release-sources", required=True, action="store_true", help="Approve retaining source digests and redacted evidence")
     for action in sorted(_ACTIONS):
         parser = actions.add_parser(action, help={
             "create": "Create a persistent assessment with explicit authorization scope",
@@ -72,22 +88,55 @@ def add_commands(actions):
         parser.add_argument("--out", type=Path, help="New JSON output file; stdout when omitted")
 
 
+def _federation_sources(args):
+    from .federation_offline import MAX_TOTAL_BYTES
+    from .model import ContractError
+    sources = []
+    remaining = MAX_TOTAL_BYTES
+    for profile in ("nmap", "ffuf", "nuclei"):
+        paths = getattr(args, profile)
+        if paths is None:
+            continue
+        if len(paths) != 1 or not paths[0].is_file():
+            raise ContractError("Choose one regular local file per source family.")
+        with paths[0].open("rb") as stream:
+            raw = stream.read(remaining + 1)
+        remaining -= len(raw)
+        if remaining < 0:
+            raise ContractError("Choose files totalling at most 2 MiB.")
+        sources.append((profile, raw))
+    return sources
+
+
 def execute_command(args):
     action = args.assessment_action
-    if action not in _ACTIONS:
+    if action not in _ACTIONS and action not in {"federation-index", "federation-preview", "federation-retain"}:
         return None
     from .commands_assessment import _read, _write
     if args.out is not None and args.out.exists():
         raise ValueError("Output already exists")
-    if action == "registry":
+    if action == "federation-index":
+        from .federation_index import build_surface_index
+        result = build_surface_index(_read(args.snapshot))
+    elif action == "federation-preview":
+        from .federation_offline import project_federation
+        result = project_federation(args.allowed_services, _federation_sources(args))
+    elif action == "registry":
         from .detectors import catalog
         result = catalog()
     else:
         from .workbench import WorkbenchStore, WorkbenchService
+        if action == "federation-retain" and not args.store.is_file():
+            raise ValueError("Choose the existing assessment store")
         store = WorkbenchStore(args.store)
         service = WorkbenchService(store)
         try:
-            if action == "create":
+            if action == "federation-retain":
+                from .federation_records import federation_preview_digest
+                preview_digest = federation_preview_digest(_read(args.reviewed_projection))
+                result = service.retain_federation(args.assessment_id, args.allowed_services, _federation_sources(args),
+                                                   expected_revision=args.expected_revision, preview_digest=preview_digest)
+            elif action == "create":
                 result = service.create(args.title, _read(args.scope), _read(args.engagement) if args.engagement else None)
             elif action == "list":
                 result = {"assessments": service.list()}

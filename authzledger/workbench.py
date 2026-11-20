@@ -274,13 +274,22 @@ class WorkbenchStore:
             try:
                 current = self._read(assessment_id)
                 records = self._artifacts(current)
-                if expected_revision is not None and (type(expected_revision) is not int or current["revision"] != expected_revision):
-                    raise WorkbenchError("assessment_revision_conflict")
-                if deduplicate:
+                federation = kind == "federation-receipt"
+                if federation:
+                    from .federation_records import validate_federation_receipt
+                    if type(expected_revision) is not int or not 1 <= expected_revision <= current["revision"]:
+                        raise WorkbenchError("assessment_revision_conflict")
+                    validate_federation_receipt(value, current)
+                    if value["scope_digest_at_import"] != current["scope"]["scope_digest"]:
+                        raise WorkbenchError("federation_scope_revision_conflict")
+                revision_matches = expected_revision is None or (type(expected_revision) is int and current["revision"] == expected_revision)
+                if deduplicate and (revision_matches or federation):
                     prior = next((item for item in records if item["kind"] == kind and item["value"] == value), None)
                     if prior is not None:
                         self._db.execute("COMMIT")
                         return prior
+                if not revision_matches:
+                    raise WorkbenchError("assessment_revision_conflict")
                 previous = current["artifact_head"]
                 artifact = seal("workbench-artifact", {"artifact_id": "artifact-" + uuid.uuid4().hex,
                     "assessment_id": assessment_id, "kind": kind, "created_at": _now(), "assessment_revision": current["revision"],
@@ -418,6 +427,15 @@ class WorkbenchService:
         record = self.store.add_artifact(assessment_id, kind, batch, expected_revision=expected_revision if expected_revision is not None else current["revision"])
         self.refresh_catalog(assessment_id)
         return record
+
+    def retain_federation(self, assessment_id, allowed_services, sources, *, expected_revision, preview_digest=None):
+        """Retain one verified, non-executable source projection in this assessment."""
+        from .federation_records import build_federation_receipt, KIND
+        if type(expected_revision) is not int or expected_revision < 1:
+            raise WorkbenchError("assessment_revision_conflict")
+        assessment = self.store.get(assessment_id)
+        receipt = build_federation_receipt(assessment, allowed_services, sources, preview_digest)
+        return self.store.add_artifact(assessment_id, KIND, receipt, expected_revision, deduplicate=True)
 
     def refresh_catalog(self, assessment_id, declarations=None):
         from .surface import build_catalog, merge_catalogs
