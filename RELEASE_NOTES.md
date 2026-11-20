@@ -1,6 +1,6 @@
-# AuthzLedger 1.6.0rc1 — engineering review
+# AuthzLedger 1.6.0 — release target under review
 
-This candidate adds selected offline tool-export federation and a source-linked index for frozen assessment evidence. The public 1.6 release gate is open. Source review is public. RC binaries are internal. See [the candidate notes](docs/private-rc160.md). The notes below describe earlier versions.
+This target adds selected offline tool-export federation and a source-linked index for frozen assessment evidence. The public 1.6 release gate is open. The wheel is reserved for internal acceptance. See the [target notes](docs/release-target-1.6.md). The notes below describe earlier versions.
 
 ---
 

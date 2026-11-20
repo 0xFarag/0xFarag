@@ -172,8 +172,9 @@ def _ffuf_entries(raw):
     if method == '':
         method = None
     supported_context = method in ('GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', None) and not any(
-        config.get(key) for key in ('headers', 'requestfile', 'rawrequest', 'cookies', 'data',
-                                    'sni', 'follow_redirects', 'proxyurl', 'client-cert', 'client-key'))
+        config.get(key) for key in ('headers', 'requestfile', 'rawrequest', 'cookies',
+                                    'data', 'postdata', 'sni', 'follow_redirects', 'proxyurl',
+                                    'replayproxyurl', 'client-cert', 'client-key'))
     for i, row in enumerate(rows):
         if not isinstance(row, dict):
             raise ValueError('invalid_ffuf_record')

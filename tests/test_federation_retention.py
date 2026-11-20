@@ -1,10 +1,13 @@
 """Retained offline source claims, optimistic revisions, bounded scope and revalidation."""
 import copy
 import json
+import os
 import runpy
 import socket
+import sqlite3
 import subprocess
 import tempfile
+import threading
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -63,6 +66,69 @@ class FederationRetentionTests(unittest.TestCase):
         self.assertIn('Bound source inventory', render_platform_html(snapshot))
         self.assertEqual(len(one['value']['catalog']['endpoints']), 1)
 
+    def test_legacy_import_rolls_back_both_artifacts_on_catalog_write_failure(self):
+        self.store._db.execute("""CREATE TEMP TRIGGER qa_catalog_failure BEFORE INSERT ON wb_artifacts
+                               WHEN NEW.kind='surface-catalog' BEGIN SELECT RAISE(ABORT,'qa_catalog_failure'); END;""")
+        with self.assertRaisesRegex(sqlite3.IntegrityError, 'qa_catalog_failure'):
+            self.service.import_source(self.aid, NMAP, 'nmap-xml-v1', expected_revision=1)
+        with WorkbenchStore(self.db) as reopened:
+            self.assertEqual(reopened.snapshot(self.aid), (self.assessment, []))
+        self.store._db.execute('DROP TRIGGER qa_catalog_failure')
+        saved = self.service.import_source(self.aid, NMAP, 'nmap-xml-v1', expected_revision=1)
+        current, records = self.store.snapshot(self.aid)
+        self.assertEqual(current['revision'], 3)
+        self.assertEqual([r['kind'] for r in records], ['adapter-receipt', 'surface-catalog'])
+        self.assertEqual(records[0], saved)
+        self.assertEqual(records[1]['previous_digest'], saved['artifact_digest'])
+
+    def test_credentials_rejected_before_persistent_revision_or_artifact(self):
+        marker = 'Bearer TEST_ONLY_STORAGE_CANARY'
+        private_key_marker = '-----BEGIN PRIVATE KEY-----'
+        self.store._db.execute('PRAGMA journal_mode=WAL')
+        for submit in (
+            lambda: self.service.create(marker, policy()),
+            lambda: self.service.create('Notes', policy(), {'notes': marker}),
+            lambda: self.service.update(self.aid, {'title': marker}, 1),
+            lambda: self.store.add_artifact(self.aid, 'test', {'notes': private_key_marker}, 1),
+            lambda: self.store.add_artifact(self.aid, 'test', {marker: 'test metadata'}, 1),
+        ):
+            with self.assertRaisesRegex(ValueError, 'literal_credentials_cannot_be_persisted'):
+                submit()
+        with patch.dict(os.environ, {'TEST_STORAGE_REF': 'QaTestStorageKeyEcho'}):
+            with self.assertRaisesRegex(ValueError, 'credential_echo_cannot_be_persisted'):
+                self.store.add_artifact(self.aid, 'test', {
+                    'ref': {'env': 'TEST_STORAGE_REF'}, 'QaTestStorageKeyEcho': 0,
+                }, 1)
+        self.assertEqual(len(self.service.list()), 1)
+        self.assertEqual(self.store.snapshot(self.aid), (self.assessment, []))
+        for file in self.db.parent.glob('workspace.sqlite*'):
+            data = file.read_bytes()
+            for sensitive in (marker, private_key_marker, 'QaTestStorageKeyEcho'):
+                self.assertNotIn(sensitive.encode(), data)
+
+    def test_concurrent_first_open_of_same_absent_database(self):
+        target = Path(self.directory.name) / 'shared.sqlite'
+        original_open = os.open
+        barrier = threading.Barrier(2)
+        thread_state = threading.local()
+
+        def overlap_first_creation(path, flags, *args, **kwargs):
+            if (Path(path) == target and flags & os.O_CREAT and flags & os.O_EXCL
+                    and not getattr(thread_state, 'reached', False)):
+                thread_state.reached = True
+                barrier.wait(timeout=5)
+            return original_open(path, flags, *args, **kwargs)
+
+        def open_workspace():
+            with WorkbenchStore(target) as store:
+                return store.list()
+
+        with patch.object(os, 'open', side_effect=overlap_first_creation), ThreadPoolExecutor(2) as pool:
+            workers = [pool.submit(open_workspace) for _ in range(2)]
+            self.assertEqual([worker.result(timeout=15) for worker in workers], [[], []])
+        if os.name == 'posix':
+            self.assertEqual(target.stat().st_mode & 0o777, 0o600)
+
     def test_two_connections_same_revision_retry_one_append(self):
         with WorkbenchStore(self.db) as peer, ThreadPoolExecutor(max_workers=2) as pool:
             services = [self.service, WorkbenchService(peer)]
@@ -101,6 +167,28 @@ class FederationRetentionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'revision_conflict'):
             self.retain(sources=[('ffuf', ffuf(length=123))])
         self.assertEqual(len(self.store.artifacts(self.aid)), 1)
+
+    def test_ffuf_rev1_archive_and_stale_review_on_native_body(self):
+        fixtures = Path(__file__).resolve().parents[1] / 'review' / '1.6' / 'vendor-proof' / 'fixtures'
+        snapshot_bytes = (fixtures / 'ffuf-rev1-snapshot.json').read_bytes()
+        historical = json.loads(snapshot_bytes)
+        verify_platform(historical)
+        legacy = historical['artifacts'][0]['value']
+        self.assertEqual(legacy['sources'][0]['records'][0]['disposition'], 'accepted')
+        allowed = legacy['allowed_services']
+        sources = [('ffuf', (fixtures / 'ffuf-context.json').read_bytes())]
+        assessment = self.service.create('Reader revision 2', policy(allowed))
+        current = project_federation(allowed, sources)
+        self.assertEqual(current['receipts'][0]['records'][0]['disposition'], 'unsupported_request_context')
+        with self.assertRaisesRegex(ValueError, 'federation_preview_digest_mismatch'):
+            self.service.retain_federation(assessment['id'], allowed, sources,
+                                          expected_revision=1, preview_digest=legacy['preview_digest'])
+        self.assertEqual(self.service.get(assessment['id'])['artifacts'], [])
+        stored = self.service.retain_federation(assessment['id'], allowed, sources,
+                                               expected_revision=1, preview_digest=federation_preview_digest(current))
+        self.assertEqual(stored['value']['sources'][0]['records'][0]['disposition'], 'unsupported_request_context')
+        self.assertNotIn('CONTEXT_CANARY', json.dumps(stored))
+        self.assertEqual(snapshot_bytes, (fixtures / 'ffuf-rev1-snapshot.json').read_bytes())
 
     def test_scope_requires_exact_service_network_and_no_deny(self):
         policies = [policy(['tcp://192.0.2.10:444']), policy(denied_networks=['192.0.2.10/32']),

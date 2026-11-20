@@ -5,7 +5,7 @@
   "coverage": "Three offline federation readers in the patch. Other 1.5 import entry points use different contracts.",
   "reader_identity": "Matrix profile revision plus reader_source_sha256. At runtime the receipt carries logical source name and raw SHA-256; the envelope carries the projection format. No producer-version gate.",
   "reader_source": "authzledger/federation_offline.py",
-  "reader_source_sha256": "5fd9af29e0578442b62c496c81724315ac65d06832caa122521ed86df61ceb38",
+  "reader_source_sha256": "106b62b82bf57b48ef70d91dcfc2e54326a7e8248543af24a184a40006083cdd",
   "shared_limits": {
     "input_bytes_total": 2097152, "input_bytes_per_source": 2097152,
     "records_per_source": 1000, "scope_services_min": 1, "scope_services_max": 32,
@@ -44,7 +44,7 @@
       "fixture": {"path":"demo_d/fixtures/nmap.xml","sha256":"9885a02dc028840f7ec8dce648c40d4eab6c0028ce8a21f82f778d83e6d6bc7a","origin":"synthetic","producer_version_claimed":null,"records":{"accepted":1},"levels":{"hint":1}}
     },
     {
-      "profile_id":"ffuf","reader_revision":1,"logical_source":"ffuf.json",
+      "profile_id":"ffuf","reader_revision":2,"logical_source":"ffuf.json",
       "record_type":"http_result","record_unit":"results[]","locator":"/results/N, JSON Pointer index from 0",
       "producer_format":"ffuf v2-style result-array JSON; limited file-export field subset",
       "producer_version_gate":false,"evidence_ceiling":"hint",
@@ -54,7 +54,7 @@
       "source_units_without_rows":"Empty results produces zero rows. Top-level metadata and custom producer fields do not count as observations.",
       "dispositions":["accepted","out_of_scope","unresolved_scope","unsupported_target","unsupported_request_context"],
       "classification":"Unrecognized method or nonempty routing/credential context places each result in unsupported_request_context. Host inconsistency is unresolved. HTTP status alone creates no finding.",
-      "unsupported_nonempty_config":["headers","requestfile","rawrequest","cookies","data","sni","follow_redirects","proxyurl","client-cert","client-key"],
+      "unsupported_nonempty_config":["headers","requestfile","rawrequest","cookies","data","postdata","sni","follow_redirects","proxyurl","replayproxyurl","client-cert","client-key"],
       "methods":["GET","HEAD","POST","PUT","PATCH","DELETE","OPTIONS"],
       "limits":{"json_depth":40,"status_min":100,"status_max":599,"length_min":0,"length_max":9007199254740991},
       "atomic_rejections":["malformed/non-UTF-8 JSON, duplicate keys, nonfinite numbers, exceeded depth","non-object document, non-array results, non-object row or config","for an admitted request context: missing/invalid status or present invalid length"],
@@ -99,5 +99,13 @@
     "permission_status":"No separate redistribution grant for the submitted example was verified. Reference and checksum only; optional checkout check uses the file already present.",
     "limitations":"Host-only example, no service row. Native tool execution and provenance of the author's production run have not been independently witnessed."
   },
-  "native_compatibility_gate":{"status":"open","missing":["redistributable version-pinned native Nmap TCP service-port export","redistributable version-pinned native ffuf file export","redistributable version-pinned native Nuclei HTTP result export"],"closure":"For each profile acquire an approved unmodified static export, producer version and origin, permissible redistribution/use, SHA-256, privacy review and expected per-field positive/negative results. Recheck through product readers and independent checker without starting a producer."}
+  "native_compatibility_gate": {
+    "status":"bounded_profile_reference_cases_passed",
+    "manifest":"vendor-proof/provenance.json",
+    "verification":"vendor-proof/verify.py",
+    "scope":"Selected format fields only. Operator-provided files do not authenticate the producer version. These cases do not establish the full release gate.",
+    "native_producers":{"nmap":"5.51 / XML 1.03 original four-port export","ffuf":"2.1.0 native file writer with synthetic input objects","nuclei":"3.3.10 native JSONL writer with synthetic input objects"},
+    "optional_vendor_boundaries":"Pinned upstream Nmap 3.75 TCP/UDP, 5.51SVN service identifier rejection and 5.59BETA1 encoding rejection.",
+    "excluded":"Universal producer-version ranges, full scanner execution, launcher integration and unknown format options."
+  }
 }

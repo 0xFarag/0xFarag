@@ -16,6 +16,7 @@ from pathlib import Path
 import re
 import shutil
 
+from .credentials import contains_credential_marker
 from .oracles import canonical, seal
 from .assessment_reports import validate_cvss_vector, reporting_catalog, _text
 
@@ -54,7 +55,7 @@ def _no_credentials(value):
                 stack.append((child, depth + 1))
         elif isinstance(item, list):
             stack.extend((child, depth + 1) for child in item)
-        elif isinstance(item, str) and ('PRIVATE KEY-----' in item or re.search(r'(?i)\bBearer\s+[A-Za-z0-9._~+/-]{8,}', item)):
+        elif isinstance(item, str) and contains_credential_marker(item):
             raise ValueError('credential material is not permitted in platform artifacts')
 
 

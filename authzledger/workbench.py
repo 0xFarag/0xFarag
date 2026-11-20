@@ -18,6 +18,7 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .credentials import contains_credential_marker
 from .oracles import canonical, digest, seal
 
 
@@ -42,6 +43,8 @@ def _json(value):
 def _text(value, name, maximum=256):
     if not isinstance(value, str) or not value.strip() or len(value) > maximum or any(ord(c) < 32 or ord(c) == 127 or 0xD800 <= ord(c) <= 0xDFFF for c in value):
         raise WorkbenchError("invalid_" + name)
+    if contains_credential_marker(value):
+        raise WorkbenchError("literal_credentials_cannot_be_persisted")
     return value
 
 
@@ -62,6 +65,8 @@ def _secret_free(value):
                     if " " in resolved:
                         secrets.add(resolved.split(" ", 1)[1])
             for key, item in part.items():
+                if isinstance(key, str):
+                    pending.append(key)
                 if str(key).lower() in sensitive:
                     reference = isinstance(item, dict) and set(item) == {"env"} and isinstance(item["env"], str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,127}", item["env"])
                     redacted = item is None or isinstance(item, str) and item in {"", "[REDACTED]", "<redacted>", "redacted"}
@@ -71,6 +76,8 @@ def _secret_free(value):
         elif isinstance(part, (list, tuple)):
             pending.extend(part)
         elif isinstance(part, str):
+            if contains_credential_marker(part):
+                raise WorkbenchError("literal_credentials_cannot_be_persisted")
             strings.append(part)
     if any(secret and (secret == text or len(secret) >= 8 and secret in text) for secret in secrets for text in strings):
         raise WorkbenchError("credential_echo_cannot_be_persisted")
@@ -95,13 +102,9 @@ class WorkbenchStore:
             target = Path(self.path).absolute()
             if any(p.is_symlink() for p in (target, *target.parents)):
                 raise WorkbenchError("workspace_symlink_refused")
-            target.parent.mkdir(parents=True, exist_ok=True)
-            if not target.exists():
-                fd = os.open(target, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
-                os.close(fd)
             self.path = str(target)
-            # Both services share the 1.1 database. Let its existing, strict
-            # initializer establish/verify that schema before adding tables.
+            # The shared history initializer atomically creates or validates the
+            # 0600 file before the workbench adds its tables.
             from .history import HistoryStore
             HistoryStore(self.path).close()
         self._db = sqlite3.connect(self.path, check_same_thread=False, isolation_level=None, timeout=10)
@@ -263,7 +266,24 @@ class WorkbenchStore:
                 raise
         return result
 
-    def add_artifact(self, assessment_id, kind, value, expected_revision=None, *, deduplicate=False):
+    def _append_artifact(self, current, kind, value):
+        assessment_id = current["id"]
+        previous = current["artifact_head"]
+        artifact = seal("workbench-artifact", {"artifact_id": "artifact-" + uuid.uuid4().hex,
+            "assessment_id": assessment_id, "kind": kind, "created_at": _now(), "assessment_revision": current["revision"],
+            "scope_digest": current["scope"].get("scope_digest"), "previous_digest": previous, "value": copy.deepcopy(value)}, "artifact_digest")
+        self._db.execute("INSERT INTO wb_artifacts(artifact_id,assessment_id,kind,value) VALUES(?,?,?,?)", (artifact["artifact_id"], assessment_id, kind, _json(artifact)))
+        current["artifact_head"] = artifact["artifact_digest"]
+        current["revision"] += 1
+        current["updated_at"] = _now()
+        self._revision(current)
+        return artifact
+
+    def add_artifact(self, assessment_id, kind, value, expected_revision=None, *, deduplicate=False, catalog=None):
+        if catalog is not None:
+            if deduplicate or kind not in {"adapter-receipt", "import-batch"} or not isinstance(catalog, dict):
+                raise WorkbenchError("invalid_import_catalog")
+            _secret_free(catalog)
         _text(kind, "artifact_kind", 80)
         if not isinstance(value, dict):
             raise WorkbenchError("artifact_requires_object")
@@ -290,15 +310,9 @@ class WorkbenchStore:
                         return prior
                 if not revision_matches:
                     raise WorkbenchError("assessment_revision_conflict")
-                previous = current["artifact_head"]
-                artifact = seal("workbench-artifact", {"artifact_id": "artifact-" + uuid.uuid4().hex,
-                    "assessment_id": assessment_id, "kind": kind, "created_at": _now(), "assessment_revision": current["revision"],
-                    "scope_digest": current["scope"].get("scope_digest"), "previous_digest": previous, "value": copy.deepcopy(value)}, "artifact_digest")
-                self._db.execute("INSERT INTO wb_artifacts(artifact_id,assessment_id,kind,value) VALUES(?,?,?,?)", (artifact["artifact_id"], assessment_id, kind, _json(artifact)))
-                current["artifact_head"] = artifact["artifact_digest"]
-                current["revision"] += 1
-                current["updated_at"] = _now()
-                self._revision(current)
+                artifact = self._append_artifact(current, kind, value)
+                if catalog is not None:
+                    self._append_artifact(current, "surface-catalog", catalog)
                 self._db.execute("COMMIT")
             except BaseException:
                 self._db.execute("ROLLBACK")
@@ -414,7 +428,9 @@ class WorkbenchService:
 
     def import_source(self, assessment_id, raw, profile, *, source_origin=None, response_bytes=None, expected_revision=None):
         from .imports import parse_import
-        current = self.store.get(assessment_id)
+        current, records = self.store.snapshot(assessment_id)
+        if expected_revision is not None and (type(expected_revision) is not int or expected_revision != current["revision"]):
+            raise WorkbenchError("assessment_revision_conflict")
         if profile in {"nmap-xml-v1", "nuclei-jsonl-v1"}:
             from .adapters import import_adapter
             if source_origin is not None or response_bytes is not None:
@@ -424,9 +440,9 @@ class WorkbenchService:
         else:
             batch = parse_import(raw, profile, source_origin=source_origin, response_bytes=response_bytes)
             kind = "import-batch"
-        record = self.store.add_artifact(assessment_id, kind, batch, expected_revision=expected_revision if expected_revision is not None else current["revision"])
-        self.refresh_catalog(assessment_id)
-        return record
+        incoming = {"kind": kind, "value": batch}
+        catalog = self._surface_catalog(current, [*records, incoming])
+        return self.store.add_artifact(assessment_id, kind, batch, expected_revision=current["revision"], catalog=catalog)
 
     def retain_federation(self, assessment_id, allowed_services, sources, *, expected_revision, preview_digest=None):
         """Retain one verified, non-executable source projection in this assessment."""
@@ -437,9 +453,9 @@ class WorkbenchService:
         receipt = build_federation_receipt(assessment, allowed_services, sources, preview_digest)
         return self.store.add_artifact(assessment_id, KIND, receipt, expected_revision, deduplicate=True)
 
-    def refresh_catalog(self, assessment_id, declarations=None):
+    @staticmethod
+    def _surface_catalog(current, records, declarations=None):
         from .surface import build_catalog, merge_catalogs
-        current, records = self.store.snapshot(assessment_id)
         imports = [a["value"] for a in records if a["kind"] == "import-batch"]
         catalog = build_catalog(imports, declarations=declarations, scope=current["scope"])
         previous = next((i for i in range(len(records)-1, -1, -1) if records[i]["kind"] == "surface-catalog"), -1)
@@ -453,6 +469,11 @@ class WorkbenchService:
                     executed = step.get("execution")
                     if isinstance(executed, dict) and executed.get("kind") == "discovery-execution":
                         catalog = merge_catalogs([catalog, executed["catalog"]], scope=current["scope"])
+        return catalog
+
+    def refresh_catalog(self, assessment_id, declarations=None):
+        current, records = self.store.snapshot(assessment_id)
+        catalog = self._surface_catalog(current, records, declarations)
         return self.store.add_artifact(assessment_id, "surface-catalog", catalog, expected_revision=current["revision"])
 
     def delta(self, assessment_id, baseline_catalog_id, current_catalog_id, checks=None):

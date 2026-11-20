@@ -1,7 +1,7 @@
 {
-  "version": "1.6.0rc1",
+  "version": "1.6.0",
   "target_version": "1.6.0",
-  "status": "engineering-review",
+  "status": "release-target-under-review",
   "publication_status": "public-source-review",
   "public_release_gate": "open",
   "previous_stable_release": {
@@ -14,7 +14,7 @@
     "two reproducible wheel builds and isolated installation",
     "offline federation, source-bound review and Demo D readback"
   ],
-  "release_contract": "docs/private-rc160.md",
+  "release_contract": "review/1.6/release-gate.json",
   "historical_reference": {
     "version": "1.5.0",
     "path": "docs/release-1.5.0.md"

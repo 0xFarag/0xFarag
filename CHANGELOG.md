@@ -1,5 +1,12 @@
 # AuthzLedger changelog
 
+## 1.6.0 — final version under review
+
+The package, Studio session and CLI use the final version for acceptance. Comparison supports original reports from 1.6.0rc1 and 1.6.0. Public release approval is pending.
+
+- Retain the previous evidence identity for existing ffuf imports. New imports omit results whose native request context cannot be reconstructed safely. The reader matrix records revision 2 and includes native-writer fixtures.
+- Use the private history-store initializer for simultaneous first opens and reject explicit bearer/private-key markers at the persistence boundary. A failed catalog write rolls back the corresponding source import in the same SQLite transaction.
+
 ## 1.6.0rc1 — engineering review
 
 Added reviewed offline federation receipts and a read-only, source-bound index for frozen assessments. The 1.6 release decision remains open.

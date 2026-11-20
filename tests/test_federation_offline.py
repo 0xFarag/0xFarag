@@ -184,6 +184,22 @@ class FederationOfflineTests(unittest.TestCase):
                 result = view(('ffuf', json.dumps(row).encode()))
                 self.assertEqual(result['receipts'][0]['records'][0]['disposition'], 'unsupported_request_context')
 
+    def test_ffuf_native_and_legacy_request_context_fields(self):
+        for key in ('postdata', 'data', 'replayproxyurl'):
+            for value in ('', 'CONTEXT_CANARY'):
+                with self.subTest(key=key, present=bool(value)):
+                    document = json.loads(ffuf())
+                    document['config'] = {'method': 'POST', key: value}
+                    result = view(('ffuf', json.dumps(document).encode()))
+                    record = result['receipts'][0]['records'][0]
+                    if value:
+                        self.assertEqual(record['disposition'], 'unsupported_request_context')
+                        self.assertEqual(result['graph']['observations'], [])
+                    else:
+                        self.assertEqual(record['disposition'], 'accepted')
+                        self.assertEqual(result['graph']['observations'][0]['asserted']['method'], 'POST')
+                    self.assertNotIn('CONTEXT_CANARY', json.dumps(result))
+
     def test_no_raw_paths_from_ffuf_configuration_are_retained(self):
         result = json.loads(ffuf(resultfile='/home/PRIVATE_CANARY/report'))
         result['commandline'] = 'PRIVATE_CANARY'

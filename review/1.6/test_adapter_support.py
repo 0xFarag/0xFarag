@@ -37,7 +37,7 @@ class SupportMatrixTests(unittest.TestCase):
         for row in self.profiles:
             with self.subTest(profile=row["profile_id"]):
                 f = row["fixture"]
-                self.assertEqual(1, row["reader_revision"])
+                self.assertEqual({"nmap": 1, "ffuf": 2, "nuclei": 1}[row["profile_id"]], row["reader_revision"])
                 self.assertFalse(row["producer_version_gate"])
                 self.assertIsNone(f["producer_version_claimed"])
                 self.assertEqual("synthetic", f["origin"])

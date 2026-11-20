@@ -1,6 +1,6 @@
-# Install the internal 1.6.0rc1 engineering review wheel
+# Install the internal 1.6.0 review wheel
 
-For internal binary verification use the exact wheel and instructions in [the candidate notes](docs/private-rc160.md). The source is available for engineering review. Previous stable installation instructions follow for historical reference.
+Use the exact internally supplied 1.6.0 wheel and the instructions in the [target notes](docs/release-target-1.6.md) for verification. Production publication awaits release acceptance. The following installation instructions refer to the public stable v1.5.0.
 
 ---
 
