@@ -1,0 +1,59 @@
+{
+  "rights": "ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).",
+  "classification": "unsigned Debian verifier packaging preview",
+  "upstream_tag": "v1.5.0",
+  "upstream_tag_commit": "03aea857e35358ddeb13d2a861b633e60c1ca873",
+  "source_asset_hashes": {
+    "verify_bundle.py": "afe47e30606d61f09025fa8b2703d7446b08cc0a3093e4b82eace355bfba5303",
+    "authzledger-1.5.0-proof.zip": "54b21858a89d498ba3b5050ad85f5969068bf79bcf5a07467297b3c3d1d5e817"
+  },
+  "demo_key_source": "authzledger-proof/trusted-public.pem in pinned release archive, external to signed bundle",
+  "demo_ed25519_spki_der_sha256": "f38decf76b93bfc01a132a504195f305e217f6d9ce8a29628b096abc68b40696",
+  "package_sha256": "d6d6541ddd03069d0f3cfb7554944f6f17ebb38ceef4c567aa63d2eec2ae632a",
+  "two_builds_same_environment_identical": true,
+  "upstream_script_preserved": true,
+  "package_arch": "all",
+  "package_test": "dpkg-deb -x, executed extracted /usr/bin/authzledger-verify as unprivileged user",
+  "os": "Debian 13.7 amd64",
+  "test_runtime": "Python 3.13.5",
+  "crypto": "OpenSSL 3.5.7 9 Jun 2026 (Library: OpenSSL 3.5.7 9 Jun 2026)",
+  "system_install_tested": true,
+  "release_signature_provided": false,
+  "tests": {
+    "historical_demo_c": {
+      "exit_code": 0,
+      "output": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.\nReport assertion/dependency semantics and execution truth are not established by this standalone verifier."
+    },
+    "one_byte_changed": {
+      "exit_code": 1,
+      "output": "FAILED: bundle file size or hash mismatch: attachments/platform.pdf"
+    },
+    "unrelated_trusted_key": {
+      "exit_code": 1,
+      "output": "FAILED: trusted public key fingerprint mismatch"
+    }
+  },
+  "installation_scope": "Isolated Debian 13.7 amd64 OCI root filesystem, unprivileged outer uid, Linux user/mount/PID/network namespaces. Host package database unused.",
+  "installation": {
+    "image_repo": "debuerreotype/docker-debian-artifacts",
+    "image_root_tree": "2dcd3d429aa99a1302a4bb9b8cacb4f318c71d4a",
+    "image_layer_sha256": "f2b1a427bf1fb2a8d08e8e0af11582776acd357451f8f403ffa91a68b6d206cb",
+    "dpkg_dependencies": {
+      "openssl": "3.5.7-1~deb13u3",
+      "python3": "3.13.5-1"
+    },
+    "dependency_source": "APT using signed Debian trixie, trixie-updates and trixie-security repositories, no signature or dependency overrides.",
+    "isolated_test_root": "trixie/slim",
+    "install": "dpkg -i succeeded; dpkg-query recorded install ok installed",
+    "verify_after_install": {
+      "original": 0,
+      "one_byte_changed": 1,
+      "unrelated_key": 1
+    },
+    "remove": "dpkg --remove succeeded; executable and payload absent after removal; evidence directory preserved",
+    "dpkg_audit_after_remove": "empty",
+    "upgrade_from_previous_package_tested": false,
+    "vm_desktop_tested": false,
+    "installation_log": "debian-smoke.txt"
+  }
+}
