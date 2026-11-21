@@ -1,0 +1,39 @@
+{
+  "rights": "ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).",
+  "candidate": "6621f1b76b3b641ae1f25a195d50cad677d96091",
+  "suite_runs": [
+    {
+      "command": [
+        "node",
+        "tests/browser_federation_offline.cjs"
+      ],
+      "suite_sha256": "41e99f7793612703bcc4740b63f070d5fc247c2973a4c86a2e1c2638d6651462",
+      "attempted": true,
+      "status": "blocked_before_browser_assertions",
+      "process_exit_code": 1,
+      "diagnostic": "Chromium process singleton could not create a socket (EPERM).",
+      "passed": false
+    },
+    {
+      "command": [
+        "node",
+        "tests/browser_federation_index.cjs"
+      ],
+      "suite_sha256": "c79481f2f9b6940668fcc58980fb66fedad159495b1f3c658845ca43882b317b",
+      "attempted": true,
+      "status": "blocked_before_browser_assertions",
+      "process_exit_code": 1,
+      "diagnostic": "Chromium process singleton could not create a socket (EPERM).",
+      "passed": false
+    }
+  ],
+  "system_browser": "Chromium 156.0.8078.79",
+  "playwright": "1.62.1",
+  "alternate_runner": {
+    "command": "playwright install chromium --only-shell",
+    "result": "blocked",
+    "diagnostic": "Official headless-shell download returned HTTP 403. Browser package was not installed."
+  },
+  "browsers_passed_here": 0,
+  "release_authorized": false
+}
