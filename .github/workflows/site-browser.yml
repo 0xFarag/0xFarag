@@ -30,3 +30,23 @@ jobs:
         run: node qa/node_modules/playwright/cli.js install chromium
       - name: Test public pages and their evidence
         run: node qa/website.cjs
+
+  hostinger:
+    name: Package public website for Hostinger
+    needs: browser
+    if: github.ref == 'refs/heads/authzledger-website'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Check the Hostinger document root
+        run: test -s public/index.html
+      - name: Upload static site with index.html at the archive root
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: AuthzLedger-Hostinger-${{ github.sha }}
+          path: public/
+          if-no-files-found: error
