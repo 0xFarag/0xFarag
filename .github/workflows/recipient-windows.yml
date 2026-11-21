@@ -1,0 +1,37 @@
+# ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
+name: Windows recipient verifier
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/recipient-windows.yml'
+      - 'packaging/recipient-windows/**'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: windows-2022
+    timeout-minutes: 12
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: packaging/recipient-windows
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Build Windows artifacts and test the historical release
+        run: |
+          $ErrorActionPreference = "Stop"
+          $env:AUTHZLEDGER_PYTHON = (& py -3.13 -c "import sys;print(sys.executable)").Trim()
+          if ($LASTEXITCODE -ne 0) { throw 'Python 3.13 not available' }
+          $env:AUTHZLEDGER_OPENSSL = "$env:ProgramFiles\Git\usr\bin\openssl.exe"
+          if (!(Test-Path $env:AUTHZLEDGER_OPENSSL)) { throw 'Git OpenSSL not available' }
+          if (!(Test-Path ('{0}\NSIS\makensis.exe' -f [Environment]::GetFolderPath('ProgramFilesX86')))) {
+            choco install nsis --version=3.11 --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { throw 'NSIS installation failed' }
+          }
+          Invoke-WebRequest -Uri 'https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-proof.zip' -OutFile "$env:RUNNER_TEMP\proof-demo.zip"
+          & $env:AUTHZLEDGER_PYTHON build_windows.py
+          if ($LASTEXITCODE -ne 0) { throw 'Build failed' }
+          & $env:AUTHZLEDGER_PYTHON smoke_windows.py "$env:RUNNER_TEMP\proof-demo.zip"
+          if ($LASTEXITCODE -ne 0) { throw 'Smoke test failed' }
