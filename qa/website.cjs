@@ -45,7 +45,7 @@ async function checkLinks(page, origin) {
         .map(attr => new URL(node.getAttribute(attr), document.baseURI).href)));
     for (const link of links) {
       const dst = new URL(link);
-      if (dst.origin !== origin) continue;
+      if (dst.protocol !== 'http:' || dst.origin !== origin) continue;
       files.set(dst.pathname, (files.get(dst.pathname) || new Set()).add(dst.hash));
     }
   }
@@ -62,22 +62,36 @@ async function checkLinks(page, origin) {
   console.log('All internal references resolve in Chromium, ' + files.size + ' paths.');
 }
 
-async function verifyDownload(page, origin) {
+async function verifyDownloads(page, origin) {
   await page.goto(origin + '/installation.html');
-  const anchor = page.locator('a[download]').filter({hasText:/Wheel/i}).first();
-  // External release assets can be checked via their release inventory instead.
-  // Always exercise a local browser download on the Lab, including on mobile.
-  if (await anchor.count()) {
-    const dst = new URL(await anchor.getAttribute('href'), page.url());
-    if (dst.origin === origin) {
-      const sha = crypto.createHash('sha256').update((await (await page.request.get(dst.href)).body())).digest('hex');
-      const sumsResponse = await page.request.get(origin + '/downloads/empfaengerpruefer/SHA256SUMS.txt');
-      assert.equal(sumsResponse.status(),200);
-      assert((await sumsResponse.text()).includes(sha), 'website serves the documented wheel');
+  const packageUrls = await page.locator('#downloads a[download]').evaluateAll(nodes =>
+    nodes.map(a => a.href));
+  assert(packageUrls.length > 0, 'download buttons are present');
+  const inventory = await page.request.get(origin + '/downloads/empfaengerpruefer/SHA256SUMS.txt');
+  assert.equal(inventory.status(), 200);
+  const sums = new Map((await inventory.text()).trim().split(/\r?\n/).map(line => {
+    const match=/^([a-f0-9]{64})\s+(.+)$/.exec(line);
+    assert(match);
+    return [match[2],match[1]];
+  }));
+  for (const url of packageUrls) {
+    const target=new URL(url);
+    const name=decodeURIComponent(target.pathname.split('/').pop());
+    if (name === 'SHA256SUMS.txt') continue;
+    const expected=sums.get(name);
+    assert(expected,'documented SHA-256 for ' + name);
+    if (target.origin !== origin) {
+      assert.equal(target.origin,'https://github.com');
+      assert(target.pathname.startsWith('/0xFarag/0xFarag/releases/download/recipient-verifier-'));
     }
+    const response=await page.request.get(url,{timeout:90_000});
+    assert.equal(response.status(),200,name);
+    const observed=crypto.createHash('sha256').update(await response.body()).digest('hex');
+    assert.equal(observed,expected,name);
+    await response.dispose();
   }
+  console.log('Verified SHA-256 for the packages linked from the downloads guide.');
 }
-
 async function exercise(browser, origin, width) {
   const context = await browser.newContext({
     viewport: {width,height:900}, acceptDownloads: true, reducedMotion:'reduce'
@@ -138,7 +152,7 @@ async function exercise(browser, origin, width) {
     await page.unroute('**/proof/v1.5.0/report.json');
     if (width >= 1000) {
       await checkLinks(page,origin);
-      await verifyDownload(page,origin);
+      await verifyDownloads(page,origin);
       const investor = await page.request.get(origin+'/investor-one-pager.pdf');
       assert.equal(investor.status(),200);
       assert((await investor.body()).subarray(0,5).equals(Buffer.from('%PDF-')));
