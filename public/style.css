@@ -17,3 +17,67 @@
 
 /* ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag). */
 .control-desk,.dist-list{display:grid;gap:clamp(1.5rem,4vw,4rem);padding:2rem 0;margin-top:1.5rem;border-top:1px solid #99865c;border-bottom:1px solid #99865c}.control-desk{grid-template-columns:1fr 1fr}.dist-list{grid-template-columns:repeat(3,minmax(0,1fr))}.control-desk label{display:block;margin-bottom:.65rem;font-weight:650}.control-desk select{width:100%;padding:.75rem;border:1px solid #a39273;border-radius:.3rem;color:#132239;background:#fff;font:inherit}.control-desk h3,.dist-list h3{margin:0 0 .6rem}.detail{max-width:76ch;line-height:1.65;margin-top:1.2rem}.control-desk a[hidden]{display:none}.control-lab{background:#0e2034;color:#f5f1e9}.control-lab .intro,.control-lab .detail,.control-lab .control-desk p{color:#d2dbe7}.control-lab .detail a,.control-lab a.text-link,.control-lab h2 em{color:#edd29c}.native .dist-list p{line-height:1.6}.control-lab :focus-visible,.native :focus-visible{outline:3px solid #ae8f38;outline-offset:4px}@media(max-width:720px){.control-desk,.dist-list{grid-template-columns:1fr}.control-desk select{max-width:100%}}
+
+/* Launch palette and the two evidence views. */
+:root {
+  --navy: #071722;
+  --ink: #132938;
+  --navy2: #12303d;
+  --teal: #43D6CF;
+  --gold: #C8A66B;
+  --steel: #435762;
+}
+.hero, .lab-head {background:radial-gradient(ellipse at 82% 26%,#234555 0%,#102a37 42%,var(--navy) 78%);color:white}
+.hero-grid {grid-template-columns:1.18fr .9fr}
+.hero h1 {font-size:clamp(3.4rem,6.2vw,5.15rem);max-width:14ch}
+.hero h1 em,.lab-head h1 em {color:var(--teal)}
+.claim {color:#dcd8c9;font:500 clamp(1.06rem,1.5vw,1.25rem)/1.45 "Instrument Sans",Arial,sans-serif;margin-top:1.2rem}
+.hero .lead {margin-top:.8rem}
+.metrics-title {text-decoration:underline;text-underline-offset:.25em}
+.metrics strong {color:var(--teal)}
+.gold:hover {background:#d7bb89}
+.inputs,.appendix {background:#f3f6f6}
+.adapters {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;margin:2rem 0 0}
+.adapters>div {border-top:2px solid #538785;padding-top:.7rem}
+.adapters dt {font-size:1.1rem;font-weight:700}.adapters dd {margin:.25rem 0 0;color:var(--steel)}
+.cockpit-grid {display:grid;grid-template-columns:1.06fr .94fr;gap:1.3rem;margin-top:2rem}
+.console {background:#f2f6f5;border:1px solid #c2d4d3;border-top:4px solid #347e7a;padding:clamp(1rem,3.2vw,2.5rem);min-width:0}
+.console>label {display:block;font-weight:650;margin-bottom:.5rem}
+.console select,.console button {font:inherit}
+.console select {padding:.65rem .8rem;color:var(--ink);background:white;border:1px solid #748e91;width:100%}
+.console select:disabled,.console button:disabled {opacity:.65}
+.console button {border:0;font-weight:650;cursor:pointer}
+.console button:disabled {cursor:default}
+.console select:focus-visible,.console button:focus-visible,input:focus-visible,summary:focus-visible {outline:3px solid #398b88;outline-offset:3px}
+.console h3 {font:400 clamp(1.6rem,2.5vw,2.3rem)/1.2 "Instrument Serif",Georgia,serif;letter-spacing:-.033em;margin:0 0 .5rem}
+.finding-detail {margin:1.4rem 0}
+.finding-detail dl {border-top:1px solid #b9cccc;margin-top:1rem;padding-top:.5rem}
+.finding-detail dt {font-size:.88rem;color:#40555f;margin-top:.55rem}
+.finding-detail dd {margin:.15rem 0 0;overflow-wrap:anywhere;font-size:.87rem}
+.signature {background:var(--navy);color:white;border-color:var(--navy);border-top-color:var(--gold)}
+.signature .kicker,.signature .text-link {color:var(--gold)}
+.signature p:not(.kicker) {color:#d2e0e3}
+.signature fieldset {border:0;padding:0;margin:1.15rem 0}
+.signature legend {font-weight:650;margin-bottom:.35rem}
+.signature label {display:block;margin:.3rem 0}
+.signature input {accent-color:#43d6cf}
+.signature #verification-note {margin-top:.8rem;font-size:.95rem;min-height:3.1em}
+.signature #verification-note[data-result=valid] {color:#85e8d1}
+.signature #verification-note[data-result=invalid] {color:#ffd0a4}
+.appendix .fed-layout {margin-top:0}
+.lab-head {padding:3.4rem 0 2rem}
+.lab-head .crumb {display:inline-block;margin-bottom:1.8rem;color:var(--teal);text-decoration:underline}
+.lab-head .lead {max-width:59ch}
+.control-lab {background:var(--navy)}.control-lab .kicker {color:#a7c5cb}
+.cockpit a:focus-visible,.signature a:focus-visible {outline:3px solid #4baca6}
+.mobile-nav {display:none}
+@media(max-width:800px){.hero-grid{grid-template-columns:1.12fr .88fr}.adapters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){
+  .hero-grid,.cockpit-grid {grid-template-columns:1fr}.hero h1 {font-size:clamp(2.85rem,10.4vw,4.1rem)}
+  .hero-grid {gap:1.25rem}.nav{flex-wrap:wrap;padding:.6rem 0}.head-cta{margin-left:auto}
+  .mobile-nav{display:block;font-size:.9rem;position:relative}.mobile-nav summary{cursor:pointer;color:white;padding:.48rem}
+  .mobile-nav nav{display:grid;gap:.9rem;position:absolute;right:0;top:100%;z-index:4;background:var(--navy);padding:1rem 1.3rem;min-width:9rem;border:1px solid #526674}
+  .adapters {gap:.8rem}.cockpit-grid {gap:1rem}.signature #verification-note{min-height:0}
+}
+@media(max-width:380px){.head-cta {font-size:.8rem}.adapters {grid-template-columns:1fr}}
+.budget {border-top:1px solid #b9cccc;padding-top:.7rem;font-size:.9rem;color:var(--steel)}

@@ -1,0 +1,145 @@
+{
+  "assessment_id": "assessment-fb41efc459ea44a6bc1f5eb1f36bc1e6",
+  "baseline_cases": 5,
+  "current_cases": 4,
+  "demo": "C",
+  "elapsed_ms": 167.548,
+  "execution_ledger": {
+    "approved_total": 20,
+    "by_kind": {
+      "advisory": 0,
+      "application": 3,
+      "cleanup": 0,
+      "discovery": 0,
+      "identity_control": 2,
+      "negative_control": 2,
+      "object_control": 2,
+      "pdp": 0,
+      "reduction": 0,
+      "replay": 0,
+      "service": 0,
+      "setup": 0,
+      "state_probe": 0
+    },
+    "cancel_reason": null,
+    "cancelled": false,
+    "cleanup_remaining": 0,
+    "dispatched_total": 9,
+    "kind": "request-budget-ledger",
+    "leased_pending": 0,
+    "remaining": 11,
+    "requests": [
+      {
+        "elapsed_ms": 13.051,
+        "kind": "object_control",
+        "operation_id": "owner-object",
+        "outcome": "pass",
+        "response_bytes": 77,
+        "sequence": 1,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 12.496,
+        "kind": "identity_control",
+        "operation_id": "actor-identity-0",
+        "outcome": "pass",
+        "response_bytes": 36,
+        "sequence": 2,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 12.531,
+        "kind": "negative_control",
+        "operation_id": "known-denial-0",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 3,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 14.983,
+        "kind": "application",
+        "operation_id": "variant-peer-1",
+        "outcome": "fail",
+        "response_bytes": 77,
+        "sequence": 4,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 12.296,
+        "kind": "application",
+        "operation_id": "variant-peer-2",
+        "outcome": "fail",
+        "response_bytes": 77,
+        "sequence": 5,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 12.177,
+        "kind": "object_control",
+        "operation_id": "owner-object",
+        "outcome": "pass",
+        "response_bytes": 77,
+        "sequence": 6,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 11.981,
+        "kind": "identity_control",
+        "operation_id": "actor-identity-0",
+        "outcome": "pass",
+        "response_bytes": 36,
+        "sequence": 7,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 12.293,
+        "kind": "negative_control",
+        "operation_id": "known-denial-0",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 8,
+        "state": "finished"
+      },
+      {
+        "elapsed_ms": 12.805,
+        "kind": "application",
+        "operation_id": "variant-peer-1",
+        "outcome": "pass",
+        "response_bytes": 19,
+        "sequence": 9,
+        "state": "finished"
+      }
+    ],
+    "reserved_pending": 0,
+    "schema_version": 1
+  },
+  "fixture": "authored-loopback-two-tenant",
+  "http_requests_observed": 9,
+  "limits": {
+    "concurrency": 1,
+    "max_requests": 20,
+    "max_response_bytes": 65536,
+    "timeout_seconds": 2
+  },
+  "network_operations_observed": 9,
+  "original_evidence_preserved": true,
+  "transitions": [
+    {
+      "baseline_finding_digest": "ae2cc7229c288db21479cb60e929af0c176a6e6e3193da0e9682d5ce17449f81",
+      "case_id": "variant-peer-1",
+      "current_finding_digest": "69629cc3d90aef7cfd383218e0373d67866f7babf91450a4b57f73699df310bb",
+      "finding_id": "finding-cabbe355c68937e2311bb886",
+      "status": "fix_verified",
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "baseline_finding_digest": "80efd3f64a5147f75921dc608c3c542d9a35b8c99473358d2ae524c3f1a3ba3d",
+      "case_id": "variant-peer-2",
+      "current_finding_digest": null,
+      "finding_id": "finding-c05b584f5c488a0155a3397e",
+      "status": "not_retested",
+      "verification_level": "captured_inputs_replayed"
+    }
+  ]
+}

@@ -1,0 +1,296 @@
+{
+  "schema_version": 1,
+  "kind": "release-verification150",
+  "producer_version": "1.5.0",
+  "source_digest": "a91413ef3b2623289dfc138055f7eff8619222200caed5818464abdd3035a5e2",
+  "commit": "03aea857e35358ddeb13d2a861b633e60c1ca873",
+  "started_at": "2026-10-20T18:45:56.598116+00:00",
+  "completed": true,
+  "runtime": {
+    "python": "3.12.15",
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39"
+  },
+  "commands": [
+    {
+      "id": "unit",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "/home/runner/work/0xFarag/0xFarag/tools/run_tests150.py",
+        "--out",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/unit-results.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 125.232,
+      "log": "unit.log",
+      "log_sha256": "eaa429672a44067ef98b200f0c8310d99e96cdb6100f536fbfeb013dd3a051bf"
+    },
+    {
+      "id": "core",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "/home/runner/work/0xFarag/0xFarag/tools/release_check.py",
+        "--out",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/core"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 5.698,
+      "log": "core.log",
+      "log_sha256": "4b815e9cb3bf2c78eaa3e9e362ed3f175b7ec42a8e47c9733e26ce7a956ea252"
+    },
+    {
+      "id": "comparison",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "/home/runner/work/0xFarag/0xFarag/tools/check_comparison.py",
+        "--out",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/comparison"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.364,
+      "log": "comparison.log",
+      "log_sha256": "ef1f2e20f9b17c9057edbb82f45b73ac35f210d509e780e4a085249e55312869"
+    },
+    {
+      "id": "assessment",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "/home/runner/work/0xFarag/0xFarag/tools/check_assessment.py",
+        "--out",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/assessment"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.166,
+      "log": "assessment.log",
+      "log_sha256": "e73a12740c4c7ec076a093afcf7a630051158aca92a62d7aebf256d8e61ab2d3"
+    },
+    {
+      "id": "selective100",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "/home/runner/work/0xFarag/0xFarag/tools/check_selective100.py",
+        "--out",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/selective100"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 4.572,
+      "log": "selective100.log",
+      "log_sha256": "18cce5503ea30fe4ada91291594439517bac6194f35b7b0ae125b8fa3c2deba9"
+    },
+    {
+      "id": "workflow110",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "/home/runner/work/0xFarag/0xFarag/tools/check_workflows110.py",
+        "--out",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/workflow110"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.267,
+      "log": "workflow110.log",
+      "log_sha256": "4cab6b353ec0aeeb6baab9a276a738f3b7198d590cd4c40530a343e6119a41e3"
+    },
+    {
+      "id": "platform150",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "/home/runner/work/0xFarag/0xFarag/tools/check_platform150.py",
+        "--out",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/platform150"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 2.77,
+      "log": "platform150.log",
+      "log_sha256": "c4a40f901ae79ae90085247fd1de453f1b956dd995f8a8ffd7dcf6192e58e8fb"
+    },
+    {
+      "id": "native_burp",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "-I",
+        "/home/runner/work/0xFarag/0xFarag/tools/check_native_burp.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.114,
+      "log": "native_burp.log",
+      "log_sha256": "ea30f2b0d8b80a6d332ea6bf6f3c7494f4d6f6fc80734fcf967022d3075a26f0"
+    },
+    {
+      "id": "browser_acceptance",
+      "argv": [
+        "node",
+        "/home/runner/work/0xFarag/0xFarag/tests/browser_acceptance.cjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 7.749,
+      "log": "browser_acceptance.log",
+      "log_sha256": "a4eea7c08b587ca4e11746099926b7cc7cc1027520f4f58d0d5a98ce5ddb6652"
+    },
+    {
+      "id": "browser_v1",
+      "argv": [
+        "node",
+        "/home/runner/work/0xFarag/0xFarag/tests/browser_v1.cjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 5.744,
+      "log": "browser_v1.log",
+      "log_sha256": "9849e04e31bc9df9c3b5d9552c0253149b3285497e3c95e6eb57a44c5504561e"
+    },
+    {
+      "id": "browser_comparison",
+      "argv": [
+        "node",
+        "/home/runner/work/0xFarag/0xFarag/tests/browser_comparison.cjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.922,
+      "log": "browser_comparison.log",
+      "log_sha256": "8bf269b515368f4a29c652e547bd53c32b3b636fdb5b049a3b48bcad2c1d67e9"
+    },
+    {
+      "id": "browser_assessments",
+      "argv": [
+        "node",
+        "/home/runner/work/0xFarag/0xFarag/tests/browser_assessments.cjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 10.849,
+      "log": "browser_assessments.log",
+      "log_sha256": "a56469c6258fd68ac39cc7329f5827aa16c4847611a650a318aa934e9f37b73c"
+    },
+    {
+      "id": "browser_assessment_security",
+      "argv": [
+        "node",
+        "/home/runner/work/0xFarag/0xFarag/tests/browser_assessment_security.cjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 2.482,
+      "log": "browser_assessment_security.log",
+      "log_sha256": "33bc84b4cea81f1fc8fe71c08a1db424570d688adff022e0ca379885f21ed49f"
+    },
+    {
+      "id": "browser_retest_freshness",
+      "argv": [
+        "node",
+        "/home/runner/work/0xFarag/0xFarag/tests/browser_retest_freshness.cjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 2.683,
+      "log": "browser_retest_freshness.log",
+      "log_sha256": "60fcbd74af0d5cb0603720140019cadd65e0d0c2bc6ebf2d691939c5235e1171"
+    },
+    {
+      "id": "browser_feature_coverage",
+      "argv": [
+        "node",
+        "/home/runner/work/0xFarag/0xFarag/tests/browser_feature_coverage.cjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 6.483,
+      "log": "browser_feature_coverage.log",
+      "log_sha256": "f29baa1ba3aeca57c8bc78f5eca9de9203774e1a9f885b191957159ead400799"
+    },
+    {
+      "id": "browser_platform150",
+      "argv": [
+        "node",
+        "/home/runner/work/0xFarag/0xFarag/tests/browser_platform150.cjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 4.125,
+      "log": "browser_platform150.log",
+      "log_sha256": "58a1f961aa807a5a447a875b90a87ed506c662d06bfb46cd053e2d3290cff352"
+    },
+    {
+      "id": "wheel_first",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "-m",
+        "pip",
+        "wheel",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/wheel-first",
+        "/home/runner/work/0xFarag/0xFarag"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.766,
+      "log": "wheel_first.log",
+      "log_sha256": "0ca7b267c181e12186aa352858f9bd44278e79cce8097659a0c5f66b1effa2d4"
+    },
+    {
+      "id": "wheel_second",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "-m",
+        "pip",
+        "wheel",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/wheel-second",
+        "/home/runner/work/0xFarag/0xFarag"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.716,
+      "log": "wheel_second.log",
+      "log_sha256": "243d57b7a19d4b0f8f058c54af8288b3a2df839a1f3380597b34b6b8b92bfa82"
+    },
+    {
+      "id": "wheel_equal",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "-c",
+        "from pathlib import Path; import sys; assert Path(sys.argv[1]).read_bytes()==Path(sys.argv[2]).read_bytes()",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/wheel-first/authzledger-1.5.0-py3-none-any.whl",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/wheel-second/authzledger-1.5.0-py3-none-any.whl"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.032,
+      "log": "wheel_equal.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "installed_wheel",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "-c",
+        "from pathlib import Path\nimport json, subprocess, sys, venv\nroot=Path.cwd(); venv.EnvBuilder(with_pip=True).create(root/'venv')\npython=root/'venv'/('Scripts/python.exe' if sys.platform=='win32' else 'bin/python')\ndef run(*args): subprocess.run([str(python), *map(str,args)],check=True)\nrun('-m','pip','install','--no-index','--no-deps',sys.argv[1])\nrun('-m','pip','install','reportlab==4.4.9')\nrun('-I','-c',\"import authzledger,pathlib,sys; p=pathlib.Path(authzledger.__file__).resolve(); assert str(p).startswith(str(pathlib.Path(sys.prefix).resolve())); assert authzledger.__version__ == \"+repr(sys.argv[2])+\"; print(authzledger.__version__,p)\")\nrun('-I','-m','authzledger','assessment','demo','--out',root/'legacy-demo')\nrun('-I','-m','authzledger','verify-bundle',root/'legacy-demo/proof','--public-key',root/'legacy-demo/trusted-public.pem')\nrun('-I',root/'verify_bundle.py',root/'legacy-demo/proof','--public-key',root/'legacy-demo/trusted-public.pem')\nrun('-I','-m','authzledger','assessment','demo150','--out',root/'suite-demo','--standalone-verifier',root/'verify_bundle.py')\nrun('-I','-m','authzledger','verify-bundle',root/'suite-demo/C-retest-proof/proof','--public-key',root/'suite-demo/trusted-public.pem')\nrun('-I',root/'verify_bundle.py',root/'suite-demo/C-retest-proof/proof','--public-key',root/'suite-demo/trusted-public.pem')\nprint(json.dumps({'isolated':True,'version':sys.argv[2],'legacy_and_suite_demos':True}))\n",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/wheel-first/authzledger-1.5.0-py3-none-any.whl",
+        "1.5.0"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 8.483,
+      "log": "installed_wheel.log",
+      "log_sha256": "fa557894f9a0c314611cc66a1d5340a5a3d9e9048ffbbdf914d09e89c662ab56"
+    },
+    {
+      "id": "package",
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "/home/runner/work/0xFarag/0xFarag/tools/package_release.py",
+        "--proof-source",
+        "/home/runner/work/0xFarag/0xFarag/artifacts/release150/platform150"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.166,
+      "log": "package.log",
+      "log_sha256": "e572674919c89af3d5649abdc6c84a13f946362cf5b2ba62080b46020bad2f70"
+    }
+  ],
+  "unit_results": {
+    "kind": "unit-completion150",
+    "producer_version": "1.5.0",
+    "discovered": 682,
+    "executed": 682,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "unexpected_successes": 0,
+    "successful": true,
+    "elapsed_seconds": 124.555
+  },
+  "completed_at": "2026-10-20T18:49:11.062397+00:00"
+}

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="AuthzLedger-Empfängerprüfer herunterladen, installieren und eine Ed25519-signierte Übergabe lokal verifizieren.">
+<title>Empfängerprüfer installieren · AuthzLedger</title>
+<link rel="stylesheet" href="install.css">
+</head>
+<body>
+<a class="skip" href="#inhalt">Zum Inhalt</a>
+<header><nav class="wrap"><a class="wordmark" href="./"><img src="assets/0xfarag-original.png" alt="" width="42" height="42">AuthzLedger</a><a href="./">Zur Produktseite <span aria-hidden="true">↗</span></a></nav></header>
+<main id="inhalt">
+<section class="intro"><div class="wrap"><p class="meta">Installation · Empfängerprüfung</p><h1>Eine signierte Übergabe prüfen.</h1><p>Mit dem eigenständigen Empfängerprüfer verifizierst du lokal die Ed25519-Signatur, das Dateiinventar, die SHA-256-Werte und die Verknüpfung zum Bericht.</p>
+<a class="primary" href="#downloads">Downloads</a> <a class="secondary" href="#pruefen">Übergabe prüfen</a></div></section>
+<div class="wrap content">
+<section id="downloads"><h2>Downloads</h2><p>Diese Pakete enthalten den eigenständigen Empfängerprüfer aus AuthzLedger v1.5.0. Die Versionsnummern unten bezeichnen seine Paketierung. Alle hier angebotenen Softwarepakete sind unsigniert.</p>
+<div class="cards">
+<article><h3>Debian / Ubuntu</h3><p>DEB · Preview 1 · Python ab 3.10 und OpenSSL ab 3.0. Für Debian 13.7 amd64 dokumentiert.</p><a href="downloads/empfaengerpruefer/authzledger-verifier_1.5.0-0~preview1_all.deb" download>DEB herunterladen</a></article>
+<article><h3>Windows x64 · Self-contained</h3><p>Portable PyInstaller-EXE v1.5.0-win.1. Python und Kryptobibliothek sind enthalten. Unter Windows Server 2022 x64 mit fünf Prüffällen getestet.</p><span>GitHub-Release-Link in Prüfung</span></article>
+<article><h3>Windows · Installer-Vorschau</h3><p>ZIP · Vorschau mit Konsolen-EXE und Benutzer-Installer. Benötigt externes Python ab 3.13 und OpenSSL ab 3.0.</p><span>GitHub-Release-Link in Prüfung</span></article>
+<article><h3>Arch Linux</h3><p>PKGBUILD · Preview 1 · Das Archiv enthält das Rezept, die lokalen Quellen und deren Prüfsummen.</p><a href="downloads/empfaengerpruefer/AuthzLedger-Arch-Pruefer-PKGBUILD.tar.gz" download>Arch-Baurezept herunterladen</a></article>
+<article><h3>Python-Wheel</h3><p>Revision 1.5.0.post1 · In isolierter Python-Umgebung unter Linux geprüft. Benötigt OpenSSL ab 3.0.</p><a href="downloads/empfaengerpruefer/authzledger_recipient_verifier-1.5.0.post1-py3-none-any.whl" download>Wheel herunterladen</a></article>
+<article><h3>Quellen und Dockerfile</h3><p>Revision 1.5.0.post1 · Originalskript, Installationshinweise, Rechtehinweise und mehrstufiges Docker-Baurezept.</p><a href="downloads/empfaengerpruefer/authzledger_recipient_verifier-1.5.0.post1.tar.gz" download>Quellarchiv herunterladen</a></article>
+</div>
+<p class="line-links"><a href="downloads/empfaengerpruefer/SHA256SUMS.txt">SHA-256-Prüfsummen</a><a href="downloads/empfaengerpruefer/verification.json">Prüfprotokoll dieser Ausgabe (JSON)</a></p>
+</section>
+<section id="integritaet"><h2>Download abgleichen</h2><p>Vergleiche den SHA-256-Wert der ausgewählten Datei vor der Installation mit der Prüfsummenliste. Ein gleicher Wert bestätigt, dass die Bytes der Referenz entsprechen. Für einen Herkunftsnachweis brauchst du eine unabhängig bestätigte Referenz.</p>
+<p>Unter Linux mit dem heruntergeladenen DEB im aktuellen Verzeichnis</p>
+<pre><code>sha256sum ./authzledger-verifier_1.5.0-0~preview1_all.deb</code></pre>
+<p>Unter Windows in PowerShell</p>
+<pre><code>(Get-FileHash -Algorithm SHA256 .\AuthzLedger-Windows-x64-SelfContained.zip).Hash</code></pre>
+</section>
+<section id="installieren"><h2>Empfängerprüfer einrichten</h2>
+<details open><summary>Debian / Ubuntu</summary><p>Öffne ein Terminal im Download-Verzeichnis. Mit diesen Befehlen kannst du die Paketmetadaten ansehen und die Vorschau ohne Systeminstallation entpacken. Python ab 3.10 und OpenSSL ab 3.0 müssen bereits installiert sein.</p>
+<pre><code>dpkg-deb --info ./authzledger-verifier_1.5.0-0~preview1_all.deb
+dpkg-deb -x ./authzledger-verifier_1.5.0-0~preview1_all.deb ./pruefer
+./pruefer/usr/bin/authzledger-verify --help</code></pre>
+<p>Für eine Systeminstallation nutze <code>sudo apt install ./authzledger-verifier_1.5.0-0~preview1_all.deb</code>. Danach steht <code>authzledger-verify</code> als Befehl bereit. Mit <code>sudo apt remove authzledger-verifier</code> lässt sich das Paket entfernen. Ein eigener Ubuntu-Installationstest steht aus.</p></details>
+<details><summary>Windows x64 · Eigenständige EXE</summary><p>Vergleiche den ZIP-Hash mit der Prüfsummenliste und entpacke das Archiv in einen eigenen Ordner. Python und die Kryptobibliothek sind im Programm enthalten. Es läuft ohne Systeminstallation und benötigt keinen externen OpenSSL-Befehl. Für die Nutzung ist keine Administratorberechtigung erforderlich.</p>
+<pre><code>.\AuthzLedgerVerify-1.5.0-win.1-x64.exe --version
+.\AuthzLedgerVerify-1.5.0-win.1-x64.exe .\proof --public-key .\vertrauen\mandat.pem
+$LASTEXITCODE</code></pre><p>Das Archiv enthält <code>SHA256SUMS</code>, <code>windows-native-checks.json</code> und die Lizenzen der mitgelieferten Komponenten. Die EXE trägt keine Authenticode-Signatur. Auf Windows Server 2022 x64 wurden fünf Fälle gegen den Originalprüfer abgeglichen. <a href="https://github.com/0xFarag/0xFarag/actions/runs/44885489514">Windows-Prüflauf</a></p></details>
+<details><summary>Windows · Optionale Installer-Vorschau</summary><p>Entpacke das ZIP in einen eigenen Ordner. Es enthält den portablen Prüfer und einen optionalen Installer für das aktuelle Windows-Benutzerkonto. Beide EXE-Dateien sind ohne Authenticode-Signatur. Verwende die tatsächlichen absoluten Pfade deiner vertrauenswürdigen Python- und OpenSSL-Installation. Das Beispiel verwendet Python 3.13 und OpenSSL aus Git für Windows.</p>
+<pre><code>$env:AUTHZLEDGER_PYTHON = (&amp; py -3.13 -c "import sys; print(sys.executable)").Trim()
+$env:AUTHZLEDGER_OPENSSL = "$env:ProgramFiles\Git\usr\bin\openssl.exe"
+Test-Path -LiteralPath $env:AUTHZLEDGER_OPENSSL
+.\AuthzLedgerVerify-x64.exe --help</code></pre>
+<p>Die Pfadprüfung muss <code>True</code> ergeben. Der historische Windows-Test umfasst das Demo-C-Paket. Für Netzlaufwerke, NTFS-Junctions und mehrfach verschachtelte Übergaben liegt keine allgemeine Freigabe vor. Die zugehörigen Rechtehinweise stehen im ZIP.</p></details>
+<details><summary>Arch Linux</summary><p>Erforderlich sind die Arch-Pakete <code>base-devel</code>, <code>python</code> (ab 3.10) und <code>openssl</code> (ab 3.0). Baue als normaler Benutzer. Die vier lokalen Quelldateien werden gegen festgelegte Hashes geprüft.</p>
+<pre><code>tar -xzf AuthzLedger-Arch-Pruefer-PKGBUILD.tar.gz
+cd arch-recipient
+makepkg --verifysource
+makepkg --cleanbuild
+makepkg --packagelist</code></pre>
+<p>Installiere die von <code>makepkg --packagelist</code> genannte Datei mittels <code>sudo pacman -U ./DATEINAME</code>. Prüfe mit <code>authzledger-verify --help</code>. Entfernen mit <code>sudo pacman -R authzledger-verifier</code>. Rezeptsyntax, vier Quellen-Hashes, Paketinhalt und Prüferfunktion wurden unter Linux getestet. Der native Arch-Bau mit <code>makepkg</code> und die Installation mit <code>pacman</code> stehen aus.</p></details>
+<details><summary>Wheel oder Python-Quelle unter Linux</summary><p>Erforderlich sind Python ab 3.10 und ein vertrauenswürdiges <code>openssl</code> ab 3.0 im Suchpfad. Für das Wheel werden zusätzlich <code>venv</code> und <code>pip</code> benötigt. Die Installation verwendet die heruntergeladene Datei und benötigt keine Verbindung zu einem Paketindex.</p>
+<pre><code>python3 -m venv .venv
+.venv/bin/python -m pip install --no-index --no-deps ./authzledger_recipient_verifier-1.5.0.post1-py3-none-any.whl
+.venv/bin/authzledger-verify --help</code></pre>
+<p>Um das Skript direkt aus der Quelle auszuführen</p>
+<pre><code>tar -xzf authzledger_recipient_verifier-1.5.0.post1.tar.gz
+cd authzledger_recipient_verifier-1.5.0.post1
+python3 -I -B ./authzledger_recipient_verifier.py --help</code></pre></details>
+<details><summary>Docker aus dem Quellarchiv bauen</summary><p>Im entpackten Python-Quellarchiv liegt das zweistufige Dockerfile. Der Bau benötigt Zugriff auf das Basis-Image und die offiziellen Debian-Pakete. Es liegt noch kein getestetes Container-Image dieser Prüferausgabe vor.</p>
+<pre><code>docker build -t authzledger-recipient-verifier:1.5.0.post1 .
+docker run --rm --network none authzledger-recipient-verifier:1.5.0.post1 --help</code></pre>
+<p>Für eine Übergabe mit dem Verzeichnis <code>proof</code> und dem separat bestätigten Schlüssel <code>vertrauen/mandat.pem</code> im aktuellen Verzeichnis</p>
+<pre><code>docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,nodev,noexec \
+  --mount type=bind,src="$PWD/proof",dst=/input/proof,readonly \
+  --mount type=bind,src="$PWD/vertrauen/mandat.pem",dst=/trust/mandat.pem,readonly \
+  authzledger-recipient-verifier:1.5.0.post1 /input/proof --public-key /trust/mandat.pem</code></pre></details>
+</section>
+<section id="pruefen"><h2>Übergabe prüfen</h2><ol><li>Speichere das entpackte Evidence-Bundle in einem ruhenden, nur lesbaren Verzeichnis. Im Beispiel heisst es <code>proof</code>.</li><li>Beschaffe den erwarteten öffentlichen Ed25519-Schlüssel über einen unabhängig bestätigten Kanal. Speichere ihn ausserhalb des Bundles, hier unter <code>vertrauen/mandat.pem</code>.</li><li>Starte den Prüfer und ersetze die Beispielpfade durch die tatsächlichen Pfade.</li></ol>
+<pre><code>authzledger-verify ./proof --public-key ./vertrauen/mandat.pem</code></pre>
+<p>Für die entpackte Debian-Vorschau verwende <code>./pruefer/usr/bin/authzledger-verify</code>, für das Wheel <code>.venv/bin/authzledger-verify</code> und für das eigenständige Windows-Paket <code>.\AuthzLedgerVerify-1.5.0-win.1-x64.exe</code>.</p>
+<p><strong>Exitcode 0</strong> bestätigt Signatur, Inventar, Hashes und Berichtsanker. Bei einer Fehlermeldung bleibt die Übergabe ungeprüft. Ob ein Befund fachlich zutrifft und tatsächlich erneut getestet wurde, ergibt sich aus den zugehörigen Controls und Ausführungsbelegen.</p>
+</section>
+</div></main><footer><div class="wrap"><a class="wordmark" href="./">AuthzLedger</a><p>© Nasser Aldin Farag (0xFarag). All rights reserved.</p></div></footer>
+</body></html>

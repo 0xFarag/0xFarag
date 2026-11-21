@@ -1,4 +1,9 @@
 (function () {
+  const legacyLabSections = ['kontrolllabor', 'foederation', 'kandidatenpruefung', 'beweisfilm', 'status'];
+  if (legacyLabSections.includes(location.hash.slice(1))) {
+    location.replace('lab.html' + location.hash);
+    return;
+  }
   const nav = document.querySelector('.proof-nav');
   const tabs = Array.from(nav.querySelectorAll('a'));
   const panels = tabs.map(tab => document.getElementById(tab.hash.slice(1)));

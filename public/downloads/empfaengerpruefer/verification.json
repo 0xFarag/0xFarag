@@ -1,0 +1,97 @@
+{
+  "wheel_venv": {
+    "valid": 0,
+    "modified_pdf": 1,
+    "different_trusted_key": 1
+  },
+  "source_archive": {
+    "valid": 0,
+    "modified_pdf": 1,
+    "different_trusted_key": 1
+  },
+  "debian_extracted": {
+    "valid": 0,
+    "modified_pdf": 1,
+    "different_trusted_key": 1
+  },
+  "arch_staged_source": {
+    "valid": 0,
+    "modified_pdf": 1,
+    "different_trusted_key": 1
+  },
+  "arch_recipe": {
+    "bash_syntax": "passed",
+    "hash_pins": 4,
+    "package_stage": "passed",
+    "native_makepkg": "not_run"
+  },
+  "windows_preview": {
+    "AuthzLedgerVerify-x64.exe": "sha256_matched_recorded_build",
+    "AuthzLedgerVerify-Setup.exe": "sha256_matched_recorded_build"
+  },
+  "upstream_verifier_sha256": "afe47e30606d61f09025fa8b2703d7446b08cc0a3093e4b82eace355bfba5303",
+  "runtime": {
+    "python": "3.12.14",
+    "openssl": "OpenSSL 3.5.7 9 Jun 2026 (Library: OpenSSL 3.5.7 9 Jun 2026)"
+  },
+  "test_input": {
+    "artifact": "AuthzLedger_1.6_Demo_BC_Originalbeleg.zip",
+    "scope": "synthetic archived evidence only",
+    "manifest_sha256": "0974e414a525e675863a64dc9730fd4f5e58ed5b2d49ddd18d26af92d8506c7f"
+  },
+  "windows_self_contained": {
+    "executable": "AuthzLedgerVerify-1.5.0-win.1-x64.exe",
+    "exe_sha256": "c35a6a8e5d9457052a5beddc3abc5d24789c51f735761cb1120b1813becb038a",
+    "native_actions_run": "https://github.com/0xFarag/0xFarag/actions/runs/44885489514",
+    "authenticode_signed": false,
+    "receipt": {
+      "version": "1.5.0-win.1",
+      "source_proof_sha256": "54b21858a89d498ba3b5050ad85f5969068bf79bcf5a07467297b3c3d1d5e817",
+      "binary_sha256": "c35a6a8e5d9457052a5beddc3abc5d24789c51f735761cb1120b1813becb038a",
+      "github_run_id": "44885489514",
+      "commit": "e603bb9f8faa411eeace24a05073e9024195b6d8",
+      "tests": {
+        "authentic/upstream": {
+          "exit": 0,
+          "message": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.\nReport assertion/dependency semantics and execution truth are not established by this standalone verifier."
+        },
+        "authentic/packaged": {
+          "exit": 0,
+          "message": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.\nReport assertion/dependency semantics and execution truth are not established by this standalone verifier."
+        },
+        "self_trust/upstream": {
+          "exit": 1,
+          "message": "FAILED: trusted public key must be supplied from outside the bundle"
+        },
+        "self_trust/packaged": {
+          "exit": 1,
+          "message": "FAILED: trusted public key must be supplied from outside the bundle"
+        },
+        "wrong_key/upstream": {
+          "exit": 1,
+          "message": "FAILED: trusted public key fingerprint mismatch"
+        },
+        "wrong_key/packaged": {
+          "exit": 1,
+          "message": "FAILED: trusted public key fingerprint mismatch"
+        },
+        "one_byte/upstream": {
+          "exit": 1,
+          "message": "FAILED: bundle file size or hash mismatch: attachments/platform.html"
+        },
+        "one_byte/packaged": {
+          "exit": 1,
+          "message": "FAILED: bundle file size or hash mismatch: attachments/platform.html"
+        },
+        "bad_signature/upstream": {
+          "exit": 1,
+          "message": "FAILED: detached signature verification failed"
+        },
+        "bad_signature/packaged": {
+          "exit": 1,
+          "message": "FAILED: detached signature verification failed"
+        }
+      }
+    }
+  }
+}
