@@ -1,0 +1,21 @@
+WEBVTT
+
+00:00.000 --> 00:04.000
+Referenzdemo v1.5.0. Zwei Ausgangsbefunde.
+Einer wurde erneut geprüft.
+
+00:04.000 --> 00:09.000
+Ein Fall ist als fix_verified belegt.
+Der zweite bleibt ausdrücklich not_retested.
+
+00:09.000 --> 00:14.000
+Hauptverifier und Standalone-Verifier
+akzeptieren das Original mit dem Demo-Schlüssel.
+
+00:14.000 --> 00:20.000
+Ein verändertes Byte in report.json.
+Beide Verifier lehnen die Kopie ab.
+
+00:20.000 --> 00:24.000
+AuthzLedger 1.6 in Entwicklung.
+Pilot anfragen auf LinkedIn bei Nasser Aldin Farag.

@@ -1,0 +1,40 @@
+{
+  "type": "historical_review_summary",
+  "source_commit": "f8f840f33e88911cfcd3b9d189bc5c7ac13b17b7",
+  "source_tree": "4a663ce0df9dde419a9bc42c0985406cc60de1fe",
+  "review_started_utc": "2026-11-20T21:41:43+00:00",
+  "review_finished_utc": "2026-11-20T21:42:07+00:00",
+  "scope": "Fresh local source-worktree runs; no published runner, full historical suite or GA claim.",
+  "review_receipt_sha256": "4b3e68dff8feacd7005995d5d9f8c2764ded2bd6e81e3ed4d02d907344733fdb",
+  "review_groups": [
+    {
+      "name": "federation-python",
+      "exit_code": 0
+    },
+    {
+      "name": "historical-offline",
+      "exit_code": 0
+    },
+    {
+      "name": "review-projection-contract",
+      "exit_code": 0
+    },
+    {
+      "name": "review-adapter-compatibility",
+      "exit_code": 0
+    },
+    {
+      "name": "formal-gate-mechanics",
+      "exit_code": 0
+    },
+    {
+      "name": "browser-offline",
+      "exit_code": 0
+    },
+    {
+      "name": "browser-index",
+      "exit_code": 0
+    }
+  ],
+  "full_release_acceptance": false
+}

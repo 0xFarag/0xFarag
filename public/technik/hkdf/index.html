@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zwei Schlüssel aus einem Geheimnis · AuthzLedger</title><meta name="description" content="X25519 und HKDF: Richtungsschlüssel, Rollentrennung und Referenzprüfung mit RFC 5869. Eine technische Founder-Notiz mit eigenständigem Python-Beispiel.">
+<meta name="author" content="Nasser Aldin Farag (0xFarag)"><meta name="theme-color" content="#0c192c"><meta name="referrer" content="no-referrer"><link rel="stylesheet" href="../../style.css">
+<style>.article-hero{background:var(--navy);color:#fff;padding:clamp(2.4rem,7vw,5.5rem) 0}.article-hero h1{max-width:17ch;font-size:clamp(2.8rem,6vw,5.8rem)}.article-hero .byline{color:#d7e0ec;margin:1.25rem 0}.article-copy{width:min(70ch,91vw);margin:auto;padding:clamp(2rem,5vw,4.5rem) 0;color:var(--ink);font:1.12rem/1.75 Georgia,serif;overflow-wrap:anywhere}.article-copy h2{margin:2.1rem 0 .7rem;line-height:1.18;font:normal clamp(1.6rem,3vw,2.5rem)/1.18 Georgia,serif}.article-copy p,.article-copy li{margin:.85rem 0}.article-copy a{text-decoration:underline;text-underline-offset:.18em;color:#225474}.article-copy pre{padding:1rem 1.15rem;background:var(--navy);color:#f8efe3;white-space:pre-wrap;overflow-wrap:anywhere}.article-copy code{font:.88em/1.55 ui-monospace,monospace}.article-copy ol{padding-left:1.6rem}.article-copy li::marker{font-weight:bold}.article-footer{color:#e4ebf1;padding:2rem 0}.article-footer p{margin-top:1rem;color:#c4d0de}.article-footer a{text-decoration:underline}</style></head>
+<body><a class="skip" href="#beitrag">Zum Artikel</a><header class="head"><div class="wrap nav"><a class="brand" href="../../"><img src="../../assets/0xfarag-original.png" alt="" width="36" height="36"><span>AuthzLedger</span></a><a class="head-cta" href="../../#pilot">Pilot anfragen</a></div></header>
+<main id="beitrag"><article><header class="article-hero"><div class="wrap"><p class="release">Technische Founder-Notiz · Kryptografie</p><h1>Zwei Schlüssel aus einem Geheimnis</h1><p class="byline">Von Nasser Aldin Farag / 0xFarag</p><a class="btn gold" href="hkdf_demo.py" download="hkdf_demo.py">Offline-Beispiel herunterladen (.py)</a></div></header>
+<div class="article-copy"><p>Zwei Seiten können mit X25519 unabhängig denselben geheimen Wert
+berechnen. Woher wissen sie, welche 32 Bytes später für welche Aufgabe
+gelten? Das Protokoll muss diese Aufgabe benennen. HKDF kann aus dem
+gemeinsamen Geheimnis beispielsweise je einen Schlüssel für die Hin- und
+Rückrichtung ableiten. Beide Seiten müssen sich über Rolle, Reihenfolge
+und Kontext einig sein. <a
+href="https://www.rfc-editor.org/rfc/rfc7748#section-6.1">RFC 7748,
+Abschnitt 6.1</a></p>
+<p>Bei AuthzLedger 1.5.0 prüft der Empfänger mit Ed25519 das signierte
+Inventar eines Übergabepakets. Der öffentliche Prüfschlüssel muss dem
+erwarteten Absender unabhängig zugeordnet werden. Dieses Blatt erläutert
+eine andere kryptografische Aufgabe, die Ableitung symmetrischer
+Schlüssel. Das beiliegende X25519/HKDF-Beispiel läuft eigenständig und
+beschreibt keine freigegebene Transportfunktion von AuthzLedger. <a
+href="https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0">AuthzLedger
+1.5.0</a></p>
+<h2 id="was-extract-und-expand-leisten">Was Extract und Expand
+leisten</h2>
+<p>Für SHA-256 berechnet <strong>Extract</strong> den 32 Byte langen
+Zwischenschlüssel <code>PRK = HMAC-SHA256(salt, IKM)</code>. Der Salt
+ist der HMAC-Schlüssel, das ursprüngliche Schlüsselmaterial die
+Nachricht. Für einen fehlenden Salt legt RFC 5869 einen Standardwert aus
+32 Nullbytes fest. Ein verfügbarer, unabhängiger Zufallssalt kann
+öffentlich sein. Beide Seiten müssen denselben Wert verwenden. Extract
+nutzt die vorhandene Entropie. Ein leicht erratbares Geheimnis bleibt
+auch mit Salt leicht erratbar. Für Passwörter braucht es ein dafür
+ausgelegtes, rechen- und vorzugsweise speicherintensives Verfahren. <a
+href="https://www.rfc-editor.org/rfc/rfc5869#section-2">RFC 5869,
+Abschnitte 2 und 3</a></p>
+<p><strong>Expand</strong> erzeugt aus PRK, Kontext <code>info</code>
+und gewünschter Länge <code>L</code> das Ausgabematerial. Bei SHA-256
+sind je Expand-Aufruf höchstens 8’160 Byte möglich. Zweck,
+Protokollversion und Senderichtung erhalten eindeutige Kodierungen. Nur
+die Ausgabelänge zu verändern trennt keine Zwecke: Mit demselben PRK und
+Kontext entsprechen die ersten 16 Byte einer 32-Byte-Ausgabe exakt der
+16-Byte-Ausgabe. <a
+href="https://www.rfc-editor.org/rfc/rfc5869#section-2.3">RFC 5869,
+Abschnitt 2.3</a></p>
+<h2 id="was-das-beispiel-überprüft">Was das Beispiel überprüft</h2>
+<ol type="1">
+<li>Der öffentliche Testfall A.1 liefert erwartete Werte für PRK und die
+42-Byte-Ausgabe. Das Programm prüft die getrennten Phasen und die
+kombinierte HKDF-Funktion gegen diese Werte. So kann eine vertauschte
+HMAC-Parameterreihenfolge oder ein falscher Kontext auffallen. <a
+href="https://www.rfc-editor.org/rfc/rfc5869#appendix-A.1">Testvektor
+A.1</a></li>
+<li>Zwei lokal erzeugte, kurzlebige X25519-Schlüsselpaare berechnen das
+Geheimnis jeweils von ihrer Seite aus. Ein Kontext bindet beide
+öffentlichen Schlüssel in der festen Reihenfolge Client, Server. Jede
+Seite erhält dieselben zwei Richtungsschlüssel. Ein vertauschtes
+Rollenpaar liefert für denselben Richtungsnamen einen anderen Schlüssel.
+Das Programm gibt ausschliesslich Prüfergebnisse aus. <a
+href="https://cryptography.io/en/latest/hazmat/primitives/asymmetric/x25519/">Python-Bibliothek</a></li>
+<li>Die öffentlichen Schlüssel sind im Beispiel direkt im selben Prozess
+verfügbar. Bei einer Netzwerkverbindung braucht der Handshake zusätzlich
+einen Vertrauensnachweis für die Gegenstelle und eine vereinbarte
+Behandlung ungültiger Peer-Eingaben. Die Einbeziehung öffentlicher
+Schlüssel in <code>info</code> allein bestätigt keine Identität. <a
+href="https://www.rfc-editor.org/rfc/rfc7748#section-6">RFC 7748,
+Abschnitte 6 und 7</a></li>
+</ol>
+<p><strong>Ein häufiger Fehler bei Nonces.</strong> Eine konstante
+HKDF-Ausgabe als Nonce für mehrere Nachrichten mit demselben
+ChaCha20-Poly1305-Schlüssel würde dessen Einmaligkeitsanforderung
+verletzen. RFC 8439 verlangt pro Verschlüsselung unter demselben
+Schlüssel eine eindeutige 96-Bit-Nonce. Zählerstände müssen
+gegebenenfalls Neustarts überstehen oder mit frischen Schlüsseln neu
+beginnen. AEAD liefert bereits den Authentifizierungstag für die
+Nachricht. Das Lernbeispiel endet vor der Verschlüsselung. <a
+href="https://www.rfc-editor.org/rfc/rfc8439#section-2.8">RFC 8439,
+Abschnitt 2.8</a></p>
+<h2 id="lokal-ausführen">Lokal ausführen</h2>
+<p>Voraussetzung ist eine Python-Umgebung mit <code>cryptography</code>
+ab Version 40. Mit Python 3.12 und <code>cryptography</code> 50.0.0
+wurde das Programm erfolgreich ausgeführt.</p>
+<pre class="sh"><code>python hkdf_demo.py</code></pre>
+<pre class="text"><code>PASS  RFC 5869 A.1: PRK (32 bytes), OKM (42 bytes)
+PASS  Both peers agree, directions differ, swapped role context differs</code></pre>
+</div></article></main><footer class="article-footer"><div class="wrap"><nav aria-label="Projekt und Rechte"><a href="../../#impressum">Zurück zu AuthzLedger</a> · <a href="https://github.com/0xFarag/0xFarag/blob/03aea857e35358ddeb13d2a861b633e60c1ca873/LICENSE">Lizenz</a> · <a href="https://github.com/0xFarag/0xFarag/blob/03aea857e35358ddeb13d2a861b633e60c1ca873/NOTICE.txt">Drittanbieterhinweise</a></nav><p>ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).</p></div></footer></body></html>

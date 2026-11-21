@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00.300 --> 00:05.700
+AuthzLedger 1.6, die Engineering Preview.
+Vom Prüfumfang bis zum signierten Bericht.
+
+00:06.050 --> 00:09.900
+Demo aus 1.5.0. Trotz HTTP 403
+ist der geschützte Marker lesbar.
+
+00:10.080 --> 00:13.800
+Drei lokale Exporte.
+Nmap, ffuf und Nuclei.
+
+00:14.080 --> 00:19.850
+Vier Beobachtungen, ein Hinweis.
+Kein importierter Befund ist bestätigt.
+
+00:20.150 --> 00:25.700
+Ein separater Testfall verbindet
+einen HAR-Mitschnitt mit drei Exporten.
+
+00:26.100 --> 00:31.700
+Fünf Beobachtungen, eine gemeinsame Route.
+Jede Herkunft bleibt nachvollziehbar.
+
+00:32.100 --> 00:38.700
+Im Retest aus 1.5.0 ist ein Fix belegt.
+Der zweite Befund bleibt ungeprüft.
+
+00:39.050 --> 00:45.700
+Ein Byte im signierten Paket wird verändert.
+Beide Verifier lehnen die Kopie ab.
+
+00:46.100 --> 00:50.200
+AuthzLedger 1.6 ist die Engineering Preview.
+Öffentlich verfügbar ist Version 1.5.0.
+
+00:50.250 --> 00:53.850
+Pilot anfragen auf LinkedIn.
+Nasser Aldin Farag, 0xFarag.

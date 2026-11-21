@@ -1,0 +1,21 @@
+WEBVTT
+
+00:00.000 --> 00:04.000
+Referenzdemo v1.5.0. Eine 403-Antwort
+enthielt geschützte Daten.
+
+00:04.000 --> 00:09.000
+Die Antwort enthielt den geschützten
+Objektmarker SYNTHETIC-INVOICE-A.
+
+00:09.000 --> 00:14.000
+Identität, Referenzobjekt und bekannte Ablehnung
+bestanden die Kontrollen. Offenlegung bestätigt.
+
+00:14.000 --> 00:20.000
+Ungültige Kontrollen liessen das Urteil offen.
+Die 200-Fehlerantwort enthielt keinen Marker.
+
+00:20.000 --> 00:24.000
+AuthzLedger 1.6 in Entwicklung.
+Pilot anfragen auf LinkedIn bei Nasser Aldin Farag.

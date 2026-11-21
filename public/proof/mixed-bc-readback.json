@@ -1,0 +1,97 @@
+{
+  "assessment_id": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+  "demo_b": {
+    "control_refs": [
+      "reference"
+    ],
+    "evidence_level": "confirmed",
+    "finding_id": "finding-cf80d7887355d0a446a33845",
+    "native_check": "misconfig.security_headers",
+    "rule_10021_source_status": "not_verified",
+    "scope": "This finding confirms the absence of a configured header. It is separate from C."
+  },
+  "demo_c": {
+    "baseline_finding_ids": [
+      "finding-71dd5140505595bd87010086",
+      "finding-ae64d20deb2bf61f37090cb3"
+    ],
+    "fresh_retest_count": 1,
+    "transitions": [
+      {
+        "finding_id": "finding-ae64d20deb2bf61f37090cb3",
+        "status": "fix_verified",
+        "verification_level": "captured_inputs_replayed"
+      },
+      {
+        "finding_id": "finding-71dd5140505595bd87010086",
+        "status": "not_retested",
+        "verification_level": "captured_inputs_replayed"
+      }
+    ],
+    "unretested_count": 1
+  },
+  "independent_controls": [
+    "foreign_har_rejected",
+    "upgraded_scanner_hint_rejected",
+    "native_control_removed_rejected"
+  ],
+  "independent_readback_sha256": "a9d579b0591e4539e05dafd538620cbec9b8e5ab1031fb35acd0a41abb679f4a",
+  "product_version": "1.6.0",
+  "release_approval": false,
+  "scope": "Synthetic, local demonstration, not a release attestation.",
+  "snapshot_digest": "15158eb8c3c8c429b52d16a6b4f0333214468f9f4768e56b78f890de2a2b1dfb",
+  "source_bytes": {
+    "mixed-b-result.json": "81d604114d57d05e3a8c34117ecb0810e2bd5c7b326d1e539d3bd47540786632",
+    "mixed-c-result.json": "e88fa8b182ad1d7b3477516c1432e24a919d1882a4221bf2cb8e25265cff4bd8"
+  },
+  "source_checks": {
+    "extra_source_member": 1,
+    "missing_zap": 1,
+    "original": 0,
+    "raw_har_byte": 1,
+    "source_inventory_byte": 1,
+    "wrong_key": 1
+  },
+  "source_commit": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+  "source_inventory_sha256": "e22edfa767bdccacd998a1fd60a3c178581a589fb1a83b759a23efaf37634b4e",
+  "source_scope_digest": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+  "sources": {
+    "chromium": {
+      "har_sha256": "09929d30d5a759db4132efb96b8150dd97569749366a31714c198b83e9130c3d",
+      "requests": 1,
+      "version": "153.0.8010.0"
+    },
+    "zap_passive": {
+      "active_jobs": [],
+      "har_sha256": "09929d30d5a759db4132efb96b8150dd97569749366a31714c198b83e9130c3d",
+      "kernel_blocked_outbound_socket_calls": true,
+      "report_sha256": "c4470f6510d9c487599d3cd375dc50a4fa78d62ea2a6a587dd6c2fc1131bc7b8",
+      "target_replay": false,
+      "version": "2.17.0"
+    }
+  },
+  "type": "candidate_mixed_assessment_review",
+  "verifiers": {
+    "extra_file": [
+      2,
+      1
+    ],
+    "missing_file": [
+      2,
+      1
+    ],
+    "one_byte": [
+      2,
+      1
+    ],
+    "original": [
+      0,
+      0
+    ],
+    "wrong_key": [
+      2,
+      1
+    ]
+  },
+  "wheel_sha256": "fd9234e6dc0dd55d105b01e4c010f68f3f2afc208027fcf057d5f179b31c3197"
+}

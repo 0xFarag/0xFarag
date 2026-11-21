@@ -1,0 +1,66 @@
+{
+  "assessment_id": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+  "demo": "B",
+  "external_capture_sha256": "09929d30d5a759db4132efb96b8150dd97569749366a31714c198b83e9130c3d",
+  "external_scanner": {
+    "artifact_id": "artifact-524ccbe2698149dca5864fa5071a3801",
+    "assertions": [
+      {
+        "kind": "source_assertion",
+        "plugin_id": "10021",
+        "risk_code": "1",
+        "tool": "ZAP",
+        "verification": "not_verified"
+      }
+    ],
+    "entry_id": "import-70bc0cd760f45942183e41ce",
+    "import_sha256": "a45a6cf9e33d852b269eb0a8f60fe48f5428879258ce820208fa005269779ae3",
+    "original_sha256": "c4470f6510d9c487599d3cd375dc50a4fa78d62ea2a6a587dd6c2fc1131bc7b8"
+  },
+  "finding": {
+    "check_id": "misconfig.security_headers",
+    "check_version": "1.0.0",
+    "control_refs": [
+      "reference"
+    ],
+    "cvss": {
+      "status": "not_scored",
+      "vector": null
+    },
+    "evidence_level": "confirmed",
+    "family": "misconfig",
+    "finding_digest": "ef2113c767d437f8ba0023042b8549dfc9acd42e2afa7e54c9c4f5312e46be0b",
+    "id": "finding-cf80d7887355d0a446a33845",
+    "interpretation": "violation",
+    "kind": "detection-finding",
+    "limitations": [
+      "A missing configured header is a configuration observation, not proof of exploitability."
+    ],
+    "local_id": "actual",
+    "observation_refs": [
+      "2ac4820bec052be95c30dcfa6d8f3b57732db72dc2416e61ddf687db4ada35fa"
+    ],
+    "reason": "predicate_violated",
+    "reproducer_ref": "bcb6a63bfe84ba58bc7e0b3e289b8de31635f13cfd2d416867727e116f3816a5",
+    "review_status": "unreviewed",
+    "rule_digest": "a0620708c6652ef3add5aa0c2f345a5673d1ebc2803653fb6ac0be8e5ee50d88",
+    "schema_version": 1,
+    "severity": "low",
+    "severity_basis": "curated_default_requires_context_review",
+    "source_finding": null,
+    "source_refs": [
+      "b700ee71c627671abc7762cf8c210b112cafa7dde1cbf73b68316a2b932e6b06",
+      "import-70bc0cd760f45942183e41ce",
+      "import-cab231e6f4819f1e6fbd0124"
+    ],
+    "status": "confirmed",
+    "title": "Missing explicitly required security response headers"
+  },
+  "missing_controls": "explicit_distinct_controls_required",
+  "native_check": "misconfig.security_headers",
+  "native_execution": "b700ee71c627671abc7762cf8c210b112cafa7dde1cbf73b68316a2b932e6b06",
+  "native_observation": "7981f08a7141398e0d74cf0552963faf9d0419f7afa203483094c049e3c601b0",
+  "s16_10_local_evidence": "demonstrated",
+  "scanner_assertion_unchanged": true,
+  "scope_digest": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7"
+}

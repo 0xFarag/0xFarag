@@ -1,0 +1,17 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.375
+Welcher Fix ist belegt?
+Auszug aus dem Originalbericht von Demo C.
+
+00:00:04.375 --> 00:00:10.000
+Zwei Befunde, ein Retest.
+1 × fix_verified, 1 × not_retested.
+
+00:00:10.000 --> 00:00:15.250
+Ein Byte verändert. Beide Prüfer lehnen die Kopie ab.
+Original 0/0. Kopie 2/1.
+
+00:00:15.250 --> 00:00:19.500
+Pilot anfragen mit AuthzLedger v1.5.0.
+v1.6.0 im Review.

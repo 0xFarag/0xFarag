@@ -1,0 +1,21 @@
+{
+  "kind": "federated-surface-index",
+  "schema_version": 1,
+  "index_digest": "e17cb8a49ad475d75d3bbd3bc179560360f7fec0d34682761f7d3eac3998cef2",
+  "summary": {
+    "services": 1,
+    "endpoints": 1,
+    "observations": 5,
+    "omissions": 0,
+    "mixed_services": 1,
+    "mixed_endpoints": 1
+  },
+  "source_test": "tests/test_federation_index.py::FederationIndexTests.test_real_mixed_freeze_no_network_and_no_mutation",
+  "sources": [
+    "HAR",
+    "Nmap XML",
+    "ffuf JSON",
+    "Nuclei JSONL"
+  ],
+  "network": "disabled_during_capture"
+}

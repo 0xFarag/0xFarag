@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00.300 --> 00:05.700
+AuthzLedger 1.6 engineering preview.
+From scope to signed report.
+
+00:06.050 --> 00:09.900
+The 1.5.0 demo shows a protected marker
+in an HTTP 403 response.
+
+00:10.080 --> 00:13.800
+Three local exports
+from Nmap, ffuf and Nuclei.
+
+00:14.080 --> 00:19.850
+Four observations and one hint.
+No imported finding is confirmed.
+
+00:20.150 --> 00:25.700
+A separate test combines a HAR capture
+with three tool exports.
+
+00:26.100 --> 00:31.700
+Five observations share one route.
+Each can be traced to its source.
+
+00:32.100 --> 00:38.700
+The 1.5.0 retest verified one fix.
+The second finding was not retested.
+
+00:39.050 --> 00:45.700
+One byte changed in a signed package copy.
+Both verifiers rejected it.
+
+00:46.100 --> 00:50.200
+1.6 is an engineering preview.
+The public release is 1.5.0.
+
+00:50.250 --> 00:53.850
+Ask for “Pilot” on LinkedIn.
+Nasser Aldin Farag, 0xFarag.

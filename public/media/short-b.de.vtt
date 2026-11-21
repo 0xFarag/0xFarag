@@ -1,0 +1,21 @@
+WEBVTT
+
+00:00.000 --> 00:04.000
+Referenzdemo v1.5.0. Was wurde im
+beschränkten Scope wirklich geprüft?
+
+00:04.000 --> 00:09.000
+Vier HTTP-Anfragen, eine TCP-Verbindung.
+Das Ledger zählt alle fünf Vorgänge.
+
+00:09.000 --> 00:14.000
+Im geprüften Antwort-Header fehlte
+X-Content-Type-Options.
+
+00:14.000 --> 00:20.000
+Bestätigt ist der fehlende konfigurierte Header.
+Die Ausnutzbarkeit bleibt offen.
+
+00:20.000 --> 00:24.000
+AuthzLedger 1.6 in Entwicklung.
+Pilot anfragen auf LinkedIn bei Nasser Aldin Farag.

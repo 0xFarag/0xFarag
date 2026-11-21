@@ -1,0 +1,21 @@
+WEBVTT
+
+00:00.000 --> 00:04.000
+In the 1.5.0 demo, a 403 response
+contained protected data.
+
+00:04.000 --> 00:09.000
+The response included the protected marker
+SYNTHETIC-INVOICE-A.
+
+00:09.000 --> 00:14.000
+Identity, object and known-denial controls
+passed, confirming the disclosure.
+
+00:14.000 --> 00:20.000
+Invalid controls left the verdict open.
+The 200 error response had no marker.
+
+00:20.000 --> 00:24.000
+1.6 preview. Send “Pilot” to
+Nasser Aldin Farag on LinkedIn.

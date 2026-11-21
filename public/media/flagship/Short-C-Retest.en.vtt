@@ -1,0 +1,13 @@
+WEBVTT
+
+NOTE ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
+
+00:00:00.000 --> 00:00:05.000
+Two baseline findings. One fix_verified. The other stays not_retested.
+
+00:00:05.000 --> 00:00:10.000
+Both verifiers accepted the original. Both rejected the copy after a one-byte change.
+
+00:00:10.000 --> 00:00:15.000
+AuthzLedger. Pilot on stable v1.5.0. Thirty days, two users, one authorised engagement. CHF 2,400.
+

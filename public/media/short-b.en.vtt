@@ -1,0 +1,21 @@
+WEBVTT
+
+00:00.000 --> 00:04.000
+v1.5.0 reference demo.
+What did the scoped checks cover?
+
+00:04.000 --> 00:09.000
+Four HTTP requests, one TCP connection.
+The ledger counts all five operations.
+
+00:09.000 --> 00:14.000
+The response was missing a header:
+X-Content-Type-Options.
+
+00:14.000 --> 00:20.000
+The required header was confirmed missing.
+Exploitability remains unproven.
+
+00:20.000 --> 00:24.000
+1.6 preview. Send “Pilot” to
+Nasser Aldin Farag on LinkedIn.

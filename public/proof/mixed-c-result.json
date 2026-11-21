@@ -1,0 +1,95 @@
+{
+  "assessment_id": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+  "baseline_execution_digest": "65f4b0abc97c90caf675ee04ac4cf3fce87e146790bec1cf4bc77a67feb6410f",
+  "baseline_unchanged": true,
+  "current_execution_digest": "f62faba580c17fa11d8dcbe904cfe88e861164d2c986876f1dfabfebdb457c94",
+  "demo": "C",
+  "finished_at": "2026-11-20T22:26:02.179087+00:00",
+  "original_har_sha256": "09929d30d5a759db4132efb96b8150dd97569749366a31714c198b83e9130c3d",
+  "producer_version": "1.6.0",
+  "readback_verified": true,
+  "reports": {
+    "platform.html": "94fc2882677ebc679418638d08d4048e08b9846f2452d6fe792eb77a899db5e0",
+    "platform.json": "cf7b8f76c95f43414c7288aaeede84186ec658d6e93a0272b03bf4235bc464c5",
+    "platform.pdf": "c782dc2a126d163478d2b46238cd31aed641db856c2fc9b84bdf58234ee3cfee"
+  },
+  "scope_digest": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+  "signer_scope": "separately supplied, demo-specific public key, no production trust claim",
+  "snapshot_digest": "15158eb8c3c8c429b52d16a6b4f0333214468f9f4768e56b78f890de2a2b1dfb",
+  "sources": [
+    "import-cab231e6f4819f1e6fbd0124",
+    "import-70bc0cd760f45942183e41ce"
+  ],
+  "started_at": "2026-11-20T22:25:41.805058+00:00",
+  "transitions": [
+    {
+      "baseline_finding_digest": "cda830565df1a2b5bc1424edc0b0237d3243aadb2957e91bf63b996ed9c7b48f",
+      "case_id": "one",
+      "current_finding_digest": "adf651c8c10b5f353657b3f0a456df196f1239116d876017a882167225c9783f",
+      "finding_id": "finding-ae64d20deb2bf61f37090cb3",
+      "status": "fix_verified",
+      "verification_level": "captured_inputs_replayed"
+    },
+    {
+      "baseline_finding_digest": "a30210b42a131e7e7b1468434bae186af8d24ad6591e7f909ad92b962bfdb671",
+      "case_id": "two",
+      "current_finding_digest": null,
+      "finding_id": "finding-71dd5140505595bd87010086",
+      "status": "not_retested",
+      "verification_level": "captured_inputs_replayed"
+    }
+  ],
+  "trusted_demo_public_sha256": "0002586c208bae9f73ccd74392aee0a2e07e6c76ba17d75d73642f6915dcbf01",
+  "verifiers": {
+    "extra_file": [
+      {
+        "code": 2,
+        "message": "Evidence package verification FAILED: missing or extra bundle files"
+      },
+      {
+        "code": 1,
+        "message": "FAILED: missing or extra bundle files"
+      }
+    ],
+    "missing_file": [
+      {
+        "code": 2,
+        "message": "Evidence package verification FAILED: missing or extra bundle files"
+      },
+      {
+        "code": 1,
+        "message": "FAILED: missing or extra bundle files"
+      }
+    ],
+    "one_byte": [
+      {
+        "code": 2,
+        "message": "Evidence package verification FAILED: bundle file size or hash mismatch: report.json"
+      },
+      {
+        "code": 1,
+        "message": "FAILED: bundle file size or hash mismatch: report.json"
+      }
+    ],
+    "original": [
+      {
+        "code": 0,
+        "message": "Signature, trusted key, manifest, file hashes and report semantics verified."
+      },
+      {
+        "code": 0,
+        "message": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.\nReport assertion/dependency semantics and execution truth are not established by this standalone verifier."
+      }
+    ],
+    "wrong_key": [
+      {
+        "code": 2,
+        "message": "Evidence package verification FAILED: trusted public key fingerprint mismatch"
+      },
+      {
+        "code": 1,
+        "message": "FAILED: trusted public key fingerprint mismatch"
+      }
+    ]
+  }
+}

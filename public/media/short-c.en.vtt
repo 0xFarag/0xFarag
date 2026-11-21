@@ -1,0 +1,21 @@
+WEBVTT
+
+00:00.000 --> 00:04.000
+v1.5.0 demo. Two baseline findings.
+Only one was retested.
+
+00:04.000 --> 00:09.000
+The retest shows fix_verified.
+The second finding remains not_retested.
+
+00:09.000 --> 00:14.000
+Both built-in and standalone verifiers
+accept the original with the demo key.
+
+00:14.000 --> 00:20.000
+One byte in report.json was changed.
+Both verifiers reject the altered copy.
+
+00:20.000 --> 00:24.000
+1.6 preview. Send “Pilot” to
+Nasser Aldin Farag on LinkedIn.
