@@ -1,0 +1,3 @@
+# The public site contains signed manifests, hash-pinned JSON and release assets.
+# Serve the original bytes on every operating system.
+public/** -text
