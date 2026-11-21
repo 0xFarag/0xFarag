@@ -7,3 +7,5 @@ The supported offline readers accept local Nmap XML, ffuf JSON and Nuclei JSONL 
 For internal verification, install the supplied wheel in a new virtual environment outside the checkout with `python -m pip install --no-index --no-deps /path/to/authzledger-1.6.0-py3-none-any.whl`. `python -I -m authzledger --version` must report 1.6.0. `python -I -m authzledger assessment federation-preview --help` shows the local input contract. `python -I -m authzledger assessment federation-index snapshot.json` reads an existing verified snapshot.
 
 PDF output requires the pinned reports extra. The final acceptance contract covers the complete historical regression, browser suites and four demos. Historical receipts keep their original producer versions. The comparison reader explicitly supports both 1.6.0rc1 and 1.6.0.
+
+The stacked [saved detection evidence change](blue-evidence.md) is available for review against this target. Its synthetic fixture exercises four telemetry outcomes independently of the source retest status.
