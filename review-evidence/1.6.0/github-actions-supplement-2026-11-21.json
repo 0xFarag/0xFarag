@@ -1,0 +1,221 @@
+{
+  "rights": "ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).",
+  "type": "authzledger-post-review-ci-evidence",
+  "record": {
+    "read_at_utc": "2026-11-21T06:42:25.170366+00:00",
+    "prior_frozen_evidence": "https://github.com/0xFarag/0xFarag/blob/213d6e998a18217f4d52fd5da2b1a61373fdf9b6/review-evidence/1.6.0/github-actions.json",
+    "scope": "Additional historical GitHub Actions evidence. The earlier dated report remains intact. No jobs were dispatched or rerun for this verification."
+  },
+  "candidate": "bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+  "sources": {
+    "actions_all_events": "https://api.github.com/repos/0xFarag/0xFarag/actions/runs?head_sha=bb34603a99ba96b6fb23ae9f09d332b335a98b3d",
+    "run": "https://github.com/0xFarag/0xFarag/actions/runs/44831010281",
+    "verify_job": "https://github.com/0xFarag/0xFarag/actions/runs/44831010281/job/136615653717",
+    "artifact": "https://github.com/0xFarag/0xFarag/actions/runs/44831010281/artifacts/14677095761",
+    "artifact_sha256_verified": "5c67b60c92322a53c7cbb99e6b69b5ec1f59fe186934e8c61875a85fb1bef426"
+  },
+  "runs_on_candidate": [
+    {
+      "id": 44828742578,
+      "conclusion": "success",
+      "workflow": "1.6 offline source review"
+    },
+    {
+      "id": 44828742634,
+      "conclusion": "skipped",
+      "workflow": "1.5 verify (push)"
+    },
+    {
+      "id": 44828753388,
+      "conclusion": "skipped",
+      "workflow": "1.5 verify (pull request)"
+    },
+    {
+      "id": 44831010281,
+      "conclusion": "failure",
+      "workflow": "1.5 verify (manual dispatch)"
+    }
+  ],
+  "dispatch": {
+    "source_tree_digest_as_reported": "36eba95aec688fadfb6c1fde91001fc988beea7ab9befa7442b6d33465d97b2f",
+    "producer": "1.6.0",
+    "finished_utc": "2026-11-20T22:44:57.575215+00:00",
+    "step5": "success: all 21 recorded commands completed",
+    "step6": "failure: existing release gate requires producer 1.5.0 and target 1.5.0",
+    "publish150": "skipped",
+    "unit_results": {
+      "kind": "unit-completion150",
+      "producer_version": "1.6.0",
+      "discovered": 733,
+      "executed": 733,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "unexpected_successes": 0,
+      "successful": true,
+      "elapsed_seconds": 110.258
+    },
+    "independent_log_hash_checks": [
+      {
+        "id": "unit",
+        "returncode": 0,
+        "log_sha256": "b154170dd80fe7c14779661c4d36354ed5cfcbab36e712bc47cf0e960a96936b"
+      },
+      {
+        "id": "core",
+        "returncode": 0,
+        "log_sha256": "7912492af7b36c316b01b7ccc588fa3ff06d8bb3e6c192bfcdfb16acd4495d53"
+      },
+      {
+        "id": "comparison",
+        "returncode": 0,
+        "log_sha256": "46a18d50586ad2be95131cabbbca9458990e4dea7255026014f7845ec24c3e74"
+      },
+      {
+        "id": "assessment",
+        "returncode": 0,
+        "log_sha256": "e73a12740c4c7ec076a093afcf7a630051158aca92a62d7aebf256d8e61ab2d3"
+      },
+      {
+        "id": "selective100",
+        "returncode": 0,
+        "log_sha256": "15ea10a1db7e85753becb3862deebdf811be9af27b67ac17462a195e138260e2"
+      },
+      {
+        "id": "workflow110",
+        "returncode": 0,
+        "log_sha256": "4cab6b353ec0aeeb6baab9a276a738f3b7198d590cd4c40530a343e6119a41e3"
+      },
+      {
+        "id": "platform150",
+        "returncode": 0,
+        "log_sha256": "00703870bf7debc0f5d6869e4b308e459cc89a3e808caec96e53b595642e531d"
+      },
+      {
+        "id": "native_burp",
+        "returncode": 0,
+        "log_sha256": "ea30f2b0d8b80a6d332ea6bf6f3c7494f4d6f6fc80734fcf967022d3075a26f0"
+      },
+      {
+        "id": "browser_acceptance",
+        "returncode": 0,
+        "log_sha256": "a4eea7c08b587ca4e11746099926b7cc7cc1027520f4f58d0d5a98ce5ddb6652"
+      },
+      {
+        "id": "browser_v1",
+        "returncode": 0,
+        "log_sha256": "9849e04e31bc9df9c3b5d9552c0253149b3285497e3c95e6eb57a44c5504561e"
+      },
+      {
+        "id": "browser_comparison",
+        "returncode": 0,
+        "log_sha256": "8bf269b515368f4a29c652e547bd53c32b3b636fdb5b049a3b48bcad2c1d67e9"
+      },
+      {
+        "id": "browser_assessments",
+        "returncode": 0,
+        "log_sha256": "a56469c6258fd68ac39cc7329f5827aa16c4847611a650a318aa934e9f37b73c"
+      },
+      {
+        "id": "browser_assessment_security",
+        "returncode": 0,
+        "log_sha256": "33bc84b4cea81f1fc8fe71c08a1db424570d688adff022e0ca379885f21ed49f"
+      },
+      {
+        "id": "browser_retest_freshness",
+        "returncode": 0,
+        "log_sha256": "60fcbd74af0d5cb0603720140019cadd65e0d0c2bc6ebf2d691939c5235e1171"
+      },
+      {
+        "id": "browser_feature_coverage",
+        "returncode": 0,
+        "log_sha256": "f29baa1ba3aeca57c8bc78f5eca9de9203774e1a9f885b191957159ead400799"
+      },
+      {
+        "id": "browser_platform150",
+        "returncode": 0,
+        "log_sha256": "58a1f961aa807a5a447a875b90a87ed506c662d06bfb46cd053e2d3290cff352"
+      },
+      {
+        "id": "wheel_first",
+        "returncode": 0,
+        "log_sha256": "1171a52bf3201e1a16fb1bd96eb19e9c476c97f55d17bf3b15dfa7a8e30b5d09"
+      },
+      {
+        "id": "wheel_second",
+        "returncode": 0,
+        "log_sha256": "96a7cad6708bf1f4e81e4e7f5ca4121d00a90eb142d9ceb29a3afa76947704a8"
+      },
+      {
+        "id": "wheel_equal",
+        "returncode": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "id": "installed_wheel",
+        "returncode": 0,
+        "log_sha256": "3ac8a3cfecd6de86856471540f6e6f6be6c3fee2b73c08eab2e7f218ef9abfb8"
+      },
+      {
+        "id": "package",
+        "returncode": 0,
+        "log_sha256": "e572674919c89af3d5649abdc6c84a13f946362cf5b2ba62080b46020bad2f70"
+      }
+    ],
+    "test_identity_crosscheck": {
+      "unit_log_distinct_ids": 733,
+      "historical_inventory_count": 682,
+      "new_inventory_count": 51,
+      "missing": 0,
+      "unexpected": 0,
+      "reference": "regress/final/units/units.json of the earlier private acceptance dossier; matched all 574 selected and 159 omitted names",
+      "sorted_ids_sha256_lf_terminated": "49109d7a9264b678ce21b593362a70bf25991dcc2540feacc84b1234bf34d39d"
+    },
+    "historical_browser_suites": [
+      "browser_acceptance",
+      "browser_v1",
+      "browser_comparison",
+      "browser_assessments",
+      "browser_assessment_security",
+      "browser_retest_freshness",
+      "browser_feature_coverage",
+      "browser_platform150"
+    ],
+    "installed_wheel": {
+      "receipt": {
+        "isolated": true,
+        "version": "1.6.0",
+        "legacy_and_suite_demos": true
+      },
+      "observed_suite_demos": [
+        "A",
+        "B",
+        "C"
+      ],
+      "source_artifact_member": "release150/installed_wheel.log",
+      "receipt_fields_a": {
+        "assessment_id": "assessment-28e7924d01184f41822e771ddc5100a0",
+        "confirmed": "confirmed",
+        "denial_disclosure": "denial_data_disclosure",
+        "invalid_controls": "inconclusive",
+        "error_200": "rejected"
+      },
+      "interpretation": "The confirmed field belongs to the BOLA positive-control fixture. The denial field records the disclosure category. The job log includes per-operation control IDs. Separately addressable observation/control documents for each of the three semantic cases are absent from the diagnostic archive.",
+      "s16_09": "Isolated Demo A from the target wheel and recorded outcomes are evidenced. The exact per-case evidence/control-ID linkage is not fully archived.",
+      "s16_16": "A/B/C were observed from an isolated wheel. Earlier B/C/D use different wheel bytes. Neither record binds all four executions to one identical distribution wheel.",
+      "build_log_wheel_sha256": "5b02e6dd6151386121ac0634f0f74ed908a6f8169b08dfd6d594cc6af87f2b1a",
+      "other_build_log_wheel_sha256": "5b02e6dd6151386121ac0634f0f74ed908a6f8169b08dfd6d594cc6af87f2b1a",
+      "previous_bcd_wheel_sha256": "fd9234e6dc0dd55d105b01e4c010f68f3f2afc208027fcf057d5f179b31c3197",
+      "previous_bcd_source": "https://github.com/0xFarag/0xFarag/blob/213d6e998a18217f4d52fd5da2b1a61373fdf9b6/review-evidence/1.6.0/distribution.json",
+      "installed_artifact_in_diagnostic_zip": false
+    }
+  },
+  "pr5": {
+    "commit": "6621f1b76b3b641ae1f25a195d50cad677d96091",
+    "public_actions_runs_all_events": 0,
+    "public_check_runs": 0,
+    "source": "https://api.github.com/repos/0xFarag/0xFarag/actions/runs?head_sha=6621f1b76b3b641ae1f25a195d50cad677d96091"
+  },
+  "release_authorized": false,
+  "limits": "The legacy 1.5 publication gate failed for candidate version 1.6.0. No formal 1.6 release decision, integrated PR5 CI result, or product publication is evidenced."
+}
