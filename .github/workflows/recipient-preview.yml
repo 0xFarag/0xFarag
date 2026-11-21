@@ -1,0 +1,91 @@
+name: Publish audited offline recipient verifier preview
+on:
+  push:
+    branches: [release/recipient-verifier-1.5.0-preview.2]
+permissions: {}
+concurrency:
+  group: recipient-verifier-1.5.0-preview.2
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.repository == '0xFarag/0xFarag' && github.event.before == '5145856ebacfa24c4f153f03fb6e54af92cf4345' && github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Validate the original successful runs, archives and tested package digests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 prepare.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: approved-recipient-preview
+          path: out/*
+          if-no-files-found: error
+          retention-days: 2
+          compression-level: 0
+  publish:
+    needs: prepare
+    if: github.repository == '0xFarag/0xFarag' && github.event.before == '5145856ebacfa24c4f153f03fb6e54af92cf4345' && github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: approved-recipient-preview
+          path: out
+      - name: Create a separate prerelease from the approved byte list
+        working-directory: out
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: 0xFarag/0xFarag
+          RELEASE_TAG: recipient-verifier-1.5.0-preview.2
+          EXPECTED_MANIFEST: c759d8251f3ba5ed5d57506eac913727fb84a84989ebec5b1515338f648771e5
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, os
+          from pathlib import Path
+          manifest = Path('SHA256SUMS.txt')
+          assert hashlib.sha256(manifest.read_bytes()).hexdigest() == os.environ['EXPECTED_MANIFEST']
+          names = [line.split('  ', 1)[1] for line in manifest.read_text().splitlines()]
+          assert len(names) == len(set(names)) == 13
+          assert all(Path(n).name == n and not n.startswith('-') for n in names)
+          assert sorted(p.name for p in Path('.').iterdir()) == sorted(names + [manifest.name])
+          PY
+          sha256sum --strict --check SHA256SUMS.txt
+          python3 - <<'PY'
+          import os, urllib.error, urllib.request
+          root = 'https://api.github.com/repos/' + os.environ['GH_REPO']
+          for path in ('/releases/tags/', '/git/ref/tags/'):
+              request = urllib.request.Request(root + path + os.environ['RELEASE_TAG'], headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'], 'User-Agent':'recipient-release-verification'})
+              try:
+                  with urllib.request.urlopen(request, timeout=20) as response:
+                      raise SystemExit('Tag or release already exists.')
+              except urllib.error.HTTPError as exc:
+                  if exc.code != 404:
+                      raise
+          PY
+          release=$(gh api --method POST "repos/$GH_REPO/releases" -f tag_name="$RELEASE_TAG" -f target_commitish="$GITHUB_SHA" -f name="AuthzLedger offline recipient verifier · preview 2" -F body=@README.md -F draft=true -F prerelease=true -f make_latest=false --jq .id)
+          gh release upload "$RELEASE_TAG" --repo "$GH_REPO" ./*
+          gh api "repos/$GH_REPO/releases/$release" > "$RUNNER_TEMP/recipient-draft.json"
+          python3 - <<'PY'
+          import json, os, hashlib
+          from pathlib import Path
+          data = json.loads((Path(os.environ['RUNNER_TEMP'])/'recipient-draft.json').read_text())
+          assert data['draft'] and data['prerelease'] and data['tag_name'] == os.environ['RELEASE_TAG']
+          assert data['target_commitish'] == os.environ['GITHUB_SHA']
+          remote = {a['name']: a['digest'] for a in data['assets'] if a['state'] == 'uploaded'}
+          local = {f.name: 'sha256:' + hashlib.file_digest(f.open('rb'), 'sha256').hexdigest() for f in Path('.').iterdir()}
+          assert remote == local, (remote.keys(), local.keys())
+          PY
+          gh api --method PATCH "repos/$GH_REPO/releases/$release" -F draft=false -F prerelease=true -f make_latest=false --jq .html_url

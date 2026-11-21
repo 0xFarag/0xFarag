@@ -1,0 +1,15 @@
+{
+  "AuthzLedger-Arch-Pruefer-PKGBUILD.tar.gz": "fbd02941c3c33e773db72f8f3e7a3bc501da52feb4c7fa5967cf1eca541db06e",
+  "AuthzLedger-Windows-x64-Pruefer-Preview.zip": "80cde53853674baae0097776acd6eeef925073eeb4ae41be1f6c46c375216aa9",
+  "AuthzLedger-Windows-x64-SelfContained.zip": "ff76b615f2aeff1ab2659adec14835fb1b4872b0fa01af11e40acdc732a5985f",
+  "DOCKER_IMAGE_ID.txt": "f465402c979f2603d965d1c7f420a003b5edd1ef463632ff6e679b5e4db058d1",
+  "LICENSE.AuthzLedger.txt": "a29abff6cb7662bfaa515ce8f9c4d1f25c07e634aa66a1a83ab5b965b56cf9b9",
+  "NOTICE.AuthzLedger.txt": "a92cb04d0bd7854fea0e122ffdbfad0b41e0fef68874f63e2439bcc15d835816",
+  "README.md": "ce78ddb6aeecc0844760000fb2d2da746ffc27e0e968b149f4a4e54e16af5787",
+  "authzledger-recipient-verifier-1.5.0.post1-linux-amd64.docker.tar.gz": "e85800e70755866d6fcc3cb2fee9041b12c2a163973e3cfcac1e2ed239c71553",
+  "authzledger-verifier-1.5.0pre1-1-any.pkg.tar.zst": "4d9051bf028a748054a981e38fe0ad31863e7c96e46ed796cc2ff3c9199c1d8e",
+  "authzledger-verifier_1.5.0-preview1_all.deb": "d6d6541ddd03069d0f3cfb7554944f6f17ebb38ceef4c567aa63d2eec2ae632a",
+  "authzledger_recipient_verifier-1.5.0.post1-py3-none-any.whl": "676bc9954204a3bcb5962730066139164190ceecfd60e9118319ecfb16ed5a83",
+  "authzledger_recipient_verifier-1.5.0.post1.tar.gz": "70e07191098b41a6a64d0b2763fa978e7afa501cd657706fd2385c649a9b26f2",
+  "verification.json": "be230e3a90d00f45ab9422fa601e85e79a9c8d167039249455e4810d15f26cf0"
+}

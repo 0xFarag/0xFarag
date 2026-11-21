@@ -1,98 +1,16 @@
-![0xFarag — Web and API Security](assets/profile-header.svg)
+# AuthzLedger offline recipient verifier · preview 2
 
-# Nasser Aldin Farag · 0xFarag
+These packages verify the signature and retained evidence of a delivered AuthzLedger bundle offline. Obtain the trusted public key through an independent channel. Choose the package for your platform and check its SHA-256 against the release manifest.
 
-**[AuthzLedger 1.5.0 — assessment suite, source and downloads →](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0)**
+| Platform | Release asset |
+| --- | --- |
+| Windows x64, self-contained portable verifier | `AuthzLedger-Windows-x64-SelfContained.zip` (includes the portable EXE, notices and native test receipt) |
+| Windows x64, launcher and installer preview | `AuthzLedger-Windows-x64-Pruefer-Preview.zip` (read the enclosed German instructions for its runtime prerequisites) |
+| Debian / Ubuntu | `authzledger-verifier_1.5.0-preview1_all.deb` |
+| Arch Linux | `authzledger-verifier-1.5.0pre1-1-any.pkg.tar.zst` (the PKGBUILD source is also available) |
+| Docker on Linux amd64 | `authzledger-recipient-verifier-1.5.0.post1-linux-amd64.docker.tar.gz` (exported image, see `DOCKER_IMAGE_ID.txt`) |
+| Python | `authzledger_recipient_verifier-1.5.0.post1-py3-none-any.whl` and matching source distribution |
 
-**Penetration Testing · Web & API Security · Security Engineering**  
-Zürich, Switzerland
+The standalone Windows EXE is unsigned. A valid signature authenticates the signed inventory relative to the trusted key. The checks do not attest events on a remote system. This preview contains the recipient verifier only. The stable AuthzLedger product release is version 1.5.0.
 
-I bring more than ten years of system engineering experience and a background in web security to practical security assessment. My work follows a clear standard: understand the system, reproduce the finding, explain its impact and verify the fix.
-
-My focus is application security, authorization testing and security automation. I build reproducible working examples that make technical reasoning and remediation inspectable.
-
-**Open to permanent roles in penetration testing, Web/API security, AppSec and security engineering in Switzerland.** I am also the creator of AuthzLedger, an authorization testing and evidence workbench for pentesters and AppSec teams.
-
-[LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [GitHub projects](https://github.com/0xFarag?tab=repositories) · [YouTube](https://www.youtube.com/@0xFarag) · [TryHackMe](https://tryhackme.com/p/0xFarag)
-
-## AuthzLedger 1.5.0
-
-### From permitted scope to reproducible evidence.
-
-**One local assessment suite for expert pentesters and AppSec teams.**
-
-Connect permitted scope, captured traffic, discovery, controlled checks, reproducible findings, selective retests and signed handover. Studio and CLI share the same services and execution context.
-
-**[DOWNLOAD 1.5.0 →](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0)** · **[EXPLORE THE SUITE →](AUTHZLEDGER.md)** · **[RUN THE LOCAL DEMOS →](AUTHZLEDGER.md#run-the-150-suite)**
-
-### Discover → Assess → Prove → Retest → Handover
-
-| Capability | Delivered in 1.5.0 |
-| :--- | :--- |
-| **Engagement workspace** | Persistent assessments with explicit scope, rules-of-engagement references, credential references, expiry and budgets. |
-| **Recon and inventory** | Bounded HTTP/API discovery and explicit TCP service probes; one surface catalog with retained provenance. |
-| **Specialist-tool integration** | Burp raw, ZAP JSON+, HAR and OpenAPI; selected offline Nmap XML and Nuclei JSONL result adapters. Imported assertions remain hints. |
-| **Controlled assessment** | Versioned authorization, business-logic and selected web checks with prerequisite controls, observable predicates and explicit evidence levels. |
-| **Controlled PoCs** | Reproducible experiments, bounded Minimal Reproducer and explicitly approved static playbooks. |
-| **Selective retest** | Source-bound comparisons preserve the original evidence and keep omitted work visible as `not_retested`. |
-| **Reporting and handover** | JSON, HTML and PDF from one frozen snapshot; impact, remediation, coverage and an Ed25519-signed file inventory. |
-
-**682/682 tests · 8/8 browser suites · 3 reproducible demos.** [Inspect the passing release pipeline](https://github.com/0xFarag/0xFarag/actions/runs/39477528355) · [Download the exact-commit verification receipt](https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/verification.json).
-
-The A/B/C demos use owned loopback fixtures: a 403 with protected data is confirmed only with valid controls; scoped discovery leads to a narrow configuration finding; a selective fix proof retains `not_retested`. Changing one signed report byte is rejected by both verifiers.
-
-[Installation](https://github.com/0xFarag/0xFarag/blob/v1.5.0/INSTALL.md) · [Versioned source](https://github.com/0xFarag/0xFarag/tree/v1.5.0) · [Source ZIP](https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-source.zip) · [Wheel](https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-py3-none-any.whl) · [Proof package with JSON/HTML/PDF](https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-proof.zip)
-
-The native checks cover documented predicates, not universal vulnerability coverage. Nmap/Nuclei adapters import supported results; they do not launch the scanners. [Read the exact supported scope and trust boundaries](https://github.com/0xFarag/0xFarag/blob/v1.5.0/docs/suite-1.5.0.md).
-
-Built on the unchanged [1.1.0 authorization foundation](https://github.com/0xFarag/0xFarag/releases/tag/v1.1.0). [Watch the historical 1.1.0 film](https://www.youtube.com/watch?v=vEaYxBpsLGw); it shows that earlier release.
-
-**AppSec teams and pentest consultancies:** [contact me on LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) to discuss an authorized pilot and reproducible developer handover.
-
-Built by **Nasser Aldin Farag / 0xFarag**, Switzerland. Source-visible, with proprietary rights reserved. [Commercial licensing](AUTHZLEDGER_RIGHTS.md) · [Product scope](AUTHZLEDGER.md) · [Development direction](AUTHZLEDGER_DIRECTION.md).
-
-## Selected engineering work
-
-| Project | Purpose | What to inspect |
-| :--- | :--- | :--- |
-| [**API Authorization Lab**](https://github.com/0xFarag/api-authorization-lab) | Make object-level authorization failures reproducible. | Local invoice API, ownership enforcement and before/after HTTP evidence. |
-| [**Nmap Evidence Report**](https://github.com/0xFarag/nmap-evidence-report) | Turn scan output into usable assessment evidence. | Offline XML processing, Markdown/JSON reports and preservation of observed states. |
-| [**Pentest Case Study**](https://github.com/0xFarag/pentest-case-study) | Connect a technical finding to a clear remediation decision. | Scope, impact, request/response evidence, fix and retest. |
-| [**Offensive Security Labs**](https://github.com/0xFarag/offensive-security-labs) | Explore security boundaries through executable examples. | Exploit/fix pairs across OAuth, SSRF, CI and API security, with regression checks. |
-| [**TryHackMe Reports**](https://github.com/0xFarag/tryhackme-writeups) | Document technical reasoning and lessons from completed rooms. | Learning retrospectives, remediation analysis and proposed retest criteria. |
-
-The runnable labs and sample assessment use synthetic data in local environments. They are separate from client engagements. TryHackMe reports distinguish completed learning activities from proposed retests.
-
-## Technical focus
-
-**Web & API security** — HTTP, authentication boundaries, object-level access control, finding validation and retesting.  
-**Systems** — Windows/Linux, networking, operations and system engineering.  
-**Security engineering** — Python automation, structured evidence, reproducible tests and clear technical reporting.  
-**Continuing development** — Active Directory security, offensive security methodology and red teaming.
-
-## Credentials
-
-| Credential | Issuer | Earned |
-| :--- | :--- | :--- |
-| **PNPT** — Practical Network Penetration Tester | TCM Security | 2024 |
-| **PenTest+** | CompTIA | 2024 |
-| **OPST** — OSSTMM Professional Security Tester | ISECOM | 2024 |
-| **PJPT** | TCM Security | 2023 |
-| **eJPT** | INE | 2023 |
-| **CC** — Certified in Cybersecurity | ISC² | 2024 |
-| **ICCA** — INE Certified Cloud Associate | INE | 2023 |
-| **Google Cybersecurity Professional Certificate** | Google | 2023 |
-
-## Work with me
-
-I am seeking a permanent cybersecurity role in Switzerland, with a focus on penetration testing, Web/API security, AppSec or security engineering. I welcome technical conversations about the trade-offs, test design and evidence behind these projects.
-
-**[Contact me on LinkedIn →](https://www.linkedin.com/in/nasser-aldin-farag-974697412/)**
-
-## Rights and permissions
-
-Copyright © 2026 Nasser Aldin Farag (0xFarag). All rights reserved.
-
-Nasser Aldin Farag is the sole holder of the copyright and the other exclusive rights in his own protectable work, including AuthzLedger and this personal brand. No co-ownership is granted. Publication does not transfer those rights and does not grant a licence to copy, modify, redistribute or exploit them commercially. A separate written licence is required.
-
-GitHub's terms for viewing and forking a public repository, mandatory law, and third-party licences remain in force. Earlier MIT text applies only to copies that already received it. [Rights and commercial licensing](AUTHZLEDGER_RIGHTS.md) · [Profile licence](LICENSE).
+Native verification runs: [Windows x64](https://github.com/0xFarag/0xFarag/actions/runs/44885489514), [Windows launcher and installer](https://github.com/0xFarag/0xFarag/actions/runs/44876995868), [Linux packages and Docker](https://github.com/0xFarag/0xFarag/actions/runs/44885731891). See the rights and attribution notices attached to this release and inside each package.

@@ -1,0 +1,5 @@
+{
+ "windows":{"run":44885489514,"commit":"e603bb9f8faa411eeace24a05073e9024195b6d8","id":14699338011,"sha256":"ff76b615f2aeff1ab2659adec14835fb1b4872b0fa01af11e40acdc732a5985f"},
+ "windows-legacy":{"run":44876995868,"commit":"8963826c994e2dce50cfcf5a76d4229370b3c7b1","id":14696580445,"sha256":"08eeda735ae88fb2faa5c76ad452297248274cf54b84fcd65623683e4bff2137"},
+ "linux":{"run":44885731891,"commit":"796f0734788c99fd389f4eab6c246ed2d2dcaa37","id":14699603528,"sha256":"a6c053b908e57758ad9073debcfca650809c8f88d118798c30461172cc24486b","members":["authzledger-recipient-verifier-1.5.0.post1-linux-amd64.docker.tar.gz","authzledger-verifier-1.5.0pre1-1-any.pkg.tar.zst","DOCKER_IMAGE_ID.txt"]}
+}

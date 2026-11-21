@@ -1,0 +1,65 @@
+{
+  "rights": "ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).",
+  "package": "unsigned Windows recipient verifier preview for upstream v1.5.0",
+  "release": "03aea857e35358ddeb13d2a861b633e60c1ca873",
+  "upstream_verifier_sha256": "afe47e30606d61f09025fa8b2703d7446b08cc0a3093e4b82eace355bfba5303",
+  "proof_zip_sha256": "54b21858a89d498ba3b5050ad85f5969068bf79bcf5a07467297b3c3d1d5e817",
+  "output": {
+    "AuthzLedgerVerify-x64.exe": {
+      "bytes": 2231808,
+      "sha256": "d82a3f22eae0d58987a915771f32035d4cf937769ab6512e95257f7868a39f97",
+      "machine": "0x8664",
+      "authenticode_signed": false
+    },
+    "AuthzLedgerVerify-Setup.exe": {
+      "bytes": 832853,
+      "sha256": "29198e610f2ed8c6e1ba1f9ce8f44194e2d004db8680489e764cc497a28b21ad",
+      "machine": "0x14c",
+      "authenticode_signed": false
+    }
+  },
+  "host_tests": {
+    "original": {
+      "exit": 0,
+      "message": "VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.\nReport assertion/dependency semantics and execution truth are not established by this standalone verifier."
+    },
+    "one_byte": {
+      "exit": 1,
+      "message": "FAILED: bundle file size or hash mismatch: attachments/platform.pdf"
+    },
+    "unrelated_pubkey": {
+      "exit": 1,
+      "message": "FAILED: trusted public key fingerprint mismatch"
+    }
+  },
+  "tampered_pdf_same_size_different_bytes": 1,
+  "host": "Windows Server 2022 GitHub-hosted runner compiled and tested both delivered binaries. Linux host tested matching launcher sources separately.",
+  "original_verifier_embedded_byte_for_byte": true,
+  "windows_native_ci": {
+    "status": "success",
+    "pr": "https://github.com/0xFarag/0xFarag/pull/8",
+    "run": "https://github.com/0xFarag/0xFarag/actions/runs/44876995868",
+    "source_commit": "8963826c994e2dce50cfcf5a76d4229370b3c7b1",
+    "image": "windows-2022",
+    "source_build": "pass",
+    "portable": {
+      "original": 0,
+      "one_byte": 1,
+      "unrelated_key": 1
+    },
+    "installed": {
+      "original": 0,
+      "one_byte": 1,
+      "unrelated_key": 1
+    },
+    "installation": "pass",
+    "removal_with_user_file_retention": "pass",
+    "checkout_merge_commit": "65ab944cfb035d3a4b2cc4dc215f2bcd9b674a00",
+    "artifact_id": 14696580445,
+    "artifact_sha256": "08eeda735ae88fb2faa5c76ad452297248274cf54b84fcd65623683e4bff2137",
+    "artifact_expires_at": "2026-11-28T06:45:08Z",
+    "downloaded_binaries_individually_sha256_verified": true,
+    "artifact_url": "https://github.com/0xFarag/0xFarag/actions/runs/44876995868/artifacts/14696580445"
+  },
+  "regression_scope": "recipient verifier only"
+}
