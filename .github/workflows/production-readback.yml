@@ -1,0 +1,62 @@
+name: Verify public production deployment
+on:
+  push:
+    branches: [verify/production-20261121]
+permissions:
+  contents: read
+jobs:
+  public-https:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: b2758a4b7f117a4de8cb3857bbfdeeecd7c4755d
+          persist-credentials: false
+      - name: Compare anonymous HTTPS responses with the approved release
+        shell: bash
+        run: |
+          python - <<'PY'
+          import concurrent.futures, hashlib, json, pathlib, ssl, urllib.error, urllib.parse, urllib.request
+          origin = "https://authzledger.vercel.app"
+          targets = {"/":"index.html", "/installation.html":"installation.html", "/investor-one-pager.pdf":"investor-one-pager.pdf", "/proof/v1.5.0/receipt.json":"proof/v1.5.0/receipt.json", "/lab.html":"lab.html"}
+          class SameOrigin(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, headers, newurl):
+                  if urllib.parse.urlsplit(newurl)[:2] != urllib.parse.urlsplit(origin)[:2]:
+                      raise ValueError("unexpected cross-origin redirect")
+                  return super().redirect_request(req, fp, code, msg, headers, newurl)
+          def check(item):
+              remote, local = item
+              expected = hashlib.sha256((pathlib.Path("public")/local).read_bytes()).hexdigest()
+              opener=urllib.request.build_opener(SameOrigin(), urllib.request.HTTPSHandler(context=ssl.create_default_context()))
+              req=urllib.request.Request(origin+remote,headers={"Accept-Encoding":"identity", "User-Agent":"AuthzLedger-release-readback/1.0"})
+              with opener.open(req,timeout=20) as rsp:
+                  body=rsp.read()
+                  got=hashlib.sha256(body).hexdigest()
+                  print(f"HTTPS {rsp.status} {rsp.url} {len(body)} bytes sha256={got} matches_commit={got==expected}",flush=True)
+                  assert rsp.status==200 and got==expected, (remote,expected,got)
+          with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+              list(pool.map(check, targets.items()))
+          PY
+      - name: Read public .com registry and apex DNS
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,urllib.request,urllib.error
+          url="https://rdap.verisign.com/com/v1/domain/authzledger.com"
+          try:
+              with urllib.request.urlopen(url,timeout=15) as r:
+                  data=json.load(r)
+                  print("Verisign RDAP:",r.status,data.get("ldhName"),"status=",data.get("status"))
+          except urllib.error.HTTPError as error:
+              print("Verisign RDAP:",error.code)
+          except Exception as error:
+              print("Verisign RDAP check incomplete:",type(error).__name__)
+          for t in ("A","NS"):
+              try:
+                  with urllib.request.urlopen("https://dns.google/resolve?name=authzledger.com&type="+t,timeout=10) as rsp:
+                      d=json.load(rsp)
+                      print("Google Public DNS:",t,"rcode",d.get("Status"),"answers",[(a["type"],a["data"]) for a in d.get("Answer",[])])
+              except Exception as error:
+                  print("DNS check incomplete:",type(error).__name__)
+          PY
