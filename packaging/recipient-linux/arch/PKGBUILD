@@ -1,0 +1,28 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
+# Package recipe for the standalone, offline recipient verifier.
+pkgname=authzledger-verifier
+pkgver=1.5.0pre1
+pkgrel=1
+pkgdesc='Offline recipient verifier for Ed25519-signed AuthzLedger handovers (packaging preview)'
+arch=('any')
+url='https://github.com/0xFarag/0xFarag'
+license=('LicenseRef-AuthzLedger-All-Rights-Reserved')
+depends=('python>=3.10' 'openssl>=3.0')
+source=('verify_bundle.py' 'authzledger-verify' 'LICENSE' 'NOTICE.txt')
+sha256sums=(
+  'afe47e30606d61f09025fa8b2703d7446b08cc0a3093e4b82eace355bfba5303'
+  '6bce673623fd6bef55314fb6cfaa84bd3b6a4b5e90e02713c811a6aac136fb2c'
+  'a29abff6cb7662bfaa515ce8f9c4d1f25c07e634aa66a1a83ab5b965b56cf9b9'
+  'a92cb04d0bd7854fea0e122ffdbfad0b41e0fef68874f63e2439bcc15d835816'
+)
+
+check() {
+    python -I -B "$srcdir/verify_bundle.py" --help >/dev/null
+}
+
+package() {
+    install -Dm755 "$srcdir/authzledger-verify" "$pkgdir/usr/bin/authzledger-verify"
+    install -Dm644 "$srcdir/verify_bundle.py" "$pkgdir/usr/share/authzledger-verifier/verify_bundle.py"
+    install -Dm644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    install -Dm644 "$srcdir/NOTICE.txt" "$pkgdir/usr/share/licenses/$pkgname/NOTICE.txt"
+}

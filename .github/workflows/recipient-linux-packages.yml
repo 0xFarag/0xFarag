@@ -1,0 +1,81 @@
+name: Linux recipient verifier packaging
+on:
+  push:
+    branches:
+      - 'release/recipient-linux-20261121*'
+    paths:
+      - 'packaging/recipient-linux/**'
+      - '.github/workflows/recipient-linux-packages.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  linux-packages:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Fetch immutable test fixture
+        working-directory: packaging/recipient-linux
+        run: |
+          curl --fail --silent --show-error --location \
+            https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-proof.zip \
+            --output proof.zip
+          echo "54b21858a89d498ba3b5050ad85f5969068bf79bcf5a07467297b3c3d1d5e817  proof.zip" | sha256sum --check -
+      - name: Verify the recipient wheel in a fresh environment
+        working-directory: packaging/recipient-linux
+        run: |
+          python3 -m venv "$RUNNER_TEMP/receipt-venv"
+          "$RUNNER_TEMP/receipt-venv/bin/python" -m pip install --no-index --no-deps packages/*.whl
+          PATH="$RUNNER_TEMP/receipt-venv/bin:$PATH" python3 ci-check.py installed proof.zip
+      - name: Install and exercise the Debian package on Debian and Ubuntu
+        working-directory: packaging/recipient-linux
+        run: |
+          for base in debian:13-slim ubuntu:24.04; do
+            docker run --rm -v "$PWD:/source:ro" "$base" bash -euc '
+              apt-get update
+              DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3 openssl
+              dpkg -i /source/packages/*.deb
+              authzledger-verify --help
+              python3 /source/ci-check.py installed /source/proof.zip
+              dpkg --remove authzledger-verifier
+              test ! -e /usr/bin/authzledger-verify
+            '
+          done
+      - name: Install and test on Arch Linux
+        working-directory: packaging/recipient-linux
+        run: |
+          mkdir -p out
+          docker run --rm -v "$PWD:/source:ro" -v "$PWD/out:/out" archlinux:base-devel bash -euc '
+            pacman -Syu --noconfirm --needed python openssl base-devel
+            useradd --create-home builder
+            cp -r /source/arch /home/builder/build
+            chown -R builder:builder /home/builder/build
+            runuser -u builder -- bash -ec "cd /home/builder/build && makepkg --verifysource && makepkg --cleanbuild"
+            pkg=(/home/builder/build/authzledger-verifier-*.pkg.tar.zst)
+            test "${#pkg[@]}" = 1
+            pacman -U --noconfirm "${pkg[0]}"
+            authzledger-verify --help
+            python /source/ci-check.py installed /source/proof.zip
+            cp "${pkg[0]}" /out/
+            pacman -R --noconfirm authzledger-verifier
+            test ! -e /usr/bin/authzledger-verify
+          '
+      - name: Build and test multi-stage image offline at runtime
+        working-directory: packaging/recipient-linux
+        run: |
+          docker build --pull -t authzledger-recipient-verifier:1.5.0.post1 container
+          docker run --rm --network none authzledger-recipient-verifier:1.5.0.post1 --help
+          python3 ci-check.py docker proof.zip
+          docker image inspect --format '{{.Id}}' authzledger-recipient-verifier:1.5.0.post1 > out/DOCKER_IMAGE_ID.txt
+          docker save authzledger-recipient-verifier:1.5.0.post1 | gzip -n > out/authzledger-recipient-verifier-1.5.0.post1-linux-amd64.docker.tar.gz
+          cd out
+          sha256sum -- *.pkg.tar.zst *.docker.tar.gz DOCKER_IMAGE_ID.txt > SHA256SUMS.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: authzledger-linux-recipient-packages
+          path: packaging/recipient-linux/out/
+          if-no-files-found: error
+          retention-days: 7

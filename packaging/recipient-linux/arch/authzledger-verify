@@ -1,0 +1,5 @@
+#!/bin/sh
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
+PATH=/usr/bin
+export PATH
+exec /usr/bin/python -I -B /usr/share/authzledger-verifier/verify_bundle.py "$@"
