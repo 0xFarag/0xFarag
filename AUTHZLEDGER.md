@@ -8,6 +8,16 @@ Published 20 October 2026 · Nasser Aldin Farag / 0xFarag · Switzerland
 
 **682/682 tests, zero failures or skips · 8/8 browser suites · 3 reproducible demos.** The release tag binds commit `03aea857e35358ddeb13d2a861b633e60c1ca873`. All six public release assets were downloaded and matched against the verified CI artifacts and SHA-256 digests.
 
+## Pilot and evidence lab · 21 November 2026
+
+The 56-second product film follows the evidence behind a selective retest. One finding is recorded as `fix_verified`. The second remains `not_retested`. [Watch the film](https://authzledger.sweet-macaw-6993.chatgpt.site/#film).
+
+The browser lab asks a separate question: what did the defender observe? Switch between four synthetic samples: a matched event and alert, an event alone, an empty source, and an event from another scope. Each sample yields a downloadable unsigned JSON record tied to the same source finding. [Try the signal lab](https://authzledger.sweet-macaw-6993.chatgpt.site/#kontrolllabor).
+
+The 30-day pilot uses stable v1.5.0 and covers two named users and one authorised engagement. Indicative price: CHF 2,400. Version 1.6.0 is in technical review. [Request a pilot](https://authzledger.sweet-macaw-6993.chatgpt.site/#pilot) · [Follow the 1.6 review](https://github.com/0xFarag/0xFarag/pull/4).
+
+ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
+
 ## Suite workflow
 
 **Discover → Assess → Investigate → Retest → Report → Proof**
