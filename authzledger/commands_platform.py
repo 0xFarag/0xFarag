@@ -9,6 +9,10 @@ _ACTIONS = {"create", "list", "show", "registry", "surface-import", "discover-pl
 
 
 def add_commands(actions):
+    blue = actions.add_parser("blue-evidence", help="Compare saved telemetry with a local retest readback")
+    blue.add_argument("anchor", type=Path)
+    blue.add_argument("signals", type=Path)
+    blue.add_argument("--out", type=Path, help="New JSON file; stdout when omitted")
     index = actions.add_parser("federation-index", help="Inspect surface provenance from a frozen assessment snapshot offline")
     index.add_argument("snapshot", type=Path, help="Frozen platform snapshot JSON from assessment freeze")
     index.add_argument("--out", type=Path, help="New index JSON file; stdout when omitted")
@@ -110,12 +114,21 @@ def _federation_sources(args):
 
 def execute_command(args):
     action = args.assessment_action
-    if action not in _ACTIONS and action not in {"federation-index", "federation-preview", "federation-retain"}:
+    if action not in _ACTIONS and action not in {"blue-evidence", "federation-index", "federation-preview", "federation-retain"}:
         return None
     from .commands_assessment import _read, _write
     if args.out is not None and args.out.exists():
         raise ValueError("Output already exists")
-    if action == "federation-index":
+    if action == "blue-evidence":
+        from .blue_evidence import MAX_BYTES, correlate_retest
+        inputs = []
+        for path in (args.anchor, args.signals):
+            if not path.is_file():
+                raise ValueError("Choose a regular local JSON file.")
+            with path.open("rb") as stream:
+                inputs.append(stream.read(MAX_BYTES + 1))
+        result = correlate_retest(*inputs)
+    elif action == "federation-index":
         from .federation_index import build_surface_index
         result = build_surface_index(_read(args.snapshot))
     elif action == "federation-preview":

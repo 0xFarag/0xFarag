@@ -51,6 +51,7 @@ def platform_route(handler, body):
         "recover": {"assessment_id"},
         "federation-preview": {"allowed_services", "sources", "with_review"},
         "federation-index": {"snapshot_id"},
+        "blue-evidence": {"anchor_b64", "signals_b64"},
         "federation-retain": {"assessment_id", "allowed_services", "sources", "expected_revision", "preview_digest", "release_sources"},
         "annotate": {"assessment_id", "annotations", "expected_revision"},
     }
@@ -58,7 +59,16 @@ def platform_route(handler, body):
         raise ContractError("Unsupported platform operation or fields.")
     service = handler.server.workbench
     identifier = body.get("assessment_id")
-    if route == "federation-index":
+    if route == "blue-evidence":
+        from .blue_evidence import MAX_BYTES, correlate_retest
+        inputs = []
+        for field in ("anchor_b64", "signals_b64"):
+            encoded = body.get(field)
+            if not isinstance(encoded, str) or len(encoded) > 4 * ((MAX_BYTES + 2) // 3):
+                raise ContractError("Select two local JSON files up to 512 KiB each.")
+            inputs.append(base64.b64decode(encoded, validate=True))
+        result = correlate_retest(*inputs)
+    elif route == "federation-index":
         from .federation_index import build_surface_index
         snapshot_id = body.get("snapshot_id")
         snapshot = handler.server.platform_snapshots.get(snapshot_id) if isinstance(snapshot_id, str) else None

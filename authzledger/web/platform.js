@@ -441,3 +441,24 @@ $('p-delta').onclick=guarded(async()=>{pRequire();const result=await api('/api/p
 $('p-knowledge').onclick=guarded(async()=>{pRequire();const observations=[{product:$('p-knowledge-product').value.trim(),version:$('p-knowledge-version').value.trim(),source_ref:$('p-knowledge-source').value.trim(),source_kind:$('p-knowledge-kind').value}],pack=$('p-knowledge-pack').value.trim()?await strictJSON($('p-knowledge-pack').value):null;const result=await api('/api/platform/knowledge',{assessment_id:platform.id,observations,pack});pInvalidate();await pLoad(platform.id);$('p-knowledge-status').textContent='Knowledge result retained · '+result.artifact.artifact_id;pInspect('Knowledge candidates','Evidence-bound hints; exploitability is not established',{Result:result.artifact.value});});
 document.querySelectorAll('.platform-records').forEach(list=>list.addEventListener('keydown',event=>{if(!['ArrowDown','ArrowUp','j','k'].includes(event.key)||event.ctrlKey||event.metaKey)return;const rows=[...list.querySelectorAll('button')],i=rows.indexOf(document.activeElement);if(i<0)return;event.preventDefault();rows[(i+(['ArrowDown','j'].includes(event.key)?1:rows.length-1))%rows.length]?.focus();}));
 for(const [label,view] of [['Engagement and authorization scope','scope'],['Discover assessment surface','surface'],['Assess with controlled checks','assess'],['Investigate retained assessment','investigate'],['Assessment platform report and proof','report']])commands.push([label,guarded(async()=>{if(!platform.loaded)await pRefresh();pPage(view);})]);
+
+$('p-blue-evaluate').onclick = guarded(async () => {
+ const controls = [$('p-blue-anchor'), $('p-blue-signals')];
+ const files = controls.map(input => input.files[0]);
+ const status = $('p-blue-status');
+ status.textContent = '';
+ if (files.some(file => !file || file.size > 512 * 1024)) throw Error('Choose two JSON files up to 512 KiB each.');
+ $('p-blue-evaluate').disabled = true;
+ controls.forEach(input => { input.disabled = true; });
+ try {
+  const [anchor_b64, signals_b64] = await Promise.all(files.map(aImportFileBase64));
+  const result = await api('/api/platform/blue-evidence', {anchor_b64, signals_b64});
+  const summary = Object.entries(result.samples).map(([name, record]) => name + ': ' + record.status);
+  status.textContent = [result.binding.assessment, result.synthetic ? 'Synthetic' : 'Operator-supplied', ...summary].join(' · ');
+  download(result, 'blue-evidence.json');
+ } finally {
+  controls.forEach(input => { input.disabled = false; });
+  $('p-blue-evaluate').disabled = false;
+ }
+});
+for (const id of ['p-blue-anchor', 'p-blue-signals']) $(id).onchange = () => { $('p-blue-status').textContent = ''; };

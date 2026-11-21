@@ -1,0 +1,70 @@
+{
+  "schema": "authzledger.website-lab.v1",
+  "rights": "ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).",
+  "dataset": "synthetic-control-signals",
+  "anchor_sha256": "e88fa8b182ad1d7b3477516c1432e24a919d1882a4221bf2cb8e25265cff4bd8",
+  "expectation": {
+    "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+    "scope": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+    "finding": "finding-ae64d20deb2bf61f37090cb3",
+    "rule": "lab.handover.validation",
+    "source": "fixture.audit",
+    "from_utc": "2026-11-20T22:25:41Z",
+    "until_utc": "2026-11-20T22:26:03Z"
+  },
+  "controls": {
+    "matched": {
+      "events": [
+        {
+          "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+          "scope": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+          "finding": "finding-ae64d20deb2bf61f37090cb3",
+          "source": "fixture.audit",
+          "at": "2026-11-20T22:25:50Z",
+          "event": "evt-lab-001"
+        }
+      ],
+      "alerts": [
+        {
+          "event": "evt-lab-001",
+          "rule": "lab.handover.validation"
+        }
+      ]
+    },
+    "telemetry_only": {
+      "events": [
+        {
+          "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+          "scope": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+          "finding": "finding-ae64d20deb2bf61f37090cb3",
+          "source": "fixture.audit",
+          "at": "2026-11-20T22:25:50Z",
+          "event": "evt-lab-001"
+        }
+      ],
+      "alerts": []
+    },
+    "no_data": {
+      "events": [],
+      "alerts": []
+    },
+    "foreign": {
+      "events": [
+        {
+          "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+          "scope": "synthetic-other-scope",
+          "finding": "finding-ae64d20deb2bf61f37090cb3",
+          "source": "fixture.audit",
+          "at": "2026-11-20T22:25:50Z",
+          "event": "evt-lab-001"
+        }
+      ],
+      "alerts": [
+        {
+          "event": "evt-lab-001",
+          "rule": "lab.handover.validation"
+        }
+      ]
+    }
+  }
+}
