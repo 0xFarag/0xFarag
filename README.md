@@ -93,4 +93,6 @@ I am seeking a permanent cybersecurity role in Switzerland, with a focus on pene
 
 Copyright © 2026 Nasser Aldin Farag (0xFarag). All rights reserved.
 
-All exclusive rights legally held by me in my own protectable contributions to AuthzLedger and my personal branding remain reserved to me. Publication or delivery does not itself transfer ownership or grant a general commercial licence. Commercial reuse requires a separate written agreement, subject to applicable law and permissions already validly granted. [Rights and commercial licensing](AUTHZLEDGER_RIGHTS.md).
+Nasser Aldin Farag is the sole holder of the copyright and the other exclusive rights in his own protectable work, including AuthzLedger and this personal brand. No co-ownership is granted. Publication does not transfer those rights and does not grant a licence to copy, modify, redistribute or exploit them commercially. A separate written licence is required.
+
+GitHub's terms for viewing and forking a public repository, mandatory law, and third-party licences remain in force. Earlier MIT text applies only to copies that already received it. [Rights and commercial licensing](AUTHZLEDGER_RIGHTS.md) · [Profile licence](LICENSE).
