@@ -1,0 +1,61 @@
+name: Offline recipient for Windows x64
+on:
+  workflow_dispatch:
+  push:
+    branches: ['release/offline-recipient-windows-20261121']
+    paths:
+      - '.github/workflows/recipient-selfcontained-windows.yml'
+      - 'packaging/recipient-selfcontained/windows/**'
+  pull_request:
+    paths:
+      - '.github/workflows/recipient-selfcontained-windows.yml'
+      - 'packaging/recipient-selfcontained/windows/**'
+permissions:
+  contents: read
+jobs:
+  build-and-check:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: packaging/recipient-selfcontained/windows
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Build self-contained verifier and preserve third-party notices
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          if ((Get-FileHash -Algorithm SHA256 upstream_verifier.py).Hash -ne 'afe47e30606d61f09025fa8b2703d7446b08cc0a3093e4b82eace355bfba5303') { throw 'Different upstream verifier' }
+          py -3.13-64 -m venv .venv
+          $python = (Resolve-Path '.venv\Scripts\python.exe').Path
+          & $python -m pip install --only-binary=:all: -r requirements-build.txt
+          & $python prepare.py
+          & $python build_notices.py
+          & $python -m PyInstaller --onefile --console --clean --noupx --name AuthzLedgerVerify-1.5.0-win.1-x64 --add-data 'THIRD_PARTY_NOTICES.txt:.' verifier.py
+          $exe = (Resolve-Path 'dist\AuthzLedgerVerify-1.5.0-win.1-x64.exe').Path
+          if ((& $exe --version) -ne 'AuthzLedger Offline Recipient Verifier 1.5.0-win.1') { throw 'Wrong verifier build' }
+          $notices = (& $exe --notices | Out-String)
+          foreach ($required in @('CPython','cryptography','OpenSSL','PyInstaller')) { if ($notices -notmatch $required) { throw "Missing attribution for $required" } }
+          Copy-Item THIRD_PARTY_NOTICES.txt,LICENSE.AuthzLedger.txt,NOTICE.AuthzLedger.txt,README.md -Destination dist
+          & $python -m pip freeze | Out-File dist/build-dependencies.txt -Encoding utf8NoBOM
+      - name: Compare official proof with the original and the packaged verifier
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          $python = (Resolve-Path '.venv\Scripts\python.exe').Path
+          $archive = Join-Path $env:RUNNER_TEMP 'authzledger-stable-proof.zip'
+          $env:PATH = "$env:ProgramFiles\Git\usr\bin;$env:PATH"
+          Invoke-WebRequest -Uri 'https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-proof.zip' -OutFile $archive
+          & $python smoke.py --archive $archive --exe 'dist\AuthzLedgerVerify-1.5.0-win.1-x64.exe' --receipt dist/windows-native-checks.json
+          Get-ChildItem dist -File | Sort-Object Name | ForEach-Object { '{0}  {1}' -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name } | Set-Content SHA256SUMS -Encoding utf8NoBOM
+          Copy-Item SHA256SUMS dist
+      - name: Retain verified unsigned candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: AuthzLedger-Offline-Recipient-1.5.0-win.1-x64
+          path: packaging/recipient-selfcontained/windows/dist/
+          if-no-files-found: error
+          retention-days: 14
