@@ -1,0 +1,11 @@
+Package: authzledger
+Version: 1.5.0
+Section: utils
+Priority: optional
+Architecture: all
+Depends: python3 (>= 3.10), python3-pip
+Maintainer: Nasser Aldin Farag <0xFarag>
+Description: AuthzLedger – Authorization Intelligence, built on evidence.
+ From scope to proof. Local assessment suite with control-bound findings and signed handover.
+ .
+ © Nasser Aldin Farag (0xFarag). All rights reserved.
