@@ -33,5 +33,23 @@ jobs:
           Invoke-WebRequest -Uri 'https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-proof.zip' -OutFile "$env:RUNNER_TEMP\proof-demo.zip"
           & $env:AUTHZLEDGER_PYTHON build_windows.py
           if ($LASTEXITCODE -ne 0) { throw 'Build failed' }
-          & $env:AUTHZLEDGER_PYTHON smoke_windows.py "$env:RUNNER_TEMP\proof-demo.zip"
+          $out = New-Item -ItemType Directory -Path ./native-tested
+          $rights = "ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag)."
+          @($rights, "Run $env:GITHUB_RUN_ID, attempt $env:GITHUB_RUN_ATTEMPT, checkout $env:GITHUB_SHA", "Image $env:ImageOS $env:ImageVersion") | Set-Content -Encoding utf8NoBOM "$out/windows-smoke.txt"
+          & $env:AUTHZLEDGER_PYTHON smoke_windows.py "$env:RUNNER_TEMP\proof-demo.zip" 2>&1 | Tee-Object -FilePath "$out/windows-smoke.txt" -Append
           if ($LASTEXITCODE -ne 0) { throw 'Smoke test failed' }
+          $files = @("AuthzLedgerVerify-x64.exe", "AuthzLedgerVerify-Setup.exe")
+          foreach ($name in $files) { Copy-Item -LiteralPath $name -Destination $out }
+          $hashes = foreach ($name in ($files + "windows-smoke.txt")) {
+            $hex = (Get-FileHash -Algorithm SHA256 -LiteralPath "$out/$name").Hash.ToLowerInvariant()
+            "$hex  $name"
+          }
+          $hashes | Set-Content -Encoding ascii "$out/native-SHA256SUMS"
+          $hashes | Write-Output
+      - name: Retain exact tested binaries and smoke proof for seven days
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: authzledger-windows-recipient-tested
+          path: packaging/recipient-windows/native-tested/
+          if-no-files-found: error
+          retention-days: 7
