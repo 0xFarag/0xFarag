@@ -1,0 +1,15 @@
+.git
+.github
+.venv
+**/__pycache__
+**/*.pyc
+artifacts
+dist
+tests
+docs
+evidence
+examples
+fixtures
+media
+tools
+*.sqlite3
