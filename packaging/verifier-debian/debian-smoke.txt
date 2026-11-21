@@ -1,0 +1,18 @@
+ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
+
+13.7
+openssl 3.5.7-1~deb13u3 install ok installed
+python3 3.13.5-1 install ok installed
+Selecting previously unselected package authzledger-verifier.
+(Reading database ... 6200 files and directories currently installed.)
+Preparing to unpack .../authzledger-verifier_1.5.0-0~preview1_all.deb ...
+Unpacking authzledger-verifier (1.5.0-0~preview1) ...
+Setting up authzledger-verifier (1.5.0-0~preview1) ...
+authzledger-verifier 1.5.0-0~preview1 install ok installed
+VERIFIED: Ed25519 signature, exact inventory, file hashes and report anchors.
+Report assertion/dependency semantics and execution truth are not established by this standalone verifier.
+FAILED: bundle file size or hash mismatch: attachments/platform.pdf
+FAILED: trusted public key fingerprint mismatch
+(Reading database ... 6206 files and directories currently installed.)
+Removing authzledger-verifier (1.5.0-0~preview1) ...
+Original=0 Changed=1 WrongKey=1 Removed=1 BundlePreserved=1
