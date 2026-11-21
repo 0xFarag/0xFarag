@@ -1,51 +1,36 @@
 # AuthzLedger Rechte und kommerzielle Lizenzierung
 
-Stand: 9. Oktober 2026. Rechteinhaber der ihm zustehenden Rechte: Nasser Aldin Farag (0xFarag).
+Stand: 21. November 2026.
 
-## Copyright und Rechtevorbehalt
+Alleiniger Rechteinhaber: Nasser Aldin Farag (0xFarag), Schweiz.
+Keine Mitinhaberschaft. Keine stillschweigende Lizenz.
 
-Copyright © 2026 Nasser Aldin Farag (0xFarag). Alle Rechte vorbehalten.
-
-Sämtliche Nasser Aldin Farag zustehenden Rechte an den eigenen, rechtlich schutzfähigen Bestandteilen von AuthzLedger und seinem persönlichen Branding bleiben ausschliesslich ihm vorbehalten.
-
-Vervielfältigung, Bearbeitung, Verbreitung, Unterlizenzierung und kommerzielle Verwertung bedürfen seiner vorherigen schriftlichen Zustimmung, soweit nicht zwingendes Recht oder bereits wirksam eingeräumte Berechtigungen entgegenstehen. Die Bereitstellung oder Veröffentlichung überträgt kein Eigentum und erteilt keine allgemeine kommerzielle Lizenz.
-
-## Produkt und persönliches Branding
-
-AuthzLedger ist das Produktprojekt von Nasser Aldin Farag (0xFarag). Er verantwortet die Produktvision, die fachliche Ausrichtung und die massgeblichen Gestaltungsentscheidungen.
-
-Nasser Aldin Farag beansprucht sämtliche ihm zustehenden ausschliesslichen Rechte an seinen schöpferischen Beiträgen zu AuthzLedger und seinem persönlichen Branding. Der Rechtevorbehalt umfasst insbesondere die rechtlich schutzfähigen individuellen Ausgestaltungen von Texten, Spezifikationen, Produktkonzepten, Software, Code-Strukturen, Designs, Dokumentationen und Brandingelementen.
-
-Diese Rechte bleiben bei Nasser Aldin Farag. Eine Veröffentlichung, Präsentation, Bereitstellung oder Lizenzierung bewirkt keine Übertragung des geistigen Eigentums. Nutzungsumfang, Laufzeit, Weitergabe und Vergütung werden ausschliesslich durch eine gesonderte Vereinbarung geregelt.
-
-Ohne entsprechende Berechtigung ist insbesondere keine kommerzielle Verwertung, Weiterverbreitung, Unterlizenzierung oder Übernahme in andere Produkte gestattet. Zwingendes Recht und bereits wirksam eingeräumte Berechtigungen bleiben unberührt.
+## Vorbehalt
 
 Copyright © 2026 Nasser Aldin Farag (0xFarag). Alle Rechte vorbehalten.
 
-## Kurze öffentliche Erklärung
+Sämtliche urheberrechtlichen und sonstigen ausschliesslichen Rechte an den eigenen schutzfähigen Beiträgen zu AuthzLedger, zu den persönlichen Repositories und zum persönlichen Branding stehen allein Nasser Aldin Farag zu.
 
-AuthzLedger by 0xFarag.
+Veröffentlichung, Zusendung, Vorführung oder Bezahlung überträgt diese Rechte nicht und erteilt keine allgemeine Erlaubnis zur Vervielfältigung, Bearbeitung, Verbreitung, Unterlizenzierung oder kommerziellen Verwertung. Dafür ist eine gesonderte schriftliche Vereinbarung mit ihm erforderlich.
 
-AuthzLedger ist mein Produktprojekt. Ich verantworte die Produktvision, die fachliche Ausrichtung und die Gestaltung meiner Beiträge. Sämtliche mir zustehenden Rechte bleiben ausschliesslich bei mir. Eine Veröffentlichung erteilt keine allgemeine kommerzielle Nutzungserlaubnis; Lizenzierung und Vergütung werden gesondert vereinbart.
+Zwingendes Recht und die Nutzungsbedingungen von GitHub für das Ansehen und Forken eines öffentlichen Repository bleiben unberührt. Sie sind keine Übertragung des Eigentums.
 
-© 2026 Nasser Aldin Farag. Alle Rechte vorbehalten.
+## Was nicht mitbeansprucht wird
 
-## Zusammenarbeit und vorbestehende Rechte
+Fremdes Material bleibt bei seinen Rechteinhabern und unter seiner eigenen Lizenz. Dazu gehören insbesondere unveränderte ZAP-Reporte unter der Apache License 2.0, getrennt lizenzierte Schriften und Bibliotheken sowie Plattforminhalte von TryHackMe. Ideen und Verfahren als solche werden nicht als ausschliessliches Recht behauptet. Dieser Text ist kein Patent- und kein Markeneintrag.
 
-AuthzLedger und mein persönliches Branding sind eigenständige Projekte von Nasser Aldin Farag (0xFarag). Meine daran bestehenden ausschliesslichen Rechte und meine vorbestehenden schutzfähigen Beiträge bleiben mir vorbehalten.
+Kopien, die früher rechtmässig unter einem MIT-Text aus einem Lab-Repository bezogen wurden, behalten nur die Erlaubnis aus genau jenem MIT-Text. Die jetzige Fassung erteilt keine weitere Erlaubnis.
 
-Die Übermittlung von Unterlagen, Quellcode, Spezifikationen oder Demonstrationen begründet für sich allein keine Eigentumsübertragung, keine Exklusivlizenz und keine allgemeine Verwertungsberechtigung.
+## Produktversionen
 
-Für eine Zusammenarbeit sind die eingebrachten bestehenden Rechte ausdrücklich zu dokumentieren. Nutzungsrechte, Rechte an Weiterentwicklungen, Vertraulichkeit und Vergütung sind vorab schriftlich festzulegen. Eine pauschale Übertragung meines vorbestehenden geistigen Eigentums ist nicht vorgesehen.
+AuthzLedger 1.5.0 und die älteren veröffentlichten Versionen behalten den Lizenztext, der mit der jeweiligen Version ausgeliefert wurde. Der Rechtevorbehalt dort lautet bereits: All rights reserved, Nasser Aldin Farag (0xFarag).
 
-Zwingende gesetzliche Regelungen und bereits wirksame Vereinbarungen bleiben berücksichtigt.
-
-## Rights and permissions
+## English
 
 Copyright © 2026 Nasser Aldin Farag (0xFarag). All rights reserved.
 
-All exclusive rights legally held by Nasser Aldin Farag in his own protectable contributions to AuthzLedger and his personal branding remain reserved to him. Publication, presentation, delivery of a copy or payment for a licence does not itself transfer ownership or grant a general commercial licence. Reproduction, modification, redistribution, sublicensing and commercial exploitation require prior written permission, subject to applicable law, applicable platform terms and permissions already validly granted.
+Nasser Aldin Farag is the sole holder of the exclusive rights in his own protectable contributions to AuthzLedger, his repositories and his personal brand. No co-ownership is granted. Publication does not transfer those rights and does not grant a general licence. Commercial use requires a separate written agreement.
 
-The accompanying LICENSE governs the current source distribution. The notices accompanying each previously released version remain applicable to that version. Statutory rights, separately applicable licences and legally required notices remain in force. This statement is a rights reservation; it does not establish a patent or trademark registration or create rights in ideas or methods as such.
+GitHub's terms for viewing and forking a public repository, mandatory law, and third-party licences remain in force. Copies already received under an earlier MIT licence keep only that earlier grant.
 
-Permissions and commercial licensing: [Nasser Aldin Farag / 0xFarag](https://github.com/0xFarag).
+Permissions and commercial licensing: https://github.com/0xFarag
