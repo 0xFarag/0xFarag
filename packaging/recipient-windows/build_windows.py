@@ -24,7 +24,12 @@ def main():
     env = dict(os.environ, GOOS="windows", GOARCH="amd64", CGO_ENABLED="0", GO111MODULE="off", GOTOOLCHAIN="local")
     subprocess.run([go, "build", "-trimpath", "-buildvcs=false", "-ldflags=-s -w -buildid=",
                     "-o", str(ROOT / "AuthzLedgerVerify-x64.exe"), "main.go"], cwd=SOURCE, env=env, check=True)
-    subprocess.run([nsis, "installer.nsi"], cwd=SOURCE, check=True)
+    payload = ROOT / "AuthzLedgerVerify-x64.exe"
+    if not payload.is_file() or payload.stat().st_size < 4096:
+        raise SystemExit("Missing compiled Windows payload.")
+    option = "/" if os.name == "nt" else "-"
+    subprocess.run([nsis, option + "NOCD", option + "INPUTCHARSET", "UTF8",
+                    str(SOURCE / "installer.nsi")], cwd=ROOT, check=True)
 
 if __name__ == "__main__":
     main()

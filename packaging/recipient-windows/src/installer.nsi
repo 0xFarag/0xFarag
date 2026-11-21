@@ -1,7 +1,7 @@
 ; ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
 Unicode true
 Name "AuthzLedger Recipient Verifier Preview"
-OutFile "../AuthzLedgerVerify-Setup.exe"
+OutFile "AuthzLedgerVerify-Setup.exe"
 RequestExecutionLevel user
 SetCompressor /SOLID lzma
 InstallDir "$LOCALAPPDATA\Programs\AuthzLedgerRecipientVerifierPreview"
@@ -19,12 +19,12 @@ Section
   SetShellVarContext current
   SetOutPath "$INSTDIR"
   ClearErrors
-  File "../AuthzLedgerVerify-x64.exe"
-  File "../NOTICE.txt"
-  File "../upstream-LICENSE"
-  File "../upstream-NOTICE.txt"
-  File "../Go-LICENSE.txt"
-  File "../NSIS-LICENSE.txt"
+  File "AuthzLedgerVerify-x64.exe"
+  File "NOTICE.txt"
+  File "upstream-LICENSE"
+  File "upstream-NOTICE.txt"
+  File "Go-LICENSE.txt"
+  File "NSIS-LICENSE.txt"
   IfErrors failed
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   IfErrors failed
