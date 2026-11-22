@@ -17,6 +17,8 @@ My focus is application security, authorization testing and security automation.
 
 ## AuthzLedger 1.5.0
 
+<a href="https://authzledger.com/"><img src="assets/authzledger-logo.png" alt="AuthzLedger website" width="72" height="72"></a>
+
 ### From permitted scope to reproducible evidence.
 
 **One local assessment suite for expert pentesters and AppSec teams.**

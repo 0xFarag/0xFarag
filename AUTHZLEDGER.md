@@ -1,5 +1,7 @@
 # AuthzLedger 1.5.0
 
+<a href="https://authzledger.com/"><img src="assets/authzledger-logo.png" alt="AuthzLedger website" width="104" height="104"></a>
+
 **A local assessment suite that connects expert pentesting from permitted scope to reproducible evidence.**
 
 **[DOWNLOAD 1.5.0 →](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0)** · **[VIEW VERSIONED SOURCE →](https://github.com/0xFarag/0xFarag/tree/v1.5.0)** · **[VERIFY THE RELEASE →](https://github.com/0xFarag/0xFarag/actions/runs/39477528355)**
