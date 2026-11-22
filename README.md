@@ -1,5 +1,7 @@
 # AuthzLedger · Öffentliche Website
 
+<img src="public/assets/authzledger-logo.png" alt="AuthzLedger" width="96" height="96">
+
 Dieser Zweig enthält die statische Produktwebsite von Nasser Aldin Farag (0xFarag). GitHub führt die Quellen, Filme, Untertitel und öffentlichen Beispielbelege zusammen. Vercel liefert das Verzeichnis `public/` aus. Die Website benötigt keinen Build-Schritt, keine Kontodaten und keinen laufenden Assessment-Dienst.
 
 Das stabile Produkt liegt im [Release v1.5.0](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0). Die Freigabe des Produktes hat einen separaten Versions- und Signaturprozess. Die Projektadresse ist authzledger.com.
