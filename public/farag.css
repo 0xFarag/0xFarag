@@ -1,0 +1,74 @@
+/* Shared 0xFarag identity across the product, lab, installation and articles. */
+:root {
+  --midnight: #081426;
+  --royal: #153765;
+  --brass: #e2b65f;
+  --navy: var(--midnight);
+  --navy2: var(--royal);
+  --gold: var(--brass);
+  --paper: #f7f6f2;
+  --line: #c8cfda;
+}
+
+header.head, body > header, body > footer {
+  background: var(--midnight);
+  color: #f7f7f4;
+  border-block-start: 2px solid var(--brass);
+}
+
+.brand, .wordmark {
+  font-family: "Instrument Sans", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -.035em;
+  color: #fff3d8;
+}
+
+.brand img, .wordmark img {
+  width: clamp(2.65rem, 4vw, 3.4rem);
+  height: auto;
+}
+
+.hero, .lab-head, .article-hero, main > section.intro {
+  background-color: var(--midnight);
+  background-image:
+    linear-gradient(126deg, transparent 64%, #d5a74738 64.1%, transparent 64.24%),
+    linear-gradient(126deg, transparent 70%, #7fa3d824 70.1%, transparent 70.24%),
+    radial-gradient(ellipse at 88% 35%, #234a77, transparent 55%),
+    linear-gradient(115deg, var(--midnight) 16%, #102747 72%, var(--royal));
+  color: #f9f7f1;
+  border-block-end: 1px solid var(--brass);
+}
+
+.hero h1, .lab-head h1, .article-hero h1, .intro h1 {
+  font-family: "Instrument Sans", system-ui, sans-serif;
+  font-weight: 690;
+  letter-spacing: -.05em;
+  line-height: 1.04;
+  overflow-wrap: break-word;
+}
+.hero h1 { max-width: 15ch; font-size: clamp(2.6rem, 5.1vw, 5rem); }
+.hero h1 em, .lab-head h1 em {
+  color: var(--brass);
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+}
+
+.release, .meta, .metrics-title { color: var(--brass); }
+.head-cta, .btn, .primary, .secondary { border-radius: .2rem; }
+.head-cta { border-color: var(--brass); }
+.btn.gold, .primary {
+  color: var(--midnight);
+  border-color: var(--brass);
+  background: var(--brass);
+}
+.btn.gold:hover, .primary:hover { background: #f5d18a; }
+.track, .cards article { border-top: 3px solid #aa8039; }
+.content article a, .content .line-links a { color: #164676; }
+.content pre { background: #edf1f7; border-color: #9c7738; }
+.pricing, .publisher, .inputs, .appendix { background-color: var(--paper); }
+.control-lab, .pilot-card, .fed-card.inverse { background-color: #102747; }
+
+@media (max-width: 720px) {
+  .hero h1 { max-width: 17ch; }
+  .brand img, .wordmark img { width: 2.6rem; }
+}
