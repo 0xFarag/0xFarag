@@ -2,7 +2,7 @@
 // The existing authenticated Studio session owns all state. No browser storage.
 const platform = {id:null, record:null, registry:null, review:null, plan:null, operation:null,
  artifact:null, selected:null, snapshot:null, job:null, busy:false, revision:0, loaded:false,loadSequence:0};
-const federationProfiles = ['nmap', 'ffuf', 'nuclei'];
+const federationProfiles = ['nmap', 'ffuf', 'nuclei', 'nikto', 'nessus', 'gobuster', 'feroxbuster'];
 let federationRevision = 0;
 let federationProjection = null;
 let federationReview = null;
@@ -462,3 +462,18 @@ $('p-blue-evaluate').onclick = guarded(async () => {
  }
 });
 for (const id of ['p-blue-anchor', 'p-blue-signals']) $(id).onchange = () => { $('p-blue-status').textContent = ''; };
+$('p-telemetry-summarize').onclick = guarded(async () => {
+ const input = $('p-telemetry-file'), button = $('p-telemetry-summarize'), status = $('p-telemetry-status');
+ status.textContent = '';
+ const file = input.files[0];
+ if (!file || file.size > 512 * 1024) throw Error('Choose one normalized telemetry JSON file up to 512 KiB.');
+ input.disabled = button.disabled = true;
+ try {
+  const result = await api('/api/platform/telemetry-summary', {source_b64: await aImportFileBase64(file)});
+  status.textContent = result.counts.detection + ' detection · ' + result.counts.containment + ' containment · ' + result.counts.review + ' review';
+  download(result, 'telemetry-summary.json');
+ } finally {
+  input.disabled = button.disabled = false;
+ }
+});
+$('p-telemetry-file').onchange = () => { $('p-telemetry-status').textContent = ''; };

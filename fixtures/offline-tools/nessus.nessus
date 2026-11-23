@@ -1,0 +1,1 @@
+<NessusClientData_v2><Report name="Synthetic review"><ReportHost name="app.invalid"><HostProperties><tag name="host-ip">192.0.2.10</tag></HostProperties><ReportItem pluginID="123" port="443" protocol="tcp" severity="2"><plugin_output>private-report</plugin_output></ReportItem></ReportHost></Report></NessusClientData_v2>

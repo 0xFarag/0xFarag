@@ -172,7 +172,7 @@ def build_surface_index(snapshot):
                     omit(row['disposition'], 'offline_federation', kind, ref, pointer)
                     continue
                 fields = row['asserted']
-                method = fields.get('method') if kind == 'ffuf' else None
+                method = fields.get('method') if kind in {'ffuf', 'feroxbuster'} else None
                 level = None if kind == 'nuclei' and fields['matched'] is not True else 'hint'
                 add('offline_federation', kind, ref, pointer, row['service'], row.get('scheme'),
                     row.get('path_digest'), method, level, 'service_declared', dict(fields))

@@ -34,6 +34,10 @@
       <label>Inventory services, one per line<textarea id="p-federation-scope" rows="2" spellcheck="false" placeholder="tcp://192.0.2.10:443"></textarea></label>
       <div class="form-grid">
         <label>Nmap XML<input type="file" id="p-fed-nmap" accept=".xml"></label>
+        <label>feroxbuster response JSONL<input type="file" id="p-fed-feroxbuster" accept=".json,.jsonl,.ndjson"></label>
+        <label>Nikto XML<input type="file" id="p-fed-nikto" accept=".xml"></label>
+        <label>Nessus v2 XML<input type="file" id="p-fed-nessus" accept=".nessus,.xml"></label>
+        <label>Gobuster directory results<input type="file" id="p-fed-gobuster" accept=".txt,.log"></label>
         <label>ffuf JSON<input type="file" id="p-fed-ffuf" accept=".json"></label>
         <label>Nuclei JSONL<input type="file" id="p-fed-nuclei" accept=".jsonl,.ndjson"></label>
       </div>
@@ -41,7 +45,7 @@
       <div class="actions"><button id="p-federation-preview">Preview projection</button><button id="p-federation-save" disabled>Download projection JSON</button></div>
       <p id="p-federation-status" role="status"></p>
       <div id="p-federation-observations" class="platform-records" aria-label="Source observations"></div>
-      <label class="check"><input type="checkbox" id="p-federation-consent" disabled>Release source digests and redacted observations to the selected assessment. Paths and scanner identifiers are retained as digests.</label>
+      <label class="check"><input type="checkbox" id="p-federation-consent" disabled>Release source digests and redacted observations to the selected assessment. Endpoint paths are retained as digests. The receipt includes numeric scanner IDs.</label>
       <button id="p-federation-retain" disabled>Retain reviewed evidence</button>
     </details>
     <details><summary>Bounded active discovery</summary><label>HTTP seed paths, one per line<textarea id="p-seed-paths" rows="3" placeholder="/api/status"></textarea></label><label class="check"><input id="p-follow-links" type="checkbox">Follow links only when their exact operation is already authorized</label><details><summary>Advanced HTTP / network seeds</summary><label>Seed JSON (optional override)<textarea id="p-seeds-json" rows="5" spellcheck="false"></textarea></label></details><button id="p-discover-plan">Preview discovery plan</button></details>
@@ -61,6 +65,11 @@
   </div>
   <div id="p-investigate" class="platform-page">
     <h3>Trace each conclusion to its controls.</h3><div id="p-summary" class="platform-summary"></div><p id="p-coverage" class="subtle"></p><div id="p-job-list"></div><p id="p-run-status" role="status" aria-live="polite">No execution selected.</p><div class="actions"><button id="p-cancel" hidden>Stop further requests</button><button id="p-reconnect" hidden>Reconnect to running job</button><button id="p-recover">Reconcile interrupted local work</button></div>
+    <details><summary>Review defensive telemetry from a Cobalt Strike exercise</summary>
+      <p class="subtle">Import detection, containment and review events normalized by your EDR or SIEM to the AuthzLedger telemetry JSON profile. The summary binds each row to its source and preserves asset identifiers as digests.</p>
+      <label>Normalized telemetry JSON<input id="p-telemetry-file" type="file" accept=".json"></label>
+      <button id="p-telemetry-summarize">Download event summary</button><p id="p-telemetry-status" role="status"></p>
+    </details>
     <details><summary>Compare saved detection evidence</summary>
       <p class="subtle">Select a saved retest readback and its signal export (512 KiB each). The unsigned comparison uses the assessment ID in those files and preserves its retest coverage.</p>
       <div class="form-grid"><label>Retest readback JSON<input id="p-blue-anchor" type="file" accept=".json"></label><label>Signal export JSON<input id="p-blue-signals" type="file" accept=".json"></label></div>

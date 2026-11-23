@@ -2,6 +2,12 @@
 
 The 1.6.0 distribution is under final review. Its release gate is open, and the wheel is retained for internal verification. The current public stable release is [v1.5.0](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0). See the [target notes](docs/release-target-1.6.md) and [acceptance contract](review/1.6/README.md). The following documentation describes v1.5.0.
 
+The review candidate includes a native, offline Kubernetes RBAC evaluator. Run `python -m authzledger rbac --help` with Node.js 22 or newer. Use `rbac check POLICY.json REQUEST.json` to inspect one grant, `rbac baseline POLICY.json REQUESTS.json` to retain a baseline, and `rbac retest BASIS.json ORIGINAL.json CURRENT.json` to compare selected cases. The evaluator reports permissions in the supplied policy bytes. The JSON reports are unsigned.
+
+For local file triage, `python -m authzledger file-review FILE` computes SHA-256, SHA-1 and MD5. Add `--clamav` to scan the same bytes with the ClamAV installation on your machine. See [file review limits and result codes](docs/file-review.md).
+
+The [offline tool evidence guide](docs/tool-evidence.md) documents the additional report readers in this review candidate.
+
 ---
 
 # AuthzLedger 1.5.0 — controlled assessment suite

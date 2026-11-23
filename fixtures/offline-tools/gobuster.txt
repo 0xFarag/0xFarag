@@ -1,0 +1,2 @@
+https://192.0.2.10/docs (Status: 200) [Size: 18]
+/private-report (Status: 403) [Size: 0]

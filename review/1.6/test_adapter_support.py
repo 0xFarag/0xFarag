@@ -112,6 +112,8 @@ class SupportMatrixTests(unittest.TestCase):
         self.assertEqual(limits["input_bytes_total"], reader.MAX_TOTAL_BYTES)
         self.assertEqual(limits["input_bytes_per_source"], reader.MAX_SOURCE_BYTES)
         self.assertEqual(limits["records_per_source"], reader.MAX_RECORDS)
+        self.assertEqual(limits["distinct_profiles_max"], len(reader.SOURCE_NAMES))
+        self.assertEqual(self.matrix["available_reader_profiles"], sorted(reader.SOURCE_NAMES))
         allowed = self.golden["scope"]["allowed_services"]
         inputs = [(p["profile_id"], (ROOT / p["fixture"]["path"]).read_bytes()) for p in self.profiles]
         self.assertEqual(self.golden, reader.project_federation(allowed, inputs))

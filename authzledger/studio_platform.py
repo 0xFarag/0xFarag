@@ -11,10 +11,10 @@ from .model import ContractError
 
 
 def _federation_sources(body):
-    from .federation_offline import MAX_TOTAL_BYTES
+    from .federation_offline import MAX_TOTAL_BYTES, SOURCE_NAMES
     encoded = body.get("sources")
-    if not isinstance(encoded, dict) or not 1 <= len(encoded) <= 3 or set(encoded) - {"nmap", "ffuf", "nuclei"}:
-        raise ContractError("Choose saved Nmap XML, ffuf JSON or Nuclei JSONL exports.")
+    if not isinstance(encoded, dict) or not encoded or set(encoded) - SOURCE_NAMES.keys():
+        raise ContractError("Choose a supported local tool export.")
     sources = []
     maximum = MAX_TOTAL_BYTES
     total = 0
@@ -52,6 +52,7 @@ def platform_route(handler, body):
         "federation-preview": {"allowed_services", "sources", "with_review"},
         "federation-index": {"snapshot_id"},
         "blue-evidence": {"anchor_b64", "signals_b64"},
+        "telemetry-summary": {"source_b64"},
         "federation-retain": {"assessment_id", "allowed_services", "sources", "expected_revision", "preview_digest", "release_sources"},
         "annotate": {"assessment_id", "annotations", "expected_revision"},
     }
@@ -59,15 +60,16 @@ def platform_route(handler, body):
         raise ContractError("Unsupported platform operation or fields.")
     service = handler.server.workbench
     identifier = body.get("assessment_id")
-    if route == "blue-evidence":
-        from .blue_evidence import MAX_BYTES, correlate_retest
+    if route in {"blue-evidence", "telemetry-summary"}:
+        from .blue_evidence import MAX_BYTES, correlate_retest, summarize_telemetry
         inputs = []
-        for field in ("anchor_b64", "signals_b64"):
+        inputs_fields = ("source_b64",) if route == "telemetry-summary" else ("anchor_b64", "signals_b64")
+        for field in inputs_fields:
             encoded = body.get(field)
             if not isinstance(encoded, str) or len(encoded) > 4 * ((MAX_BYTES + 2) // 3):
-                raise ContractError("Select two local JSON files up to 512 KiB each.")
+                raise ContractError("Each selected file must be local JSON up to 512 KiB.")
             inputs.append(base64.b64decode(encoded, validate=True))
-        result = correlate_retest(*inputs)
+        result = summarize_telemetry(inputs[0]) if route == "telemetry-summary" else correlate_retest(*inputs)
     elif route == "federation-index":
         from .federation_index import build_surface_index
         snapshot_id = body.get("snapshot_id")

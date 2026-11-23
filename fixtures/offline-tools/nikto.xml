@@ -1,0 +1,1 @@
+<niktoscans><niktoscan><scandetails targetip="192.0.2.10" targetport="443"><item id="000017" method="GET"><uri>/private-report</uri></item></scandetails></niktoscan></niktoscans>

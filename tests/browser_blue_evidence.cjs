@@ -45,6 +45,15 @@ async function run() {
     assert.equal(result.samples.foreign.status, 'incomparable');
     assert.equal(result.source_assertions_verified, false);
     assert.match(await page.locator('#p-blue-status').textContent(), /Synthetic/);
+    await page.getByText('Review defensive telemetry from a Cobalt Strike exercise', {exact: true}).press('Enter');
+    await page.locator('#p-telemetry-file').setInputFiles(path.join(root, 'fixtures/offline-tools/telemetry.json'));
+    const [summaryFile] = await Promise.all([page.waitForEvent('download'), page.locator('#p-telemetry-summarize').press('Enter')]);
+    assert.equal(summaryFile.suggestedFilename(), 'telemetry-summary.json');
+    const summary = JSON.parse(await fs.readFile(await summaryFile.path(), 'utf8'));
+    assert.deepEqual(summary.counts, {detection:1, containment:0, review:0});
+    assert.equal(summary.events[0].locator, '/events/0');
+    assert.equal(summary.source_assertions_verified, false);
+    assert.ok(!JSON.stringify(summary).includes('app.example'));
     assert.deepEqual(foreign, []);
     assert.deepEqual(errors, []);
     console.log('PASS: keyboard input, offline correlation, JSON download, no foreign requests');
