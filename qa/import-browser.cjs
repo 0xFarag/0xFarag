@@ -66,7 +66,9 @@ module.exports = async function verifyLocalImport(page, origin) {
     assert.deepEqual(requests, [], 'Opening local exports must not make network requests');
     page.off('request', observe);
     await page.getByRole('link', {name:'Zur Evidence Workbench'}).click();
-    await page.locator('#files').setInputFiles({name:download.suggestedFilename(), mimeType:'application/json', buffer:exported});
+    const [fileChooser] = await Promise.all([page.waitForEvent('filechooser'),
+      page.getByRole('button',{name:'JSON-Dateien öffnen'}).click()]);
+    await fileChooser.setFiles({name:download.suggestedFilename(), mimeType:'application/json', buffer:exported});
     await page.getByRole('heading',{name:'Werkzeugübergreifender Belegindex'}).waitFor();
     assert.equal(await page.locator('#cases li').count(), 3);
     assert.match(await page.locator('#import-sources').textContent(), new RegExp(digest));

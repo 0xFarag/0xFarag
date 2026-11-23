@@ -543,4 +543,5 @@ $('download').addEventListener('click', () => {
 });
 $('print').addEventListener('click', () => {preparePrint(); window.print();});
 window.addEventListener('beforeprint', preparePrint);
+$('add-file').disabled = false;
 selectSource('demo-c');
