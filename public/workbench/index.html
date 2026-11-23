@@ -36,13 +36,19 @@
           </optgroup><optgroup label="Eigene Dateien" id="local-options"></optgroup>
         </select></div>
         <div class="import-action"><button id="add-file" class="btn primary" type="button">JSON-Dateien öffnen</button><input type="file" id="files" multiple accept=".json,application/json" hidden></div>
-        <p class="source-help">Öffnen Sie den Signalbericht <code>blue-evidence.json</code> aus AuthzLedger Studio oder der CLI direkt hier. Unterstützt werden auch Befund B, Retest C und föderierte Inventare. Maximal 2 MiB pro Datei.</p>
+        <p class="source-help">Öffnen Sie den Signalbericht <code>blue-evidence.json</code> aus AuthzLedger Studio oder der CLI direkt hier. Für Werkzeugexporte erstellen Sie zuerst im <a href="../import/">lokalen Belegimport</a> einen Belegindex. Hier öffnen Sie den Index, Befund B, Retest C oder ein föderiertes Inventar. Maximal 2 MiB pro Datei.</p>
       </section>
       <p id="feedback" class="feedback" role="status" aria-live="polite">Das Retest-Beispiel wird geöffnet.</p>
       <div id="document" hidden>
         <section class="summary card" aria-labelledby="summary-title">
           <div class="summary-copy"><span class="small-label" id="origin"></span><h2 id="summary-title"></h2><p id="identity"></p><p id="metric-note" class="fine" hidden></p></div>
           <dl id="metrics" class="metrics"></dl>
+          <details id="import-registry" class="technical" hidden><summary>Quelldateien und Originalbytes prüfen</summary>
+            <p>Wählen Sie die Originalexporte zum lokalen SHA-256-Abgleich. Die Workbench liest bis zu 1 MiB je Datei. Das Ergebnis bleibt in dieser Sitzung und ist im exportierten Review nicht enthalten.</p>
+            <button id="verify-originals" class="btn" type="button">Originaldateien abgleichen</button><input type="file" id="original-files" multiple hidden>
+            <p id="original-status" class="feedback" role="status" aria-live="polite"></p><ul id="original-outcomes"></ul>
+            <ul id="import-sources" aria-label="Quelldateien laut Index"></ul>
+          </details>
         </section>
         <div class="desk">
           <section class="casebook card" aria-labelledby="cases-title">
@@ -83,13 +89,13 @@
           </section>
         </div>
         <section id="snapshot-comparison" aria-label="Belegstände vergleichen"></section>
-        <section id="handover" class="handover card" aria-labelledby="handover-title"><div><p class="small-label">Übergabe</p><h2 id="handover-title">Redigierte Fallübersicht</h2><p>Enthält Prüfergebnis, Bearbeitungsstand und Datei-Fingerabdruck. Bei Signalberichten wird auch die Alarmabdeckung je Probe aufgeführt. Dateinamen, Original-IDs und Freitext bleiben privat. Die Übersicht ist unsigniert.</p></div>
+        <section id="handover" class="handover card" aria-labelledby="handover-title"><div><p class="small-label">Übergabe</p><h2 id="handover-title">Redigierte Fallübersicht</h2><p>Enthält Prüfergebnis, Bearbeitungsstand und Datei-Fingerabdruck. Signalberichte enthalten die Alarmabdeckung je Probe. Bei Belegindizes enthält die JSON-Übersicht Werkzeug, Quelldigest und Datensatzverweis. Dateinamen, Original-IDs und Freitext bleiben privat. Die Übersicht ist unsigniert.</p></div>
           <div class="actions"><button class="btn primary" id="download" type="button">JSON exportieren</button><button class="btn" id="print" type="button">Drucken / PDF</button></div>
         </section>
       </div>
     </div>
   </main>
-  <footer><div class="shell">AuthzLedger · © Nasser Aldin Farag (0xFarag)</div></footer>
+  <footer><div class="shell">AuthzLedger · © Nasser Aldin Farag (0xFarag). All rights reserved.</div></footer>
 </div>
 <section id="print-report" aria-label="Redigierte Fallübersicht"></section>
 </body>

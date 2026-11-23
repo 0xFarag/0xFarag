@@ -2,15 +2,15 @@
 <!-- © Nasser Aldin Farag (0xFarag). All rights reserved. -->
 <html lang="de-CH"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Downloads für Recipient Studio und CLI · AuthzLedger</title>
-<meta name="description" content="Laden Sie AuthzLedger Recipient Studio für Windows und Debian/Ubuntu oder den Offline-Empfängerprüfer für Arch, Docker und Python direkt herunter.">
+<title>Downloads und Offline-Prüfwerkzeuge · AuthzLedger</title>
+<meta name="description" content="AuthzLedger Recipient Studio, Empfängerprüfer und kostenfreie Offline-Werkzeuge für Kubernetes-RBAC und lokale Dateien herunterladen.">
 <link rel="canonical" href="https://authzledger.com/downloads/"><link rel="icon" href="../assets/authzledger-icon.png">
 <link rel="stylesheet" href="../install.css"><link rel="stylesheet" href="../farag.css"><link rel="stylesheet" href="/downloads/downloads.css">
 </head><body>
 <a class="skip" href="#inhalt">Zum Inhalt</a>
 <header><nav class="wrap" aria-label="Hauptnavigation"><a class="wordmark" href="../"><img src="../assets/authzledger-logo.png" alt="" width="42" height="42">AuthzLedger</a><div class="download-nav"><a href="/installation.html">Installation</a><a href="/abos/">Abos</a><a href="/konto/">Kundenkonto</a></div></nav></header>
 <main id="inhalt">
-<section class="intro"><div class="wrap"><p class="meta">Empfängerprüfung</p><h1>Downloads</h1><p>Prüfen Sie eine signierte AuthzLedger-Übergabe lokal. Wählen Sie das Studio mit grafischer Oberfläche oder den Prüfer für die Kommandozeile. Der Download erfordert kein Konto.</p></div></section>
+<section class="intro"><div class="wrap"><p class="meta">Empfängerprüfung</p><h1>Downloads</h1><p>Prüfen Sie signierte Übergaben mit dem Studio oder der Kommandozeile. Für Kubernetes-Berechtigungen und lokale Dateien stehen separate kostenfreie Werkzeuge bereit. Alle Downloads sind ohne Konto verfügbar.</p></div></section>
 <div class="wrap content">
 <section id="studio"><p class="meta">Recipient Studio · Preview 3</p><h2>Studio und Kommandozeile</h2>
 <div class="cards studio">
@@ -24,6 +24,9 @@
 <li><div><h3>Python</h3><p>Wheel oder Quellarchiv mit dem mehrstufigen Dockerfile.</p></div><div class="choices"><a href="/downloads/recipient-verifier-preview-2/authzledger_recipient_verifier-1.5.0.post1-py3-none-any.whl" download>Wheel</a><a href="/downloads/recipient-verifier-preview-2/authzledger_recipient_verifier-1.5.0.post1.tar.gz" download>Quellarchiv</a></div></li>
 <li><div><h3>Windows und Debian ohne Studio</h3><p>Frühere reine CLI-Ausgaben für bestehende Arbeitsabläufe.</p></div><div class="choices"><a href="/downloads/recipient-verifier-preview-2/AuthzLedger-Windows-x64-SelfContained.zip" download>Windows x64 · portabel</a><a href="/downloads/recipient-verifier-preview-2/AuthzLedger-Windows-x64-Pruefer-Preview.zip" download>Windows mit Installer</a><a href="/downloads/recipient-verifier-preview-2/authzledger-verifier_1.5.0-preview1_all.deb" download>Debian-Paket</a></div></li>
 </ul><p class="line-links"><a href="/downloads/recipient-verifier-preview-2/SHA256SUMS.txt">SHA-256 für CLI-Pakete</a><a href="/downloads/recipient-verifier-preview-2/verification.json">Prüfprotokoll (JSON)</a></p></section>
+<section id="pruefwerkzeuge"><h2>Kostenfreie Offline-Prüfwerkzeuge</h2>
+<ul class="platforms"><li><div><h3>Kubernetes-RBAC und Dateiprüfung</h3><p>Vergleichen Sie Berechtigungen zweier Kubernetes-Exporte mit Node.js 22+. Prüfen Sie lokale Dateien mit Python 3.10+ und auf Wunsch mit einem bereits installierten ClamAV. Das ZIP enthält den Quellcode und beide Anleitungen.</p></div><div class="choices"><a href="/downloads/pruefwerkzeuge/AuthzLedger-Offline-Pruefwerkzeuge.zip" download>Prüfwerkzeuge als ZIP</a></div></li></ul>
+<p class="line-links"><a href="/downloads/pruefwerkzeuge/SHA256SUMS.txt">SHA-256 für das Werkzeugpaket</a><a href="/rbac/">RBAC im Browser prüfen</a><a href="/dateipruefung/">Datei im Browser prüfen</a></p></section>
 <section id="integritaet"><h2>Vor der ersten Prüfung</h2><p>Vergleichen Sie den SHA-256-Wert des Downloads mit der Prüfsumme seiner Ausgabe. Für die spätere Prüfung einer Kundenübergabe benötigen Sie den unabhängig bestätigten öffentlichen Schlüssel des Absenders.</p><p class="line-links"><a href="../installation.html#integritaet">Prüfsumme unter Windows oder Linux vergleichen</a><a href="../installation.html#pruefen">Übergabe prüfen</a></p></section>
 </div></main><footer><div class="wrap"><a class="wordmark" href="../">AuthzLedger</a><p>© Nasser Aldin Farag (0xFarag). All rights reserved.</p><p><a href="../LICENSE.txt">Lizenz</a> · <a href="../NOTICE.txt">Drittanbieterhinweise</a></p></div></footer>
 </body></html>

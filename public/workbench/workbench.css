@@ -137,3 +137,6 @@ footer {border-top:1px solid var(--line);background:white;color:var(--slate);pad
   #print-report tr {break-inside:avoid}
   @page {margin:15mm}
 }
+
+#import-registry { grid-column: 1 / -1; min-width: 0; }
+#import-sources { padding-inline-start: 1.4rem; overflow-wrap: anywhere; }

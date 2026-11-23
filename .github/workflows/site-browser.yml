@@ -1,7 +1,7 @@
 name: Verify AuthzLedger public website
 on:
   push:
-    branches: [launch/evidence-site-20261121, launch/evidence-import-20261123, launch/storefront-20261123, launch/evidence-workbench-20261123, authzledger-website]
+    branches: [launch/evidence-site-20261121, launch/evidence-import-20261123, launch/storefront-20261123, launch/evidence-workbench-20261123, launch/multitool-import-20261123, authzledger-website]
   workflow_dispatch:
 
 permissions:
@@ -24,6 +24,8 @@ jobs:
         run: node scripts/build-downloads.mjs
       - name: Check the complete offline download inventory
         run: node scripts/build-downloads.mjs --check
+      - name: Rebuild the standalone download and test the extracted CLIs
+        run: python qa/test_offline_download.py
       - name: Install pinned browser test runner
         run: npm install --prefix qa --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 sax@1.6.1
       - name: Install Chromium on Linux
@@ -33,9 +35,11 @@ jobs:
         if: runner.os == 'Windows'
         run: node qa/node_modules/playwright/cli.js install chromium
       - name: Check source-bound observation comparisons
-        run: node --test qa/import-formats.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
+        run: node --test qa/import-formats.cjs qa/format-extensions.cjs qa/asset-review.cjs qa/ferox-format.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
       - name: Check evidence workbench projections and comparisons
-        run: node --test qa/board-blue.test.mjs qa/board-compare.test.mjs qa/board-model.test.mjs
+        run: node --test qa/board-blue.test.mjs qa/board-compare.test.mjs qa/board-model.test.mjs qa/board-index.test.mjs
+      - name: Verify native policy permissions, retests, file triage and vetted access
+        run: node --test qa/rbac-policy.test.mjs qa/rbac-retest.test.mjs qa/rbac-browser.cjs qa/file-triage.test.mjs qa/file-triage-browser.cjs qa/pro-review.cjs qa/pro-access-browser.cjs
       - name: Verify billing readiness, checkout and customer journeys
         run: node --test qa/billing-api.cjs qa/customer.cjs qa/customer-browser.cjs
       - name: Test public pages and their evidence

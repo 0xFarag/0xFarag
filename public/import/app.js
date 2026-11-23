@@ -9,9 +9,19 @@
   for (const [key, info] of Object.entries(definitions)) {
     for (const id of ['adapter','filter']) $(id).add(new Option(info.label,key));
   }
-  $('adapter').value = 'ffuf';
+  const autoOption = new Option('Automatisch erkennen', 'auto');
+  $('adapter').add(autoOption, 0);
+  $('adapter').value = 'auto';
   function updateHint() {
     const key = $('adapter').value;
+    const automatic = key === 'auto';
+    $('sample-detail').hidden = automatic;
+    if (automatic) {
+      $('file').accept = [...new Set(Object.values(definitions).flatMap(def => def.accept.split(',')))].join(',');
+      $('hint').textContent = 'Du kannst Exporte verschiedener Werkzeuge zusammen auswählen. Das Format wird am Dateiinhalt erkannt. Jede Datei wird einzeln geprüft.';
+      $('follow').hidden = true;
+      return;
+    }
     $('file').accept = definitions[key].accept;
     $('hint').textContent = definitions[key].hint;
     $('sample').textContent = key === 'ffuf' || key === 'cobalt' ? JSON.stringify(JSON.parse(samples[key]),null,2) : samples[key];
@@ -31,7 +41,7 @@
     page = Math.min(page,pages-1);
     $('real').setAttribute('aria-pressed',String(!example));
     $('examples').setAttribute('aria-pressed',String(example));
-    $('context').textContent = example ? 'Beispieldaten mit frei erfundenen Datensätzen. Deine eigenen Dateien liegen im separaten Arbeitsbereich.' : 'Wähle das Format und anschliessend eine oder mehrere vorhandene Dateien. Alle Importe bleiben lokal in diesem Tab.';
+    $('context').textContent = example ? 'Beispieldaten mit frei erfundenen Datensätzen. Deine eigenen Dateien liegen im separaten Arbeitsbereich.' : 'Wähle Dateien aus demselben Mandat. Alle Importe bleiben lokal in diesem Tab.';
     $('add').textContent = example ? 'Beispiel hinzufügen' : 'Dateien auswählen';
     $('clear').disabled = busy || !files.length;
     $('add').disabled = $('adapter').disabled = $('real').disabled = $('examples').disabled = $('follow').disabled = busy;
@@ -56,6 +66,7 @@
     if (!files.length) $('files').append(element('li','Keine Quelldateien.'));
     updateHint();
     if (typeof AuthzCompare !== 'undefined') AuthzCompare.render($('comparison'), files);
+    AuthzAssets.render($('asset-review'), files);
   }
   function fileList() { return [...stores.real, ...stores.examples]; }
   async function add(inputs) {
@@ -75,14 +86,23 @@
           if (all.length >= limits.files || all.reduce((s,f) => s+f.bytes,0)+parsed.bytes > limits.totalBytes || all.reduce((s,f) => s+f.rows.length,0)+parsed.rows.length > limits.totalRows) throw new ImportError('Die gemeinsame Dateigrenze ist erreicht. Leere bei Bedarf einen Arbeitsbereich.');
           const id = 'S'+String(++sequence).padStart(2,'0');
           stores[mode].push({...parsed, id, example:mode==='examples'});
-          messages.push(id+' eingelesen · '+parsed.rows.length+' Beobachtungen.');
+          messages.push(id+' eingelesen · '+definitions[parsed.source].label+' · '+parsed.rows.length+' Beobachtungen.');
         } catch (e) { messages.push('Datei '+(index+1)+' abgelehnt. '+(e instanceof ImportError ? e.message : 'Die Datei lässt sich in diesem Format nicht verarbeiten.')); }
       }
     } finally {
       busy=false; $('file').value=''; $('status').textContent=messages.join('\n'); refresh();
     }
   }
-  function switchMode(next) { if(busy) return; mode=next; page=0; $('filter').value=''; $('status').textContent=''; refresh(); }
+  function switchMode(next) {
+    if (busy || mode === next) return;
+    mode = next;
+    autoOption.disabled = mode === 'examples';
+    $('adapter').value = autoOption.disabled ? 'ffuf' : 'auto';
+    page = 0;
+    $('filter').value = '';
+    $('status').textContent = '';
+    refresh();
+  }
   $('real').onclick=()=>switchMode('real'); $('examples').onclick=()=>switchMode('examples');
   $('adapter').onchange=updateHint; $('filter').onchange=()=>{page=0;refresh();};
   $('file').onchange=()=>add(Array.from($('file').files));

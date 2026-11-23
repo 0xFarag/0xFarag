@@ -3,6 +3,7 @@
 
 const assert = require('node:assert/strict');
 const {createHash} = require('node:crypto');
+const fs = require('node:fs/promises');
 
 module.exports = async function verifyLocalImport(page, origin) {
   await page.goto(origin + '/import/');
@@ -11,9 +12,10 @@ module.exports = async function verifyLocalImport(page, origin) {
   page.on('request', observe);
   try {
     const adapters = page.locator('#adapter');
-    const sources = ['nikto', 'ffuf', 'gobuster', 'nmap', 'burp', 'nessus', 'cobalt'];
+    const sources = ['nikto', 'ffuf', 'gobuster', 'nmap', 'burp', 'nessus', 'cobalt', 'zap', 'har', 'openapi', 'nuclei', 'feroxbuster'];
     const options = await adapters.locator('option').evaluateAll(nodes => nodes.map(node => node.value));
-    assert.deepEqual([...options].sort(), [...sources].sort());
+    assert.deepEqual([...options].sort(), ['auto', ...sources].sort());
+    assert.equal(await adapters.inputValue(), 'auto');
     await page.locator('#examples').click();
     for (const [index, source] of sources.entries()) {
       await adapters.selectOption(source);
@@ -22,9 +24,10 @@ module.exports = async function verifyLocalImport(page, origin) {
     }
     await adapters.selectOption('ffuf');
     await page.locator('#follow').click();
-    await page.waitForFunction(() => document.querySelectorAll('#files code').length === 8);
+    const followPosition = sources.length + 1;
+    await page.waitForFunction(n => document.querySelectorAll('#files code').length === n, followPosition);
     await page.locator('[data-snapshot=earlier]').selectOption({index:2});
-    await page.locator('[data-snapshot=later]').selectOption({index:8});
+    await page.locator('[data-snapshot=later]').selectOption({index:followPosition});
     await page.locator('#authz-compare-scope').check();
     assert.match(await page.locator('#comparison').innerText(), /not_retested/);
     await page.locator('#filter').selectOption('nessus');
@@ -48,7 +51,28 @@ module.exports = async function verifyLocalImport(page, origin) {
     assert.equal(await page.locator('#files code').count(), 1);
     await page.locator('#clear').click();
     assert.equal(await page.locator('#files code').count(), 0);
+    await adapters.selectOption('auto');
+    const gobuster = {name:'sensitive-client.txt', mimeType:'text/plain', buffer:Buffer.from('https://example.invalid/other (Status: 403)\n/relative (Status: 200)')};
+    const invalid = {name:'other.json', mimeType:'application/json', buffer:Buffer.from('{"results":[],"site":[]}')};
+    await page.locator('#file').setInputFiles([upload, invalid, gobuster]);
+    await page.waitForFunction(() => document.querySelectorAll('#files code').length === 2);
+    assert.match(await page.locator('#status').innerText(), /Datei 2 abgelehnt/);
+    const asset = page.locator('#asset-review');
+    assert.match(await asset.innerText(), /In mehreren Werkzeugen: 1/);
+    assert.match(await asset.innerText(), /Datensätze ohne Hostbezug: 1/);
+    const [download] = await Promise.all([page.waitForEvent('download'), asset.getByRole('button',{name:'Belegindex als JSON speichern',exact:true}).click()]);
+    const exported = await fs.readFile(await download.path());
+    assert.doesNotMatch(exported.toString(), /sensitive-client|example.invalid|\/relative/);
     assert.deepEqual(requests, [], 'Opening local exports must not make network requests');
+    page.off('request', observe);
+    await page.getByRole('link', {name:'Zur Evidence Workbench'}).click();
+    await page.locator('#files').setInputFiles({name:download.suggestedFilename(), mimeType:'application/json', buffer:exported});
+    await page.getByRole('heading',{name:'Werkzeugübergreifender Belegindex'}).waitFor();
+    assert.equal(await page.locator('#cases li').count(), 3);
+    assert.match(await page.locator('#import-sources').textContent(), new RegExp(digest));
+    await page.locator('#import-registry summary').click();
+    await page.locator('#original-files').setInputFiles([upload,{...upload,name:'changed.json',buffer:Buffer.concat([upload.buffer,Buffer.from(' ')])}]);
+    await page.waitForFunction(() => document.querySelector('#original-status').textContent.includes('1 von 2'));
   } finally {
     page.off('request', observe);
   }

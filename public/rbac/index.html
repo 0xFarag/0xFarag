@@ -1,0 +1,37 @@
+<!doctype html>
+<!-- © Nasser Aldin Farag (0xFarag). All rights reserved. -->
+<html lang="de-CH"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071722"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; object-src 'none'">
+<title>RBAC-Prüfung · AuthzLedger</title><meta name="description" content="Kubernetes-Berechtigungen in lokalen RBAC-Snapshots nachvollziehen und ausgewählte Fragen erneut prüfen.">
+<link rel="icon" href="/assets/authzledger-icon.png"><link rel="stylesheet" href="/konto/kundenbereich.css"><link rel="stylesheet" href="./style.css"><script type="module" src="./ui.mjs"></script>
+</head><body><a class="skip" href="#main">Zum Inhalt</a>
+<header><div class="wrap masthead"><a class="brand" href="/"><img src="/assets/authzledger-logo.png" width="40" height="40" alt="">AuthzLedger</a><nav aria-label="Hauptnavigation"><a href="/import/">Belegimport</a><a href="/workbench/">Workbench</a><a href="/fachzugang/">Fachzugang</a></nav></div></header>
+<main id="main"><div class="intro"><div class="wrap"><h1>Kubernetes-RBAC prüfen</h1><p>Welche Regel deckt eine konkrete Anfrage ab? Prüfen Sie lokale Richtlinienexporte und vergleichen Sie dieselbe Frage nach einer Änderung.</p></div></div>
+<div class="wrap content"><noscript><p>Aktivieren Sie JavaScript für die lokale Auswertung.</p></noscript>
+<section class="panel"><h2>Ursprünglicher Snapshot</h2><p>Öffnen Sie einen Kubernetes-RBAC-v1-Export als UTF-8-JSON oder probieren Sie eine synthetische Leserolle aus. Beide Snapshots bleiben im Arbeitsspeicher. Je Snapshot gelten 2 MiB und 1’000 RBAC-Objekte.</p>
+<div class="actions"><button type="button" class="primary" id="pick-original">Original öffnen</button><input hidden type="file" id="original" accept=".json,application/json"><button type="button" class="secondary" id="example">Beispiel laden</button><button type="button" class="secondary" id="clear" hidden>Sitzung leeren</button></div><p id="source-status" role="status" aria-live="polite"></p><div id="source-info"></div></section>
+<div id="workspace" hidden><section class="panel"><h2>Prüffrage</h2><p>Geben Sie die Anfrage so ein, wie sie vor dem API-Server aussehen würde. Benutzer- und Gruppenmitgliedschaften sind explizite Annahmen.</p>
+<form id="query-form"><div class="grid">
+<label>Subjekttyp<select name="kind"><option>User</option><option>Group</option><option>ServiceAccount</option></select></label>
+<label>Subjektname<input name="name" required maxlength="253" autocomplete="off"></label>
+<label id="sa-label" hidden>Namespace des ServiceAccounts<input name="subjectNamespace" maxlength="63" autocomplete="off"></label>
+<label>Anfrage-Namespace<input name="namespace" maxlength="63" placeholder="Leer für clusterweit" autocomplete="off"></label>
+<label>Verb<input name="verb" required maxlength="253" value="get" autocomplete="off"></label>
+<label>API-Gruppe<input name="apiGroup" maxlength="253" placeholder="Leer für Core API" autocomplete="off"></label>
+<label>Ressource (Plural)<input name="resource" required maxlength="253" placeholder="pods" autocomplete="off"></label>
+<label>Subressource (optional)<input name="subresource" maxlength="253" placeholder="log" autocomplete="off"></label>
+<label>Ressourcenname (optional)<input name="resourceName" maxlength="253" autocomplete="off"></label>
+<label>Namensselektor für list/watch<input name="fieldSelectorName" maxlength="253" autocomplete="off"></label>
+<label>Zusätzliche Gruppen (eine pro Zeile)<textarea name="groups" rows="2" maxlength="16256"></textarea></label>
+</div><div class="actions"><button class="primary" id="run" type="submit">Frage prüfen</button><button class="secondary" type="button" id="keep" disabled>Frage übernehmen</button></div></form>
+<p id="query-status" role="status" aria-live="polite"></p><div id="proofs"></div></section>
+<section class="panel"><h2>Prüfbasis</h2><p>Die Basis verbindet bis zu 32 Fragen mit dem Original-Hash. Die exportierte Basis enthält auch die eingegebenen Subjektnamen, Gruppen und Ressourcennamen.</p>
+<ol id="queries"></ol><div class="actions"><button id="make" type="button" class="primary" disabled>Prüfbasis erstellen</button><button id="save-basis" type="button" class="secondary" hidden>Basis als JSON speichern</button><button id="load-basis" type="button" class="secondary">Gespeicherte Basis laden</button><input id="basis-file" type="file" accept=".json,application/json" hidden></div><p id="basis-status" role="status" aria-live="polite"></p><div id="basis-hash"></div></section>
+<section class="panel" id="retest" hidden><h2>Ausgewählte Fragen erneut prüfen</h2><p>Öffnen Sie den späteren Snapshot und wählen Sie die Fragen einzeln aus. Ausgelassene Fragen erscheinen als <code>not_retested</code>.</p>
+<div class="actions"><button id="pick-current" type="button" class="secondary">Späteren Snapshot öffnen</button><input hidden id="current" type="file" accept=".json,application/json"><button id="demo-current" type="button" class="secondary" hidden>Geändertes Beispiel laden</button></div>
+<p id="current-status" role="status" aria-live="polite"></p><div id="current-info"></div><fieldset id="selection"><legend>Fragen für diesen Retest</legend></fieldset>
+<div class="actions"><button type="button" class="primary" id="compare" disabled>Auswahl erneut prüfen</button><button id="save-result" type="button" class="secondary" hidden>Retest als JSON speichern</button></div><p role="status" id="retest-status" aria-live="polite"></p><div id="results"></div></section></div>
+<section class="limits"><h2>Geltungsbereich</h2><p>Die Auswertung berücksichtigt Role, RoleBinding, ClusterRole und ClusterRoleBinding aus dem geöffneten Export. Sie bewertet Ressourcenanfragen anhand der gemeldeten Rollen und Bindungen. Live-Zugriff, andere Autorisierer, Admission-Regeln und Nicht-Ressourcen-URLs liegen ausserhalb der Prüfung. Unaufgelöste oder aggregierte Rollen und unvollständige Exporte können eine Entscheidung offenlassen.</p><a href="./README.md">Unterstütztes RBAC-Profil und Grenzen</a></section>
+</div></main><footer><div class="wrap"><div><strong>AuthzLedger</strong><p>Nasser Aldin Farag (0xFarag) · Schweiz</p><small>© Nasser Aldin Farag (0xFarag). All rights reserved.</small></div><nav aria-label="Weitere Informationen"><a href="/">Produkt</a><a href="/LICENSE.txt">Lizenz</a></nav></div></footer></body></html>

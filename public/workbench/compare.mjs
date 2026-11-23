@@ -57,6 +57,9 @@ export function compareProjections(before, after) {
   // A native SOC report carries source digests, but omits the original retest
   // and signal data. Comparing declared IDs would allow unrelated reports to
   // appear bound merely by copying the metadata.
+  if (before.kind === 'evidence_index' && after.kind === 'evidence_index') {
+    return blocked('index_source_binding', 'Die Indizes enthalten ungeprüfte Quellverweise. Für einen Vergleich laden Sie zwei Originalexporte desselben Werkzeugs im lokalen Belegimport.');
+  }
   if (before.kind === 'blue' && after.kind === 'blue') {
     return blocked('blue_source_binding', 'SOC-Berichte lassen sich hier einzeln prüfen. Für einen gebundenen Standvergleich fehlen der ursprüngliche Retest und die Signaldatei. Die Hashangaben im Bericht allein belegen keine gemeinsame Herkunft.');
   }

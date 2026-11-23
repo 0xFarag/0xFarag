@@ -17,6 +17,7 @@ export const statusLabels = Object.freeze({
   not_verified: 'Unbestätigter Scannerhinweis',
   hint: 'Quellhinweis',
   observed: 'Beobachtung',
+  import_unassessed: 'Ungeprüfter Importbeleg',
   excluded: 'Ausgelassen',
   soc_observed: 'Alarm zugeordnet',
   soc_telemetry_only: 'Nur Telemetrie',
@@ -291,7 +292,64 @@ const syntheticWindowLabels = {matched: 'Alarm und Telemetrie', telemetry_only: 
 function exactFields(record, names) {
   const keys = Object.keys(record);
   requireField(keys.length === names.length && names.every(key => Object.hasOwn(record, key)),
-    'Der SOC-Bericht enthält unbekannte oder fehlende Felder.');
+    'Das Datenobjekt enthält unbekannte oder fehlende Felder.');
+}
+
+const importSources = Object.freeze({
+  nikto: 'Nikto', ffuf: 'ffuf', gobuster: 'Gobuster', feroxbuster: 'feroxbuster', nmap: 'Nmap', burp: 'Burp Suite', nessus: 'Nessus',
+  cobalt: 'Cobalt-Strike-Telemetrie (EDR/SIEM)', zap: 'OWASP ZAP', har: 'HAR', openapi: 'OpenAPI', nuclei: 'Nuclei'
+});
+
+function evidenceIndexProjection(input) {
+  exactFields(input, ['schema', 'rights', 'workspace', 'signature', 'assessment', 'files']);
+  requireField(input.rights === '© Nasser Aldin Farag (0xFarag). All rights reserved.' &&
+    ['real', 'example'].includes(input.workspace) && input.signature === 'unsigned',
+    'Herkunftsangabe oder Signaturstatus des Belegindexes ist ungültig.');
+  const assessment = object(input.assessment);
+  exactFields(assessment, ['scope', 'controls', 'coverage', 'findings', 'retest']);
+  requireField(assessment.scope === 'unverified' && assessment.controls === 'unverified' &&
+    assessment.coverage === 'unknown' && assessment.findings === 'not_assessed' && assessment.retest === 'not_assessed',
+    'Der Belegindex darf keine geprüfte Abdeckung, Freigabe oder fachliche Bestätigung ausweisen.');
+
+  const rows = [];
+  const sources = [];
+  const fileKeys = new Set();
+  const assets = new Set();
+  let unassigned = 0;
+  for (const file of records(input.files, 'Quelldateien', 1, 20)) {
+    exactFields(object(file), ['source', 'sha256', 'observations']);
+    requireField(typeof file.source === 'string' && Object.hasOwn(importSources, file.source), 'Unbekanntes Werkzeug im Belegindex.');
+    const hash = digest(file.sha256, 'Quelldatei');
+    const fileKey = file.source + ':' + hash;
+    requireField(!fileKeys.has(fileKey), 'Eine Quelldatei ist im selben Quellformat mehrfach aufgeführt.');
+    fileKeys.add(fileKey);
+    const observations = records(file.observations, 'Beobachtungen je Datei', 0, 1000);
+    requireField(rows.length + observations.length <= 2500, 'Der Belegindex überschreitet 2’500 Beobachtungen.');
+    const label = importSources[file.source];
+    sources.push({source: file.source, label, sha256: hash, count: observations.length});
+    observations.forEach((obs, position) => {
+      exactFields(object(obs), ['asset_id', 'locator', 'fingerprint']);
+      const locator = string(obs.locator, 'Position', 24);
+      const match = /^(?:Zeile|Datensatz) ([1-9][0-9]{0,6})$/.exec(locator);
+      requireField(match && Number(match[1]) <= 1048576, 'Ungültige Zeile oder Position im Belegindex.');
+      const fingerprint = digest(obs.fingerprint, 'Datensatz-Fingerabdruck');
+      const asset = obs.asset_id;
+      requireField(asset === null || typeof asset === 'string' && /^[a-f0-9]{16}$/.test(asset),
+        'Ungültige pseudonyme Asset-ID im Belegindex.');
+      if (asset === null) unassigned++;
+      else assets.add(asset);
+      rows.push({
+        id: fileKey + ':' + (position + 1), binding: hash, source: label,
+        title: label + ' · ' + locator + (asset ? ' · ' + asset : ' · ohne Hostbezug'),
+        status: 'import_unassessed', summary: 'Der Belegindex verweist auf eine Beobachtung aus ' + label + '.',
+        reference: {source: file.source, file_sha256: hash, locator, fingerprint},
+        details: details([['Asset-ID', asset || 'Kein Hostbezug'], ['Quellposition', locator],
+          ['SHA-256 der Quelldatei laut Index', hash], ['Datensatz-Fingerabdruck laut Index', fingerprint]])
+      });
+    });
+  }
+  return {kind: 'evidence_index', title: 'Werkzeugübergreifender Belegindex', assessment: null, scope: null, rows, coverage: null,
+    importIndex: {workspace: input.workspace, sources, assets: assets.size, unassigned}};
 }
 
 function boundedCount(value) {
@@ -404,6 +462,52 @@ async function sha256(bytes) {
   return Array.from(hash, b => b.toString(16).padStart(2, '0')).join('');
 }
 
+// Per-index session state. Local File objects never leave a pending call.
+export function originalFileChecks(sources) {
+  const known = new Set(sources.map(file => file.sha256));
+  const matched = new Set();
+  let generation = 0;
+  let last = null;
+  const maximumBytes = 1048576;
+  const validSize = file => Number.isInteger(file?.size) && file.size > 0 && file.size <= maximumBytes;
+
+  async function verify(files) {
+    const current = ++generation;
+    if (!Array.isArray(files) || !files.length || files.length > 20 ||
+        files.reduce((total, file) => total + (validSize(file) ? file.size : 0), 0) > 5 * maximumBytes) {
+      last = {error: 'Wählen Sie 1 bis 20 Dateien mit zusammen höchstens 5 MiB.'};
+      return last;
+    }
+    const outcomes = [];
+    const seen = new Set();
+    for (const [i, file] of files.entries()) {
+      let result = {position: i + 1, status: 'size'};
+      if (validSize(file)) {
+        try {
+          const bytes = await file.arrayBuffer();
+          if (current !== generation) return null;
+          if (!(bytes instanceof ArrayBuffer) || bytes.byteLength !== file.size) throw Error();
+          const hash = await sha256(bytes);
+          const matches = known.has(hash);
+          result = {position: i + 1, status: matches ? 'matched' : 'unmatched', duplicate: seen.has(hash)};
+          if (matches) result.sha256 = hash;
+          seen.add(hash);
+        } catch {
+          result = {position: i + 1, status: 'unreadable'};
+        }
+      }
+      if (current !== generation) return null;
+      outcomes.push(result);
+    }
+    // A superseded read must commit neither a partial match nor a stale status.
+    for (const result of outcomes) if (result.status === 'matched') matched.add(result.sha256);
+    last = {outcomes};
+    return last;
+  }
+
+  return {verify, cancel() { generation++; }, has(hash) { return matched.has(hash); }, get last() { return last; }};
+}
+
 // Mirrors the v1 producer's sorted, ASCII-escaped JSON for these projections.
 // Restrict numbers to exact integers to avoid treating rounded input as identical.
 function canonical(value) {
@@ -437,8 +541,10 @@ export async function parseProjection(inputBytes) {
   }
   object(input);
   checkKeys(text);
-  const profiles = [input.demo === 'B', input.demo === 'C', input.kind === 'federated-surface-index', input.schema === 'authzledger.blue-evidence.v1'];
-  requireField(profiles.filter(Boolean).length === 1, 'Erwartet wird ein AuthzLedger-Befund B, Retest C, Quelleninventar oder SOC-Signalbericht.');
+  const profiles = [input.demo === 'B', input.demo === 'C', input.kind === 'federated-surface-index', input.schema === 'authzledger.blue-evidence.v1',
+    input.schema === 'authzledger.evidence-index.v1'];
+  requireField(profiles.filter(Boolean).length === 1, 'Erwartet wird ein AuthzLedger-Befund B, Retest C, Quelleninventar, Belegindex oder SOC-Signalbericht.');
+  if (profiles[4]) return {...evidenceIndexProjection(input), digest: await sha256(bytes)};
   if (profiles[3]) return {...blueProjection(input), digest: await sha256(bytes)};
   const assessment = identifier(input.assessment_id, 'Assessment');
   const scope = digest(input.scope_digest, 'Scope');

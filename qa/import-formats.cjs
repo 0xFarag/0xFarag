@@ -39,3 +39,20 @@ for(const [i,c] of JSON.parse(fs.readFileSync(path.join(fixtures,'invalid-cases.
   await assert.rejects(api.parse(c.source,enc(raw)),err=>err instanceof api.ImportError);
 });
 test('invalid UTF-8 rejected',async()=>{await assert.rejects(api.parse('ffuf',new Uint8Array([255])),err=>err instanceof api.ImportError);});
+test('automatic import uses the same validated parser as manual selection for every sample',async()=>{
+  for (const source of Object.keys(api.definitions)) {
+    const raw = enc(api.samples[source]);
+    assert.deepEqual(await api.parse('auto',raw), await api.parse(source,raw), source);
+  }
+  const xml = fs.readFileSync(path.join(fixtures,'nmap.xml'));
+  assert.equal((await api.parse('auto',xml)).source,'nmap');
+  const lines = enc('\n'+api.samples.nuclei+'\r\n'+api.samples.nuclei);
+  assert.equal((await api.parse('auto',lines)).rows.length,2);
+});
+test('automatic import declines ambiguous, malformed, active XML and unknown input',async()=>{
+  for (const raw of ['{"results":[],"site":[]}','{"results":[{}]}','{}','[]','unrecognised',
+    '{"results":[]}\n{"results":[]}', '<!DOCTYPE nmaprun SYSTEM "https://example.invalid/schema"><nmaprun/>',
+    '<unknown><issues/></unknown>', api.samples.nuclei+'\nnot json']) {
+    await assert.rejects(api.parse('auto',enc(raw)),err=>err instanceof api.ImportError);
+  }
+});
