@@ -11,7 +11,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
 import receipt_portable as receipt
 
-VERSION = "AuthzLedger Offline Recipient Verifier · Studio preview 3"
+VERSION = "AuthzLedger Offline Recipient Verifier - Studio preview 3"
 
 
 def public_key(pem):

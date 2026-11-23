@@ -33,7 +33,7 @@ jobs:
           & $python build_notices.py
           & $python -m PyInstaller --onefile --console --clean --noupx --name AuthzLedgerRecipientStudio-x64 --add-data 'THIRD_PARTY_NOTICES.txt:.' verifier.py
           $exe = (Resolve-Path 'dist\AuthzLedgerRecipientStudio-x64.exe').Path
-          if ((& $exe --version) -ne 'AuthzLedger Offline Recipient Verifier · Studio preview 3') { throw 'Wrong verifier build' }
+          if ((& $exe --version) -ne 'AuthzLedger Offline Recipient Verifier - Studio preview 3') { throw 'Wrong verifier build' }
           & $exe --studio-smoke
           $notices = (& $exe --notices | Out-String)
           foreach ($required in @('CPython','cryptography','OpenSSL','PyInstaller','tk')) { if ($notices -notmatch $required) { throw "Missing attribution for $required" } }
