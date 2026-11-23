@@ -112,13 +112,18 @@
 .home .edition-note { color: var(--steel); margin-top: 1.5rem; max-width: 80ch; }
 .home .pilot-card .text-link { color: #f4d79f; }
 @media (max-width: 880px) {
+  .home .nav {
+    position: relative; display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+  }
   .home .wide-nav { display: none; }
   .home .head-cta { margin-left: auto; }
-  .home .mobile-nav { display: block; position: relative; }
+  .home .mobile-nav { display: block; position: static; }
   .home .mobile-nav summary { display: list-item; color: white; cursor: pointer; padding: .6rem .4rem; }
   .home .mobile-nav nav {
     position: absolute; top: 100%; right: 0; z-index: 4; display: grid; gap: 0;
-    min-width: 13rem; background: var(--deep); color: white;
+    width: min(15rem, 100%); min-width: 0; background: var(--deep); color: white;
     border: 1px solid #567579; border-radius: .25rem; padding: .3rem;
   }
   .home .mobile-nav nav a { display: block; padding: .67rem .9rem; }
@@ -138,4 +143,11 @@
 @media (max-width: 400px) {
   .home .adapters { grid-template-columns: 1fr; }
   .home .actions .btn { padding-inline: 1rem; }
+}
+
+@media (max-width: 360px) {
+  .home .brand { font-size: 1rem; gap: .3rem; }
+  .home .brand img { width: 1.9rem; }
+  .home .nav { gap: .3rem; }
+  .home .head-cta { padding-inline: .45rem; }
 }
