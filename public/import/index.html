@@ -1,0 +1,34 @@
+<!doctype html>
+<!-- © Nasser Aldin Farag (0xFarag). All rights reserved. -->
+<html lang="de-CH">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Lokaler Belegimport | AuthzLedger</title>
+<link rel="stylesheet" href="./styles.css">
+<script src="./adapters.js" defer></script><script src="./compare.js" defer></script><script src="./app.js" defer></script>
+</head>
+<body>
+<header><div class="bar"><a class="brand" href="../">AuthzLedger</a><a class="back" href="../">Zur Übersicht</a></div></header>
+<main>
+<h1>Lokaler Belegimport</h1>
+<p class="lead">Führe vorhandene Exporte in einer Tabelle zusammen. Jede Beobachtung verweist auf ihre Quelldatei und ihren Datensatz. Scope und Controls bleiben bis zur fachlichen Prüfung offen.</p>
+<section class="panel ingest" aria-labelledby="input-heading">
+<div class="row between"><h2 id="input-heading">Quelldateien</h2><div class="switch" aria-label="Arbeitsbereich"><button id="real" aria-pressed="true">Eigene Dateien</button><button id="examples" aria-pressed="false">Beispiele</button></div></div>
+<p id="context"></p>
+<div class="row controls"><label for="adapter">Quellformat<select id="adapter"></select></label><div class="row buttons"><input id="file" type="file" multiple hidden><button class="primary" id="add">Dateien auswählen</button><button id="follow" hidden>Folgebeispiel hinzufügen</button></div></div>
+<p id="hint"></p><details id="sample-detail"><summary>Synthetisches Formatbeispiel ansehen</summary><pre id="sample"></pre></details>
+<p class="status" id="status" role="status" aria-live="polite"></p>
+</section>
+<section class="panel" aria-labelledby="review-heading">
+<div class="row between"><h2 id="review-heading">Beobachtungen</h2><button id="clear" disabled>Arbeitsbereich leeren</button></div>
+<div class="row between filters"><label for="filter">Nach Quelle filtern<select id="filter"><option value="">Alle Quellen</option></select></label><span id="totals"></span></div>
+<div class="table-wrap"><table><caption class="sr">Quellmetadaten und Prüfstatus</caption><thead><tr><th>Quelle</th><th>Herkunft</th><th>Asset-ID</th><th>Quellmetadaten</th><th>Prüfstatus</th></tr></thead><tbody id="body"></tbody></table></div>
+<div class="row between pagination"><span id="page"></span><div class="row"><button id="prev" disabled>Zurück</button><button id="next" disabled>Weiter</button></div></div>
+<details id="register"><summary>Dateiregister und SHA-256-Prüfsummen</summary><ul id="files"></ul></details>
+</section>
+<section class="panel" id="comparison" aria-label="Vergleich der Beobachtungen"></section>
+<section class="notes"><h2>So liest du die Tabelle</h2><p>Die SHA-256-Prüfsumme identifiziert die exakten Bytes der gewählten Datei. Datensatznummern zählen passende Elemente in Dokumentreihenfolge. Bei Textexporten steht die Zeilennummer. Duplikate behalten ihren eigenen Quellverweis. Die Asset-ID ist der gekürzte Hash des gemeldeten Hosts. Relative Pfade enthalten keinen Host.</p><p>Alle Berichte bleiben im Arbeitsspeicher dieses Tabs. Neuladen leert beide Arbeitsbereiche. Pro Datei gelten 1 MiB und 1’000 Datensätze. Zusammen fassen die Arbeitsbereiche 20 Dateien, 5 MiB und 2’500 Datensätze. Jede Datei wird vollständig angenommen oder abgelehnt. Die Tabelle zeigt ausgewählte Metadaten. Eine Freigabe des Scopes und die Bestätigung eines Findings erfordern separate Nachweise.</p></section>
+</main><footer>© Nasser Aldin Farag (0xFarag). All rights reserved.</footer>
+</body></html>

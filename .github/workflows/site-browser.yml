@@ -1,7 +1,7 @@
 name: Verify AuthzLedger public website
 on:
   push:
-    branches: [launch/evidence-site-20261121, authzledger-website]
+    branches: [launch/evidence-site-20261121, launch/evidence-import-20261123, authzledger-website]
   workflow_dispatch:
 
 permissions:
@@ -28,6 +28,8 @@ jobs:
       - name: Install Chromium on Windows
         if: runner.os == 'Windows'
         run: node qa/node_modules/playwright/cli.js install chromium
+      - name: Check source-bound observation comparisons
+        run: node --test qa/import-compare.cjs qa/import-compare-browser.cjs
       - name: Test public pages and their evidence
         run: node qa/website.cjs
 

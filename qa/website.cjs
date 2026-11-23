@@ -35,7 +35,7 @@ async function serveFile(request, response) {
 
 async function checkLinks(page, origin) {
   const files = new Map();
-  const htmlPages = ['/index.html', '/lab.html', '/installation.html', '/technik/hkdf/'];
+  const htmlPages = ['/index.html', '/lab.html', '/installation.html', '/technik/hkdf/', '/import/'];
   for (const source of htmlPages) {
     const response = await page.goto(origin + source);
     assert.equal(response.status(), 200, source);
@@ -151,6 +151,7 @@ async function exercise(browser, origin, width) {
     assert(await page.locator('#verify').isDisabled());
     await page.unroute('**/proof/v1.5.0/report.json');
     if (width >= 1000) {
+      await require('./import-browser.cjs')(page,origin);
       await checkLinks(page,origin);
       await verifyDownloads(page,origin);
       const investor = await page.request.get(origin+'/investor-one-pager.pdf');
