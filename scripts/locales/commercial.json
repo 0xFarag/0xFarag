@@ -1,0 +1,56 @@
+{
+  "Was Sie im Pilot abnehmen": [
+    "What you verify in the pilot",
+    "Ce que vous validez pendant le pilote",
+    "Cosa verifichi nel progetto pilota",
+    "ما الذي تتحقق منه في المشروع التجريبي"
+  ],
+  "Ihr Reviewer verfolgt einen Befund bis zur Kontrolle, ordnet den Retest seiner ursprünglichen ID zu und prüft die signierte Übergabe lokal. Die kommerzielle Basis ist Version 1.5.0. Das separate Lab zeigt synthetische Beispiele der technischen Vorschau 1.6.": [
+    "Your reviewer traces a finding back to its control, links the retest to its original ID and verifies the signed handover locally. The commercial release is 1.5.0. The separate lab presents synthetic examples from the 1.6 technical preview.",
+    "Votre responsable de revue relie un constat à son contrôle et le contre-test à son identifiant initial, puis vérifie localement la remise signée. La version commerciale est la 1.5.0. Le labo distinct présente des exemples synthétiques de l’aperçu technique 1.6.",
+    "Il revisore risale dal rilievo al controllo, collega la verifica all’ID iniziale e controlla localmente la consegna firmata. La base commerciale è la versione 1.5.0. Il laboratorio separato presenta esempi sintetici dell’anteprima tecnica 1.6.",
+    "يتتبع المراجع النتيجة حتى ضابطها ويربط إعادة الاختبار بمعرّفها الأصلي ويتحقق محلياً من الحزمة الموقّعة. الإصدار التجاري هو 1.5.0. يعرض المختبر المنفصل أمثلة اصطناعية من المعاينة التقنية 1.6."
+  ],
+  "Pilotangebot als Markdown (DE)": [
+    "Pilot offer in Markdown (German)",
+    "Offre pilote au format Markdown (allemand)",
+    "Offerta pilota in Markdown (tedesco)",
+    "عرض المشروع التجريبي بصيغة Markdown (بالألمانية)"
+  ],
+  "Pilotgespräch anfragen": [
+    "Request a pilot discussion",
+    "Demander un entretien pilote",
+    "Richiedi un colloquio sul progetto pilota",
+    "اطلب اجتماعاً حول المشروع التجريبي"
+  ],
+  "Unterlagen für Investoren": [
+    "Investor materials",
+    "Dossier investisseurs",
+    "Documenti per investitori",
+    "مواد المستثمرين"
+  ],
+  "Käuferprofil, Produktnachweise, Preise und das messbare Ziel für die ersten bezahlten Piloten auf einer Seite.": [
+    "Buyer profile, product evidence, pricing and the target for the first paid pilots on one page.",
+    "Profil des acheteurs, preuves produit, prix et objectif des premiers pilotes payants en une page.",
+    "Profilo degli acquirenti, prove di prodotto, prezzi e obiettivo dei primi progetti pilota a pagamento in una pagina.",
+    "ملف العميل وأدلة المنتج والأسعار والهدف القابل للقياس للمشاريع التجريبية المدفوعة الأولى في صفحة واحدة."
+  ],
+  "Investor-One-Pager als Markdown (EN)": [
+    "Investor brief in Markdown (English)",
+    "Fiche investisseurs au format Markdown (anglais)",
+    "Scheda investitori in Markdown (inglese)",
+    "موجز المستثمر بصيغة Markdown (بالإنجليزية)"
+  ],
+  "Investor-One-Pager als PDF (EN)": [
+    "Investor brief as PDF (English)",
+    "Fiche investisseurs en PDF (anglais)",
+    "Scheda investitori in PDF (inglese)",
+    "موجز المستثمر بصيغة PDF (بالإنجليزية)"
+  ],
+  "30-Tage-Pilot per Offerte": [
+    "Request a quote for a 30-day pilot",
+    "Demander un devis pour le pilote de 30 jours",
+    "Richiedi un preventivo per il pilota di 30 giorni",
+    "اطلب عرض سعر للمشروع التجريبي لمدة 30 يوماً"
+  ]
+}

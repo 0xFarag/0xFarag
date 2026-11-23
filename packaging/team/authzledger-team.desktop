@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=AuthzLedger Team
+Comment=Open the private AuthzLedger Team workspace
+Comment[de]=Den privaten AuthzLedger-Teamarbeitsbereich öffnen
+Exec=authzledger-team-desktop
+Icon=authzledger-team
+Terminal=false
+Categories=Office;Security;
+StartupNotify=true

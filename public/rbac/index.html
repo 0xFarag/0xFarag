@@ -5,13 +5,21 @@
 <meta name="theme-color" content="#071722"><meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; object-src 'none'">
 <title>RBAC-Prüfung · AuthzLedger</title><meta name="description" content="Kubernetes-Berechtigungen in lokalen RBAC-Snapshots nachvollziehen und ausgewählte Fragen erneut prüfen.">
-<link rel="icon" href="/assets/authzledger-icon.png"><link rel="stylesheet" href="/konto/kundenbereich.css"><link rel="stylesheet" href="./style.css"><script type="module" src="./ui.mjs"></script>
+<link rel="icon" href="/assets/authzledger-icon.png"><link rel="stylesheet" href="/konto/kundenbereich.css"><link rel="stylesheet" href="./style.css"><script type="module" src="./ui.mjs"></script><script type="module" src="./matrix-ui.mjs"></script>
 </head><body><a class="skip" href="#main">Zum Inhalt</a>
 <header><div class="wrap masthead"><a class="brand" href="/"><img src="/assets/authzledger-logo.png" width="40" height="40" alt="">AuthzLedger</a><nav aria-label="Hauptnavigation"><a href="/#werkzeuge">Arbeitsbereich</a><a href="/downloads/">Downloads</a><a href="/fachzugang/">Fachzugang</a></nav></div></header>
 <main id="main"><div class="intro"><div class="wrap"><h1>Kubernetes-RBAC prüfen</h1><p>Welche Regel deckt eine konkrete Anfrage ab? Prüfen Sie lokale Richtlinienexporte und vergleichen Sie dieselbe Frage nach einer Änderung.</p></div></div>
 <div class="wrap content"><noscript><p>Aktivieren Sie JavaScript für die lokale Auswertung.</p></noscript>
 <section class="panel"><h2>Ursprünglicher Snapshot</h2><p>Öffnen Sie einen Kubernetes-RBAC-v1-Export als UTF-8-JSON oder probieren Sie eine synthetische Leserolle aus. Beide Snapshots bleiben im Arbeitsspeicher. Je Snapshot gelten 2 MiB und 1’000 RBAC-Objekte.</p>
 <div class="actions"><button type="button" class="primary" id="pick-original">Original öffnen</button><input hidden type="file" id="original" accept=".json,application/json"><button type="button" class="secondary" id="example">Beispiel laden</button><button type="button" class="secondary" id="clear" hidden>Sitzung leeren</button></div><p id="source-status" role="status" aria-live="polite"></p><div id="source-info"></div></section>
+<section class="panel" id="matrix" translate="no" aria-labelledby="matrix-title">
+<h2 id="matrix-title" data-matrix-text="title">Berechtigungsmatrix</h2>
+<p data-matrix-text="intro">Vergleichen Sie die erwartete Berechtigung pro Subjekt und Anfrage mit den Regeln in Ihren lokalen RBAC-Exporten.</p>
+<p id="matrix-help"></p><button class="secondary" type="button" id="matrix-start" hidden data-matrix-text="openOriginal">Original öffnen</button>
+<div class="actions" id="matrix-tools" hidden><a class="secondary" href="#query-form" data-matrix-text="newQuery">Prüffrage eingeben</a><button class="secondary" id="matrix-open-after" type="button" data-matrix-text="openAfter">Vergleichsdatei öffnen</button><button class="secondary" id="matrix-clear-after" type="button" data-matrix-text="clearAfter" hidden>Vergleichsdatei entfernen</button><button class="secondary" type="button" id="matrix-load" data-matrix-text="load">Sollwerte laden</button><button class="secondary" type="button" id="matrix-save" data-matrix-text="save" disabled>Matrix als JSON speichern</button></div>
+<input type="file" accept=".json,application/json" hidden id="matrix-after"><input type="file" accept=".json,application/json" hidden id="matrix-file">
+<p id="matrix-status" role="status" aria-live="polite"></p><div id="matrix-hashes"></div><div id="matrix-table"></div><div id="matrix-detail"></div>
+</section>
 <div id="workspace" hidden><section class="panel"><h2>Prüffrage</h2><p>Geben Sie die Anfrage so ein, wie sie vor dem API-Server aussehen würde. Benutzer- und Gruppenmitgliedschaften sind explizite Annahmen.</p>
 <form id="query-form"><div class="grid">
 <label>Subjekttyp<select name="kind"><option>User</option><option>Group</option><option>ServiceAccount</option></select></label>
@@ -25,7 +33,7 @@
 <label>Ressourcenname (optional)<input name="resourceName" maxlength="253" autocomplete="off"></label>
 <label>Namensselektor für list/watch<input name="fieldSelectorName" maxlength="253" autocomplete="off"></label>
 <label>Zusätzliche Gruppen (eine pro Zeile)<textarea name="groups" rows="2" maxlength="16256"></textarea></label>
-</div><div class="actions"><button class="primary" id="run" type="submit">Frage prüfen</button><button class="secondary" type="button" id="keep" disabled>Frage übernehmen</button></div></form>
+</div><div class="actions"><button class="primary" id="run" type="submit">Frage prüfen</button><button class="secondary" type="button" id="keep" disabled>Frage übernehmen</button></div><div class="matrix-entry" id="matrix-entry" translate="no" hidden><label for="matrix-target" data-matrix-text="expected">Sollwert</label><select id="matrix-target"><option value="grant" data-matrix-text="expectGrant">Erlaubnis erwartet</option><option value="no_grant" data-matrix-text="expectNone">Keine Erlaubnis erwartet</option></select><button class="secondary" type="button" id="matrix-add" disabled data-matrix-text="add">Zur Matrix hinzufügen</button><a href="#matrix" data-matrix-text="view">Matrix ansehen</a></div></form>
 <p id="query-status" role="status" aria-live="polite"></p><div id="proofs"></div></section>
 <section class="panel"><h2>Prüfbasis</h2><p>Die Basis verbindet bis zu 32 Fragen mit dem Original-Hash. Die exportierte Basis enthält auch die eingegebenen Subjektnamen, Gruppen und Ressourcennamen.</p>
 <ol id="queries"></ol><div class="actions"><button id="make" type="button" class="primary" disabled>Prüfbasis erstellen</button><button id="save-basis" type="button" class="secondary" hidden>Basis als JSON speichern</button><button id="load-basis" type="button" class="secondary">Gespeicherte Basis laden</button><input id="basis-file" type="file" accept=".json,application/json" hidden></div><p id="basis-status" role="status" aria-live="polite"></p><div id="basis-hash"></div></section>

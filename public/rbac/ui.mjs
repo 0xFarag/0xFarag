@@ -108,8 +108,12 @@ function listQueries() {
   }
   $('make').disabled = !queries.length;
 }
+// The optional matrix reads the same validated input and source as the single-query view.
+export function analysisInputs() { return {original, lastQuery}; }
+function notifyInputs() { window.dispatchEvent(new Event('rbacinputs')); }
 function clearQuery() {
   lastQuery = null;
+  notifyInputs();
   $('keep').disabled = true;
   $('query-status').textContent = '';
   $('proofs').replaceChildren();
@@ -132,8 +136,10 @@ function reset() {
   $('source-info').replaceChildren();
 }
 async function openOriginal(file, example) {
+  const next = await snapshot(example ? demo(false) : await bytes(file), example);
   reset();
-  original = await snapshot(example ? demo(false) : await bytes(file), example);
+  original = next;
+  notifyInputs();
   $('clear').hidden = $('workspace').hidden = false;
   $('source-status').textContent = example ? 'Synthetischer Beispiel-Snapshot geöffnet.' : 'Eigener Snapshot geöffnet.';
   showSnapshot('source-info',original);
@@ -182,6 +188,7 @@ function runQuery() {
     appendMatches();
   }
   lastQuery = query;
+  notifyInputs();
   $('keep').disabled = false;
 }
 function activateBasis(value) {
@@ -235,7 +242,7 @@ async function compare() {
   result.append(list);
   $('save-result').hidden = false;
 }
-function download(data,name) {
+export function download(data,name) {
   const url = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)+'\n'],{type:'application/json'}));
   const link = el('a','');
   link.href = url;
@@ -245,7 +252,7 @@ function download(data,name) {
   link.remove();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-async function act(status,fn) {
+export async function act(status,fn) {
   if (busy) return;
   busy = true;
   const focus = document.activeElement;
@@ -275,7 +282,10 @@ inputButton('current','pick-current','current-status',openCurrent);
 inputButton('basis-file','load-basis','basis-status',restore);
 $('example').onclick = () => act('source-status',()=>openOriginal(null,true));
 $('clear').onclick = () => {reset(); $('source-status').textContent='Lokale Sitzung geleert.'; $('pick-original').focus();};
-$('query-form').oninput = () => { subjectFields(); clearQuery(); };
+$('query-form').oninput = event => {
+  if (event.target.closest('#matrix-entry')) return;
+  subjectFields(); clearQuery();
+};
 $('query-form').onsubmit = event => {event.preventDefault(); act('query-status',runQuery);};
 $('keep').onclick = () => act('query-status',() => {
   if (!lastQuery) return;

@@ -1,0 +1,15 @@
+pkgname=authzledger-team
+pkgver=@VERSION@
+pkgrel=1
+pkgdesc='Local AuthzLedger Team workspace with a desktop launcher'
+arch=('any')
+url='https://authzledger.com'
+license=('LicenseRef-AuthzLedger')
+depends=('python>=3.10' 'python-cryptography' 'tk')
+source=("https://github.com/0xFarag/0xFarag/releases/download/team-${pkgver}/authzledger-team-${pkgver}.tar.gz")
+sha256sums=('@SHA256@')
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  python3 packaging/team/install.py "${pkgdir}"
+}

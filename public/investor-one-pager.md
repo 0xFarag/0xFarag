@@ -1,46 +1,40 @@
 # AuthzLedger
 
-Investor brief · 23 November 2026
+**Investor brief · 23 November 2026 · Switzerland**
 
-**Authorization Intelligence, built on evidence.**
+A pentest lead ready to close an engagement needs to answer three questions. Which access check failed? Which control supports that finding? Which cases did the reviewer repeat after the fix? AuthzLedger brings those records into a local assessment and gives the recipient a signed inventory to verify independently.
 
-Know who can do what. Prove what changed.
+## Buyer and purchase decision
 
-## The buyer and the decision
+The initial buyer is a Swiss pentest consultancy lead or AppSec manager who signs off client handovers. The pilot covers two named users, one authorised engagement and 30 days. The buyer nominates a reviewer and selects an anonymised case, then compares review time for the same case set against the previous process.
 
-For a consultancy lead signing off a client handover, an unanswered question can delay delivery by another review cycle. Which access check failed, which control makes the result meaningful, and did anyone repeat that same check after the fix?
+## What the buyer can verify
 
-## Why start with a pilot?
+- **Finding.** Trace the finding to the source and its valid controls.
+- **Retest.** Link the selected result to its original ID and identify omitted cases marked `not_retested`.
+- **Handover.** Verify the original with an independently confirmed Ed25519 key. Record rejection of a modified copy.
 
-The 30-day pilot covers two users on one authorised engagement. Bring existing evidence and nominate a reviewer. Agree on scope, budget and acceptance criteria before starting. A second engagement tests whether the buyer will pay to repeat the workflow.
+The commercial basis is release 1.5.0. The separate 1.6 lab presents synthetic technical previews. Release records and samples support product evaluation.
 
-## What a customer can test
+## Commercial model
 
-| Acceptance criterion | Pilot test |
-|---|---|
-| Controls | Trace each confirmed finding to its valid controls. Remove a required control from a sample and check that confirmation is blocked. |
-| Source-bound retests | Trace each retest to its original evidence. Omit a case and check that it remains visible as `not_retested`. |
-| Signed handover | Verify the delivered package against a trusted Ed25519 public key. Change a signed file and check that verification fails. |
+| Offer | Price in CHF | Scope |
+|---|---:|---|
+| Pilot | 2’400 once | Two named users, one engagement, 30 days |
+| Solo | 1’200 per year | Individual professional use |
+| Team | 4’800 per year | Team licence |
+| Consultancy | Written quote | Agreed multi-engagement scope |
 
-## Commercial terms
-
-| Offer | Price | Basis |
-|---|---|---|
-| Pilot | CHF 2’400 | 30 days |
-| Solo | CHF 1’200 | Per year |
-| Team | CHF 4’800 | Per year |
-| Consultancy | By quotation | Agreed scope |
+Prices exclude applicable VAT. A qualifying annual contract within the agreed 30-day period receives a one-time CHF 1’200 credit. For Team, the first annual invoice then totals CHF 3’600.
 
 ## First commercial milestone
 
-Target 3–5 paid pilots in 30 days. At list price that is CHF 7’200–12’000 in one-off fees. If a qualifying pilot converts to Team, the CHF 1’200 credit reduces the first annual invoice to CHF 3’600 against the CHF 4’800 list price.
+Target three paid pilots in 30 days, with five as a stretch goal. That represents CHF 7’200–12’000 in one-off contract value if achieved. Track deposits received separately from contracts signed. The thesis is that linked controls reduce review effort in repeat engagements. Test it using reviewer minutes, delivery hours and separately signed renewals. No customer or revenue figures are asserted here.
 
-For each pilot, compare reviewer minutes against the buyer’s usual handover for the same case set. The moat thesis is that reusable controls and evidence linked to the original case make each subsequent handover cheaper to review. Track reviewer time, delivery hours and paid renewals to test it.
+For introductions, seek Swiss consultancy or AppSec leads with a scheduled handover, an authorised case and a reviewer who can assess it.
 
-Release evidence: [v1.5.0 / 03aea85](https://github.com/0xFarag/0xFarag/commit/03aea857e35358ddeb13d2a861b633e60c1ca873) · [CI run of 20 October 2026](https://github.com/0xFarag/0xFarag/actions/runs/39477528355).
+[Release evidence on GitHub](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0) · [Contact the founder](https://www.linkedin.com/in/nasser-aldin-farag-974697412/)
 
-Nasser Aldin Farag (0xFarag)  ·  Founder and owner  ·  Switzerland
+Nasser Aldin Farag (0xFarag) · Founder & CEO · Switzerland
 
-[Contact the founder on LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/)
-
-© Nasser Aldin Farag (0xFarag). All rights reserved.
+© Nasser Aldin Farag (0xFarag). Rights in the founder’s own protectable contributions are reserved. Third-party rights remain with their holders.
