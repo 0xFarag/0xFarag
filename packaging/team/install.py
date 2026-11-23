@@ -1,0 +1,33 @@
+"""Populate the filesystem tree used by Debian and Arch packages."""
+import os
+import shutil
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+TARGET = Path(sys.argv[1])
+if not TARGET.is_absolute():
+    raise SystemExit('An absolute staging directory is required')
+
+def install_file(src, dest, mode=0o644):
+    target = TARGET / dest
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(ROOT / src, target)
+    os.chmod(target, mode)
+
+for item in sorted((ROOT / 'team').rglob('*')):
+    if item.is_file() and not item.is_symlink() and '__pycache__' not in item.parts and not item.name.endswith(('.pyc','.pyo')):
+        install_file(item, Path('usr/lib/authzledger-team') / item.relative_to(ROOT))
+install_file('packaging/team/launcher.py', 'usr/lib/authzledger-team/launcher.py')
+for name in ['authzledger-team','authzledger-team-desktop']:
+    install_file('packaging/team/' + name, 'usr/bin/' + name, 0o755)
+install_file('packaging/team/authzledger-team.desktop', 'usr/share/applications/authzledger-team.desktop')
+install_file('public/assets/authzledger-logo.png', 'usr/share/icons/hicolor/256x256/apps/authzledger-team.png')
+install_file('LICENSE','usr/share/licenses/authzledger-team/LICENSE')
+install_file('NOTICE.txt','usr/share/licenses/authzledger-team/NOTICE.txt')
+install_file('packaging/team/README.md','usr/share/doc/authzledger-team/README.md')
+for name in ['LICENSE', 'NOTICE.txt']:
+    install_file(name, 'usr/lib/authzledger-team/legal/' + name)
+    install_file(name, 'usr/share/doc/authzledger-team/' + name)
+install_file('packaging/team/THIRD-PARTY.md', 'usr/lib/authzledger-team/legal/THIRD-PARTY.md')
+install_file('packaging/team/THIRD-PARTY.md', 'usr/share/doc/authzledger-team/THIRD-PARTY.md')

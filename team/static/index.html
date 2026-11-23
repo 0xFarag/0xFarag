@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#0b1d29">
+<title>AuthzLedger · Team</title>
+<link rel="icon" type="image/png" href="/logo.png"><link rel="stylesheet" href="/team.css"><script type="module" src="/team.mjs"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-key="skip"></a>
+<header class="mast"><div class="bar"><div class="brand"><img class="brand-mark" src="/logo.png" width="36" height="36" alt=""><span>AuthzLedger <span class="edition">Team</span></span></div>
+<div class="toolbar"><label for="locale" data-key="language"></label><select id="locale"><option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="ar">العربية</option></select><button type="button" id="logout" class="quiet" data-key="logout" hidden></button></div></div></header>
+<main id="main" tabindex="-1">
+<noscript>JavaScript wird für die Teamoberfläche benötigt. JavaScript is required.</noscript>
+<section id="login-panel" class="login card" hidden><h1 data-key="login"></h1><form id="login-form">
+<label for="username" data-key="username"></label><input id="username" name="username" required autocomplete="username" dir="auto">
+<label for="password" data-key="password"></label><input id="password" name="password" type="password" required autocomplete="current-password">
+<button class="primary" type="submit" data-key="login"></button></form><p class="fine" data-key="bootstrap"></p></section>
+<p role="status" aria-live="polite" id="message"></p>
+<section id="workspace" hidden>
+<div class="workspace-head"><div><p class="overline" data-key="teamWorkspace"></p><h1 id="team-heading"></h1></div><div class="identity"><span id="account-name" dir="auto"></span><span id="account-role"></span><details class="profile"><summary data-key="account"></summary><form id="password-form"><label for="current-password" data-key="currentPassword"></label><input id="current-password" name="current_password" type="password" required autocomplete="current-password"><label for="next-password" data-key="newPassword"></label><input id="next-password" name="password" type="password" minlength="12" maxlength="256" required autocomplete="new-password"><button class="secondary" type="submit" data-key="changePassword"></button></form></details></div></div>
+<nav class="panel-nav" aria-label="Workspace" data-aria="sections"><div id="nav-buttons">
+<button type="button" data-view="cases" data-key="cases"></button><button type="button" data-view="members" data-key="members"></button><button type="button" data-view="audit" data-key="audit"></button></div>
+<div class="team-picker"><label for="team-select" data-key="team"></label><select id="team-select"></select></div></nav>
+<section id="view-cases">
+<div class="grid">
+<aside class="card case-list"><div class="section-heading"><h2 data-key="cases"></h2><button type="button" id="cases-reload" class="secondary slim" data-key="refresh"></button></div>
+<ul id="case-list"></ul><p id="cases-empty" class="empty" data-key="emptyCases"></p>
+<details id="new-case" class="section"><summary data-key="newCase"></summary><form id="case-form">
+<label for="case-title" data-key="caseTitle"></label><input id="case-title" maxlength="160" name="title" dir="auto" required>
+<label for="case-scope" data-key="scope"></label><textarea id="case-scope" maxlength="1200" name="scope" dir="auto" rows="3" required></textarea>
+<label for="case-assets" data-key="assetList"></label><textarea id="case-assets" rows="3" required dir="auto"></textarea>
+<button class="primary" type="submit" data-key="create"></button></form></details></aside>
+<div id="case-detail" class="card detail" hidden><div class="section-heading"><div><p class="overline" data-key="case"></p><h2 id="detail-title" dir="auto"></h2></div></div>
+<p class="scope" id="detail-scope" dir="auto"></p>
+<div class="counters"><div><b id="import-count"></b><span data-key="sources"></span></div><div><b id="finding-count"></b><span data-key="findings"></span></div><div><b id="retest-count"></b><span data-key="retests"></span></div></div>
+<section class="section"><h3 data-key="sources"></h3><ul class="records" id="imports"></ul>
+<details id="import-tool"><summary data-key="importSource"></summary><form id="import-form"><div class="pair">
+<div><label for="import-format" data-key="format"></label><select id="import-format" name="format">
+<option value="burp">Burp Suite XML</option><option value="zap">OWASP ZAP JSON</option><option value="har">HAR</option><option value="nmap">Nmap XML</option><option value="nuclei">Nuclei JSONL</option><option value="openapi">OpenAPI JSON</option></select></div>
+<div><label for="import-file" data-key="exportFile"></label><input id="import-file" name="file" type="file" required></div></div><p class="fine" data-key="importHelp"></p><button class="primary" type="submit" data-key="import"></button></form></details></section>
+<section class="section" id="control-reviews" aria-labelledby="cr-heading"></section>
+<section class="section"><h3 data-key="findings"></h3><ul class="records" id="findings"></ul><details id="finding-tool"><summary data-key="newFinding"></summary>
+<form id="finding-form">
+<label for="finding-title" data-key="findingTitle"></label><input maxlength="160" id="finding-title" name="title" dir="auto" required>
+<label for="asset" data-key="asset"></label><select id="asset" name="asset" required></select>
+<label for="expected" data-key="expected"></label><textarea maxlength="2000" id="expected" name="expected" rows="2" dir="auto" required></textarea>
+<label for="observed" data-key="observed"></label><textarea maxlength="2000" id="observed" name="observed" rows="2" dir="auto" required></textarea>
+<label for="finding-status" data-key="status"></label><select id="finding-status" name="status"><option value="hint" data-key="hint"></option><option value="confirmed" data-key="confirmed"></option></select>
+<p class="fine" id="control-help" data-key="controlHelp"></p><div class="ref-fields" id="finding-evidence"></div><div class="ref-fields" id="finding-control"></div>
+<button class="primary" type="submit" data-key="saveFinding"></button></form></details></section>
+<section class="section"><h3 data-key="retests"></h3><ul class="records" id="retests"></ul><details id="retest-tool"><summary data-key="newRetest"></summary>
+<form id="retest-form"><label for="retest-finding" data-key="finding"></label><select id="retest-finding" name="finding_id" required></select>
+<label for="retest-status" data-key="status"></label><select id="retest-status" name="status"><option value="not_retested" data-key="not_retested"></option><option value="inconclusive" data-key="inconclusive"></option><option value="fix_verified" data-key="fix_verified"></option><option value="persists" data-key="persists"></option></select>
+<p class="fine" id="retest-help" data-key="retestHelp"></p><div id="retest-description"><label for="retest-observed" data-key="observed"></label><textarea maxlength="2000" id="retest-observed" rows="2" name="observed" dir="auto"></textarea></div>
+<div class="ref-fields" id="retest-evidence"></div><div class="ref-fields" id="retest-control"></div>
+<button class="primary" type="submit" data-key="saveRetest"></button></form></details></section>
+<section class="section" id="handover-tool"><h3 data-key="handover"></h3><form id="handover-form"><label for="output-language" data-key="outputLanguage"></label><select id="output-language" name="language"><option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="ar">العربية</option></select><button type="submit" class="primary" data-key="signDownload"></button></form></section>
+</div></div>
+<section class="card verify"><h2 data-key="verifyTitle"></h2><p class="fine" data-key="verifyHelp"></p><div id="trust-fingerprint" class="fingerprint"></div><button type="button" class="plain slim" id="download-key" data-key="saveKey"></button><form id="verify-form"><label for="verify-file" data-key="package"></label><input type="file" id="verify-file" accept=".json,application/json" required><button class="secondary" type="submit" data-key="verify"></button></form><p id="verify-result" role="status" aria-live="polite"></p><div id="verified-report" hidden></div></section>
+</section>
+<section id="view-members" hidden><div class="card"><div class="section-heading"><h2 data-key="members"></h2><button type="button" id="members-reload" class="secondary slim" data-key="refresh"></button></div>
+<ul id="member-list" class="records"></ul>
+<details class="section"><summary data-key="addMember"></summary><form id="member-form">
+<label for="member-mode" data-key="account"></label><select id="member-mode"><option value="new" data-key="newAccount"></option><option value="existing" data-key="existingAccount"></option></select>
+<label for="member-user" data-key="username"></label><input id="member-user" name="username" autocomplete="off" required dir="auto">
+<div id="create-account"><label for="member-password" data-key="initialPassword"></label><input id="member-password" name="password" type="password" minlength="12" maxlength="256" autocomplete="new-password">
+<label for="member-locale" data-key="language"></label><select id="member-locale" name="locale"><option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="ar">العربية</option></select></div>
+<label for="member-role" data-key="role"></label><select id="member-role" name="role"></select><button type="submit" class="primary" data-key="addMember"></button></form></details>
+<details class="section"><summary data-key="newTeam"></summary><form id="team-form"><label for="team-name" data-key="teamName"></label><input id="team-name" name="name" dir="auto" required><button type="submit" class="primary" data-key="create"></button></form></details></div></section>
+<section id="view-audit" class="card" hidden><div class="section-heading"><h2 data-key="audit"></h2><button type="button" id="audit-reload" class="secondary slim" data-key="refresh"></button></div><div class="table-wrap"><table><thead><tr><th data-key="time"></th><th data-key="actor"></th><th data-key="action"></th><th data-key="resource"></th><th data-key="result"></th></tr></thead><tbody id="audit-list"></tbody></table></div></section>
+</section>
+</main><footer>AuthzLedger <span>·</span> 0xFarag</footer>
+</body></html>
