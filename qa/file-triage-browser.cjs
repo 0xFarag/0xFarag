@@ -21,6 +21,7 @@ test('Local triage binds all results to one file, rejects stale reports, exports
   try {
     const page = await browser.newPage({viewport:{width:390,height:810}});
     const resources = {
+      '/i18n/tool-copy.js':['i18n/tool-copy.js','text/javascript'],
       '/dateipruefung/':['dateipruefung/index.html','text/html'],
       '/dateipruefung/app.mjs':['dateipruefung/app.mjs','text/javascript'],
       '/dateipruefung/model.mjs':['dateipruefung/model.mjs','text/javascript'],

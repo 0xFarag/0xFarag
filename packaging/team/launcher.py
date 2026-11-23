@@ -1,5 +1,6 @@
 """Desktop entry point. Keep the service private to the loopback interface."""
 import argparse
+import locale
 import secrets
 import sys
 import tempfile
@@ -34,45 +35,159 @@ def self_test():
             worker.join(5)
 
 
+LANGUAGES = {'de': 'Deutsch', 'en': 'English', 'fr': 'Français', 'it': 'Italiano', 'ar': 'العربية'}
+DESKTOP_TEXT = {
+    "tagline": [
+        "Privater Arbeitsbereich auf diesem Gerät",
+        "Private workspace on this device",
+        "Espace de travail privé sur cet appareil",
+        "Spazio di lavoro privato su questo dispositivo",
+        "مساحة العمل الخاصة على هذا الجهاز"
+    ],
+    "setup": [
+        "Ersteinrichtung",
+        "Initial setup",
+        "Première configuration",
+        "Configurazione iniziale",
+        "الإعداد الأولي"
+    ],
+    "user": [
+        "Benutzername für das erste Administratorkonto",
+        "Username for the first administrator",
+        "Nom du premier compte administrateur",
+        "Nome del primo amministratore",
+        "اسم حساب المسؤول الأول"
+    ],
+    "pass": [
+        "Neues Administratorpasswort (12–256 Zeichen)",
+        "New administrator password (12–256 characters)",
+        "Nouveau mot de passe administrateur (12 à 256 caractères)",
+        "Nuova password amministratore (12–256 caratteri)",
+        "كلمة مرور المسؤول الجديدة (12–256 محرفاً)"
+    ],
+    "confirm": [
+        "Passwort zur Bestätigung erneut eingeben",
+        "Re-enter the password to confirm",
+        "Saisissez à nouveau le mot de passe",
+        "Confermate la password",
+        "أعيدوا إدخال كلمة المرور للتأكيد"
+    ],
+    "mismatch": [
+        "Die beiden Passwörter stimmen nicht überein.",
+        "The passwords do not match.",
+        "Les mots de passe ne correspondent pas.",
+        "Le password non coincidono.",
+        "كلمتا المرور غير متطابقتين."
+    ],
+    "invalid_username": [
+        "Erlaubt sind Buchstaben und Ziffern sowie Punkt, Unterstrich, @, Plus und Bindestrich. Beginnen Sie mit einem Buchstaben oder einer Ziffer.",
+        "Use letters, digits, dot, underscore, @, plus or hyphen. Start with a letter or digit.",
+        "Utilisez des lettres, chiffres, points, tirets bas, @, signes plus ou traits d’union. Commencez par une lettre ou un chiffre.",
+        "Usate lettere, cifre, punti, trattini bassi, @, segni più o trattini. Iniziate con una lettera o una cifra.",
+        "استخدموا حروفاً أو أرقاماً أو النقطة أو الشرطة السفلية أو @ أو علامة الجمع أو الشرطة، وابدؤوا بحرف أو رقم."
+    ],
+    "invalid_password_length": [
+        "Das Passwort muss zwischen 12 und 256 Zeichen enthalten.",
+        "The password must be 12–256 characters long.",
+        "Le mot de passe doit comporter de 12 à 256 caractères.",
+        "La password deve contenere da 12 a 256 caratteri.",
+        "يجب أن تتكوّن كلمة المرور من 12 إلى 256 محرفاً."
+    ],
+    "running": [
+        "Der lokale Dienst läuft. Lassen Sie dieses Fenster während der Arbeit geöffnet.",
+        "The local service is running. Keep this window open while you work.",
+        "Le service local est actif. Gardez cette fenêtre ouverte pendant votre travail.",
+        "Il servizio locale è attivo. Tenete aperta questa finestra durante il lavoro.",
+        "الخدمة المحلية قيد التشغيل. أبقوا هذه النافذة مفتوحة أثناء العمل."
+    ],
+    "open": [
+        "Arbeitsbereich im Browser öffnen",
+        "Open workspace in browser",
+        "Ouvrir l’espace dans le navigateur",
+        "Apri l’area di lavoro nel browser",
+        "فتح مساحة العمل في المتصفح"
+    ],
+    "next": [
+        "Weiter",
+        "Continue",
+        "Continuer",
+        "Continua",
+        "متابعة"
+    ]
+}
+
 def launch(directory, test_window=False):
     import tkinter as tk
     from tkinter import messagebox, simpledialog, ttk
     root = tk.Tk()
     root.title('AuthzLedger Team')
+    language = (locale.getlocale()[0] or 'de').split('_')[0].lower()
+    if language not in LANGUAGES:
+        language = 'de'
+    def tr(key):
+        return DESKTOP_TEXT[key][list(LANGUAGES).index(language)]
     root.geometry('510x260')
     root.minsize(400, 230)
     panel = ttk.Frame(root, padding=24)
     panel.pack(expand=True, fill='both')
     ttk.Label(panel, text='AuthzLedger Team', font=('TkDefaultFont', 19, 'bold')).pack(anchor='w')
-    label = ttk.Label(panel, text='Privater Arbeitsbereich auf diesem Gerät', wraplength=445)
+    label = ttk.Label(panel, text=tr('tagline'), wraplength=445)
     label.pack(anchor='w', pady=(8, 16))
+    if not test_window:
+        picker = ttk.Frame(panel)
+        picker.pack(anchor='w', fill='x', pady=(0, 8))
+        selected = tk.StringVar(value=LANGUAGES[language])
+        selector = ttk.Combobox(picker, state='readonly', textvariable=selected, values=list(LANGUAGES.values()), width=17)
+        selector.pack(side='left')
+        proceed = tk.BooleanVar(value=False)
+        next_button = ttk.Button(picker, text=tr('next'), command=lambda: proceed.set(True))
+        next_button.pack(side='left', padx=8)
+        def set_language(_event):
+            nonlocal language
+            language = next(code for code, name in LANGUAGES.items() if name == selected.get())
+            label.configure(text=tr('tagline'))
+            next_button.configure(text=tr('next'))
+        selector.bind('<<ComboboxSelected>>', set_language)
+        closing = []
+        def close_picker():
+            closing.append(True)
+            proceed.set(True)
+        root.protocol('WM_DELETE_WINDOW', close_picker)
+        selector.focus_set()
+        root.wait_variable(proceed)
+        if closing:
+            root.destroy()
+            return
+        root.protocol('WM_DELETE_WINDOW', root.destroy)
+        picker.destroy()
     try:
         if needs_bootstrap(directory):
-            user = simpledialog.askstring('Ersteinrichtung', 'Benutzername für das erste Administratorkonto', parent=root)
+            user = simpledialog.askstring(tr('setup'), tr('user'), parent=root)
             if not user:
+                root.destroy()
                 return
-            password = simpledialog.askstring('Ersteinrichtung', 'Neues Administratorpasswort (12–256 Zeichen)', show='*', parent=root)
+            password = simpledialog.askstring(tr('setup'), tr('pass'), show='*', parent=root)
             if not password:
+                root.destroy()
                 return
-            confirm = simpledialog.askstring('Ersteinrichtung', 'Passwort zur Bestätigung erneut eingeben', show='*', parent=root)
+            confirm = simpledialog.askstring(tr('setup'), tr('confirm'), show='*', parent=root)
             if password != confirm:
-                raise ValueError('Die beiden Passwörter stimmen nicht überein.')
-            bootstrap(directory, user, password)
+                raise ValueError(tr('mismatch'))
+            bootstrap(directory, user, password, locale=language)
         server = make_server(directory, host='127.0.0.1', port=0)
     except Exception as error:
         if test_window:
             root.destroy()
             raise
-        messages = {'invalid_username': 'Der Benutzername muss mit einem Buchstaben oder einer Ziffer beginnen. Erlaubt sind auch Punkt, Unterstrich, @, Plus und Bindestrich.',
-                    'invalid_password_length': 'Das Passwort muss zwischen 12 und 256 Zeichen enthalten.'}
+        messages = {key: tr(key) for key in ('invalid_username', 'invalid_password_length')}
         messagebox.showerror('AuthzLedger Team', messages.get(str(error), str(error)), parent=root)
         root.destroy()
         return
     worker = threading.Thread(target=server.serve_forever, daemon=True)
     worker.start()
     url = f'http://127.0.0.1:{server.server_address[1]}/'
-    label.configure(text='Der lokale Dienst läuft. Dieses Fenster geöffnet lassen, solange Sie im Arbeitsbereich arbeiten.')
-    ttk.Button(panel, text='Arbeitsbereich im Browser öffnen', command=lambda: webbrowser.open(url)).pack(anchor='w')
+    label.configure(text=tr('running'))
+    ttk.Button(panel, text=tr('open'), command=lambda: webbrowser.open(url)).pack(anchor='w')
     address = ttk.Entry(panel, width=40)
     address.insert(0, url)
     address.configure(state='readonly')

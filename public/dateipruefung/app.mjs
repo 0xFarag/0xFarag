@@ -4,6 +4,9 @@ import {
   inspectFile, parseHashList, matchKnownHash, checkVirusTotalReport
 } from './model.mjs';
 
+import '../i18n/tool-copy.js';
+const {t, write, locale} = window.AuthzToolCopy;
+
 const $ = id => document.getElementById(id);
 const labels = [
   ['malicious','Als schädlich gemeldet'], ['suspicious','Als verdächtig gemeldet'],
@@ -12,17 +15,17 @@ const labels = [
   ['failure','Analyse fehlgeschlagen'], ['type-unsupported','Dateityp nicht unterstützt']
 ];
 let session, listRevision = 0, reportRevision = 0;
-const number = n => n.toLocaleString('de-CH');
+const number = n => n.toLocaleString(locale());
 
 function element(tag, text) {
   const result = document.createElement(tag);
-  result.textContent = text;
+  write(result, text);
   return result;
 }
 
 function feedback(id, text, error = false) {
   const target = $(id + '-status');
-  target.textContent = text;
+  write(target, text);
   target.toggleAttribute('data-error', error);
 }
 
@@ -52,21 +55,21 @@ async function openFile(file) {
     current.model = model;
     $('sha256').textContent = model.sha256;
     $('sha512').textContent = model.sha512;
-    $('format').textContent = model.format.label;
-    $('size').textContent = number(model.size) + ' Bytes';
-    $('entropy').textContent = model.size ? model.entropy.toLocaleString('de-CH', {maximumFractionDigits:3}) + ' Bit/Byte' : '0 (leere Datei)';
+    write($('format'), model.format.label);
+    write($('size'), () => t('{count} Bytes', {count:number(model.size)}));
+    write($('entropy'), () => model.size ? t('{count} Bit/Byte', {count:model.entropy.toLocaleString(locale(), {maximumFractionDigits:3})}) : t('0 (leere Datei)'));
     if (model.signals.length) {
       const signals = element('ul','');
       for (const signal of model.signals) signals.append(element('li',signal.label));
       $('signals').append(signals);
     } else {
-      $('signals').textContent = 'Für die geprüften Merkmale wurde kein Hinweis ausgelöst.';
+      write($('signals'), 'Für die geprüften Merkmale wurde kein Hinweis ausgelöst.');
     }
     $('summary').hidden = $('sources').hidden = false;
     $('export').disabled = false;
     const displayName = file.name.replace(/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/gu,
       char => '[U+' + char.codePointAt(0).toString(16).toUpperCase().padStart(4,'0') + ']');
-    feedback('file','Lokal geprüft: ' + displayName);
+    feedback('file', () => t('Lokal geprüft: {name}', {name:displayName}));
   } catch {
     if (session === current) feedback('file','Die lokale Prüfung konnte die Datei nicht lesen oder ihre Hashwerte nicht berechnen.',true);
   }
@@ -94,7 +97,7 @@ async function openList(file) {
     const matched = matchKnownHash(current.model,hashes);
     current.list = {list_sha256:sha256, distinct_hashes:hashes.size, matched};
     const verdict = matched ? 'Der Dateihash ist in der Liste enthalten.' : 'In dieser Liste gibt es keinen Treffer für den Dateihash.';
-    feedback('list',verdict + ' Verglichene SHA-256-Werte: ' + number(hashes.size) + '.');
+    feedback('list',() => t(verdict) + ' ' + t('Verglichene SHA-256-Werte: {count}.', {count:number(hashes.size)}));
   } catch {
     if (session === current && version === listRevision) feedback('list','Hashliste abgelehnt. Prüfen Sie das Textformat, die SHA-256-Werte und die Grössengrenze von 1 MiB.',true);
   } finally {
@@ -120,12 +123,12 @@ function displayReport(report) {
   const body = table.createTBody();
   for (const [key,label] of labels) {
     const row = body.insertRow();
-    row.insertCell().textContent = label;
-    row.insertCell().textContent = number(report.stats[key]);
+    write(row.insertCell(), label);
+    write(row.insertCell(), () => number(report.stats[key]));
   }
   target.replaceChildren(table);
   if (report.analyzed_at) {
-    target.append(element('p','Analysezeit laut Bericht: ' + new Date(report.analyzed_at).toLocaleString('de-CH',{timeZone:'Europe/Zurich'}) + ' Uhr (Schweiz).'));
+    target.append(element('p',() => t('Analysezeit laut Bericht: {time} Uhr (Schweiz).', {time:new Date(report.analyzed_at).toLocaleString(locale(), {timeZone:'Europe/Zurich'})})));
   }
 }
 
@@ -152,8 +155,7 @@ async function openReport(file) {
     current.report = {report_sha256:sha256, file_sha256:checked.sha256, stats, total:checked.total,
       analyzed_at:checked.analyzedAt, provenance:'unverified_import'};
     displayReport(current.report);
-    const count = checked.total ? number(checked.total) + ' gemeldete Engine-Ergebnisse.' : 'Der Bericht enthält keine Engine-Ergebnisse.';
-    feedback('vt','Dateihash stimmt überein. ' + count);
+    feedback('vt', () => t('Dateihash stimmt überein.') + ' ' + (checked.total ? t('{count} gemeldete Engine-Ergebnisse.', {count:number(checked.total)}) : t('Der Bericht enthält keine Engine-Ergebnisse.')));
   } catch {
     if (session === current && version === reportRevision) feedback('vt','Bericht abgelehnt. Prüfen Sie Format, Dateihash, vollständige Kategorien und die Grössengrenze von 2 MiB.',true);
   } finally {

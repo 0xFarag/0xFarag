@@ -1,6 +1,9 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
 import {deviceKey, endpoint, publicApplication, signedRequest} from './device.mjs';
 
+import '../i18n/tool-copy.js';
+const {t, write, locale} = window.AuthzToolCopy;
+
 const $ = id => document.getElementById(id);
 const controls = [
   ['scope', 'Mandatsumfang', [['unknown','Ungeklärt'],['in_scope','Im Scope'],['out_of_scope','Ausserhalb']]],
@@ -16,7 +19,7 @@ const decisions = {
 let pair, application;
 function node(tag, text) {
   const el = document.createElement(tag);
-  el.textContent = text;
+  write(el, text);
   return el;
 }
 function presentKey() {
@@ -24,17 +27,17 @@ function presentKey() {
   $('authenticate').hidden = $('registration').hidden = false;
   $('fingerprint').textContent = application.kid;
   $('application').value = JSON.stringify(application, null, 2);
-  $('access-status').textContent = 'Prüfschlüssel in diesem Browser gefunden. Die persönliche Freigabe können Sie jetzt prüfen.';
+  write($('access-status'), 'Prüfschlüssel in diesem Browser gefunden. Die persönliche Freigabe können Sie jetzt prüfen.');
 }
 function keyUnavailable() {
-  $('access-status').textContent = 'Die lokale Schlüsselablage ist nicht verfügbar. Öffnen Sie diese Seite über HTTPS in einem aktuellen Browser mit erlaubten Websitedaten.';
+  write($('access-status'), 'Die lokale Schlüsselablage ist nicht verfügbar. Öffnen Sie diese Seite über HTTPS in einem aktuellen Browser mit erlaubten Websitedaten.');
 }
 async function loadKey(create) {
   $('generate').disabled = true;
   try {
     pair = await deviceKey(create);
     if (!pair) {
-      $('access-status').textContent = 'Dieses Browserprofil hat noch keinen Prüfschlüssel.';
+      write($('access-status'), 'Dieses Browserprofil hat noch keinen Prüfschlüssel.');
       $('generate').hidden = false;
       return;
     }
@@ -59,16 +62,22 @@ function downloadApplication() {
 }
 function discardResult() {
   $('result').replaceChildren();
-  $('review-status').textContent = '';
+  write($('review-status'), '');
 }
+function labelRemoveButtons() {
+  Array.from($('rows').children).forEach((row, index) => {
+    row.querySelector('button').setAttribute('aria-label', t('Fall {n} entfernen', {n:index + 1}));
+  });
+}
+window.addEventListener('authzlanguage', labelRemoveButtons);
 function numberRows() {
   const rows = Array.from($('rows').children);
   for (const [i, row] of rows.entries()) {
-    row.querySelector('legend').textContent = 'Fall ' + (i + 1);
+    write(row.querySelector('legend'), 'Fall {n}', {n:i + 1});
     const remove = row.querySelector('button');
-    remove.setAttribute('aria-label', 'Fall ' + (i + 1) + ' entfernen');
     remove.disabled = rows.length === 1;
   }
+  labelRemoveButtons();
   $('add-case').disabled = rows.length >= 32;
   discardResult();
 }
@@ -83,7 +92,7 @@ function addRow() {
     const label = node('label', name);
     const select = document.createElement('select');
     select.name = field;
-    for (const [value, title] of values) select.add(new Option(title, value));
+    for (const [value, title] of values) select.add(Object.assign(node('option', title), {value}));
     select.addEventListener('change', discardResult);
     label.append(select);
     choices.append(label);
@@ -117,7 +126,7 @@ function reviewResult(result, count) {
     list.append(item);
   }
   $('result').replaceChildren(node('h3','Nächster Prüfschritt je Fall'), list);
-  $('review-status').textContent = count + ' Fälle ausgewertet · ' + result.eligible + ' mit Scope, Controls und Quellbezug · ' + result.notRetested + ' ohne Retest.';
+  write($('review-status'), '{total} Fälle ausgewertet · {eligible} mit Scope, Controls und Quellbezug · {untested} ohne Retest.', {total:count, eligible:result.eligible, untested:result.notRetested});
 }
 async function review(checkOnly) {
   const status = $(checkOnly ? 'access-status' : 'review-status');
@@ -127,7 +136,7 @@ async function review(checkOnly) {
   rows.forEach(row => { row.disabled = true; });
   $('add-case').disabled = true;
   if (!checkOnly) discardResult();
-  status.textContent = checkOnly ? 'Freigabe wird geprüft …' : 'Prüfmerkmale werden ausgewertet …';
+  write(status, checkOnly ? 'Freigabe wird geprüft …' : 'Prüfmerkmale werden ausgewertet …');
   try {
     const payload = await signedRequest(pair, application.kid, cases, location.origin);
     const response = await fetch(endpoint, {method:'POST', mode:'same-origin', redirect:'error', credentials:'omit', referrerPolicy:'same-origin',
@@ -136,7 +145,7 @@ async function review(checkOnly) {
     if (response.status === 403) {
       $('review-panel').hidden = true;
       $('result').replaceChildren();
-      $('access-status').textContent = 'Für diese Anfrage wurde keine Freigabe bestätigt. Prüfen Sie Ihre Gerätezeit und den Stand Ihres persönlichen Antrags.';
+      write($('access-status'), 'Für diese Anfrage wurde keine Freigabe bestätigt. Prüfen Sie Ihre Gerätezeit und den Stand Ihres persönlichen Antrags.');
       return;
     }
     if (!response.ok) throw new Error('service');
@@ -145,11 +154,11 @@ async function review(checkOnly) {
         || data.expiresAt <= Math.floor(Date.now()/1000)) throw new Error('response');
     if (!checkOnly) reviewResult(data.review, cases.length);
     $('review-panel').hidden = false;
-    $('access-status').textContent = 'Persönliche Freigabe bestätigt bis ' + new Date(data.expiresAt * 1000).toLocaleString('de-CH', {timeZone:'Europe/Zurich'}) + ' Uhr (Schweiz).';
+    write($('access-status'), () => t('Persönliche Freigabe bestätigt bis {time} Uhr (Schweiz).', {time:new Date(data.expiresAt * 1000).toLocaleString(locale(), {timeZone:'Europe/Zurich'})}));
     if (!$('rows').childElementCount) addRow();
     if (checkOnly) $('review-title').focus();
   } catch {
-    status.textContent = 'Die Prüfung konnte nicht abgeschlossen werden. Prüfen Sie die Verbindung und versuchen Sie es erneut.';
+    write(status, 'Die Prüfung konnte nicht abgeschlossen werden. Prüfen Sie die Verbindung und versuchen Sie es erneut.');
   } finally {
     rows.forEach(row => { row.disabled = false; });
     $('add-case').disabled = $('rows').childElementCount >= 32;

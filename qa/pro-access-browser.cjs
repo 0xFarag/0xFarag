@@ -43,6 +43,7 @@ test('Browser retains its nonexportable key across reloads and opens protected r
     const env = {AUTHZ_PRO_ORIGIN:origin};
     const sent = [];
     const resources = {
+      '/i18n/tool-copy.js':['i18n/tool-copy.js','text/javascript'],
       '/fachzugang/':['fachzugang/index.html','text/html'],
       '/fachzugang/app.mjs':['fachzugang/app.mjs','text/javascript'],
       '/fachzugang/device.mjs':['fachzugang/device.mjs','text/javascript'],

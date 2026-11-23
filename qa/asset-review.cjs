@@ -75,6 +75,7 @@ test('Browser pages through asset and source rows, downloads a valid index, and 
   try {
     const page = await browser.newPage({offline:true});
     await page.setContent('<main><section id="assets"></section></main>');
+    await page.addScriptTag({content:await readFile(path.join(directory, '../i18n/tool-copy.js'), 'utf8')});
     for (const script of scripts) await page.addScriptTag({content:script});
     const a = await file('ffuf', JSON.stringify({results: [
       ...Array(13).fill(row),
