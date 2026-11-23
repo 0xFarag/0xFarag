@@ -70,7 +70,13 @@ test('offline matrix browser uses real uploads, displays sparse cells and eviden
     await page.locator('#clear').click();
     assert.equal(await cells.count(),0);
     await page.locator('#original').setInputFiles(asFile(policy));
-    await page.locator('#matrix-file').setInputFiles(asFile(JSON.stringify(report)));
+    const openMatrix = page.locator('#matrix-load');
+    await openMatrix.waitFor({state:'visible'});
+    await page.waitForFunction(() => !document.getElementById('main').inert);
+    const chooser = page.waitForEvent('filechooser');
+    await openMatrix.click();
+    await (await chooser).setFiles(asFile(JSON.stringify(report)));
+
     await page.locator('#matrix-detail h3').waitFor();
     assert.equal(await cells.count(),2);
     assert.equal(await cells.first().getAttribute('data-assessment'),'matches');

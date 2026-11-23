@@ -2206,5 +2206,1013 @@
     "Impossible d’ouvrir le formulaire de paiement. Réessayez ou demandez un devis.",
     "Impossibile aprire il modulo di pagamento. Riprova o richiedi un preventivo.",
     "تعذّر فتح نموذج الدفع. أعد المحاولة أو اطلب عرض سعر."
+  ],
+  "AuthzLedger-Empfängerprüfer herunterladen, installieren und eine Ed25519-signierte Übergabe lokal verifizieren.": [
+    "Download and install the AuthzLedger recipient verifier to verify an Ed25519-signed handover locally.",
+    "Téléchargez et installez le vérificateur AuthzLedger pour vérifier localement une remise signée avec Ed25519.",
+    "Scarica e installa il verificatore AuthzLedger per verificare localmente una consegna firmata con Ed25519.",
+    "نزّل أداة تحقّق المستلم من AuthzLedger وثبّتها للتحقق محلياً من تسليم موقّع بـ Ed25519."
+  ],
+  "Empfängerprüfer installieren · AuthzLedger": [
+    "Install the recipient verifier · AuthzLedger",
+    "Installer le vérificateur pour le destinataire · AuthzLedger",
+    "Installa il verificatore per il destinatario · AuthzLedger",
+    "تثبيت أداة تحقّق المستلم · AuthzLedger"
+  ],
+  "Zur Produktseite": [
+    "Product page",
+    "Page du produit",
+    "Pagina del prodotto",
+    "صفحة المنتج"
+  ],
+  "↗": [
+    "↗",
+    "↗",
+    "↗",
+    "↗"
+  ],
+  "Installation · Empfängerprüfung": [
+    "Installation · Recipient verification",
+    "Installation · Vérification à la réception",
+    "Installazione · Verifica del destinatario",
+    "التثبيت · تحقّق المستلم"
+  ],
+  "Eine signierte Übergabe prüfen.": [
+    "Verify a signed handover.",
+    "Vérifier une remise signée.",
+    "Verificare una consegna firmata.",
+    "تحقق من تسليم موقّع."
+  ],
+  "Mit dem eigenständigen Empfängerprüfer verifizierst du lokal die Ed25519-Signatur, das Dateiinventar, die SHA-256-Werte und die Verknüpfung zum Bericht.": [
+    "The standalone recipient verifier checks the Ed25519 signature, file inventory, SHA-256 hashes and link to the report locally.",
+    "Le vérificateur autonome contrôle localement la signature Ed25519, l’inventaire des fichiers, les empreintes SHA-256 et le lien avec le rapport.",
+    "Il verificatore autonomo controlla localmente la firma Ed25519, l’inventario dei file, gli hash SHA-256 e il collegamento al report.",
+    "تتحقق أداة المستلم المستقلة محلياً من توقيع Ed25519 وجرد الملفات وبصمات SHA-256 والارتباط بالتقرير."
+  ],
+  "Studio und CLI": [
+    "Studio and CLI",
+    "Studio et CLI",
+    "Studio e CLI",
+    "Studio وواجهة سطر الأوامر"
+  ],
+  "Alle Downloads": [
+    "All downloads",
+    "Tous les téléchargements",
+    "Tutti i download",
+    "جميع التنزيلات"
+  ],
+  "Eine Übergabe mit grafischer Oberfläche prüfen": [
+    "Verify a handover using the graphical interface",
+    "Vérifier une remise dans l’interface graphique",
+    "Verifica una consegna con l’interfaccia grafica",
+    "تحقق من التسليم عبر الواجهة الرسومية"
+  ],
+  "Wähle den Paketordner und einen separat bestätigten öffentlichen Schlüssel. Das Studio prüft das signierte Inventar lokal. Beide Pakete enthalten auch die CLI.": [
+    "Select the package folder and a separately confirmed public key. Studio verifies the signed inventory locally. Both packages also include the CLI.",
+    "Sélectionnez le dossier du paquet et une clé publique confirmée séparément. Studio vérifie localement l’inventaire signé. Les deux paquets incluent aussi la CLI.",
+    "Seleziona la cartella del pacchetto e una chiave pubblica confermata separatamente. Studio verifica localmente l’inventario firmato. Entrambi i pacchetti includono anche la CLI.",
+    "اختر مجلد الحزمة ومفتاحاً عاماً جرى تأكيده على نحو مستقل. يتحقق Studio محلياً من الجرد الموقّع. تتضمن الحزمتان واجهة الأوامر أيضاً."
+  ],
+  "Eigenständige EXE im ZIP, ohne Authenticode-Signatur. Nativ auf Windows Server 2022 geprüft.": [
+    "Standalone EXE in a ZIP, without an Authenticode signature. Tested natively on Windows Server 2022.",
+    "EXE autonome dans un ZIP, sans signature Authenticode. Testé nativement sur Windows Server 2022.",
+    "EXE autonomo in uno ZIP, senza firma Authenticode. Testato nativamente su Windows Server 2022.",
+    "ملف EXE مستقل ضمن ZIP دون توقيع Authenticode. اختُبر مباشرةً على Windows Server 2022."
+  ],
+  "Windows-Paket herunterladen (ZIP)": [
+    "Download Windows package (ZIP)",
+    "Télécharger le paquet Windows (ZIP)",
+    "Scarica il pacchetto Windows (ZIP)",
+    "نزّل حزمة Windows ‏(ZIP)"
+  ],
+  "DEB mit Desktop-Eintrag. Installation und grafischer Start auf Ubuntu 24.04 geprüft.": [
+    "DEB with desktop launcher. Installation and graphical launch tested on Ubuntu 24.04.",
+    "DEB avec lanceur graphique. Installation et lancement graphique testés sur Ubuntu 24.04.",
+    "DEB con avviatore desktop. Installazione e avvio grafico testati su Ubuntu 24.04.",
+    "حزمة DEB مع اختصار سطح مكتب. اختُبر التثبيت والتشغيل الرسومي على Ubuntu 24.04."
+  ],
+  "Debian-Paket herunterladen": [
+    "Download Debian package",
+    "Télécharger le paquet Debian",
+    "Scarica il pacchetto Debian",
+    "نزّل حزمة Debian"
+  ],
+  "SHA-256 für Preview 3": [
+    "SHA-256 for Preview 3",
+    "SHA-256 de l’aperçu 3",
+    "SHA-256 dell’anteprima 3",
+    "بصمة SHA-256 للمعاينة 3"
+  ],
+  "Build und Freigabe": [
+    "Build and release",
+    "Compilation et publication",
+    "Build e rilascio",
+    "البناء والإصدار"
+  ],
+  "Diese Pakete enthalten den eigenständigen Empfängerprüfer aus AuthzLedger v1.5.0. Die Versionsnummern unten bezeichnen seine Paketierung. Alle hier angebotenen Softwarepakete sind unsigniert.": [
+    "These packages contain the standalone recipient verifier from AuthzLedger v1.5.0. The versions below refer to packaging. All software packages offered here are unsigned.",
+    "Ces paquets contiennent le vérificateur autonome d’AuthzLedger v1.5.0. Les numéros ci-dessous désignent son conditionnement. Tous les paquets logiciels proposés ici sont non signés.",
+    "Questi pacchetti contengono il verificatore autonomo di AuthzLedger v1.5.0. Le versioni sottostanti si riferiscono al confezionamento. Tutti i pacchetti software offerti qui sono privi di firma.",
+    "تضم الحزم أداة التحقق المستقلة من AuthzLedger v1.5.0. تشير أرقام الإصدارات أدناه إلى تعبئة الأداة. جميع حزم البرامج المعروضة هنا غير موقّعة."
+  ],
+  "DEB · Preview 1 · Python ab 3.10 und OpenSSL ab 3.0. Auf Debian 13 und Ubuntu 24.04 unter linux/amd64 installiert und geprüft.": [
+    "DEB · Preview 1 · Requires Python 3.10+ and OpenSSL 3.0+. Installed and tested on Debian 13 and Ubuntu 24.04 under linux/amd64.",
+    "DEB · Aperçu 1 · Python 3.10+ et OpenSSL 3.0+. Installé et testé sur Debian 13 et Ubuntu 24.04 sous linux/amd64.",
+    "DEB · Anteprima 1 · Richiede Python 3.10+ e OpenSSL 3.0+. Installato e verificato su Debian 13 e Ubuntu 24.04 per linux/amd64.",
+    "DEB · المعاينة 1 · يتطلب Python ‏3.10 فأحدث وOpenSSL ‏3.0 فأحدث. اختُبر التثبيت على Debian 13 وUbuntu 24.04 ببنية linux/amd64."
+  ],
+  "Windows x64 · Self-contained": [
+    "Windows x64 · Self-contained",
+    "Windows x64 · Autonome",
+    "Windows x64 · Autonomo",
+    "Windows x64 · مستقل"
+  ],
+  "Portable PyInstaller-EXE v1.5.0-win.1. Python und Kryptobibliothek sind enthalten. Unter Windows Server 2022 x64 mit fünf Prüffällen getestet.": [
+    "Portable PyInstaller EXE v1.5.0-win.1 includes Python and the cryptography library. Tested with five cases on Windows Server 2022 x64.",
+    "L’EXE portable PyInstaller v1.5.0-win.1 inclut Python et la bibliothèque cryptographique. Cinq cas testés sur Windows Server 2022 x64.",
+    "L’EXE portatile PyInstaller v1.5.0-win.1 include Python e la libreria crittografica. Cinque casi testati su Windows Server 2022 x64.",
+    "يتضمن EXE المحمول المبني بـ PyInstaller بالإصدار v1.5.0-win.1 لغة Python ومكتبة التشفير. اختُبر بخمس حالات على Windows Server 2022 x64."
+  ],
+  "Eigenständige Windows-EXE (ZIP)": [
+    "Standalone Windows EXE (ZIP)",
+    "EXE Windows autonome (ZIP)",
+    "EXE Windows autonomo (ZIP)",
+    "ملف Windows EXE مستقل (ZIP)"
+  ],
+  "Windows · Installer-Vorschau": [
+    "Windows · Installer preview",
+    "Windows · Aperçu de l’installateur",
+    "Windows · Anteprima dell’installer",
+    "Windows · معاينة المثبّت"
+  ],
+  "ZIP · Vorschau mit Konsolen-EXE und Benutzer-Installer. Benötigt externes Python ab 3.13 und OpenSSL ab 3.0.": [
+    "Preview ZIP with console EXE and per-user installer. Requires external Python 3.13+ and OpenSSL 3.0+.",
+    "ZIP de préversion avec EXE console et installateur par utilisateur. Nécessite Python externe 3.13+ et OpenSSL 3.0+.",
+    "ZIP di anteprima con EXE console e installer per utente. Richiede Python esterno 3.13+ e OpenSSL 3.0+.",
+    "حزمة ZIP تجريبية تشمل EXE للطرفية ومثبّتاً لكل مستخدم. تتطلب تثبيتاً خارجياً لـ Python ‏3.13 فأحدث وOpenSSL ‏3.0 فأحدث."
+  ],
+  "Windows-Vorschau herunterladen": [
+    "Download Windows preview",
+    "Télécharger l’aperçu Windows",
+    "Scarica l’anteprima Windows",
+    "نزّل معاينة Windows"
+  ],
+  "Preview 1 · Mit": [
+    "Preview 1 · Built with",
+    "Aperçu 1 · Compilé avec",
+    "Anteprima 1 · Compilato con",
+    "المعاينة 1 · بُني باستخدام"
+  ],
+  "gebaut. Installation, Prüfung und Entfernung wurden im Arch-Container getestet.": [
+    ". Installation, verification and removal were tested in an Arch container.",
+    ". L’installation, la vérification et la désinstallation ont été testées dans un conteneur Arch.",
+    ". Installazione, verifica e rimozione sono state testate in un contenitore Arch.",
+    ". اختُبر التثبيت والتحقق والإزالة في حاوية Arch."
+  ],
+  "Arch-Paket herunterladen": [
+    "Download Arch package",
+    "Télécharger le paquet Arch",
+    "Scarica il pacchetto Arch",
+    "نزّل حزمة Arch"
+  ],
+  "PKGBUILD mit lokalen Quellen": [
+    "PKGBUILD with local sources",
+    "PKGBUILD avec sources locales",
+    "PKGBUILD con sorgenti locali",
+    "PKGBUILD مع المصادر المحلية"
+  ],
+  "Docker · linux/amd64": [
+    "Docker · linux/amd64",
+    "Docker · linux/amd64",
+    "Docker · linux/amd64",
+    "Docker · linux/amd64"
+  ],
+  "Komprimierter Image-Export für": [
+    "Compressed image export for",
+    "Export d’image compressé pour",
+    "Esportazione immagine compressa per",
+    "تصدير صورة مضغوطة لـ"
+  ],
+  ". Der Prüfer lief im nativen Test ohne Netzwerk, mit schreibgeschütztem Root-Dateisystem.": [
+    ". In the native test, the verifier ran without network access with a read-only root filesystem.",
+    ". Lors du test natif, le vérificateur a fonctionné sans réseau avec un système de fichiers racine en lecture seule.",
+    ". Nel test nativo il verificatore è stato eseguito senza rete e con filesystem radice in sola lettura.",
+    ". في الاختبار الأصلي عملت الأداة دون شبكة ومع نظام ملفات جذري للقراءة فقط."
+  ],
+  "Docker-Image herunterladen": [
+    "Download Docker image",
+    "Télécharger l’image Docker",
+    "Scarica l’immagine Docker",
+    "نزّل صورة Docker"
+  ],
+  "Python-Wheel": [
+    "Python wheel",
+    "Wheel Python",
+    "Wheel Python",
+    "حزمة Python wheel"
+  ],
+  "Revision 1.5.0.post1 · In isolierter Python-Umgebung unter Linux geprüft. Benötigt OpenSSL ab 3.0.": [
+    "Revision 1.5.0.post1 · Tested in an isolated Python environment on Linux. Requires OpenSSL 3.0+.",
+    "Révision 1.5.0.post1 · Testée dans un environnement Python isolé sous Linux. Nécessite OpenSSL 3.0 ou ultérieur.",
+    "Revisione 1.5.0.post1 · Testata in un ambiente Python isolato su Linux. Richiede OpenSSL 3.0 o successivo.",
+    "المراجعة 1.5.0.post1 · اختُبرت في بيئة Python معزولة على Linux. تتطلب OpenSSL ‏3.0 فأحدث."
+  ],
+  "Wheel herunterladen": [
+    "Download wheel",
+    "Télécharger le wheel",
+    "Scarica il wheel",
+    "نزّل حزمة wheel"
+  ],
+  "Quellen und Dockerfile": [
+    "Source and Dockerfile",
+    "Sources et Dockerfile",
+    "Sorgenti e Dockerfile",
+    "المصدر وDockerfile"
+  ],
+  "Revision 1.5.0.post1 · Originalskript, Installationshinweise, Rechtehinweise und mehrstufiges Docker-Baurezept.": [
+    "Revision 1.5.0.post1 · Original script, installation and rights notices, and multi-stage Docker build recipe.",
+    "Révision 1.5.0.post1 · Script d’origine, instructions d’installation, mentions de droits et recette Docker multiétape.",
+    "Revisione 1.5.0.post1 · Script originale, istruzioni di installazione, note sui diritti e ricetta Docker multistadio.",
+    "المراجعة 1.5.0.post1 · النص البرمجي الأصلي وتعليمات التثبيت وإشعارات الحقوق ووصفة بناء Docker متعددة المراحل."
+  ],
+  "Quellarchiv herunterladen": [
+    "Download source archive",
+    "Télécharger l’archive source",
+    "Scarica l’archivio sorgente",
+    "نزّل أرشيف المصدر"
+  ],
+  "Freigabe auf GitHub": [
+    "Release on GitHub",
+    "Version publiée sur GitHub",
+    "Versione su GitHub",
+    "الإصدار على GitHub"
+  ],
+  "SHA-256-Prüfsummen": [
+    "SHA-256 checksums",
+    "Sommes de contrôle SHA-256",
+    "Checksum SHA-256",
+    "بصمات SHA-256"
+  ],
+  "Prüfprotokoll dieser Ausgabe (JSON)": [
+    "Verification record for this release (JSON)",
+    "Procès-verbal de cette version (JSON)",
+    "Verbale di questa versione (JSON)",
+    "سجل التحقق لهذا الإصدار (JSON)"
+  ],
+  "Linux-Prüflauf": [
+    "Linux verification run",
+    "Vérification sous Linux",
+    "Verifica su Linux",
+    "تشغيل التحقق على Linux"
+  ],
+  "Download abgleichen": [
+    "Verify your download",
+    "Vérifier le téléchargement",
+    "Verifica il download",
+    "تحقق من التنزيل"
+  ],
+  "Vergleiche den SHA-256-Wert der ausgewählten Datei vor der Installation mit der Prüfsummenliste. Ein gleicher Wert bestätigt, dass die Bytes der Referenz entsprechen. Für einen Herkunftsnachweis brauchst du eine unabhängig bestätigte Referenz.": [
+    "Before installing, compare the selected file’s SHA-256 with the checksum list. A match confirms the bytes equal the reference. Provenance requires an independently verified reference.",
+    "Avant l’installation, comparez le SHA-256 du fichier à la liste des sommes de contrôle. Une correspondance confirme l’identité des octets. La provenance exige une référence vérifiée indépendamment.",
+    "Prima di installare, confronta lo SHA-256 del file con l’elenco dei checksum. Una corrispondenza conferma che i byte coincidono con il riferimento. La provenienza richiede un riferimento verificato indipendentemente.",
+    "قبل التثبيت قارن SHA-256 للملف بقائمة البصمات. يثبت التطابق أن البايتات تطابق المرجع. ولإثبات المصدر تحتاج إلى مرجع جرى التحقق منه بصورة مستقلة."
+  ],
+  "Unter Linux mit dem heruntergeladenen DEB im aktuellen Verzeichnis": [
+    "On Linux, with the downloaded DEB in the current directory",
+    "Sous Linux, avec le DEB téléchargé dans le répertoire courant",
+    "Su Linux, con il DEB scaricato nella directory corrente",
+    "على Linux، مع وجود حزمة DEB المنزّلة في المجلد الحالي"
+  ],
+  "Unter Windows in PowerShell": [
+    "On Windows in PowerShell",
+    "Sous Windows dans PowerShell",
+    "Su Windows in PowerShell",
+    "على Windows باستخدام PowerShell"
+  ],
+  "Empfängerprüfer einrichten": [
+    "Set up the recipient verifier",
+    "Configurer le vérificateur pour le destinataire",
+    "Configura il verificatore per il destinatario",
+    "إعداد أداة تحقّق المستلم"
+  ],
+  "Öffne ein Terminal im Download-Verzeichnis. Mit diesen Befehlen kannst du die Paketmetadaten ansehen und die Vorschau ohne Systeminstallation entpacken. Python ab 3.10 und OpenSSL ab 3.0 müssen bereits installiert sein.": [
+    "Open a terminal in the download directory. These commands show the package metadata and unpack the preview without installing it system-wide. Python 3.10+ and OpenSSL 3.0+ must already be installed.",
+    "Ouvrez un terminal dans le dossier de téléchargement. Ces commandes affichent les métadonnées et extraient l’aperçu sans installation système. Python 3.10+ et OpenSSL 3.0+ doivent déjà être installés.",
+    "Apri un terminale nella directory di download. Questi comandi mostrano i metadati ed estraggono l’anteprima senza installazione di sistema. Python 3.10+ e OpenSSL 3.0+ devono essere già installati.",
+    "افتح الطرفية في مجلد التنزيل. تعرض الأوامر بيانات الحزمة الوصفية وتفك المعاينة دون تثبيت على مستوى النظام. يجب أن يكون Python ‏3.10 فأحدث وOpenSSL ‏3.0 فأحدث مثبّتين مسبقاً."
+  ],
+  "Für eine Systeminstallation nutze": [
+    "For system-wide installation use",
+    "Pour une installation système, utilisez",
+    "Per un’installazione di sistema usa",
+    "للتثبيت على مستوى النظام استخدم"
+  ],
+  ". Danach steht": [
+    ". Then",
+    ". Ensuite,",
+    ". A questo punto",
+    ". بعدها يصبح"
+  ],
+  "als Befehl bereit. Mit": [
+    "is available as a command. Use",
+    "est disponible comme commande. Utilisez",
+    "è disponibile come comando. Usa",
+    "متاحاً كأمر. استخدم"
+  ],
+  "lässt sich das Paket entfernen. Die Installation und Entfernung sowie vier Prüffälle liefen auf Debian 13 und Ubuntu 24.04 erfolgreich.": [
+    "to remove the package. Installation, removal and four test cases passed on Debian 13 and Ubuntu 24.04.",
+    "pour désinstaller le paquet. L’installation, la suppression et quatre cas de test ont réussi sur Debian 13 et Ubuntu 24.04.",
+    "per rimuovere il pacchetto. Installazione, rimozione e quattro casi di test sono riusciti su Debian 13 e Ubuntu 24.04.",
+    "لإزالة الحزمة. نجح التثبيت والإزالة وأربع حالات اختبار على Debian 13 وUbuntu 24.04."
+  ],
+  "Windows x64 · Eigenständige EXE": [
+    "Windows x64 · Standalone EXE",
+    "Windows x64 · EXE autonome",
+    "Windows x64 · EXE autonomo",
+    "Windows x64 · ملف EXE مستقل"
+  ],
+  "Vergleiche den ZIP-Hash mit der Prüfsummenliste und entpacke das Archiv in einen eigenen Ordner. Python und die Kryptobibliothek sind im Programm enthalten. Es läuft ohne Systeminstallation und benötigt keinen externen OpenSSL-Befehl. Für die Nutzung ist keine Administratorberechtigung erforderlich.": [
+    "Compare the ZIP hash with the checksum list and unpack the archive into a dedicated folder. Python and the cryptography library are included. No system install, external OpenSSL command or administrator privileges are required.",
+    "Comparez l’empreinte du ZIP à la liste et extrayez-le dans un dossier dédié. Python et la bibliothèque cryptographique sont inclus. Aucune installation système, commande OpenSSL externe ni autorisation administrateur n’est requise.",
+    "Confronta l’hash dello ZIP con l’elenco ed estrai l’archivio in una cartella dedicata. Python e la libreria crittografica sono inclusi. Non servono installazione di sistema, comando OpenSSL esterno o privilegi amministrativi.",
+    "قارن بصمة ZIP بالقائمة وفكّه في مجلد مخصص. تتضمن الأداة Python ومكتبة التشفير، وتعمل دون تثبيت نظامي أو أمر OpenSSL خارجي أو صلاحيات مسؤول."
+  ],
+  "Das Archiv enthält": [
+    "The archive contains",
+    "L’archive contient",
+    "L’archivio contiene",
+    "يحتوي الأرشيف على"
+  ],
+  ",": [
+    ",",
+    ",",
+    ",",
+    ","
+  ],
+  "und die Lizenzen der mitgelieferten Komponenten. Die EXE trägt keine Authenticode-Signatur. Auf Windows Server 2022 x64 wurden fünf Fälle gegen den Originalprüfer abgeglichen.": [
+    "and the licences for bundled components. The EXE is not Authenticode-signed. Five cases were compared with the original verifier on Windows Server 2022 x64.",
+    "et les licences des composants fournis. L’EXE n’est pas signé avec Authenticode. Cinq cas ont été comparés au vérificateur original sous Windows Server 2022 x64.",
+    "e le licenze dei componenti inclusi. L’EXE non è firmato con Authenticode. Cinque casi sono stati confrontati con il verificatore originale su Windows Server 2022 x64.",
+    "وتراخيص المكونات المضمّنة. لا يحمل EXE توقيع Authenticode. قورنت خمس حالات بالأداة الأصلية على Windows Server 2022 x64."
+  ],
+  "Windows-Prüflauf": [
+    "Windows verification run",
+    "Vérification sous Windows",
+    "Verifica su Windows",
+    "تشغيل التحقق على Windows"
+  ],
+  "Windows · Optionale Installer-Vorschau": [
+    "Windows · Optional installer preview",
+    "Windows · Aperçu de l’installateur facultatif",
+    "Windows · Anteprima dell’installer facoltativo",
+    "Windows · معاينة المثبّت الاختياري"
+  ],
+  "Entpacke das ZIP in einen eigenen Ordner. Es enthält den portablen Prüfer und einen optionalen Installer für das aktuelle Windows-Benutzerkonto. Beide EXE-Dateien sind ohne Authenticode-Signatur. Verwende die tatsächlichen absoluten Pfade deiner vertrauenswürdigen Python- und OpenSSL-Installation. Das Beispiel verwendet Python 3.13 und OpenSSL aus Git für Windows.": [
+    "Unpack the ZIP into a dedicated folder. It contains the portable verifier and an optional installer for the current Windows user. Neither EXE is Authenticode-signed. Use the actual absolute paths of your trusted Python and OpenSSL installations. The example uses Python 3.13 and OpenSSL from Git for Windows.",
+    "Extrayez le ZIP dans un dossier dédié. Il contient le vérificateur portable et un installateur facultatif pour l’utilisateur Windows actuel. Aucun des deux EXE n’est signé avec Authenticode. Utilisez les chemins absolus réels de vos installations de confiance. L’exemple utilise Python 3.13 et OpenSSL de Git pour Windows.",
+    "Estrai lo ZIP in una cartella dedicata. Contiene il verificatore portatile e un installer facoltativo per l’utente Windows corrente. Nessuno dei due EXE ha firma Authenticode. Usa i percorsi assoluti effettivi delle tue installazioni attendibili di Python e OpenSSL. L’esempio usa Python 3.13 e OpenSSL di Git per Windows.",
+    "فك ZIP في مجلد مستقل. يضم الأداة المحمولة ومثبّتاً اختيارياً لمستخدم Windows الحالي. كلا ملفّي EXE بلا توقيع Authenticode. استخدم المسارات المطلقة الفعلية لنسختَي Python وOpenSSL الموثوقتين. يستخدم المثال Python 3.13 وOpenSSL من Git for Windows."
+  ],
+  "Die Pfadprüfung muss": [
+    "The path check must return",
+    "Le contrôle du chemin doit renvoyer",
+    "La verifica del percorso deve restituire",
+    "يجب أن يُرجع فحص المسار"
+  ],
+  "ergeben. Der historische Windows-Test umfasst das Demo-C-Paket. Für Netzlaufwerke, NTFS-Junctions und mehrfach verschachtelte Übergaben liegt keine allgemeine Freigabe vor. Die zugehörigen Rechtehinweise stehen im ZIP.": [
+    ". The historical Windows test covers the Demo C package. Network drives, NTFS junctions and deeply nested handovers have no general approval. The ZIP contains the relevant rights notices.",
+    ". Le test historique sous Windows couvre le paquet de la démo C. Les lecteurs réseau, jonctions NTFS et remises imbriquées ne bénéficient pas d’une validation générale. Les mentions de droits figurent dans le ZIP.",
+    ". Il test storico su Windows copre il pacchetto della demo C. Unità di rete, giunzioni NTFS e consegne annidate non hanno una convalida generale. Lo ZIP contiene le note sui diritti.",
+    ". يغطي اختبار Windows التاريخي حزمة العرض C. لا يوجد اعتماد عام لأقراص الشبكة أو وصلات NTFS أو الحزم المتداخلة بعمق. يتضمن ZIP إشعارات الحقوق."
+  ],
+  "Für das fertig gebaute Paket sind Python ab 3.10 und OpenSSL ab 3.0 erforderlich. Nach dem Hashvergleich installieren, prüfen und später bei Bedarf entfernen": [
+    "The prebuilt package requires Python 3.10+ and OpenSSL 3.0+. After comparing the hash, install, verify and optionally remove it as follows",
+    "Le paquet précompilé nécessite Python 3.10+ et OpenSSL 3.0+. Après comparaison de l’empreinte, installez-le, vérifiez-le et supprimez-le si nécessaire",
+    "Il pacchetto precompilato richiede Python 3.10+ e OpenSSL 3.0+. Dopo aver confrontato l’hash, installalo, verificalo ed eventualmente rimuovilo così",
+    "تتطلب الحزمة الجاهزة Python ‏3.10 فأحدث وOpenSSL ‏3.0 فأحدث. بعد مطابقة البصمة ثبّتها وتحقق منها ثم أزلها عند الحاجة كما يلي"
+  ],
+  "Zum eigenen Bau sind die Arch-Pakete": [
+    "To build it yourself, install the Arch packages",
+    "Pour compiler vous-même, installez les paquets Arch",
+    "Per compilarlo installa i pacchetti Arch",
+    "للبناء محلياً ثبّت حزم Arch"
+  ],
+  "(ab 3.10) und": [
+    "(3.10+) and",
+    "(3.10+) et",
+    "(3.10+) e",
+    "(3.10 فأحدث) و"
+  ],
+  "(ab 3.0) erforderlich. Baue als normaler Benutzer. Die vier lokalen Quelldateien werden gegen festgelegte Hashes geprüft.": [
+    "(3.0+). Build as an unprivileged user. The four local source files are checked against pinned hashes.",
+    "(3.0+). Compilez avec un compte sans privilèges. Les quatre fichiers sources locaux sont vérifiés avec des empreintes fixes.",
+    "(3.0+). Compila come utente senza privilegi. I quattro file sorgente locali sono confrontati con hash prefissati.",
+    "(3.0 فأحدث). نفّذ البناء كمستخدم عادي. يُتحقق من ملفات المصدر المحلية الأربعة بمقارنتها ببصمات ثابتة."
+  ],
+  "Installiere die von": [
+    "Install the file reported by",
+    "Installez le fichier indiqué par",
+    "Installa il file indicato da",
+    "ثبّت الملف الذي يحدده"
+  ],
+  "genannte Datei mittels": [
+    "using",
+    "avec",
+    "usando",
+    "باستخدام"
+  ],
+  ". Prüfe mit": [
+    ". Verify with",
+    ". Vérifiez avec",
+    ". Verifica con",
+    ". تحقق باستخدام"
+  ],
+  ". Entfernen mit": [
+    ". Remove with",
+    ". Désinstallez avec",
+    ". Rimuovi con",
+    ". أزل باستخدام"
+  ],
+  ". Das Archiv mit den Quellen ist separat verfügbar. Im nativen Arch-Lauf wurden die Quellen abgeglichen, das Paket gebaut, installiert, mit dem historischen v1.5.0-Demobeleg geprüft und wieder entfernt.": [
+    ". The source archive is available separately. The native Arch run checked the sources, built and installed the package, verified the historical v1.5.0 demo evidence, then removed the package.",
+    ". L’archive source est disponible séparément. L’exécution native sous Arch a vérifié les sources, compilé et installé le paquet, vérifié la preuve historique v1.5.0 puis supprimé le paquet.",
+    ". L’archivio sorgente è disponibile separatamente. Nell’esecuzione nativa su Arch sono stati verificati i sorgenti, compilato e installato il pacchetto, controllata la prova storica v1.5.0 e rimosso il pacchetto.",
+    ". يتوفر أرشيف المصدر منفصلاً. تحقّق التشغيل الأصلي على Arch من المصادر وبنى الحزمة وثبّتها، ثم تحقّق من دليل العرض التاريخي v1.5.0 وأزال الحزمة."
+  ],
+  "Wheel oder Python-Quelle unter Linux": [
+    "Wheel or Python source on Linux",
+    "Wheel ou source Python sous Linux",
+    "Wheel o sorgente Python su Linux",
+    "حزمة wheel أو مصدر Python على Linux"
+  ],
+  "Erforderlich sind Python ab 3.10 und ein vertrauenswürdiges": [
+    "You need Python 3.10+ and a trusted",
+    "Il vous faut Python 3.10+ et un exécutable de confiance",
+    "Servono Python 3.10+ e un eseguibile attendibile",
+    "تحتاج إلى Python ‏3.10 فأحدث وإلى نسخة موثوقة من"
+  ],
+  "ab 3.0 im Suchpfad. Für das Wheel werden zusätzlich": [
+    "version 3.0+ in your search path. The wheel also requires",
+    "version 3.0+ dans votre chemin de recherche. Le wheel nécessite aussi",
+    "versione 3.0+ nel percorso di ricerca. Il wheel richiede anche",
+    "بالإصدار 3.0 فأحدث في مسار البحث. وتتطلب حزمة wheel أيضاً"
+  ],
+  "und": [
+    "and",
+    "et",
+    "e",
+    "و"
+  ],
+  "benötigt. Die Installation verwendet die heruntergeladene Datei und benötigt keine Verbindung zu einem Paketindex.": [
+    ". Installation uses the downloaded file without contacting a package index.",
+    ". L’installation utilise le fichier téléchargé sans connexion à un index de paquets.",
+    ". L’installazione usa il file scaricato senza contattare un indice di pacchetti.",
+    ". يتم التثبيت من الملف المنزّل دون الاتصال بفهرس حزم."
+  ],
+  "Um das Skript direkt aus der Quelle auszuführen": [
+    "To run the script directly from source",
+    "Pour exécuter le script directement depuis la source",
+    "Per eseguire lo script direttamente dal sorgente",
+    "لتشغيل النص مباشرةً من المصدر"
+  ],
+  "Docker-Image laden oder aus der Quelle bauen": [
+    "Load the Docker image or build from source",
+    "Charger l’image Docker ou compiler depuis les sources",
+    "Carica l’immagine Docker o compilala dal sorgente",
+    "حمّل صورة Docker أو ابنِها من المصدر"
+  ],
+  "Lade auf einem Rechner mit Docker-Unterstützung für": [
+    "On a Docker host supporting",
+    "Sur un hôte Docker prenant en charge",
+    "Su un host Docker che supporta",
+    "على حاسوب يدعم Docker لبنية"
+  ],
+  "den geprüften Export und gleiche dessen SHA-256 ab. Das importierte Image trägt den Tag": [
+    "download the verified export and check its SHA-256. The imported image has tag",
+    "téléchargez l’export vérifié et contrôlez son SHA-256. L’image importée porte le tag",
+    "scarica l’esportazione verificata e confronta lo SHA-256. L’immagine importata ha il tag",
+    "نزّل ملف التصدير المتحقق منه وقارن بصمة SHA-256. تحمل الصورة المستوردة الوسم"
+  ],
+  "Erwartete Image-ID": [
+    "Expected image ID",
+    "Identifiant d’image attendu",
+    "ID immagine atteso",
+    "معرّف الصورة المتوقع"
+  ],
+  "Im entpackten Python-Quellarchiv liegt das zweistufige Dockerfile. Der Bau benötigt Zugriff auf das Basis-Image und die offiziellen Debian-Pakete. Ein Neubau kann durch aktualisierte Basis-Images oder Systempakete eine andere Image-ID haben.": [
+    "The unpacked Python source archive contains a two-stage Dockerfile. Building needs access to the base image and official Debian packages. Rebuilding with updated images or packages may change the image ID.",
+    "L’archive source Python extraite contient un Dockerfile en deux étapes. La compilation requiert l’image de base et les paquets Debian officiels. Leur mise à jour peut modifier l’identifiant lors d’une nouvelle compilation.",
+    "L’archivio sorgente Python estratto contiene un Dockerfile a due stadi. La build richiede l’immagine di base e i pacchetti Debian ufficiali. Aggiornamenti a immagini o pacchetti possono cambiare l’ID della nuova immagine.",
+    "يحتوي أرشيف مصدر Python المفكوك على Dockerfile بمرحلتين. يتطلب البناء الوصول إلى الصورة الأساسية وحزم Debian الرسمية. قد يتغيّر معرّف الصورة عند إعادة البناء بعد تحديثها."
+  ],
+  "Für eine Übergabe mit dem Verzeichnis": [
+    "For a handover with folder",
+    "Pour une remise avec le dossier",
+    "Per una consegna con la cartella",
+    "لتسليم يحتوي على المجلد"
+  ],
+  "und dem separat bestätigten Schlüssel": [
+    "and the separately confirmed key",
+    "et la clé confirmée séparément",
+    "e la chiave confermata separatamente",
+    "والمفتاح المؤكد بشكل مستقل"
+  ],
+  "im aktuellen Verzeichnis": [
+    "in the current directory",
+    "dans le répertoire courant",
+    "nella directory corrente",
+    "في المجلد الحالي"
+  ],
+  "Speichere das entpackte Evidence-Bundle in einem ruhenden, nur lesbaren Verzeichnis. Im Beispiel heisst es": [
+    "Store the unpacked evidence bundle in an inactive, read-only directory. In the example it is named",
+    "Placez le dossier de preuves extrait dans un répertoire immobile en lecture seule. Dans l’exemple, il s’appelle",
+    "Conserva le prove estratte in una directory in sola lettura che non viene modificata. Nell’esempio si chiama",
+    "احفظ حزمة الأدلة المفكوكة في مجلد ثابت للقراءة فقط. اسمه في المثال"
+  ],
+  "Beschaffe den erwarteten öffentlichen Ed25519-Schlüssel über einen unabhängig bestätigten Kanal. Speichere ihn ausserhalb des Bundles, hier unter": [
+    "Obtain the expected Ed25519 public key through an independently confirmed channel. Store it outside the bundle, here at",
+    "Obtenez la clé publique Ed25519 attendue par un canal confirmé indépendamment. Stockez-la hors du paquet, ici sous",
+    "Ottieni la chiave pubblica Ed25519 attesa tramite un canale confermato indipendentemente. Conservala fuori dal pacchetto, qui in",
+    "احصل على مفتاح Ed25519 العام المتوقع عبر قناة مؤكدة بشكل مستقل. احفظه خارج الحزمة، وفي المثال ضمن"
+  ],
+  "Starte den Prüfer und ersetze die Beispielpfade durch die tatsächlichen Pfade.": [
+    "Run the verifier, replacing the example paths with your actual paths.",
+    "Lancez le vérificateur en remplaçant les chemins d’exemple par les chemins réels.",
+    "Avvia il verificatore sostituendo ai percorsi di esempio quelli effettivi.",
+    "شغّل الأداة واستبدل بالمسارات التوضيحية مساراتك الفعلية."
+  ],
+  "Für die entpackte Debian-Vorschau verwende": [
+    "For the unpacked Debian preview use",
+    "Pour l’aperçu Debian extrait, utilisez",
+    "Per l’anteprima Debian estratta usa",
+    "لنسخة Debian التجريبية المفكوكة استخدم"
+  ],
+  ", für das Wheel": [
+    ", for the wheel use",
+    ", pour le wheel utilisez",
+    ", per il wheel usa",
+    "، ولحزمة wheel استخدم"
+  ],
+  "und für das eigenständige Windows-Paket": [
+    "and for the standalone Windows package use",
+    "et pour le paquet Windows autonome utilisez",
+    "e per il pacchetto Windows autonomo usa",
+    "ولحزمة Windows المستقلة استخدم"
+  ],
+  "Exitcode 0": [
+    "Exit code 0",
+    "Le code de sortie 0",
+    "Il codice di uscita 0",
+    "رمز الخروج 0"
+  ],
+  "bestätigt Signatur, Inventar, Hashes und Berichtsanker. Bei einer Fehlermeldung bleibt die Übergabe ungeprüft. Ob ein Befund fachlich zutrifft und tatsächlich erneut getestet wurde, ergibt sich aus den zugehörigen Controls und Ausführungsbelegen.": [
+    "confirms the signature, inventory, hashes and report anchor. If an error occurs the handover remains unverified. The associated controls and execution records determine whether a finding is valid and was actually retested.",
+    "confirme la signature, l’inventaire, les empreintes et l’ancre du rapport. En cas d’erreur, la remise reste non vérifiée. Les contrôles et traces d’exécution associés établissent si le constat est fondé et a été retesté.",
+    "conferma firma, inventario, hash e ancora del report. In caso di errore la consegna resta non verificata. I controlli e i registri di esecuzione associati stabiliscono se il rilievo è valido ed è stato ripetuto il test.",
+    "يؤكد التوقيع والجرد والبصمات ومرجع التقرير. في حال الخطأ يبقى التسليم غير متحقق منه. تحدّد الضوابط وسجلات التنفيذ المرتبطة ما إذا كانت النتيجة صحيحة وأُعيد اختبارها فعلاً."
+  ],
+  "© 2026 Nasser Aldin Farag (0xFarag). Alle Rechte an den eigenen schutzfähigen Beiträgen vorbehalten.": [
+    "© 2026 Nasser Aldin Farag (0xFarag). All rights reserved in the author’s own protectable contributions.",
+    "© 2026 Nasser Aldin Farag (0xFarag). Tous droits réservés sur les contributions propres susceptibles de protection.",
+    "© 2026 Nasser Aldin Farag (0xFarag). Tutti i diritti riservati sui contributi propri tutelabili.",
+    "© 2026 ناصر الدين فرج (0xFarag). جميع الحقوق محفوظة في مساهماته الأصلية القابلة للحماية."
+  ],
+  "AuthzLedger Lab · Synthetische Belege": [
+    "AuthzLedger Lab · Synthetic evidence",
+    "Labo AuthzLedger · Preuves synthétiques",
+    "Laboratorio AuthzLedger · Prove sintetiche",
+    "مختبر AuthzLedger · أدلة اصطناعية"
+  ],
+  "Öffentliches Website-Lab mit synthetischen Signalen, Retest-Belegen und technischen Ansichten zur Zielversion 1.6.": [
+    "Public lab with synthetic signals, retest evidence and technical views for the 1.6 target release.",
+    "Labo public présentant signaux synthétiques, preuves de contre-test et vues techniques de la version cible 1.6.",
+    "Laboratorio pubblico con segnali sintetici, prove delle verifiche e viste tecniche per la versione obiettivo 1.6.",
+    "مختبر عام لإشارات اصطناعية وأدلة إعادة الاختبار وعروض تقنية للإصدار المستهدف 1.6."
+  ],
+  "Cockpit": [
+    "Dashboard",
+    "Tableau de bord",
+    "Pannello",
+    "لوحة الأدلة"
+  ],
+  "← AuthzLedger": [
+    "← AuthzLedger",
+    "← AuthzLedger",
+    "← AuthzLedger",
+    "AuthzLedger →"
+  ],
+  "Lab · Technische Vorschau 1.6": [
+    "Lab · Technical preview 1.6",
+    "Labo · Aperçu technique 1.6",
+    "Laboratorio · Anteprima tecnica 1.6",
+    "المختبر · المعاينة التقنية 1.6"
+  ],
+  "Wie gut ist die": [
+    "How strong is the",
+    "Quelle est la solidité de la",
+    "Quanto è solida la",
+    "ما مدى قوة"
+  ],
+  "Belegkette?": [
+    "evidence chain?",
+    "chaîne de preuves ?",
+    "catena delle prove?",
+    "سلسلة الأدلة؟"
+  ],
+  "Diese Experimente arbeiten mit gespeicherten synthetischen Beispielen. Das Lab gehört zur technischen Vorschau. Produktversion, Lizenzangebote und Preise sind auf der kommerziellen Seite dokumentiert.": [
+    "These experiments use stored synthetic examples. The lab is part of the technical preview. The commercial site documents the product version, licences and pricing.",
+    "Ces expériences utilisent des exemples synthétiques enregistrés. Le labo fait partie de l’aperçu technique. La version du produit, les licences et les prix figurent sur le site commercial.",
+    "Gli esperimenti usano esempi sintetici salvati. Il laboratorio fa parte dell’anteprima tecnica. Sul sito commerciale sono documentati versione del prodotto, licenze e prezzi.",
+    "تستخدم التجارب أمثلة اصطناعية محفوظة. المختبر جزء من المعاينة التقنية. توثّق صفحة المنتج التجارية الإصدار وعروض الترخيص والأسعار."
+  ],
+  "Interaktives Website-Lab · synthetische Signale": [
+    "Interactive lab · Synthetic signals",
+    "Labo interactif · Signaux synthétiques",
+    "Laboratorio interattivo · Segnali sintetici",
+    "مختبر تفاعلي · إشارات اصطناعية"
+  ],
+  "Hat die Regel": [
+    "Did the rule",
+    "La règle a-t-elle",
+    "La regola ha",
+    "هل أطلقت القاعدة"
+  ],
+  "ausgelöst?": [
+    "trigger?",
+    "déclenché une alerte ?",
+    "generato un avviso?",
+    "تنبيهاً؟"
+  ],
+  "Demo C liefert die ursprüngliche Befund-ID und den Retest. Das Lab ergänzt eine erwartete Auditmeldung. Wechseln Sie die Signalquelle: Die Beurteilung der Erkennung ändert sich, die ursprüngliche Fix-Entscheidung bleibt gebunden.": [
+    "Demo C provides the original finding ID and retest. The lab adds an expected audit event. Switch signal sources to compare detection outcomes while keeping the original fix decision linked.",
+    "La démo C fournit l’identifiant initial du constat et le contre-test. Le labo ajoute un événement d’audit attendu. Changez de source pour comparer les résultats de détection en conservant le lien avec la décision initiale sur la correction.",
+    "La demo C fornisce l’ID originale del rilievo e la verifica. Il laboratorio aggiunge un evento di audit atteso. Cambia fonte per confrontare gli esiti del rilevamento mantenendo il legame con la decisione iniziale sulla correzione.",
+    "يقدّم العرض C معرّف النتيجة الأصلي وإعادة الاختبار. يضيف المختبر حدث تدقيق متوقعاً. بدّل مصدر الإشارة لمقارنة نتائج الكشف مع بقاء قرار الإصلاح الأصلي مرتبطاً بالحالة."
+  ],
+  "Signalbeispiel": [
+    "Signal example",
+    "Exemple de signal",
+    "Esempio di segnale",
+    "مثال الإشارة"
+  ],
+  "Passendes Ereignis mit Regelalarm": [
+    "Matching event with rule alert",
+    "Événement correspondant avec alerte",
+    "Evento corrispondente con avviso della regola",
+    "حدث مطابق مع تنبيه القاعدة"
+  ],
+  "Ereignis ohne Regelalarm": [
+    "Event without rule alert",
+    "Événement sans alerte",
+    "Evento senza avviso della regola",
+    "حدث دون تنبيه القاعدة"
+  ],
+  "Quelle ohne Daten": [
+    "Source with no data",
+    "Source sans données",
+    "Fonte priva di dati",
+    "مصدر دون بيانات"
+  ],
+  "Ereignis aus anderem Scope": [
+    "Event outside the expected scope",
+    "Événement hors du périmètre attendu",
+    "Evento fuori dall’ambito previsto",
+    "حدث من نطاق آخر"
+  ],
+  "Prüfung im Browser. Die Beispieldaten stammen aus einer lokalen Fixture. Es werden keine Kundendaten abgefragt.": [
+    "Browser-based check using a local fixture. No customer data is requested.",
+    "Contrôle dans le navigateur à partir de données d’exemple locales. Aucune donnée client n’est demandée.",
+    "Controllo nel browser con dati di esempio locali. Non vengono richiesti dati dei clienti.",
+    "فحص في المتصفح باستخدام بيانات اختبار محلية. لا تُطلب بيانات العملاء."
+  ],
+  "Belegquelle wird geprüft": [
+    "Verifying evidence source",
+    "Vérification de la source de preuve",
+    "Verifica della fonte delle prove",
+    "جارٍ التحقق من مصدر الدليل"
+  ],
+  "Strukturierten IR-Beleg herunterladen": [
+    "Download structured IR evidence",
+    "Télécharger la preuve IR structurée",
+    "Scarica la prova IR strutturata",
+    "نزّل الدليل المنظّم للاستجابة للحوادث"
+  ],
+  "Signal-Fixture": [
+    "Signal fixture",
+    "Données d’exemple du signal",
+    "Dati di esempio del segnale",
+    "بيانات الإشارة النموذجية"
+  ],
+  "Originalergebnis C": [
+    "Original result C",
+    "Résultat original C",
+    "Risultato originale C",
+    "النتيجة الأصلية C"
+  ],
+  ". Der JSON-Labexport ist unsigniert. Die Produktdemo hat ihr eigenes signiertes Inventar.": [
+    ". The lab’s JSON export is unsigned. The product demo has its own signed inventory.",
+    ". L’export JSON du labo est non signé. La démo du produit possède son propre inventaire signé.",
+    ". L’esportazione JSON del laboratorio è priva di firma. La demo del prodotto ha un proprio inventario firmato.",
+    ". ملف JSON المصدَّر من المختبر غير موقّع. ولعرض المنتج جرد موقّع مستقل."
+  ],
+  "Technische Vorschau · Demo D": [
+    "Technical preview · Demo D",
+    "Aperçu technique · Démo D",
+    "Anteprima tecnica · Demo D",
+    "المعاينة التقنية · العرض D"
+  ],
+  "Drei Exporte.": [
+    "Three exports.",
+    "Trois exports.",
+    "Tre esportazioni.",
+    "ثلاثة ملفات تصدير."
+  ],
+  "Eine Belegkette.": [
+    "One evidence chain.",
+    "Une chaîne de preuves.",
+    "Una catena di prove.",
+    "سلسلة أدلة واحدة."
+  ],
+  "Nmap XML, ffuf JSON und Nuclei JSONL liefern unterschiedliche Aussagen. Der Offline-Import bindet jede unterstützte Aussage an ihren Ursprung. Ein positiver Scannerhinweis bleibt ein Hinweis.": [
+    "Nmap XML, ffuf JSON and Nuclei JSONL report different observations. Offline import links each supported observation to its origin. A positive scanner signal remains a lead.",
+    "Nmap XML, ffuf JSON et Nuclei JSONL rapportent des observations distinctes. L’import hors ligne relie chaque observation prise en charge à sa source. Un signal positif de scanner reste un indice.",
+    "Nmap XML, ffuf JSON e Nuclei JSONL riportano osservazioni diverse. L’importazione offline collega ogni osservazione supportata alla sua origine. Un segnale positivo dello scanner rimane un indizio.",
+    "تقدم ملفات Nmap XML وffuf JSON وNuclei JSONL ملاحظات مختلفة. يربط الاستيراد دون اتصال كل ملاحظة مدعومة بمصدرها. يبقى تنبيه الماسح الإيجابي مؤشراً أولياً."
+  ],
+  "Originalprojektion": [
+    "Original projection",
+    "Projection d’origine",
+    "Proiezione originale",
+    "الإسقاط الأصلي للبيانات"
+  ],
+  "Wie die fünf Datensätze eingeordnet wurden": [
+    "How the five records were classified",
+    "Classement des cinq enregistrements",
+    "Classificazione dei cinque record",
+    "كيفية تصنيف السجلات الخمسة"
+  ],
+  "Nmap XML": [
+    "Nmap XML",
+    "Nmap XML",
+    "Nmap XML",
+    "Nmap XML"
+  ],
+  "1 Portbeobachtung": [
+    "1 port observation",
+    "1 observation de port",
+    "1 osservazione di porta",
+    "ملاحظة منفذ واحدة"
+  ],
+  "ffuf JSON": [
+    "ffuf JSON",
+    "ffuf JSON",
+    "ffuf JSON",
+    "ffuf JSON"
+  ],
+  "1 angenommen, 1 ausserhalb des Scope": [
+    "1 accepted, 1 out of scope",
+    "1 accepté, 1 hors périmètre",
+    "1 accettato, 1 fuori ambito",
+    "سجل مقبول وآخر خارج النطاق"
+  ],
+  "Nuclei JSONL": [
+    "Nuclei JSONL",
+    "Nuclei JSONL",
+    "Nuclei JSONL",
+    "Nuclei JSONL"
+  ],
+  "1 positiver, 1 negativer Match": [
+    "1 positive and 1 negative match",
+    "1 correspondance positive, 1 négative",
+    "1 corrispondenza positiva, 1 negativa",
+    "تطابق إيجابي وآخر سلبي"
+  ],
+  "Demo-D-Projektion öffnen (JSON)": [
+    "Open Demo D projection (JSON)",
+    "Ouvrir la projection de la démo D (JSON)",
+    "Apri la proiezione della demo D (JSON)",
+    "افتح إسقاط العرض D ‏(JSON)"
+  ],
+  "Eigenständiger Mischtest": [
+    "Standalone combined test",
+    "Test mixte indépendant",
+    "Test misto indipendente",
+    "اختبار مختلط مستقل"
+  ],
+  "Ein Dienst und eine Route mit beiden Quellenarten.": [
+    "One service and one route with both source types.",
+    "Un service et une route avec les deux types de sources.",
+    "Un servizio e una rotta con entrambi i tipi di fonte.",
+    "خدمة واحدة ومسار واحد بمصدرين من نوعين مختلفين."
+  ],
+  "Eine zusätzliche synthetische HAR-Beobachtung trifft auf dieselben drei Föderationsquellen. Der Index umfasst fünf Beobachtungen und eine Auslassung. Der gemeinsame Endpunkt weist auf die einzelnen Quellbelege.": [
+    "An additional synthetic HAR observation shares the same three federated sources. The index contains five observations and one omission. The shared endpoint references the individual source records.",
+    "Une observation HAR synthétique s’ajoute aux trois mêmes sources fédérées. L’index contient cinq observations et une omission. Le point de terminaison commun renvoie aux preuves individuelles.",
+    "Un’osservazione HAR sintetica si aggiunge alle stesse tre fonti federate. L’indice comprende cinque osservazioni e un’omissione. L’endpoint condiviso rimanda alle singole prove di origine.",
+    "تلتقي ملاحظة HAR اصطناعية إضافية بالمصادر الموحّدة الثلاثة نفسها. يضم الفهرس خمس ملاحظات وحالة مستثناة. تشير نقطة النهاية المشتركة إلى سجلات المصادر الفردية."
+  ],
+  "Gemischten Index öffnen (JSON)": [
+    "Open combined index (JSON)",
+    "Ouvrir l’index mixte (JSON)",
+    "Apri l’indice misto (JSON)",
+    "افتح الفهرس المختلط (JSON)"
+  ],
+  "Kandidat 1.6 · Gemeinsames Assessment": [
+    "Candidate 1.6 · Shared assessment",
+    "Candidat 1.6 · Évaluation commune",
+    "Candidato 1.6 · Valutazione condivisa",
+    "الإصدار المرشح 1.6 · تقييم مشترك"
+  ],
+  "Vom Mitschnitt": [
+    "From capture",
+    "De la capture",
+    "Dalla cattura",
+    "من التسجيل"
+  ],
+  "zum Retest.": [
+    "to retest.",
+    "au contre-test.",
+    "alla verifica.",
+    "إلى إعادة الاختبار."
+  ],
+  "Ein Chromium-Browser zeichnet die Antwort einer synthetischen lokalen Ressource in einer HAR-Datei auf. OWASP ZAP liest diese Datei passiv. Beide Quellen gehören zum selben Scope und Assessment.": [
+    "Chromium records a synthetic local resource’s response in a HAR file. OWASP ZAP reads the file passively. Both sources belong to the same scope and assessment.",
+    "Chromium enregistre la réponse d’une ressource locale synthétique dans un fichier HAR. OWASP ZAP le lit passivement. Les deux sources relèvent du même périmètre et de la même évaluation.",
+    "Chromium registra la risposta di una risorsa locale sintetica in un file HAR. OWASP ZAP lo legge passivamente. Entrambe le fonti appartengono allo stesso ambito e alla stessa valutazione.",
+    "يسجّل Chromium ردّ مورد محلي اصطناعي في ملف HAR. يقرأ OWASP ZAP الملف قراءة سلبية. ينتمي المصدران إلى النطاق والتقييم نفسيهما."
+  ],
+  "B · Konfiguration": [
+    "B · Configuration",
+    "B · Configuration",
+    "B · Configurazione",
+    "B · الإعدادات"
+  ],
+  "Der Hinweis hat eine eigene Quelle.": [
+    "The lead has its own source.",
+    "L’indice possède sa propre source.",
+    "L’indizio ha una propria fonte.",
+    "للمؤشر مصدره الخاص."
+  ],
+  "ZAP-Regel 10021 bleibt als": [
+    "ZAP rule 10021 is stored as",
+    "La règle ZAP 10021 est enregistrée comme",
+    "La regola ZAP 10021 è registrata come",
+    "تُحفظ قاعدة ZAP رقم 10021 بصفتها"
+  ],
+  "gespeichert. Die native Prüfung bestätigt mit einer separaten Kontrolle, dass ein ausdrücklich geforderter Antwortheader fehlt. Dieser Befund bezieht sich auf die Headerkonfiguration.": [
+    ". A separate native control confirms that a specifically required response header is missing. This finding concerns header configuration.",
+    ". Un contrôle natif distinct confirme l’absence d’un en-tête de réponse explicitement exigé. Ce constat concerne la configuration des en-têtes.",
+    ". Un controllo nativo separato conferma l’assenza di un header di risposta espressamente richiesto. Il rilievo riguarda la configurazione degli header.",
+    ". يؤكد ضابط أصلي مستقل غياب ترويسة ردّ مطلوبة صراحةً. تتعلق النتيجة بإعدادات الترويسات."
+  ],
+  "Originalergebnis B öffnen (JSON)": [
+    "Open original result B (JSON)",
+    "Ouvrir le résultat original B (JSON)",
+    "Apri il risultato originale B (JSON)",
+    "افتح النتيجة الأصلية B ‏(JSON)"
+  ],
+  "C · Selektiver Retest": [
+    "C · Selective retest",
+    "C · Contre-test sélectif",
+    "C · Verifica selettiva",
+    "C · إعادة اختبار انتقائية"
+  ],
+  "Ein Fix belegt. Eine ID offen.": [
+    "One fix proven. One ID open.",
+    "Une correction prouvée. Un identifiant ouvert.",
+    "Una correzione provata. Un ID aperto.",
+    "إصلاح مؤكّد ومعرّف ما زال مفتوحاً."
+  ],
+  "Von zwei Baseline-Befunden zum öffentlichen Datenformat erhält eine ID": [
+    "Of two baseline findings on the public data format, one ID receives",
+    "Sur deux constats initiaux concernant le format public de données, un identifiant reçoit",
+    "Dei due rilievi iniziali sul formato pubblico dei dati, un ID riceve",
+    "من نتيجتين أوليتين تخصّان صيغة البيانات العامة يحصل معرّف واحد على"
+  ],
+  ". Die ausgelassene ID bleibt": [
+    ". The omitted ID remains",
+    ". L’identifiant omis reste",
+    ". L’ID omesso rimane",
+    ". ويبقى المعرّف المستثنى"
+  ],
+  ". Der Headerbefund aus B wird im gesamten Snapshot separat geführt.": [
+    ". The header finding from B is tracked separately throughout the snapshot.",
+    ". Le constat d’en-tête de B est suivi séparément dans l’instantané.",
+    ". Il rilievo sull’header di B è tracciato separatamente nell’istantanea.",
+    ". تُسجّل نتيجة الترويسة من B بشكل مستقل في اللقطة الكاملة."
+  ],
+  "Originalergebnis C öffnen (JSON)": [
+    "Open original result C (JSON)",
+    "Ouvrir le résultat original C (JSON)",
+    "Apri il risultato originale C (JSON)",
+    "افتح النتيجة الأصلية C ‏(JSON)"
+  ],
+  "Beweisfilm zur gemeinsamen Demo B und C": [
+    "Evidence film for the combined B and C demo",
+    "Vidéo des preuves de la démo commune B et C",
+    "Video delle prove della demo combinata B e C",
+    "فيديو الأدلة للعرض المشترك B وC"
+  ],
+  "Beweisfilm als MP4 öffnen": [
+    "Open evidence film (MP4)",
+    "Ouvrir la vidéo des preuves (MP4)",
+    "Apri il video delle prove (MP4)",
+    "افتح فيديو الأدلة (MP4)"
+  ],
+  "Beweisfilm · 19,5 Sekunden": [
+    "Evidence film · 19.5 seconds",
+    "Vidéo des preuves · 19,5 secondes",
+    "Video delle prove · 19,5 secondi",
+    "فيديو الأدلة · 19.5 ثانية"
+  ],
+  "Welcher Fix ist belegt?": [
+    "Which fix is proven?",
+    "Quelle correction est prouvée ?",
+    "Quale correzione è provata?",
+    "أي إصلاح يدعمه الدليل؟"
+  ],
+  "Der Originalbericht aus dem gemeinsamen B/C-Lauf zeigt beide ursprünglichen Befunde, die ausgewählte Nachprüfung und die Reaktion der zwei Prüfer auf ein geändertes Byte.": [
+    "The original B/C report shows both initial findings, the selected retest and how two verifiers respond to a one-byte change.",
+    "Le rapport original B/C montre les deux constats initiaux, le contre-test choisi et la réaction des deux vérificateurs à la modification d’un octet.",
+    "Il report originale B/C mostra i due rilievi iniziali, la verifica selezionata e la reazione dei due verificatori alla modifica di un byte.",
+    "يعرض تقرير B/C الأصلي النتيجتين الأوليتين وإعادة الاختبار المختارة واستجابة أداتَي التحقق لتغيير بايت واحد."
+  ],
+  "Beweisfilm direkt öffnen (MP4)": [
+    "Open evidence film directly (MP4)",
+    "Ouvrir directement la vidéo (MP4)",
+    "Apri direttamente il video (MP4)",
+    "افتح فيديو الأدلة مباشرة (MP4)"
+  ],
+  "Hochformat · Deutsche Untertitel · Technische Vorschau 1.6": [
+    "Portrait · German subtitles · Technical preview 1.6",
+    "Format vertical · Sous-titres allemands · Aperçu technique 1.6",
+    "Formato verticale · Sottotitoli tedeschi · Anteprima tecnica 1.6",
+    "تنسيق عمودي · ترجمة نصية ألمانية · المعاينة التقنية 1.6"
+  ],
+  "Prüfstand · bb34603": [
+    "Verification build · bb34603",
+    "Version de vérification · bb34603",
+    "Build di verifica · bb34603",
+    "نسخة التحقق · bb34603"
+  ],
+  "Beide Paketprüfer akzeptieren das Original mit dem für diese Demo bereitgestellten Schlüssel. Nach einer Änderung um ein Byte weisen beide die Kopie zurück. Die Freigabe als stabiles Release 1.6.0 steht aus.": [
+    "Both verifiers accept the original with the key supplied for this demo and reject the copy after one byte changes. A stable 1.6.0 release has yet to be approved.",
+    "Les deux vérificateurs acceptent l’original avec la clé de démo et rejettent la copie après modification d’un octet. La version stable 1.6.0 reste à approuver.",
+    "Entrambi i verificatori accettano l’originale con la chiave della demo e rifiutano la copia dopo la modifica di un byte. La versione stabile 1.6.0 resta da approvare.",
+    "تقبل أداتا التحقق الأصل بالمفتاح المقدم للعرض وترفضان النسخة عند تغيير بايت واحد. لم تُعتمد بعد نسخة مستقرة برقم 1.6.0."
+  ],
+  "B- und C-Nachweise öffnen (JSON)": [
+    "Open B and C evidence (JSON)",
+    "Ouvrir les preuves B et C (JSON)",
+    "Apri le prove B e C (JSON)",
+    "افتح أدلة B وC ‏(JSON)"
+  ],
+  "Freigabestand": [
+    "Release status",
+    "État de publication",
+    "Stato del rilascio",
+    "حالة الإصدار"
+  ],
+  "1.6 bleibt in Prüfung.": [
+    "1.6 is under review.",
+    "La version 1.6 reste en cours d’examen.",
+    "La versione 1.6 è in fase di verifica.",
+    "الإصدار 1.6 قيد المراجعة."
+  ],
+  "Die Projektionen belegen einzelne synthetische Abläufe. Der gespeicherte B/C-Prüfbeleg führt den Status": [
+    "The projections demonstrate specific synthetic workflows. The stored B/C verification record reports the status",
+    "Les projections démontrent des processus synthétiques précis. Le relevé de vérification B/C enregistré indique le statut",
+    "Le proiezioni dimostrano specifici flussi sintetici. Il verbale di verifica B/C salvato riporta lo stato",
+    "توضح الإسقاطات مسارات اصطناعية محددة. يسجّل دليل تحقق B/C المحفوظ الحالة"
+  ],
+  "B/C-Prüfbeleg öffnen": [
+    "Open B/C verification record",
+    "Ouvrir le relevé de vérification B/C",
+    "Apri il verbale di verifica B/C",
+    "افتح سجل تحقق B/C"
+  ],
+  "Früheren technischen Review öffnen": [
+    "Open earlier technical review",
+    "Ouvrir l’examen technique antérieur",
+    "Apri la revisione tecnica precedente",
+    "افتح المراجعة التقنية السابقة"
+  ],
+  "Technische Notiz zu X25519 und HKDF": [
+    "Technical note on X25519 and HKDF",
+    "Note technique sur X25519 et HKDF",
+    "Nota tecnica su X25519 e HKDF",
+    "مذكرة تقنية عن X25519 وHKDF"
+  ],
+  "Nasser Aldin Farag / 0xFarag · Schweiz": [
+    "Nasser Aldin Farag / 0xFarag · Switzerland",
+    "Nasser Aldin Farag / 0xFarag · Suisse",
+    "Nasser Aldin Farag / 0xFarag · Svizzera",
+    "ناصر الدين فرج / 0xFarag · سويسرا"
+  ],
+  "Kontakt": [
+    "Contact",
+    "Contact",
+    "Contatti",
+    "التواصل"
   ]
 }

@@ -1,0 +1,428 @@
+{
+  "Ein numerisches Pflichtfeld fehlt oder ist ungültig.": [
+    "A required numeric field is missing or invalid.",
+    "Un champ numérique obligatoire est absent ou invalide.",
+    "Un campo numerico obbligatorio manca o non è valido.",
+    "حقل رقمي إلزامي مفقود أو غير صالح."
+  ],
+  "Ein numerisches Pflichtfeld fehlt oder liegt ausserhalb des zulässigen Bereichs.": [
+    "A required numeric field is missing or outside the permitted range.",
+    "Un champ numérique obligatoire est absent ou hors des limites autorisées.",
+    "Un campo numerico obbligatorio manca o supera i limiti consentiti.",
+    "حقل رقمي إلزامي مفقود أو خارج النطاق المسموح."
+  ],
+  "Ein Pflichtfeld enthält einen unbekannten Wert.": [
+    "A required field contains an unknown value.",
+    "Un champ obligatoire contient une valeur inconnue.",
+    "Un campo obbligatorio contiene un valore sconosciuto.",
+    "يحتوي حقل إلزامي على قيمة غير معروفة."
+  ],
+  "Eine benötigte Kennung fehlt oder ist ungültig.": [
+    "A required identifier is missing or invalid.",
+    "Un identifiant obligatoire est absent ou invalide.",
+    "Un identificatore obbligatorio manca o non è valido.",
+    "معرّف إلزامي مفقود أو غير صالح."
+  ],
+  "Der Datensatz benötigt eine absolute HTTP(S)-Adresse.": [
+    "The record requires an absolute HTTP(S) address.",
+    "L’enregistrement exige une adresse HTTP(S) absolue.",
+    "Il record richiede un indirizzo HTTP(S) assoluto.",
+    "يتطلب السجل عنوان HTTP(S) مطلقاً."
+  ],
+  "Eine HTTP(S)-Adresse ist ungültig.": [
+    "An HTTP(S) address is invalid.",
+    "Une adresse HTTP(S) est invalide.",
+    "Un indirizzo HTTP(S) non è valido.",
+    "أحد عناوين HTTP(S) غير صالح."
+  ],
+  "Ungültiges JSON.": [
+    "Invalid JSON.",
+    "JSON invalide.",
+    "JSON non valido.",
+    "بيانات JSON غير صالحة."
+  ],
+  "Unvollständiger XML-Prolog.": [
+    "Incomplete XML prolog.",
+    "Prologue XML incomplet.",
+    "Prologo XML incompleto.",
+    "مقدمة XML غير مكتملة."
+  ],
+  "Externe oder unbekannte DTD abgelehnt.": [
+    "External or unknown DTD rejected.",
+    "DTD externe ou inconnue refusée.",
+    "DTD esterna o sconosciuta rifiutata.",
+    "رُفض تعريف DTD خارجي أو غير معروف."
+  ],
+  "Interne DTD nur für das unterstützte Burp-Schema zulässig.": [
+    "An internal DTD is allowed only for the supported Burp schema.",
+    "Une DTD interne est autorisée uniquement pour le schéma Burp pris en charge.",
+    "Una DTD interna è consentita solo per lo schema Burp supportato.",
+    "يُسمح بتعريف DTD داخلي لمخطط Burp المدعوم فقط."
+  ],
+  "Burp-Schema zu gross.": [
+    "The Burp schema is too large.",
+    "Le schéma Burp est trop volumineux.",
+    "Lo schema Burp è troppo grande.",
+    "حجم مخطط Burp أكبر من الحد المسموح."
+  ],
+  "Unbekannte oder aktive interne DTD-Deklaration abgelehnt.": [
+    "Unknown or active internal DTD declaration rejected.",
+    "Déclaration DTD interne inconnue ou active refusée.",
+    "Dichiarazione DTD interna sconosciuta o attiva rifiutata.",
+    "رُفض تصريح DTD داخلي غير معروف أو نشط."
+  ],
+  "Fehlerhafter DTD-Abschluss.": [
+    "Invalid DTD closing delimiter.",
+    "Délimiteur de fin de DTD invalide.",
+    "Delimitatore di chiusura della DTD non valido.",
+    "محدّد نهاية DTD غير صالح."
+  ],
+  "Weitere DTD, Entitäten und Verarbeitungsanweisungen werden abgelehnt, auch als Literaltext.": [
+    "Additional DTDs, entities and processing instructions are rejected, including as literal text.",
+    "Les DTD supplémentaires, les entités et les instructions de traitement sont refusées, même sous forme de texte littéral.",
+    "Ulteriori DTD, entità e istruzioni di elaborazione sono rifiutate, anche come testo letterale.",
+    "تُرفض تعريفات DTD الإضافية والكيانات وتعليمات المعالجة، حتى عند ورودها كنص حرفي."
+  ],
+  "Das XML überschreitet die zulässige Strukturgrösse.": [
+    "The XML exceeds the allowed structure size.",
+    "La structure XML dépasse la taille autorisée.",
+    "La struttura XML supera le dimensioni consentite.",
+    "تتجاوز بنية XML الحجم المسموح."
+  ],
+  "Ungültiges XML oder unbekanntes Wurzelelement.": [
+    "Invalid XML or unknown root element.",
+    "XML invalide ou élément racine inconnu.",
+    "XML non valido o elemento radice sconosciuto.",
+    "مستند XML غير صالح أو عنصر الجذر غير معروف."
+  ],
+  "Ungültige IPv4-Adresse.": [
+    "Invalid IPv4 address.",
+    "Adresse IPv4 invalide.",
+    "Indirizzo IPv4 non valido.",
+    "عنوان IPv4 غير صالح."
+  ],
+  "Ungültige IPv6-Adresse.": [
+    "Invalid IPv6 address.",
+    "Adresse IPv6 invalide.",
+    "Indirizzo IPv6 non valido.",
+    "عنوان IPv6 غير صالح."
+  ],
+  "Ungültige HTTP-Methode.": [
+    "Invalid HTTP method.",
+    "Méthode HTTP invalide.",
+    "Metodo HTTP non valido.",
+    "طريقة HTTP غير صالحة."
+  ],
+  "Für dieses Profil ist eine absolute HTTP(S)-Adresse erforderlich.": [
+    "This profile requires an absolute HTTP(S) address.",
+    "Ce profil exige une adresse HTTP(S) absolue.",
+    "Questo profilo richiede un indirizzo HTTP(S) assoluto.",
+    "يتطلب ملف التعريف هذا عنوان HTTP(S) مطلقاً."
+  ],
+  "Ungültige HTTP(S)-Adresse.": [
+    "Invalid HTTP(S) address.",
+    "Adresse HTTP(S) invalide.",
+    "Indirizzo HTTP(S) non valido.",
+    "عنوان HTTP(S) غير صالح."
+  ],
+  "Der JSON-Datensatz ist zu tief verschachtelt.": [
+    "The JSON record is nested too deeply.",
+    "L’enregistrement JSON comporte trop de niveaux imbriqués.",
+    "Il record JSON contiene troppi livelli di annidamento.",
+    "يتجاوز عمق تداخل سجل JSON الحد المسموح."
+  ],
+  "Ein ZAP Traditional-JSON-Bericht mit site-Liste wird benötigt.": [
+    "A ZAP Traditional JSON report with a site list is required.",
+    "Un rapport ZAP Traditional JSON contenant la liste site est requis.",
+    "È richiesto un rapporto ZAP Traditional JSON con l’elenco site.",
+    "يلزم تقرير ZAP Traditional JSON يحتوي على قائمة site."
+  ],
+  "Eine ZAP-Site benötigt die Liste alerts.": [
+    "A ZAP site requires the alerts list.",
+    "Un site ZAP doit contenir la liste alerts.",
+    "Un sito ZAP deve contenere l’elenco alerts.",
+    "يلزم وجود قائمة alerts في موقع ZAP."
+  ],
+  "Ein ZAP-Alert benötigt die Liste instances.": [
+    "A ZAP alert requires the instances list.",
+    "Une alerte ZAP doit contenir la liste instances.",
+    "Un avviso ZAP deve contenere l’elenco instances.",
+    "يلزم وجود قائمة instances في تنبيه ZAP."
+  ],
+  "ZAP-Instanz und gemeldete Site widersprechen sich.": [
+    "The ZAP instance and the reported site disagree.",
+    "L’instance ZAP ne correspond pas au site indiqué.",
+    "L’istanza ZAP non corrisponde al sito segnalato.",
+    "لا يطابق مثيل ZAP الموقع المبلّغ عنه."
+  ],
+  "Ungültiger ZAP-Parameter.": [
+    "Invalid ZAP parameter.",
+    "Paramètre ZAP invalide.",
+    "Parametro ZAP non valido.",
+    "مُعامِل ZAP غير صالح."
+  ],
+  "Erwartet wird HAR 1.2 mit log.entries.": [
+    "HAR 1.2 with log.entries is required.",
+    "Un fichier HAR 1.2 contenant log.entries est requis.",
+    "È richiesto un file HAR 1.2 con log.entries.",
+    "يلزم ملف HAR 1.2 يتضمن log.entries."
+  ],
+  "Ungültiger HAR-Requestinhalt.": [
+    "Invalid HAR request content.",
+    "Contenu de requête HAR invalide.",
+    "Contenuto della richiesta HAR non valido.",
+    "محتوى الطلب في HAR غير صالح."
+  ],
+  "Ungültiger HAR-Antwortstatus.": [
+    "Invalid HAR response status.",
+    "Statut de réponse HAR invalide.",
+    "Stato della risposta HAR non valido.",
+    "حالة الاستجابة في HAR غير صالحة."
+  ],
+  "Ungültige OpenAPI-Serverliste.": [
+    "Invalid OpenAPI server list.",
+    "Liste de serveurs OpenAPI invalide.",
+    "Elenco dei server OpenAPI non valido.",
+    "قائمة خوادم OpenAPI غير صالحة."
+  ],
+  "Benötigt wird ein OpenAPI-3.0-, 3.1- oder 3.2-Dokument mit info und paths im JSON-Format.": [
+    "Provide an OpenAPI 3.0, 3.1 or 3.2 JSON document with info and paths.",
+    "Fournissez un document JSON OpenAPI 3.0, 3.1 ou 3.2 contenant info et paths.",
+    "Fornisci un documento JSON OpenAPI 3.0, 3.1 o 3.2 con info e paths.",
+    "أدخل مستند JSON بإصدار OpenAPI ‏3.0 أو 3.1 أو 3.2 يتضمن info وpaths."
+  ],
+  "Ungültiger OpenAPI-Pfadeintrag.": [
+    "Invalid OpenAPI path entry.",
+    "Entrée de chemin OpenAPI invalide.",
+    "Voce di percorso OpenAPI non valida.",
+    "إدخال مسار OpenAPI غير صالح."
+  ],
+  "Ein OpenAPI-Pfad enthält $ref. Bitte den Pfad vor dem Import lokal auflösen.": [
+    "An OpenAPI path contains $ref. Resolve the reference locally before importing.",
+    "Un chemin OpenAPI contient $ref. Résolvez la référence localement avant l’import.",
+    "Un percorso OpenAPI contiene $ref. Risolvi il riferimento in locale prima dell’importazione.",
+    "يحتوي مسار OpenAPI على ‎$ref. حُلّ المرجع محلياً قبل الاستيراد."
+  ],
+  "Eine direkte OpenAPI-Operationsdefinition fehlt.": [
+    "An inline OpenAPI operation definition is missing.",
+    "Une définition directe d’opération OpenAPI est absente.",
+    "Manca la definizione diretta di un’operazione OpenAPI.",
+    "تعريف مباشر لعملية OpenAPI مفقود."
+  ],
+  "Ungültige OpenAPI-Operationsliste.": [
+    "Invalid OpenAPI operation list.",
+    "Liste d’opérations OpenAPI invalide.",
+    "Elenco delle operazioni OpenAPI non valido.",
+    "قائمة عمليات OpenAPI غير صالحة."
+  ],
+  "Eine zusätzliche Methode kollidiert mit einer Standardoperation.": [
+    "An additional method conflicts with a standard operation.",
+    "Une méthode supplémentaire entre en conflit avec une opération standard.",
+    "Un metodo aggiuntivo è in conflitto con un’operazione standard.",
+    "تتعارض طريقة إضافية مع عملية قياسية."
+  ],
+  "Unbekanntes Feld am OpenAPI-Pfad.": [
+    "Unknown field in an OpenAPI path.",
+    "Champ inconnu dans un chemin OpenAPI.",
+    "Campo sconosciuto in un percorso OpenAPI.",
+    "حقل مجهول في مسار OpenAPI."
+  ],
+  "Erwartet wird ein Nuclei-HTTP-Ereignis mit matcher-status true in Zeile {n}.": [
+    "Expected a Nuclei HTTP event with matcher-status set to true on line {n}.",
+    "Un événement HTTP Nuclei avec matcher-status défini sur true est attendu à la ligne {n}.",
+    "Alla riga {n} è atteso un evento HTTP di Nuclei con matcher-status impostato su true.",
+    "يُتوقع في السطر {n} حدث HTTP من Nuclei تكون قيمة matcher-status فيه true."
+  ],
+  "Die Nuclei-Datei enthält kein auswertbares JSONL-Ereignis.": [
+    "The Nuclei file contains no usable JSONL events.",
+    "Le fichier Nuclei ne contient aucun événement JSONL exploitable.",
+    "Il file Nuclei non contiene eventi JSONL utilizzabili.",
+    "لا يحتوي ملف Nuclei على أحداث JSONL قابلة للمعالجة."
+  ],
+  "Ein feroxbuster-Export darf höchstens 4’096 Zeilen enthalten.": [
+    "A feroxbuster export can contain up to 4,096 lines.",
+    "Un export feroxbuster peut contenir au maximum 4 096 lignes.",
+    "Un’esportazione feroxbuster può contenere fino a 4 096 righe.",
+    "الحد الأقصى لملف feroxbuster المصدّر هو ٤٠٩٦ سطراً."
+  ],
+  "Ungültiger feroxbuster-Datensatz in Zeile {n}.": [
+    "Invalid feroxbuster record on line {n}.",
+    "Enregistrement feroxbuster invalide à la ligne {n}.",
+    "Record feroxbuster non valido alla riga {n}.",
+    "سجل feroxbuster غير صالح في السطر {n}."
+  ],
+  "Ungültiger feroxbuster-Konfigurationseintrag.": [
+    "Invalid feroxbuster configuration entry.",
+    "Entrée de configuration feroxbuster invalide.",
+    "Voce di configurazione feroxbuster non valida.",
+    "إدخال إعدادات feroxbuster غير صالح."
+  ],
+  "Ungültiger feroxbuster-Statistikeintrag.": [
+    "Invalid feroxbuster statistics entry.",
+    "Entrée de statistiques feroxbuster invalide.",
+    "Voce statistica feroxbuster non valida.",
+    "إدخال إحصاءات feroxbuster غير صالح."
+  ],
+  "Ungültiger feroxbuster-Logeintrag.": [
+    "Invalid feroxbuster log entry.",
+    "Entrée de journal feroxbuster invalide.",
+    "Voce di log feroxbuster non valida.",
+    "إدخال السجل في feroxbuster غير صالح."
+  ],
+  "Unbekannter feroxbuster-Eintrag in Zeile {n}.": [
+    "Unknown feroxbuster entry on line {n}.",
+    "Entrée feroxbuster inconnue à la ligne {n}.",
+    "Voce feroxbuster sconosciuta alla riga {n}.",
+    "إدخال feroxbuster غير معروف في السطر {n}."
+  ],
+  "Ungültiger feroxbuster-Antwortstatus.": [
+    "Invalid feroxbuster response status.",
+    "Statut de réponse feroxbuster invalide.",
+    "Stato della risposta feroxbuster non valido.",
+    "حالة استجابة feroxbuster غير صالحة."
+  ],
+  "Ungültiger feroxbuster-Wildcardstatus.": [
+    "Invalid feroxbuster wildcard status.",
+    "Statut de correspondance générique feroxbuster invalide.",
+    "Stato della corrispondenza wildcard di feroxbuster non valido.",
+    "حالة المطابقة العامة في feroxbuster غير صالحة."
+  ],
+  "Ungültiger feroxbuster-Quellbezug.": [
+    "Invalid feroxbuster source reference.",
+    "Référence de source feroxbuster invalide.",
+    "Riferimento alla fonte feroxbuster non valido.",
+    "مرجع مصدر feroxbuster غير صالح."
+  ],
+  "Ungültige feroxbuster-Antwortmetrik.": [
+    "Invalid feroxbuster response metric.",
+    "Mesure de réponse feroxbuster invalide.",
+    "Metrica di risposta feroxbuster non valida.",
+    "مقياس استجابة feroxbuster غير صالح."
+  ],
+  "Der feroxbuster-Export enthält keine Antwortzeile.": [
+    "The feroxbuster export contains no response records.",
+    "L’export feroxbuster ne contient aucune ligne de réponse.",
+    "L’esportazione feroxbuster non contiene righe di risposta.",
+    "لا يحتوي ملف feroxbuster المصدّر على أي سطر استجابة."
+  ],
+  "Mehr als 1’000 Datensätze. Teile den Export lokal auf.": [
+    "More than 1,000 records. Split the export locally.",
+    "Plus de 1 000 enregistrements. Scindez l’export localement.",
+    "Più di 1 000 record. Suddividi l’esportazione in locale.",
+    "يوجد أكثر من ١٠٠٠ سجل. قسّم ملف التصدير محلياً."
+  ],
+  "Eine ffuf-Liste unter results fehlt.": [
+    "The ffuf results list is missing.",
+    "La liste results de ffuf est absente.",
+    "Manca l’elenco results di ffuf.",
+    "قائمة results الخاصة بـ ffuf مفقودة."
+  ],
+  "Ungültiger ffuf-Datensatz.": [
+    "Invalid ffuf record.",
+    "Enregistrement ffuf invalide.",
+    "Record ffuf non valido.",
+    "سجل ffuf غير صالح."
+  ],
+  "Der ffuf-Status muss eine ganze JSON-Zahl sein.": [
+    "The ffuf status must be an integer JSON number.",
+    "Le statut ffuf doit être un entier JSON.",
+    "Lo stato ffuf deve essere un numero intero JSON.",
+    "يجب أن تكون حالة ffuf عدداً صحيحاً بصيغة JSON."
+  ],
+  "Unerwartete Gobuster-Syntax in Zeile {n}.": [
+    "Unexpected Gobuster syntax on line {n}.",
+    "Syntaxe Gobuster inattendue à la ligne {n}.",
+    "Sintassi Gobuster inattesa alla riga {n}.",
+    "صياغة Gobuster غير متوقعة في السطر {n}."
+  ],
+  "Ungültiger Gobuster-Pfad.": [
+    "Invalid Gobuster path.",
+    "Chemin Gobuster invalide.",
+    "Percorso Gobuster non valido.",
+    "مسار Gobuster غير صالح."
+  ],
+  "Mindestens eine Gobuster-dir-Ergebniszeile wird benötigt.": [
+    "At least one Gobuster dir result line is required.",
+    "Au moins une ligne de résultat Gobuster dir est requise.",
+    "È necessaria almeno una riga di risultato di Gobuster dir.",
+    "يلزم سطر نتائج واحد على الأقل من وضع dir في Gobuster."
+  ],
+  "Erwartet wird das dokumentierte JSON-Format für normalisierte defensive Telemetrie.": [
+    "Provide the documented JSON format for normalized defensive telemetry.",
+    "Fournissez le format JSON documenté pour la télémétrie défensive normalisée.",
+    "Fornisci il formato JSON documentato per la telemetria difensiva normalizzata.",
+    "استخدم تنسيق JSON الموثّق لبيانات الرصد الدفاعية الموحّدة."
+  ],
+  "Jedes defensive Ereignis benötigt genau die vier dokumentierten Felder.": [
+    "Each defensive event requires exactly the four documented fields.",
+    "Chaque événement défensif doit contenir exactement les quatre champs documentés.",
+    "Ogni evento difensivo deve contenere esattamente i quattro campi documentati.",
+    "يجب أن يحتوي كل حدث دفاعي على الحقول الأربعة الموثّقة حصراً."
+  ],
+  "Ereignisse benötigen einen gültigen UTC-Zeitstempel im ISO-Format.": [
+    "Events require a valid UTC timestamp in ISO format.",
+    "Les événements exigent un horodatage UTC valide au format ISO.",
+    "Gli eventi richiedono un timestamp UTC valido in formato ISO.",
+    "تتطلب الأحداث طابعاً زمنياً صالحاً بتوقيت UTC وتنسيق ISO."
+  ],
+  "Explizite Nmap-Ports benötigen eine Host-IP und einen Zustand.": [
+    "Explicit Nmap port records require a host IP address and a port state.",
+    "Les ports explicitement indiqués par Nmap exigent une adresse IP d’hôte et un état de port.",
+    "I record di porta espliciti di Nmap richiedono l’IP dell’host e uno stato della porta.",
+    "تتطلب سجلات المنافذ الصريحة في Nmap عنوان IP للمضيف وحالة للمنفذ."
+  ],
+  "Unbekannte Quelle.": [
+    "Unknown source.",
+    "Source inconnue.",
+    "Fonte sconosciuta.",
+    "مصدر غير معروف."
+  ],
+  "Ungültiges JSON oder JSONL.": [
+    "Invalid JSON or JSONL.",
+    "JSON ou JSONL invalide.",
+    "JSON o JSONL non valido.",
+    "بيانات JSON أو JSONL غير صالحة."
+  ],
+  "Unbekanntes JSONL-Profil.": [
+    "Unknown JSONL profile.",
+    "Profil JSONL inconnu.",
+    "Profilo JSONL sconosciuto.",
+    "ملف تعريف JSONL غير معروف."
+  ],
+  "Das JSON enthält Kennzeichen mehrerer Formate. Wähle das Quellformat ausdrücklich.": [
+    "The JSON has markers for several formats. Select the source format explicitly.",
+    "Le JSON comporte des marqueurs de plusieurs formats. Sélectionnez le format source explicitement.",
+    "Il JSON presenta indicatori di più formati. Seleziona esplicitamente il formato sorgente.",
+    "يحتوي JSON على مؤشرات لعدة تنسيقات. اختر تنسيق المصدر صراحةً."
+  ],
+  "Quellformat nicht erkannt. Prüfe den Export oder wähle das Quellformat ausdrücklich.": [
+    "Source format unrecognized. Check the export or select its format explicitly.",
+    "Format source non reconnu. Vérifiez l’export ou sélectionnez explicitement son format.",
+    "Formato sorgente non riconosciuto. Verifica l’esportazione o selezionane esplicitamente il formato.",
+    "تعذّر التعرّف على تنسيق المصدر. راجع الملف المصدّر أو اختر تنسيقه صراحةً."
+  ],
+  "Wähle eine nicht leere UTF-8-Datei bis 1 MiB.": [
+    "Choose a non-empty UTF-8 file up to 1 MiB.",
+    "Choisissez un fichier UTF-8 non vide de 1 Mio au maximum.",
+    "Scegli un file UTF-8 non vuoto di massimo 1 MiB.",
+    "اختر ملف UTF-8 غير فارغ بحجم لا يتجاوز ١ ميبيبايت."
+  ],
+  "Für SHA-256 wird HTTPS oder localhost benötigt.": [
+    "SHA-256 requires HTTPS or localhost.",
+    "SHA-256 nécessite HTTPS ou localhost.",
+    "SHA-256 richiede HTTPS o localhost.",
+    "يتطلب SHA-256 استخدام HTTPS أو localhost."
+  ],
+  "Ungültiger UTF-8-Text.": [
+    "Invalid UTF-8 text.",
+    "Texte UTF-8 invalide.",
+    "Testo UTF-8 non valido.",
+    "نص UTF-8 غير صالح."
+  ],
+  "Binärdateien werden abgelehnt.": [
+    "Binary files are rejected.",
+    "Les fichiers binaires sont refusés.",
+    "I file binari non sono accettati.",
+    "الملفات الثنائية مرفوضة."
+  ]
+}

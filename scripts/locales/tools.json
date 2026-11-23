@@ -1192,5 +1192,1271 @@
     "AuthzLedger · © Nasser Aldin Farag (0xFarag). Tous droits réservés.",
     "AuthzLedger · © Nasser Aldin Farag (0xFarag). Tutti i diritti riservati.",
     "AuthzLedger · © Nasser Aldin Farag (0xFarag). جميع الحقوق محفوظة."
+  ],
+  "Zwei Schlüssel aus einem Geheimnis · AuthzLedger": [
+    "Two keys from one secret · AuthzLedger",
+    "Deux clés issues d’un même secret · AuthzLedger",
+    "Due chiavi da un solo segreto · AuthzLedger",
+    "مفتاحان من سر واحد · AuthzLedger"
+  ],
+  "X25519 und HKDF: Richtungsschlüssel, Rollentrennung und Referenzprüfung mit RFC 5869. Eine technische Founder-Notiz mit eigenständigem Python-Beispiel.": [
+    "X25519 and HKDF: directional keys, role separation and validation against RFC 5869. A technical founder’s note with a standalone Python example.",
+    "X25519 et HKDF : clés par sens de communication, séparation des rôles et validation selon la RFC 5869. Une note technique du fondateur avec un exemple Python autonome.",
+    "X25519 e HKDF: chiavi direzionali, separazione dei ruoli e verifica secondo la RFC 5869. Una nota tecnica del fondatore con un esempio Python autonomo.",
+    "X25519 وHKDF: مفاتيح مستقلة لكل اتجاه وفصل الأدوار والتحقق وفق RFC 5869. ملاحظة تقنية من المؤسس مع مثال Python مستقل."
+  ],
+  "AuthzLedger – Produktlogo und Schriftzug": [
+    "AuthzLedger product logo and wordmark",
+    "Logo et nom de marque d’AuthzLedger",
+    "Logo e denominazione di AuthzLedger",
+    "شعار AuthzLedger واسمه التجاري"
+  ],
+  "Zum Artikel": [
+    "Skip to article",
+    "Aller à l’article",
+    "Vai all’articolo",
+    "انتقل إلى المقال"
+  ],
+  "Pilot anfragen": [
+    "Request a pilot",
+    "Demander un projet pilote",
+    "Richiedi un progetto pilota",
+    "اطلب تجربة تجريبية"
+  ],
+  "Technische Founder-Notiz · Kryptografie": [
+    "Technical founder’s note · Cryptography",
+    "Note technique du fondateur · Cryptographie",
+    "Nota tecnica del fondatore · Crittografia",
+    "ملاحظة تقنية من المؤسس · التشفير"
+  ],
+  "Zwei Schlüssel aus einem Geheimnis": [
+    "Two keys from one secret",
+    "Deux clés issues d’un même secret",
+    "Due chiavi da un solo segreto",
+    "مفتاحان من سر واحد"
+  ],
+  "Von Nasser Aldin Farag / 0xFarag": [
+    "By Nasser Aldin Farag / 0xFarag",
+    "Par Nasser Aldin Farag / 0xFarag",
+    "Di Nasser Aldin Farag / 0xFarag",
+    "بقلم Nasser Aldin Farag / 0xFarag"
+  ],
+  "Offline-Beispiel herunterladen (.py)": [
+    "Download the offline example (.py)",
+    "Télécharger l’exemple hors ligne (.py)",
+    "Scarica l’esempio offline (.py)",
+    "نزّل المثال للاستخدام بلا اتصال (.py)"
+  ],
+  "Zwei Seiten können mit X25519 unabhängig denselben geheimen Wert berechnen. Woher wissen sie, welche 32 Bytes später für welche Aufgabe gelten? Das Protokoll muss diese Aufgabe benennen. HKDF kann aus dem gemeinsamen Geheimnis beispielsweise je einen Schlüssel für die Hin- und Rückrichtung ableiten. Beide Seiten müssen sich über Rolle, Reihenfolge und Kontext einig sein.": [
+    "With X25519, two parties can independently compute the same secret value. How do they know which 32 bytes to use for each purpose? The protocol must identify that purpose. HKDF can, for example, derive a key from the shared secret for each direction of communication. Both parties must agree on roles, order and context.",
+    "Avec X25519, deux parties peuvent calculer indépendamment le même secret. Comment savoir quels 32 octets utiliser pour chaque fonction ? Le protocole doit préciser cette fonction. HKDF peut, par exemple, dériver du secret partagé une clé pour chaque sens de communication. Les deux parties doivent s’accorder sur les rôles, l’ordre et le contexte.",
+    "Con X25519 due parti possono calcolare in modo indipendente lo stesso segreto. Come stabiliscono quali 32 byte usare per ciascuna funzione? Il protocollo deve specificare quella funzione. HKDF può ad esempio derivare dal segreto condiviso una chiave per ciascuna direzione di comunicazione. Le parti devono concordare ruoli, ordine e contesto.",
+    "يمكن لطرفين استخدام X25519 لحساب القيمة السرية نفسها بصورة مستقلة. كيف يعرفان أي 32 بايت تُستخدم لكل غرض؟ على البروتوكول تحديد الغرض. يتيح HKDF مثلاً اشتقاق مفتاح من السر المشترك لكل اتجاه اتصال. يجب أن يتفق الطرفان على الأدوار والترتيب والسياق."
+  ],
+  "RFC 7748, Abschnitt 6.1": [
+    "RFC 7748, section 6.1",
+    "RFC 7748, section 6.1",
+    "RFC 7748, sezione 6.1",
+    "RFC 7748، القسم 6.1"
+  ],
+  "Bei AuthzLedger 1.5.0 prüft der Empfänger mit Ed25519 das signierte Inventar eines Übergabepakets. Der öffentliche Prüfschlüssel muss dem erwarteten Absender unabhängig zugeordnet werden. Dieses Blatt erläutert eine andere kryptografische Aufgabe, die Ableitung symmetrischer Schlüssel. Das beiliegende X25519/HKDF-Beispiel läuft eigenständig und beschreibt keine freigegebene Transportfunktion von AuthzLedger.": [
+    "In AuthzLedger 1.5.0 the recipient uses Ed25519 to verify the signed inventory of a handover package. The recipient must independently establish that the public verification key belongs to the expected sender. This note covers a different cryptographic task, deriving symmetric keys. The accompanying X25519/HKDF example runs independently and does not describe a released AuthzLedger transport feature.",
+    "Dans AuthzLedger 1.5.0, le destinataire vérifie avec Ed25519 l’inventaire signé du paquet de remise. Il doit vérifier indépendamment que la clé publique appartient à l’expéditeur attendu. Cette note traite d’une autre opération cryptographique, la dérivation de clés symétriques. L’exemple X25519/HKDF s’exécute de façon autonome et ne décrit aucune fonction de transport publiée d’AuthzLedger.",
+    "In AuthzLedger 1.5.0 il destinatario verifica con Ed25519 l’inventario firmato del pacchetto di consegna. Deve accertare in modo indipendente che la chiave pubblica di verifica appartenga al mittente atteso. Questa nota illustra un’altra operazione crittografica, la derivazione di chiavi simmetriche. L’esempio X25519/HKDF è autonomo e non descrive una funzione di trasporto rilasciata di AuthzLedger.",
+    "في AuthzLedger 1.5.0 يتحقق المستلم باستخدام Ed25519 من قائمة المحتويات الموقّعة لحزمة التسليم. وعليه التأكد من مصدر مستقل أن مفتاح التحقق العام يخص المرسل المتوقع. تشرح هذه الملاحظة مهمة تشفير أخرى هي اشتقاق المفاتيح المتماثلة. يعمل مثال X25519/HKDF المرفق بصورة مستقلة ولا يصف ميزة نقل مطرحة في AuthzLedger."
+  ],
+  "AuthzLedger 1.5.0": [
+    "AuthzLedger 1.5.0",
+    "AuthzLedger 1.5.0",
+    "AuthzLedger 1.5.0",
+    "AuthzLedger 1.5.0"
+  ],
+  "Was Extract und Expand leisten": [
+    "What Extract and Expand do",
+    "Le rôle d’Extract et d’Expand",
+    "Le funzioni di Extract ed Expand",
+    "وظيفتا Extract وExpand"
+  ],
+  "Für SHA-256 berechnet": [
+    "For SHA-256,",
+    "Avec SHA-256,",
+    "Con SHA-256,",
+    "مع SHA-256، تحسب"
+  ],
+  "Extract": [
+    "Extract",
+    "Extract",
+    "Extract",
+    "Extract"
+  ],
+  "den 32 Byte langen Zwischenschlüssel": [
+    "computes the 32-byte intermediate key",
+    "calcule la clé intermédiaire de 32 octets",
+    "calcola la chiave intermedia di 32 byte",
+    "المفتاح الوسيط المكوّن من 32 بايت"
+  ],
+  ". Der Salt ist der HMAC-Schlüssel, das ursprüngliche Schlüsselmaterial die Nachricht. Für einen fehlenden Salt legt RFC 5869 einen Standardwert aus 32 Nullbytes fest. Ein verfügbarer, unabhängiger Zufallssalt kann öffentlich sein. Beide Seiten müssen denselben Wert verwenden. Extract nutzt die vorhandene Entropie. Ein leicht erratbares Geheimnis bleibt auch mit Salt leicht erratbar. Für Passwörter braucht es ein dafür ausgelegtes, rechen- und vorzugsweise speicherintensives Verfahren.": [
+    ". The salt is the HMAC key, and the initial keying material is the message. If no salt is supplied, RFC 5869 specifies a default of 32 zero bytes. An independently generated random salt may be public. Both parties must use the same value. Extract uses the available entropy. Even with a salt, an easily guessed secret remains easy to guess. Passwords require a dedicated computationally intensive and preferably memory-intensive method.",
+    ". Le sel sert de clé HMAC et le matériau de clé initial sert de message. En l’absence de sel, la RFC 5869 définit une valeur par défaut de 32 octets nuls. Un sel aléatoire indépendant peut être public. Les deux parties doivent utiliser la même valeur. Extract exploite l’entropie disponible. Même avec un sel, un secret facile à deviner le reste. Les mots de passe exigent une méthode spécifique coûteuse en calcul et de préférence en mémoire.",
+    ". Il sale è la chiave HMAC e il materiale di chiave iniziale è il messaggio. In assenza di sale, la RFC 5869 prevede 32 byte pari a zero. Un sale casuale indipendente può essere pubblico. Le parti devono usare lo stesso valore. Extract sfrutta l’entropia disponibile. Un segreto facilmente intuibile resta tale anche con un sale. Per le password occorre un metodo dedicato che richieda ingenti risorse di calcolo e preferibilmente di memoria.",
+    ". يستخدم الملح مفتاحاً لـ HMAC وتكون مادة المفتاح الأولية هي الرسالة. في غياب الملح تحدد RFC 5869 قيمة افتراضية من 32 بايت صفرياً. يمكن نشر الملح العشوائي المستقل، وعلى الطرفين استخدام القيمة نفسها. تستفيد Extract من الإنتروبيا المتاحة. ويظل السر سهل التخمين كذلك حتى مع الملح. تتطلب كلمات المرور خوارزمية مخصصة عالية الكلفة الحسابية ويفضّل أن تتطلب ذاكرة كبيرة."
+  ],
+  "RFC 5869, Abschnitte 2 und 3": [
+    "RFC 5869, sections 2 and 3",
+    "RFC 5869, sections 2 et 3",
+    "RFC 5869, sezioni 2 e 3",
+    "RFC 5869، القسمان 2 و3"
+  ],
+  "Expand": [
+    "Expand",
+    "Expand",
+    "Expand",
+    "Expand"
+  ],
+  "erzeugt aus PRK, Kontext": [
+    "uses the PRK, context",
+    "utilise la PRK, le contexte",
+    "usa PRK, contesto",
+    "تستخدم المفتاح الوسيط PRK والسياق"
+  ],
+  "und gewünschter Länge": [
+    "and desired length",
+    "et la longueur souhaitée",
+    "e lunghezza desiderata",
+    "والطول المطلوب"
+  ],
+  "das Ausgabematerial. Bei SHA-256 sind je Expand-Aufruf höchstens 8’160 Byte möglich. Zweck, Protokollversion und Senderichtung erhalten eindeutige Kodierungen. Nur die Ausgabelänge zu verändern trennt keine Zwecke: Mit demselben PRK und Kontext entsprechen die ersten 16 Byte einer 32-Byte-Ausgabe exakt der 16-Byte-Ausgabe.": [
+    "to produce the output. With SHA-256 each Expand call can produce at most 8,160 bytes. Encode the purpose, protocol version and direction unambiguously. Changing only the output length does not separate purposes: given the same PRK and context, the first 16 bytes of a 32-byte output exactly match the 16-byte output.",
+    "pour produire la sortie. Avec SHA-256, chaque appel à Expand peut produire au maximum 8 160 octets. Encodez sans ambiguïté l’usage, la version du protocole et le sens de communication. Changer uniquement la longueur ne sépare pas les usages : avec la même PRK et le même contexte, les 16 premiers octets d’une sortie de 32 octets sont identiques à la sortie de 16 octets.",
+    "per generare l’output. Con SHA-256 ogni chiamata a Expand può produrre al massimo 8.160 byte. Codificare senza ambiguità lo scopo, la versione del protocollo e la direzione di invio. Variando solo la lunghezza non si separano gli scopi: con gli stessi PRK e contesto, i primi 16 byte di un output di 32 byte coincidono con l’output di 16 byte.",
+    "لتوليد الخرج. عند استخدام SHA-256 يصل خرج كل استدعاء لـ Expand إلى 8160 بايت كحد أقصى. يلزم ترميز الغرض وإصدار البروتوكول واتجاه الإرسال بصورة فريدة. لا يفصل تغيير طول الخرج وحده بين الأغراض، فمع تطابق PRK والسياق تساوي أول 16 بايت من خرج بطول 32 بايت الخرج بطول 16 بايت تماماً."
+  ],
+  "RFC 5869, Abschnitt 2.3": [
+    "RFC 5869, section 2.3",
+    "RFC 5869, section 2.3",
+    "RFC 5869, sezione 2.3",
+    "RFC 5869، القسم 2.3"
+  ],
+  "Was das Beispiel überprüft": [
+    "What the example checks",
+    "Ce que vérifie l’exemple",
+    "Cosa verifica l’esempio",
+    "ما الذي يتحقق منه المثال؟"
+  ],
+  "Der öffentliche Testfall A.1 liefert erwartete Werte für PRK und die 42-Byte-Ausgabe. Das Programm prüft die getrennten Phasen und die kombinierte HKDF-Funktion gegen diese Werte. So kann eine vertauschte HMAC-Parameterreihenfolge oder ein falscher Kontext auffallen.": [
+    "Public test case A.1 supplies expected values for the PRK and the 42-byte output. The program checks the separate stages and the combined HKDF function against them. This can reveal reversed HMAC parameters or an incorrect context.",
+    "Le cas de test public A.1 fournit les valeurs attendues pour la PRK et la sortie de 42 octets. Le programme vérifie séparément chaque étape ainsi que la fonction HKDF complète à l’aide de ces valeurs. Il peut ainsi détecter une inversion des paramètres HMAC ou un contexte erroné.",
+    "Il caso di test pubblico A.1 fornisce i valori attesi per la PRK e l’output di 42 byte. Il programma verifica con questi valori le singole fasi e la funzione HKDF completa. Può così rilevare parametri HMAC invertiti o un contesto errato.",
+    "توفر حالة الاختبار المنشورة A.1 القيم المتوقعة لـ PRK وللخرج المكوّن من 42 بايت. يتحقق البرنامج من المرحلتين كل على حدة ومن دالة HKDF الكاملة باستخدام هذه القيم، ما قد يكشف عكس معاملي HMAC أو خطأ في السياق."
+  ],
+  "Testvektor A.1": [
+    "Test vector A.1",
+    "Vecteur de test A.1",
+    "Vettore di test A.1",
+    "متجه الاختبار A.1"
+  ],
+  "Zwei lokal erzeugte, kurzlebige X25519-Schlüsselpaare berechnen das Geheimnis jeweils von ihrer Seite aus. Ein Kontext bindet beide öffentlichen Schlüssel in der festen Reihenfolge Client, Server. Jede Seite erhält dieselben zwei Richtungsschlüssel. Ein vertauschtes Rollenpaar liefert für denselben Richtungsnamen einen anderen Schlüssel. Das Programm gibt ausschliesslich Prüfergebnisse aus.": [
+    "Two locally generated ephemeral X25519 key pairs compute the secret from their respective sides. The context binds both public keys in the fixed order client then server. Both parties obtain the same two directional keys. Swapping roles produces a different key for the same direction name. The program prints only check results.",
+    "Deux paires de clés X25519 éphémères générées localement permettent à chaque partie de calculer le secret de son côté. Le contexte lie les deux clés publiques dans l’ordre fixe client puis serveur. Chaque partie obtient les mêmes deux clés directionnelles. Une inversion des rôles produit une autre clé pour le même nom de direction. Le programme affiche uniquement les résultats des vérifications.",
+    "Due coppie di chiavi X25519 effimere generate localmente permettono a ciascuna parte di calcolare il segreto dal proprio lato. Il contesto lega le due chiavi pubbliche nell’ordine fisso client, server. Entrambe le parti ottengono le stesse due chiavi direzionali. Scambiare i ruoli produce una chiave diversa per lo stesso nome di direzione. Il programma mostra soltanto i risultati delle verifiche.",
+    "يحسب كل طرف السر بزوج مفاتيح X25519 مؤقت مولّد محلياً. يربط السياق المفتاحَين العامَّين بترتيب ثابت، العميل ثم الخادم. يحصل الطرفان على مفتاحَي الاتجاه نفسيهما. عند تبديل الدورين يتغير المفتاح لنفس اسم الاتجاه. يعرض البرنامج نتائج التحقق فقط."
+  ],
+  "Python-Bibliothek": [
+    "Python library",
+    "Bibliothèque Python",
+    "Libreria Python",
+    "مكتبة Python"
+  ],
+  "Die öffentlichen Schlüssel sind im Beispiel direkt im selben Prozess verfügbar. Bei einer Netzwerkverbindung braucht der Handshake zusätzlich einen Vertrauensnachweis für die Gegenstelle und eine vereinbarte Behandlung ungültiger Peer-Eingaben. Die Einbeziehung öffentlicher Schlüssel in": [
+    "In this example, both public keys are directly available in the same process. A network handshake also needs a way to authenticate the peer and agreed handling of invalid peer inputs. Including public keys in",
+    "Dans cet exemple, les deux clés publiques sont directement accessibles dans le même processus. Sur un réseau, la négociation requiert également une preuve d’identité du pair et un traitement convenu des entrées invalides. Inclure les clés publiques dans",
+    "Nell’esempio entrambe le chiavi pubbliche sono disponibili nello stesso processo. Su una rete l’handshake richiede anche la verifica dell’identità della controparte e una gestione concordata dei suoi input non validi. Includere le chiavi pubbliche in",
+    "في المثال يتاح المفتاحان العامان مباشرة ضمن العملية نفسها. عند الاتصال عبر شبكة تتطلب المصافحة أيضاً آلية للتحقق من هوية الطرف الآخر واتفاقاً على معالجة مدخلاته غير الصالحة. إدراج المفاتيح العامة في"
+  ],
+  "allein bestätigt keine Identität.": [
+    "alone does not authenticate a peer.",
+    "ne suffit pas à vérifier une identité.",
+    "da solo non conferma alcuna identità.",
+    "وحده لا يثبت الهوية."
+  ],
+  "RFC 7748, Abschnitte 6 und 7": [
+    "RFC 7748, sections 6 and 7",
+    "RFC 7748, sections 6 et 7",
+    "RFC 7748, sezioni 6 e 7",
+    "RFC 7748، القسمان 6 و7"
+  ],
+  "Ein häufiger Fehler bei Nonces.": [
+    "A common nonce mistake.",
+    "Une erreur fréquente avec les nonces.",
+    "Un errore comune con i nonce.",
+    "خطأ شائع عند استخدام قيمة nonce."
+  ],
+  "Eine konstante HKDF-Ausgabe als Nonce für mehrere Nachrichten mit demselben ChaCha20-Poly1305-Schlüssel würde dessen Einmaligkeitsanforderung verletzen. RFC 8439 verlangt pro Verschlüsselung unter demselben Schlüssel eine eindeutige 96-Bit-Nonce. Zählerstände müssen gegebenenfalls Neustarts überstehen oder mit frischen Schlüsseln neu beginnen. AEAD liefert bereits den Authentifizierungstag für die Nachricht. Das Lernbeispiel endet vor der Verschlüsselung.": [
+    "Reusing a constant HKDF output as a nonce for several messages under the same ChaCha20-Poly1305 key would violate the uniqueness requirement. RFC 8439 requires a unique 96-bit nonce for each encryption under the same key. Counters may need to persist across restarts or start again with fresh keys. AEAD already provides the message authentication tag. The example stops before encryption.",
+    "Réutiliser une sortie HKDF constante comme nonce pour plusieurs messages avec la même clé ChaCha20-Poly1305 enfreindrait l’exigence d’unicité. La RFC 8439 exige un nonce unique de 96 bits pour chaque chiffrement sous une même clé. Les compteurs doivent, si nécessaire, survivre aux redémarrages ou repartir avec de nouvelles clés. AEAD fournit déjà le tag d’authentification du message. L’exemple s’arrête avant le chiffrement.",
+    "Riutilizzare un output HKDF costante come nonce per più messaggi con la stessa chiave ChaCha20-Poly1305 violerebbe il requisito di unicità. La RFC 8439 richiede un nonce univoco di 96 bit per ogni cifratura con la stessa chiave. Se necessario, i contatori devono persistere dopo i riavvii o ripartire con chiavi nuove. AEAD fornisce già il tag di autenticazione del messaggio. L’esempio si ferma prima della cifratura.",
+    "تؤدي إعادة استخدام خرج ثابت من HKDF كقيمة nonce لعدة رسائل مع مفتاح ChaCha20-Poly1305 نفسه إلى انتهاك شرط التفرّد. تشترط RFC 8439 قيمة nonce فريدة بطول 96 بت لكل عملية تشفير بالمفتاح نفسه. عند الحاجة يجب حفظ العدّادات عبر إعادة التشغيل أو البدء من جديد بمفاتيح جديدة. توفّر AEAD وسم مصادقة الرسالة أصلاً. ينتهي المثال قبل التشفير."
+  ],
+  "RFC 8439, Abschnitt 2.8": [
+    "RFC 8439, section 2.8",
+    "RFC 8439, section 2.8",
+    "RFC 8439, sezione 2.8",
+    "RFC 8439، القسم 2.8"
+  ],
+  "Lokal ausführen": [
+    "Run locally",
+    "Exécuter localement",
+    "Esegui in locale",
+    "التشغيل محلياً"
+  ],
+  "Voraussetzung ist eine Python-Umgebung mit": [
+    "Requires a Python environment with",
+    "Une installation de Python est requise avec",
+    "È richiesto un ambiente Python con",
+    "يتطلب التشغيل بيئة Python مع"
+  ],
+  "ab Version 40. Mit Python 3.12 und": [
+    "version 40 or later. The program ran successfully with Python 3.12 and",
+    "en version 40 ou ultérieure. Le programme a été exécuté avec succès avec Python 3.12 et",
+    "dalla versione 40. Il programma è stato eseguito con successo con Python 3.12 e",
+    "بالإصدار 40 أو أحدث. نُفِّذ البرنامج بنجاح باستخدام Python 3.12 و"
+  ],
+  "50.0.0 wurde das Programm erfolgreich ausgeführt.": [
+    "50.0.0.",
+    "50.0.0.",
+    "50.0.0.",
+    "50.0.0."
+  ],
+  "Zurück zu AuthzLedger": [
+    "Back to AuthzLedger",
+    "Retour à AuthzLedger",
+    "Torna ad AuthzLedger",
+    "العودة إلى AuthzLedger"
+  ],
+  "© 2026 Nasser Aldin Farag (0xFarag). Alle Rechte an den eigenen schutzfähigen Beiträgen vorbehalten.": [
+    "© 2026 Nasser Aldin Farag (0xFarag). All rights reserved in the author’s own contributions eligible for protection.",
+    "© 2026 Nasser Aldin Farag (0xFarag). Tous droits réservés sur les contributions propres de l’auteur susceptibles de protection.",
+    "© 2026 Nasser Aldin Farag (0xFarag). Tutti i diritti riservati sui contributi originali dell’autore suscettibili di protezione.",
+    "© 2026 Nasser Aldin Farag (0xFarag). جميع الحقوق محفوظة في إسهامات المؤلف الأصلية المؤهلة للحماية."
+  ],
+  "Rechte und Lizenzierung": [
+    "Rights and licensing",
+    "Droits et licences",
+    "Diritti e licenze",
+    "الحقوق والتراخيص"
+  ],
+  "·": [
+    "·",
+    "·",
+    "·",
+    "·"
+  ],
+  "Lizenztext": [
+    "License text",
+    "Texte de la licence",
+    "Testo della licenza",
+    "نص الترخيص"
+  ],
+  "Drittanbieterhinweise": [
+    "Third-party notices",
+    "Mentions relatives aux tiers",
+    "Avvisi di terze parti",
+    "إشعارات الجهات الخارجية"
+  ],
+  "Als schädlich gemeldet": [
+    "Reported as malicious",
+    "Signalé comme malveillant",
+    "Segnalato come dannoso",
+    "أُبلغ بأنه ضار"
+  ],
+  "Als verdächtig gemeldet": [
+    "Reported as suspicious",
+    "Signalé comme suspect",
+    "Segnalato come sospetto",
+    "أُبلغ بأنه مريب"
+  ],
+  "Als unbedenklich gemeldet": [
+    "Reported as harmless",
+    "Signalé comme inoffensif",
+    "Segnalato come innocuo",
+    "أُبلغ بأنه غير ضار"
+  ],
+  "Keine Erkennung gemeldet": [
+    "No detection reported",
+    "Aucune détection signalée",
+    "Nessun rilevamento segnalato",
+    "لم يُبلّغ عن أي اكتشاف"
+  ],
+  "Zeitüberschreitung": [
+    "Timeout",
+    "Délai dépassé",
+    "Tempo scaduto",
+    "انتهت مهلة التحليل"
+  ],
+  "Bestätigte Zeitüberschreitung": [
+    "Confirmed timeout",
+    "Délai dépassé confirmé",
+    "Tempo scaduto confermato",
+    "انتهاء المهلة مؤكّد"
+  ],
+  "Analyse fehlgeschlagen": [
+    "Analysis failed",
+    "Échec de l’analyse",
+    "Analisi non riuscita",
+    "فشل التحليل"
+  ],
+  "Dateityp nicht unterstützt": [
+    "Unsupported file type",
+    "Type de fichier non pris en charge",
+    "Tipo di file non supportato",
+    "نوع الملف غير مدعوم"
+  ],
+  "Wählen Sie eine Datei bis 16 MiB.": [
+    "Select a file up to 16 MiB.",
+    "Sélectionnez un fichier de 16 Mio maximum.",
+    "Seleziona un file fino a 16 MiB.",
+    "اختر ملفاً بحجم لا يتجاوز 16 MiB."
+  ],
+  "Dateibytes werden lokal geprüft …": [
+    "Checking file bytes locally …",
+    "Vérification locale des octets du fichier…",
+    "Verifica locale dei byte del file in corso…",
+    "جارٍ فحص بايتات الملف محلياً…"
+  ],
+  "Für die geprüften Merkmale wurde kein Hinweis ausgelöst.": [
+    "The checked characteristics raised no flags.",
+    "Aucun des critères vérifiés n’a déclenché de signalement.",
+    "Nessuna delle caratteristiche verificate ha generato una segnalazione.",
+    "لم تُظهر الخصائص المفحوصة أي مؤشرات."
+  ],
+  "Lokal geprüft: {name}": [
+    "Checked locally: {name}",
+    "Vérification locale : {name}",
+    "Verificato in locale: {name}",
+    "تم الفحص محلياً: {name}"
+  ],
+  "Die lokale Prüfung konnte die Datei nicht lesen oder ihre Hashwerte nicht berechnen.": [
+    "The local check could not read the file or compute its hashes.",
+    "La vérification locale n’a pas pu lire le fichier ou calculer ses empreintes.",
+    "La verifica locale non è riuscita a leggere il file o a calcolarne gli hash.",
+    "تعذّر على الفحص المحلي قراءة الملف أو حساب بصماته."
+  ],
+  "Hashliste wird lokal verglichen …": [
+    "Comparing the hash list locally …",
+    "Comparaison locale de la liste d’empreintes…",
+    "Confronto locale dell’elenco di hash in corso…",
+    "جارٍ مقارنة قائمة البصمات محلياً…"
+  ],
+  "Der Dateihash ist in der Liste enthalten.": [
+    "The file hash is in the list.",
+    "L’empreinte du fichier figure dans la liste.",
+    "L’hash del file figura nell’elenco.",
+    "بصمة الملف موجودة في القائمة."
+  ],
+  "In dieser Liste gibt es keinen Treffer für den Dateihash.": [
+    "No entry in this list matches the file hash.",
+    "Aucune empreinte de la liste ne correspond à celle du fichier.",
+    "Nessuna voce dell’elenco corrisponde all’hash del file.",
+    "لا يوجد في هذه القائمة ما يطابق بصمة الملف."
+  ],
+  "Verglichene SHA-256-Werte: {count}.": [
+    "SHA-256 values compared: {count}.",
+    "Empreintes SHA-256 comparées : {count}.",
+    "Valori SHA-256 confrontati: {count}.",
+    "عدد قيم SHA-256 التي جرت مقارنتها: {count}."
+  ],
+  "Hashliste abgelehnt. Prüfen Sie das Textformat, die SHA-256-Werte und die Grössengrenze von 1 MiB.": [
+    "Hash list rejected. Check the text format, SHA-256 values and 1 MiB size limit.",
+    "Liste d’empreintes refusée. Vérifiez le format texte, les empreintes SHA-256 et la limite de 1 Mio.",
+    "Elenco di hash rifiutato. Verifica il formato di testo, i valori SHA-256 e il limite di 1 MiB.",
+    "رُفضت قائمة البصمات. تحقق من تنسيق النص وقيم SHA-256 وحدّ الحجم البالغ 1 MiB."
+  ],
+  "Zusammenfassung aus dem zugeordneten Bericht": [
+    "Summary from the matching report",
+    "Résumé du rapport correspondant",
+    "Riepilogo del rapporto associato",
+    "ملخص التقرير المطابق"
+  ],
+  "Berichtskategorie": [
+    "Report category",
+    "Catégorie du rapport",
+    "Categoria del rapporto",
+    "فئة التقرير"
+  ],
+  "Anzahl": [
+    "Count",
+    "Nombre",
+    "Numero",
+    "العدد"
+  ],
+  "Analysezeit laut Bericht: {time} Uhr (Schweiz).": [
+    "Analysis time in the report: {time} (Swiss time).",
+    "Heure de l’analyse selon le rapport : {time} (heure suisse).",
+    "Ora dell’analisi secondo il rapporto: {time} (ora svizzera).",
+    "وقت التحليل وفق التقرير: {time} (بتوقيت سويسرا)."
+  ],
+  "Dateibezug wird geprüft …": [
+    "Checking the file reference …",
+    "Vérification du lien avec le fichier…",
+    "Verifica del riferimento al file in corso…",
+    "جارٍ التحقق من ارتباط التقرير بالملف…"
+  ],
+  "Bericht abgelehnt. Sein SHA-256 gehört zu einer anderen Datei.": [
+    "Report rejected. Its SHA-256 belongs to a different file.",
+    "Rapport refusé. Son empreinte SHA-256 appartient à un autre fichier.",
+    "Rapporto rifiutato. Il suo SHA-256 appartiene a un altro file.",
+    "رُفض التقرير. بصمة SHA-256 تخص ملفاً آخر."
+  ],
+  "Der Bericht enthält keine Engine-Ergebnisse.": [
+    "The report contains no engine results.",
+    "Le rapport ne contient aucun résultat de moteur d’analyse.",
+    "Il rapporto non contiene risultati dei motori di analisi.",
+    "لا يحتوي التقرير على نتائج من محركات التحليل."
+  ],
+  "{count} gemeldete Engine-Ergebnisse.": [
+    "Reported engine results: {count}.",
+    "Résultats de moteurs signalés : {count}.",
+    "Risultati dei motori segnalati: {count}.",
+    "عدد نتائج المحركات المبلّغ عنها: {count}."
+  ],
+  "Dateihash stimmt überein.": [
+    "File hash matches.",
+    "L’empreinte du fichier correspond.",
+    "L’hash del file corrisponde.",
+    "بصمة الملف متطابقة."
+  ],
+  "Bericht abgelehnt. Prüfen Sie Format, Dateihash, vollständige Kategorien und die Grössengrenze von 2 MiB.": [
+    "Report rejected. Check the format, file hash, complete set of categories and 2 MiB size limit.",
+    "Rapport refusé. Vérifiez le format, l’empreinte du fichier, la présence de toutes les catégories et la limite de 2 Mio.",
+    "Rapporto rifiutato. Verifica il formato, l’hash del file, la presenza di tutte le categorie e il limite di 2 MiB.",
+    "رُفض التقرير. تحقق من التنسيق وبصمة الملف واكتمال الفئات وحدّ الحجم البالغ 2 MiB."
+  ],
+  "Lokale Prüfung geleert.": [
+    "Local check cleared.",
+    "Vérification locale effacée.",
+    "Verifica locale azzerata.",
+    "تم مسح الفحص المحلي."
+  ],
+  "Zum lokalen Berechnen der Hashwerte benötigt dieser Browser HTTPS und WebCrypto.": [
+    "This browser requires HTTPS and WebCrypto to compute hashes locally.",
+    "Ce navigateur nécessite HTTPS et WebCrypto pour calculer les empreintes localement.",
+    "Questo browser richiede HTTPS e WebCrypto per calcolare gli hash in locale.",
+    "يتطلب حساب البصمات محلياً في هذا المتصفح HTTPS وWebCrypto."
+  ],
+  "0 (leere Datei)": [
+    "0 (empty file)",
+    "0 (fichier vide)",
+    "0 (file vuoto)",
+    "0 (ملف فارغ)"
+  ],
+  "{count} Bytes": [
+    "{count} bytes",
+    "{count} octets",
+    "{count} byte",
+    "{count} بايت"
+  ],
+  "{count} Bit/Byte": [
+    "{count} bits/byte",
+    "{count} bits/octet",
+    "{count} bit/byte",
+    "{count} بت/بايت"
+  ],
+  "Keine unterstützte Kennung": [
+    "No supported signature",
+    "Aucune signature prise en charge",
+    "Nessuna firma supportata",
+    "لا توجد بصمة تنسيق مدعومة"
+  ],
+  "Der Name enthält ein Unicode-Zeichen zur Steuerung der Leserichtung.": [
+    "The name contains a Unicode character that controls text direction.",
+    "Le nom contient un caractère Unicode qui contrôle le sens de lecture.",
+    "Il nome contiene un carattere Unicode che controlla la direzione di lettura.",
+    "يتضمن الاسم محرف Unicode يتحكم في اتجاه قراءة النص."
+  ],
+  "Auf eine Dokument- oder Archivendung folgt eine ausführbare oder aktivierbare Endung.": [
+    "A document or archive extension is followed by an executable or activatable extension.",
+    "Une extension de document ou d’archive est suivie d’une extension exécutable ou activable.",
+    "A un’estensione di documento o archivio segue un’estensione eseguibile o attivabile.",
+    "يلي امتداد المستند أو الأرشيف امتداد قابل للتنفيذ أو التفعيل."
+  ],
+  "Die bekannte Dateiendung passt nicht zur erkannten Formatkennung.": [
+    "The known file extension does not match the detected format signature.",
+    "L’extension connue ne correspond pas à la signature de format détectée.",
+    "L’estensione nota non corrisponde alla firma di formato rilevata.",
+    "لا يتطابق امتداد الملف المعروف مع بصمة التنسيق المكتشفة."
+  ],
+  "MZ-Präfix vorhanden. Der Verweis auf einen vollständigen PE-Signatur- und COFF-Header ist nicht bestätigt.": [
+    "An MZ prefix is present. Its reference to a complete PE signature and COFF header has not been confirmed.",
+    "Un préfixe MZ est présent. La référence à une signature PE et à un en-tête COFF complets n’a pas été confirmée.",
+    "È presente un prefisso MZ. Il riferimento a una firma PE e a un’intestazione COFF complete non è confermato.",
+    "توجد بادئة MZ. لم يُؤكّد أنها تشير إلى توقيع PE وترويسة COFF مكتملين."
+  ],
+  "Windows-PE-Kennung": [
+    "Windows PE signature",
+    "Signature Windows PE",
+    "Firma Windows PE",
+    "توقيع Windows PE"
+  ],
+  "ELF-Kennung": [
+    "ELF signature",
+    "Signature ELF",
+    "Firma ELF",
+    "توقيع ELF"
+  ],
+  "PDF-Kennung": [
+    "PDF signature",
+    "Signature PDF",
+    "Firma PDF",
+    "توقيع PDF"
+  ],
+  "ZIP-Container-Kennung": [
+    "ZIP signature",
+    "Signature ZIP",
+    "Firma ZIP",
+    "توقيع ZIP"
+  ],
+  "Gzip-Kennung": [
+    "Gzip signature",
+    "Signature Gzip",
+    "Firma Gzip",
+    "توقيع Gzip"
+  ],
+  "PNG-Kennung": [
+    "PNG signature",
+    "Signature PNG",
+    "Firma PNG",
+    "توقيع PNG"
+  ],
+  "JPEG-Kennung": [
+    "JPEG signature",
+    "Signature JPEG",
+    "Firma JPEG",
+    "توقيع JPEG"
+  ],
+  "GIF-Kennung": [
+    "GIF signature",
+    "Signature GIF",
+    "Firma GIF",
+    "توقيع GIF"
+  ],
+  "WebAssembly-Kennung": [
+    "WebAssembly signature",
+    "Signature WebAssembly",
+    "Firma WebAssembly",
+    "توقيع WebAssembly"
+  ],
+  "Mandatsumfang": [
+    "Engagement scope",
+    "Périmètre du mandat",
+    "Perimetro dell’incarico",
+    "نطاق التكليف"
+  ],
+  "Ungeklärt": [
+    "Unresolved",
+    "À clarifier",
+    "Da chiarire",
+    "غير محسوم"
+  ],
+  "Im Scope": [
+    "In scope",
+    "Dans le périmètre",
+    "Nel perimetro",
+    "ضمن النطاق"
+  ],
+  "Ausserhalb": [
+    "Out of scope",
+    "Hors périmètre",
+    "Fuori perimetro",
+    "خارج النطاق"
+  ],
+  "Controls": [
+    "Controls",
+    "Contrôles",
+    "Controlli",
+    "الضوابط"
+  ],
+  "Beleg fehlt": [
+    "Evidence missing",
+    "Justificatif manquant",
+    "Evidenza mancante",
+    "الدليل مفقود"
+  ],
+  "Fehlgeschlagen": [
+    "Failed",
+    "Échec",
+    "Non superato",
+    "فشل"
+  ],
+  "Bestanden": [
+    "Passed",
+    "Réussi",
+    "Superato",
+    "ناجح"
+  ],
+  "Quellbezug": [
+    "Source reference",
+    "Référence à la source",
+    "Riferimento alla fonte",
+    "مرجع المصدر"
+  ],
+  "Bezug fehlt": [
+    "No reference",
+    "Référence manquante",
+    "Riferimento mancante",
+    "المرجع مفقود"
+  ],
+  "Mehrdeutig": [
+    "Ambiguous",
+    "Ambigu",
+    "Ambiguo",
+    "ملتبس"
+  ],
+  "Eindeutig zugeordnet": [
+    "Unambiguously linked",
+    "Association sans ambiguïté",
+    "Associazione univoca",
+    "ارتباط واضح"
+  ],
+  "Retest": [
+    "Retest",
+    "Nouveau test",
+    "Nuovo test",
+    "إعادة الاختبار"
+  ],
+  "Nicht erneut geprüft": [
+    "Not retested",
+    "Aucun nouveau test",
+    "Non verificato di nuovo",
+    "لم يُعَد اختباره"
+  ],
+  "Nicht eindeutig": [
+    "Inconclusive",
+    "Non concluant",
+    "Non conclusivo",
+    "غير حاسم"
+  ],
+  "Befund besteht weiter": [
+    "Finding persists",
+    "Le constat persiste",
+    "Il rilievo persiste",
+    "لا تزال النتيجة قائمة"
+  ],
+  "Änderung beobachtet": [
+    "Change observed",
+    "Changement observé",
+    "Cambiamento osservato",
+    "لوحظ تغيير"
+  ],
+  "Aus Prüfmenge ausschliessen": [
+    "Exclude from the review set",
+    "Exclure de l’ensemble à vérifier",
+    "Escludi dall’insieme da verificare",
+    "استبعِد من مجموعة الفحص"
+  ],
+  "Mandatsumfang klären": [
+    "Clarify the engagement scope",
+    "Clarifier le périmètre du mandat",
+    "Chiarisci il perimetro dell’incarico",
+    "وضّح نطاق التكليف"
+  ],
+  "Kontrollbeleg prüfen": [
+    "Review the control evidence",
+    "Vérifier le justificatif du contrôle",
+    "Verifica l’evidenza del controllo",
+    "راجِع دليل الضابط"
+  ],
+  "Quellbezug klären": [
+    "Clarify the source reference",
+    "Clarifier la référence à la source",
+    "Chiarisci il riferimento alla fonte",
+    "وضّح مرجع المصدر"
+  ],
+  "Retest einplanen": [
+    "Schedule a retest",
+    "Planifier un nouveau test",
+    "Pianifica un nuovo test",
+    "جدوِل إعادة الاختبار"
+  ],
+  "Uneindeutigen Retest prüfen": [
+    "Review the inconclusive retest",
+    "Examiner le nouveau test non concluant",
+    "Esamina il nuovo test non conclusivo",
+    "راجِع نتيجة إعادة الاختبار غير الحاسمة"
+  ],
+  "Bestehenden Befund prüfen": [
+    "Review the persistent finding",
+    "Examiner le constat persistant",
+    "Esamina il rilievo persistente",
+    "راجِع النتيجة التي لا تزال قائمة"
+  ],
+  "Beobachtete Änderung prüfen": [
+    "Review the observed change",
+    "Vérifier le changement observé",
+    "Verifica il cambiamento osservato",
+    "راجِع التغيير الملحوظ"
+  ],
+  "Prüfschlüssel in diesem Browser gefunden. Die persönliche Freigabe können Sie jetzt prüfen.": [
+    "A verification key was found in this browser. You can now check your personal access approval.",
+    "Une clé de vérification a été trouvée dans ce navigateur. Vous pouvez vérifier votre autorisation personnelle.",
+    "È stata trovata una chiave di verifica in questo browser. Ora puoi verificare la tua autorizzazione personale.",
+    "عُثر على مفتاح تحقق في هذا المتصفح. يمكنك الآن التحقق من تصريحك الشخصي."
+  ],
+  "Die lokale Schlüsselablage ist nicht verfügbar. Öffnen Sie diese Seite über HTTPS in einem aktuellen Browser mit erlaubten Websitedaten.": [
+    "Local key storage is unavailable. Open this page over HTTPS in an up-to-date browser with site data enabled.",
+    "Le stockage local des clés est indisponible. Ouvrez cette page en HTTPS dans un navigateur à jour autorisant les données de site.",
+    "L’archivio locale delle chiavi non è disponibile. Apri questa pagina tramite HTTPS in un browser aggiornato che consenta i dati dei siti.",
+    "مخزن المفاتيح المحلي غير متاح. افتح الصفحة عبر HTTPS في متصفح محدّث يسمح بتخزين بيانات الموقع."
+  ],
+  "Dieses Browserprofil hat noch keinen Prüfschlüssel.": [
+    "This browser profile does not have a verification key yet.",
+    "Ce profil de navigateur ne possède pas encore de clé de vérification.",
+    "Questo profilo del browser non ha ancora una chiave di verifica.",
+    "لا يملك ملف تعريف المتصفح هذا مفتاح تحقق بعد."
+  ],
+  "Fall {n}": [
+    "Case {n}",
+    "Cas {n}",
+    "Caso {n}",
+    "الحالة {n}"
+  ],
+  "Fall {n} entfernen": [
+    "Remove case {n}",
+    "Supprimer le cas {n}",
+    "Rimuovi il caso {n}",
+    "أزِل الحالة {n}"
+  ],
+  "Fall entfernen": [
+    "Remove case",
+    "Supprimer le cas",
+    "Rimuovi il caso",
+    "أزِل الحالة"
+  ],
+  "Nächster Prüfschritt je Fall": [
+    "Next review step for each case",
+    "Prochaine vérification pour chaque cas",
+    "Prossima verifica per ciascun caso",
+    "خطوة المراجعة التالية لكل حالة"
+  ],
+  "{total} Fälle ausgewertet · {eligible} mit Scope, Controls und Quellbezug · {untested} ohne Retest.": [
+    "Cases assessed: {total} · With scope, controls and source reference: {eligible} · Without a retest: {untested}.",
+    "Cas évalués : {total} · Avec périmètre, contrôles et référence à la source : {eligible} · Sans nouveau test : {untested}.",
+    "Casi valutati: {total} · Con perimetro, controlli e riferimento alla fonte: {eligible} · Senza nuovo test: {untested}.",
+    "الحالات المقيّمة: {total} · مع نطاق وضوابط ومرجع مصدر: {eligible} · بلا إعادة اختبار: {untested}."
+  ],
+  "Freigabe wird geprüft …": [
+    "Checking access approval …",
+    "Vérification de l’autorisation…",
+    "Verifica dell’autorizzazione in corso…",
+    "جارٍ التحقق من التصريح…"
+  ],
+  "Prüfmerkmale werden ausgewertet …": [
+    "Evaluating review criteria …",
+    "Évaluation des critères de vérification…",
+    "Valutazione dei criteri di verifica in corso…",
+    "جارٍ تقييم معايير الفحص…"
+  ],
+  "Für diese Anfrage wurde keine Freigabe bestätigt. Prüfen Sie Ihre Gerätezeit und den Stand Ihres persönlichen Antrags.": [
+    "No approval was confirmed for this request. Check your device clock and the status of your personal application.",
+    "Aucune autorisation n’a été confirmée pour cette demande. Vérifiez l’heure de votre appareil et l’état de votre demande personnelle.",
+    "Nessuna autorizzazione confermata per questa richiesta. Verifica l’orologio del dispositivo e lo stato della tua domanda personale.",
+    "لم يتأكد وجود تصريح لهذا الطلب. تحقّق من ساعة جهازك وحالة طلبك الشخصي."
+  ],
+  "Persönliche Freigabe bestätigt bis {time} Uhr (Schweiz).": [
+    "Personal access approved until {time} (Swiss time).",
+    "Autorisation personnelle confirmée jusqu’à {time} (heure suisse).",
+    "Autorizzazione personale confermata fino alle {time} (ora svizzera).",
+    "تأكد التصريح الشخصي حتى {time} (بتوقيت سويسرا)."
+  ],
+  "Die Prüfung konnte nicht abgeschlossen werden. Prüfen Sie die Verbindung und versuchen Sie es erneut.": [
+    "The check could not be completed. Check your connection and try again.",
+    "La vérification n’a pas abouti. Vérifiez votre connexion et réessayez.",
+    "Impossibile completare la verifica. Controlla la connessione e riprova.",
+    "تعذّر إكمال التحقق. افحص اتصالك ثم أعد المحاولة."
+  ],
+  "Automatisch erkennen": [
+    "Detect automatically",
+    "Détecter automatiquement",
+    "Rileva automaticamente",
+    "اكتشاف تلقائي"
+  ],
+  "Sie können Exporte verschiedener Werkzeuge zusammen auswählen. Das Format wird am Dateiinhalt erkannt. Jede Datei wird einzeln geprüft.": [
+    "Select exports from different tools together. The format is detected from the contents of each file. Each file is checked individually.",
+    "Vous pouvez sélectionner ensemble des exports de plusieurs outils. Le format est détecté à partir du contenu du fichier. Chaque fichier est vérifié séparément.",
+    "Puoi selezionare insieme esportazioni di strumenti diversi. Il formato è rilevato dal contenuto del file. Ogni file viene verificato singolarmente.",
+    "يمكنك اختيار ملفات تصدير من أدوات مختلفة معاً. يُكتشف التنسيق من محتوى الملف ويُفحص كل ملف على حدة."
+  ],
+  "Beispieldaten mit frei erfundenen Datensätzen. Ihre eigenen Dateien liegen im separaten Arbeitsbereich.": [
+    "The example contains fictional records. Your files are in a separate workspace.",
+    "L’exemple contient des enregistrements fictifs. Vos fichiers se trouvent dans un espace de travail séparé.",
+    "L’esempio contiene record fittizi. I tuoi file si trovano in un’area di lavoro separata.",
+    "تحتوي بيانات المثال على سجلات خيالية. ملفاتك موجودة في مساحة عمل منفصلة."
+  ],
+  "Wählen Sie Dateien aus demselben Mandat. Alle Importe bleiben lokal in diesem Tab.": [
+    "Choose files from the same engagement. All imports stay local to this tab.",
+    "Choisissez des fichiers du même mandat. Tous les imports restent dans cet onglet, en local.",
+    "Scegli file dello stesso incarico. Tutte le importazioni restano in locale in questa scheda.",
+    "اختر ملفات التكليف نفسه. تبقى جميع الملفات المستوردة محلياً في علامة التبويب هذه."
+  ],
+  "Beispiel hinzufügen": [
+    "Add example",
+    "Ajouter un exemple",
+    "Aggiungi esempio",
+    "أضِف مثالاً"
+  ],
+  "{files} Dateien · {observations} Beobachtungen in der Auswahl": [
+    "Files: {files} · Observations in selection: {observations}",
+    "Fichiers : {files} · Observations dans la sélection : {observations}",
+    "File: {files} · Osservazioni nella selezione: {observations}",
+    "الملفات: {files} · المشاهدات في التحديد: {observations}"
+  ],
+  "Seite {page} von {total}": [
+    "Page {page} of {total}",
+    "Page {page} sur {total}",
+    "Pagina {page} di {total}",
+    "الصفحة {page} من {total}"
+  ],
+  "Kein Hostbezug": [
+    "No host reference",
+    "Aucune référence d’hôte",
+    "Nessun riferimento all’host",
+    "لا يوجد مرجع مضيف"
+  ],
+  "Duplikat zu {prior} · ungeprüft": [
+    "Duplicate of {prior} · unverified",
+    "Doublon de {prior} · non vérifié",
+    "Duplicato di {prior} · non verificato",
+    "نسخة مكررة من {prior} · غير متحقق منها"
+  ],
+  "Scope und Controls ungeprüft": [
+    "Scope and controls unverified",
+    "Périmètre et contrôles non vérifiés",
+    "Perimetro e controlli non verificati",
+    "النطاق والضوابط غير متحقق منهما"
+  ],
+  "Für diese Auswahl liegen keine Beobachtungen vor.": [
+    "No observations for this selection.",
+    "Aucune observation pour cette sélection.",
+    "Nessuna osservazione per questa selezione.",
+    "لا توجد مشاهدات لهذا التحديد."
+  ],
+  "Dieser Arbeitsbereich enthält noch keine Dateien.": [
+    "This workspace does not contain any files yet.",
+    "Cet espace de travail ne contient encore aucun fichier.",
+    "Quest’area di lavoro non contiene ancora file.",
+    "لا تحتوي مساحة العمل هذه على ملفات بعد."
+  ],
+  "Keine Quelldateien.": [
+    "No source files.",
+    "Aucun fichier source.",
+    "Nessun file sorgente.",
+    "لا توجد ملفات مصدر."
+  ],
+  "Dateien werden lokal geprüft …": [
+    "Checking files locally …",
+    "Vérification locale des fichiers…",
+    "Verifica locale dei file in corso…",
+    "جارٍ فحص الملفات محلياً…"
+  ],
+  "Pro Auswahl sind höchstens 20 Dateien zulässig.": [
+    "Select up to 20 files at a time.",
+    "Sélectionnez au maximum 20 fichiers à la fois.",
+    "Seleziona al massimo 20 file alla volta.",
+    "اختر ما يصل إلى 20 ملفاً في المرة الواحدة."
+  ],
+  "Die Datei muss zwischen 1 Byte und 1 MiB gross sein.": [
+    "The file must be between 1 byte and 1 MiB.",
+    "La taille du fichier doit être comprise entre 1 octet et 1 Mio.",
+    "Il file deve avere una dimensione compresa tra 1 byte e 1 MiB.",
+    "يجب أن يتراوح حجم الملف بين بايت واحد و1 MiB."
+  ],
+  "Die gemeinsame Dateigrenze ist erreicht. Leere bei Bedarf einen Arbeitsbereich.": [
+    "The shared file limit has been reached. Clear a workspace if necessary.",
+    "La limite commune de fichiers est atteinte. Videz un espace de travail si nécessaire.",
+    "È stato raggiunto il limite complessivo di file. Svuota un’area di lavoro se necessario.",
+    "بلغت الحد الإجمالي لعدد الملفات. أفرغ إحدى مساحات العمل عند الحاجة."
+  ],
+  "Die Datei lässt sich in diesem Format nicht verarbeiten.": [
+    "The file cannot be processed in this format.",
+    "Ce fichier ne peut pas être traité dans ce format.",
+    "Impossibile elaborare il file in questo formato.",
+    "تعذّرت معالجة الملف بهذا التنسيق."
+  ],
+  "Arbeitsbereich geleert.": [
+    "Workspace cleared.",
+    "Espace de travail vidé.",
+    "Area di lavoro svuotata.",
+    "أُفرغت مساحة العمل."
+  ],
+  "{records} Datensätze · {bytes} Bytes · SHA-256": [
+    "Records: {records} · Bytes: {bytes} · SHA-256",
+    "Enregistrements : {records} · Octets : {bytes} · SHA-256",
+    "Record: {records} · Byte: {bytes} · SHA-256",
+    "السجلات: {records} · البايتات: {bytes} · SHA-256"
+  ],
+  "Datei {n} ist bereits als {id} enthalten (identische Bytes).": [
+    "File {n} is already present as {id} (identical bytes).",
+    "Le fichier {n} est déjà présent sous {id} (octets identiques).",
+    "Il file {n} è già presente come {id} (byte identici).",
+    "الملف {n} موجود بالفعل بالمعرّف {id} (البايتات متطابقة)."
+  ],
+  "{id} eingelesen · {tool} · {count} Beobachtungen.": [
+    "Imported {id} · {tool} · Observations: {count}.",
+    "{id} importé · {tool} · Observations : {count}.",
+    "{id} importato · {tool} · Osservazioni: {count}.",
+    "استُورد {id} · {tool} · المشاهدات: {count}."
+  ],
+  "Datei {n} abgelehnt. {reason}": [
+    "File {n} rejected. {reason}",
+    "Fichier {n} refusé. {reason}",
+    "File {n} rifiutato. {reason}",
+    "رُفض الملف {n}. {reason}"
+  ],
+  "Werkzeugübergreifende Asset-Ansicht": [
+    "Cross-tool asset view",
+    "Vue des actifs par outil",
+    "Vista delle risorse tra strumenti",
+    "عرض الأصول عبر الأدوات"
+  ],
+  "Importiere eine Quelldatei, um ihre Hostbezüge zu sehen.": [
+    "Import a source file to view its host references.",
+    "Importez un fichier source pour voir ses références d’hôtes.",
+    "Importa un file sorgente per vederne i riferimenti agli host.",
+    "استورد ملف مصدر لعرض مراجع المضيفين فيه."
+  ],
+  "Werkzeug": [
+    "Tool",
+    "Outil",
+    "Strumento",
+    "الأداة"
+  ],
+  "Position": [
+    "Position",
+    "Position",
+    "Posizione",
+    "الموضع"
+  ],
+  "SHA-256 der Datei": [
+    "File SHA-256",
+    "SHA-256 du fichier",
+    "SHA-256 del file",
+    "بصمة SHA-256 للملف"
+  ],
+  "Fingerabdruck des Datensatzes": [
+    "Record fingerprint",
+    "Empreinte de l’enregistrement",
+    "Impronta del record",
+    "بصمة السجل"
+  ],
+  "Quellverweise": [
+    "Source references",
+    "Références aux sources",
+    "Riferimenti alle fonti",
+    "مراجع المصادر"
+  ],
+  "Beobachtungen nach gemeldeter Hostkennung": [
+    "Observations by reported host identifier",
+    "Observations par identifiant d’hôte signalé",
+    "Osservazioni per identificativo host segnalato",
+    "المشاهدات حسب معرّف المضيف المُبلّغ عنه"
+  ],
+  "Datensätze je Werkzeug": [
+    "Records by tool",
+    "Enregistrements par outil",
+    "Record per strumento",
+    "السجلات حسب الأداة"
+  ],
+  "Datensätze ohne zugeordneten Host": [
+    "Records without an associated host",
+    "Enregistrements sans hôte associé",
+    "Record senza host associato",
+    "السجلات دون مضيف مرتبط"
+  ],
+  "Gleiche Hostkennungen verbinden Beobachtungen innerhalb dieses Arbeitsbereichs. Jede Quellenposition bleibt einzeln nachvollziehbar. Mandatsumfang, Controls und Abdeckung sind ungeprüft.": [
+    "Matching host identifiers link observations within this workspace. Each source position can be traced individually. Engagement scope, controls and coverage are unverified.",
+    "Les identifiants d’hôte identiques relient les observations dans cet espace. Chaque position dans la source reste traçable individuellement. Le périmètre du mandat, les contrôles et la couverture ne sont pas vérifiés.",
+    "Identificativi host uguali collegano le osservazioni in quest’area di lavoro. Ogni posizione nella fonte resta tracciabile singolarmente. Perimetro dell’incarico, controlli e copertura non sono verificati.",
+    "تربط معرّفات المضيف المتطابقة المشاهدات داخل مساحة العمل هذه. يمكن تتبّع كل موضع في المصدر على حدة. لم يُتحقق من نطاق التكليف والضوابط والتغطية."
+  ],
+  "Beispiel-Belegindex als JSON speichern": [
+    "Save example evidence index as JSON",
+    "Enregistrer l’index des preuves de l’exemple en JSON",
+    "Salva l’indice delle evidenze di esempio in JSON",
+    "احفظ فهرس أدلة المثال بتنسيق JSON"
+  ],
+  "Belegindex als JSON speichern": [
+    "Save evidence index as JSON",
+    "Enregistrer l’index des preuves en JSON",
+    "Salva l’indice delle evidenze in JSON",
+    "احفظ فهرس الأدلة بتنسيق JSON"
+  ],
+  "Gleicher Beobachtungsbeleg": [
+    "Matching observation evidence",
+    "Preuves d’observation concordantes",
+    "Evidenze di osservazione coincidenti",
+    "أدلة المشاهدة متطابقة"
+  ],
+  "Beobachtungsbelege weichen ab": [
+    "Observation evidence differs",
+    "Les preuves d’observation divergent",
+    "Le evidenze di osservazione differiscono",
+    "أدلة المشاهدة مختلفة"
+  ],
+  "Nur früher belegt · not_retested": [
+    "Evidence only in earlier import · not_retested",
+    "Preuve uniquement dans l’import antérieur · not_retested",
+    "Evidenza solo nell’importazione precedente · not_retested",
+    "دليل في الاستيراد الأسبق فقط · not_retested"
+  ],
+  "Nur im späteren Import belegt": [
+    "Evidence only in the later import",
+    "Preuve uniquement dans l’import ultérieur",
+    "Evidenza solo nell’importazione successiva",
+    "دليل في الاستيراد اللاحق فقط"
+  ],
+  "Mehrdeutiger Bezug · ungeprüft": [
+    "Ambiguous reference · unverified",
+    "Référence ambiguë · non vérifiée",
+    "Riferimento ambiguo · non verificato",
+    "مرجع ملتبس · غير متحقق منه"
+  ],
+  "Zuordnung unklar · ungeprüft": [
+    "Unclear association · unverified",
+    "Association incertaine · non vérifiée",
+    "Associazione incerta · non verificata",
+    "ارتباط غير واضح · غير متحقق منه"
+  ],
+  "Zwei Quelldateien auswählen.": [
+    "Choose two source files.",
+    "Sélectionnez deux fichiers sources.",
+    "Seleziona due file sorgente.",
+    "اختر ملفّي مصدر."
+  ],
+  "Die beiden Importe müssen aus demselben Werkzeug stammen.": [
+    "Both imports must come from the same tool.",
+    "Les deux imports doivent provenir du même outil.",
+    "Entrambe le importazioni devono provenire dallo stesso strumento.",
+    "يجب أن يكون الملفان المستوردان صادرين عن الأداة نفسها."
+  ],
+  "Beispieldaten und eigene Mandatsdaten werden getrennt verglichen.": [
+    "Example data and your engagement data are compared separately.",
+    "Les données d’exemple et celles de votre mandat sont comparées séparément.",
+    "I dati di esempio e quelli del tuo incarico sono confrontati separatamente.",
+    "تُقارن بيانات المثال وبيانات تكليفك في مجموعتين منفصلتين."
+  ],
+  "Für diesen Vergleich fehlen ein Dateinachweis oder die Beobachtungen.": [
+    "File evidence or observations are missing for this comparison.",
+    "Il manque une preuve de fichier ou les observations nécessaires à cette comparaison.",
+    "Per questo confronto mancano l’evidenza del file o le osservazioni.",
+    "تنقص هذه المقارنة أدلة الملف أو المشاهدات."
+  ],
+  "Beide Importe haben denselben Datei-Hash. Damit liegt nur ein eigenständiger Dateibeleg vor.": [
+    "Both imports have the same file hash. They provide only one independent item of file evidence.",
+    "Les deux imports ont la même empreinte. Ils ne constituent qu’une seule preuve de fichier indépendante.",
+    "Entrambe le importazioni hanno lo stesso hash. Costituiscono quindi un’unica evidenza indipendente del file.",
+    "بصمة الملف متطابقة في الاستيرادين. لذا لا يتوافر سوى دليل ملف مستقل واحد."
+  ],
+  "Asset / Fallbezug": [
+    "Asset / case reference",
+    "Actif / référence du cas",
+    "Risorsa / riferimento al caso",
+    "الأصل / مرجع الحالة"
+  ],
+  "Frühere Quelle": [
+    "Earlier source",
+    "Source antérieure",
+    "Fonte precedente",
+    "المصدر الأسبق"
+  ],
+  "Spätere Quelle": [
+    "Later source",
+    "Source ultérieure",
+    "Fonte successiva",
+    "المصدر اللاحق"
+  ],
+  "Belegstatus": [
+    "Evidence status",
+    "Statut de la preuve",
+    "Stato dell’evidenza",
+    "حالة الدليل"
+  ],
+  "Weitere 40 Vergleichszeilen anzeigen": [
+    "Show 40 more comparison rows",
+    "Afficher 40 lignes de comparaison supplémentaires",
+    "Mostra altre 40 righe di confronto",
+    "اعرض 40 صف مقارنة إضافياً"
+  ],
+  "Unbekanntes Asset": [
+    "Unknown asset",
+    "Actif inconnu",
+    "Risorsa sconosciuta",
+    "أصل غير معروف"
+  ],
+  "Zwei Importstände vergleichen": [
+    "Compare two imports",
+    "Comparer deux imports",
+    "Confronta due importazioni",
+    "قارِن استيرادين"
+  ],
+  "Legen Sie die zeitliche Reihenfolge fest. Der Vergleich benötigt zwei Dateien desselben Werkzeugs mit eindeutigem Asset- und Fallbezug.": [
+    "Set the chronological order. The comparison requires two files from the same tool with clear asset and case references.",
+    "Définissez l’ordre chronologique. La comparaison nécessite deux fichiers du même outil avec des références claires à l’actif et au cas.",
+    "Definisci l’ordine cronologico. Il confronto richiede due file dello stesso strumento con riferimenti univoci alla risorsa e al caso.",
+    "حدّد الترتيب الزمني. تتطلب المقارنة ملفين من الأداة نفسها مع مراجع واضحة للأصل والحالة."
+  ],
+  "Für den Vergleich mindestens zwei Quelldateien laden.": [
+    "Load at least two source files to compare.",
+    "Chargez au moins deux fichiers sources pour la comparaison.",
+    "Carica almeno due file sorgente per il confronto.",
+    "حمّل ملفّي مصدر على الأقل للمقارنة."
+  ],
+  "Datei wählen": [
+    "Choose file",
+    "Choisir un fichier",
+    "Scegli file",
+    "اختر ملفاً"
+  ],
+  "Unbekannt": [
+    "Unknown",
+    "Inconnu",
+    "Sconosciuto",
+    "غير معروف"
+  ],
+  "Hash fehlt": [
+    "Hash missing",
+    "Empreinte manquante",
+    "Hash mancante",
+    "البصمة مفقودة"
+  ],
+  "Früher": [
+    "Earlier",
+    "Antérieur",
+    "Precedente",
+    "الأسبق"
+  ],
+  "Später": [
+    "Later",
+    "Ultérieur",
+    "Successivo",
+    "اللاحق"
+  ],
+  "Beide Exporte stammen aus demselben freigegebenen Mandat und derselben Quell- oder Projektinstanz. Die Exportkonfiguration stimmt überein.": [
+    "Both exports come from the same authorized engagement and the same source or project instance. Their export settings match.",
+    "Les deux exports proviennent du même mandat autorisé et de la même instance source ou de projet. Leurs paramètres d’export correspondent.",
+    "Entrambe le esportazioni provengono dallo stesso incarico autorizzato e dalla stessa istanza sorgente o di progetto. Le impostazioni di esportazione coincidono.",
+    "ملفّا التصدير من التكليف المصرّح به نفسه ومن مثيل المصدر أو المشروع نفسه. تتطابق إعدادات التصدير."
+  ],
+  "Bestätige Mandat, Quellinstanz und Exportkonfiguration, um die Belege zu vergleichen.": [
+    "Confirm the engagement, source instance and export settings to compare the evidence.",
+    "Confirmez le mandat, l’instance source et les paramètres d’export pour comparer les preuves.",
+    "Conferma incarico, istanza sorgente e configurazione di esportazione per confrontare le evidenze.",
+    "أكّد التكليف ومثيل المصدر وإعدادات التصدير لمقارنة الأدلة."
+  ],
+  "Belege ({count})": [
+    "Evidence ({count})",
+    "Preuves ({count})",
+    "Evidenze ({count})",
+    "الأدلة ({count})"
+  ],
+  "Quellverweise für {asset}": [
+    "Source references for {asset}",
+    "Références sources pour {asset}",
+    "Riferimenti alle fonti per {asset}",
+    "مراجع المصدر للأصل {asset}"
+  ],
+  "Belege für Asset {asset} anzeigen": [
+    "View evidence for asset {asset}",
+    "Afficher les preuves de l’actif {asset}",
+    "Mostra le evidenze per la risorsa {asset}",
+    "اعرض أدلة الأصل {asset}"
+  ],
+  "Belege ohne Hostbezug ({count})": [
+    "Evidence without a host reference ({count})",
+    "Preuves sans référence d’hôte ({count})",
+    "Evidenze senza riferimento all’host ({count})",
+    "أدلة بلا مرجع مضيف ({count})"
+  ],
+  "{label} – vorherige Seite": [
+    "{label} – previous page",
+    "{label} – page précédente",
+    "{label} – pagina precedente",
+    "{label} – الصفحة السابقة"
+  ],
+  "{label} – nächste Seite": [
+    "{label} – next page",
+    "{label} – page suivante",
+    "{label} – pagina successiva",
+    "{label} – الصفحة التالية"
+  ],
+  "Hostkennungen: {hosts} · In mehreren Werkzeugen: {shared} · Datensätze ohne Hostbezug: {unassigned}.": [
+    "Host identifiers: {hosts} · Seen by multiple tools: {shared} · Records without a host reference: {unassigned}.",
+    "Identifiants d’hôte : {hosts} · Présents dans plusieurs outils : {shared} · Enregistrements sans référence d’hôte : {unassigned}.",
+    "Identificativi host: {hosts} · Presenti in più strumenti: {shared} · Record senza riferimento all’host: {unassigned}.",
+    "معرّفات المضيفين: {hosts} · ظاهرة في عدة أدوات: {shared} · السجلات بلا مرجع مضيف: {unassigned}."
+  ],
+  "Der unsignierte Index enthält Werkzeugnamen, Hashwerte, Asset-IDs und Quellenpositionen. Bewahre ihn zusammen mit den Originalexporten auf.": [
+    "The unsigned index contains tool names, hashes, asset IDs and source positions. Keep it together with the original exports.",
+    "L’index non signé contient les noms d’outils, les empreintes, les identifiants d’actifs et les positions dans les sources. Conservez-le avec les exports d’origine.",
+    "L’indice non firmato contiene nomi degli strumenti, hash, ID delle risorse e posizioni nelle fonti. Conservalo insieme alle esportazioni originali.",
+    "يتضمن الفهرس غير الموقّع أسماء الأدوات والبصمات ومعرّفات الأصول والمواضع في المصدر. احتفظ به مع ملفات التصدير الأصلية."
+  ],
+  "{before} Datensätze früher, {after} später. Der Vergleich ordnet Importbelege zu. Eine Korrektur ist erst durch einen belegten Retest prüfbar.": [
+    "Earlier records: {before}, later records: {after}. The comparison links import evidence. Verifying a fix requires a documented retest.",
+    "Enregistrements antérieurs : {before}, ultérieurs : {after}. La comparaison associe les preuves d’import. Vérifier une correction nécessite un nouveau test documenté.",
+    "Record precedenti: {before}, successivi: {after}. Il confronto associa le evidenze delle importazioni. Per verificare una correzione serve un nuovo test documentato.",
+    "السجلات السابقة: {before}، واللاحقة: {after}. تربط المقارنة أدلة الاستيراد. يتطلب التحقق من الإصلاح إعادة اختبار موثّقة."
+  ],
+  "Vergleich je Asset und Fallbezug · {source}": [
+    "Comparison by asset and case reference · {source}",
+    "Comparaison par actif et référence de cas · {source}",
+    "Confronto per risorsa e riferimento al caso · {source}",
+    "مقارنة حسب الأصل ومرجع الحالة · {source}"
+  ],
+  "Beispiel": [
+    "Example",
+    "Exemple",
+    "Esempio",
+    "مثال"
+  ],
+  "Assets": [
+    "Assets",
+    "Actifs",
+    "Risorse",
+    "الأصول"
+  ],
+  "Cobalt-Strike-Telemetrie": [
+    "Cobalt Strike telemetry",
+    "Télémétrie Cobalt Strike",
+    "Telemetria Cobalt Strike",
+    "بيانات القياس عن بُعد لـ Cobalt Strike"
+  ],
+  "Das Dateiregister ist ungültig.": [
+    "The file registry is invalid.",
+    "Le registre des fichiers est invalide.",
+    "Il registro dei file non è valido.",
+    "سجل الملفات غير صالح."
+  ],
+  "Eigene Dateien und Beispiele benötigen getrennte Belegindizes.": [
+    "Your files and examples require separate evidence indexes.",
+    "Vos fichiers et les exemples nécessitent des index de preuves séparés.",
+    "I tuoi file e gli esempi richiedono indici delle evidenze separati.",
+    "تتطلب ملفاتك والأمثلة فهرسين منفصلين للأدلة."
+  ],
+  "Ein Quelldateibeleg ist unvollständig.": [
+    "A source file evidence record is incomplete.",
+    "Une preuve de fichier source est incomplète.",
+    "Un’evidenza relativa a un file sorgente è incompleta.",
+    "أحد أدلة ملفات المصدر غير مكتمل."
+  ],
+  "Der Index enthält zu viele Datensätze.": [
+    "The index contains too many records.",
+    "L’index contient trop d’enregistrements.",
+    "L’indice contiene troppi record.",
+    "يحتوي الفهرس على سجلات أكثر من الحد المسموح."
+  ],
+  "Ein Datensatz enthält einen ungültigen Quellverweis.": [
+    "A record contains an invalid source reference.",
+    "Un enregistrement contient une référence source invalide.",
+    "Un record contiene un riferimento alla fonte non valido.",
+    "يتضمن أحد السجلات مرجع مصدر غير صالح."
   ]
 }

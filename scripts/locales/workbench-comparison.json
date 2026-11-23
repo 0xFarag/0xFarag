@@ -1,0 +1,284 @@
+{
+  "Fall geändert": [
+    "Case changed",
+    "Cas modifié",
+    "Caso modificato",
+    "تغيّرت الحالة"
+  ],
+  "Nur Belegstand geändert": [
+    "Only evidence context changed",
+    "Seul le contexte des preuves a changé",
+    "È cambiato solo il contesto delle evidenze",
+    "تغيّر سياق الأدلة فقط"
+  ],
+  "Nur im ersten Stand": [
+    "Only in the first snapshot",
+    "Uniquement dans le premier état",
+    "Solo nella prima versione",
+    "في اللقطة الأولى فقط"
+  ],
+  "Nur im zweiten Stand": [
+    "Only in the second snapshot",
+    "Uniquement dans le second état",
+    "Solo nella seconda versione",
+    "في اللقطة الثانية فقط"
+  ],
+  "Bindung ungeklärt": [
+    "Binding unresolved",
+    "Lien non établi",
+    "Collegamento da verificare",
+    "الارتباط غير محسوم"
+  ],
+  "Gleich": [
+    "Identical",
+    "Identique",
+    "Identico",
+    "متطابق"
+  ],
+  "Alle vom Reader angezeigten Felder stimmen überein.": [
+    "All fields displayed by the reader match.",
+    "Tous les champs affichés par le lecteur concordent.",
+    "Tutti i campi visualizzati dal lettore coincidono.",
+    "جميع الحقول المعروضة في القارئ متطابقة."
+  ],
+  "Die ID erscheint nur im ersten Stand. Der Behebungsstatus bleibt offen.": [
+    "The ID appears only in the first snapshot. Remediation remains unverified.",
+    "L’identifiant figure uniquement dans le premier état. La correction reste à vérifier.",
+    "L’ID compare solo nella prima versione. La correzione resta da verificare.",
+    "يظهر المعرّف في اللقطة الأولى فقط. لم يتأكد الإصلاح بعد."
+  ],
+  "Die ID erscheint erstmals in diesem Vergleich. Wann der Befund entstanden ist, bleibt offen.": [
+    "The ID first appears in the second snapshot. The time the finding arose is unknown.",
+    "L’identifiant apparaît pour la première fois dans le second état. La date d’apparition du constat reste inconnue.",
+    "L’ID compare per la prima volta nella seconda versione. Non si conosce la data di origine del riscontro.",
+    "يظهر المعرّف أول مرة في اللقطة الثانية. وقت ظهور المشكلة غير معروف."
+  ],
+  "Die Fall-ID stimmt überein. Der zusätzliche Bindungsnachweis fehlt oder unterscheidet sich.": [
+    "The case ID matches. The additional binding evidence is missing or differs.",
+    "L’identifiant du cas concorde. La preuve supplémentaire du lien manque ou diffère.",
+    "L’ID del caso coincide. L’ulteriore evidenza del collegamento manca o differisce.",
+    "معرّف الحالة متطابق، لكن دليل الارتباط الإضافي مفقود أو مختلف."
+  ],
+  "Feld fehlt": [
+    "Field missing",
+    "Champ absent",
+    "Campo assente",
+    "الحقل غير موجود"
+  ],
+  "Bindungsnachweis im ersten und zweiten Stand": [
+    "Binding evidence in the first and second snapshots",
+    "Preuves du lien dans les deux états",
+    "Prove del collegamento nelle due versioni",
+    "دليل الارتباط في اللقطتين الأولى والثانية"
+  ],
+  "Fehlt": [
+    "Missing",
+    "Absent",
+    "Assente",
+    "مفقود"
+  ],
+  "Belegstände vergleichen": [
+    "Compare evidence snapshots",
+    "Comparer les états des preuves",
+    "Confronta le versioni delle evidenze",
+    "مقارنة لقطات الأدلة"
+  ],
+  "Vergleichen Sie denselben Quellentyp aus demselben Assessment und Scope. Der Vergleich zeigt, welche dokumentierten Felder sich geändert haben.": [
+    "Compare sources of the same type from the same assessment and scope to see which documented fields changed.",
+    "Comparez des sources du même type, issues de la même évaluation et du même périmètre, pour identifier les champs modifiés.",
+    "Confronta fonti dello stesso tipo, appartenenti alla stessa valutazione e allo stesso perimetro, per individuare i campi modificati.",
+    "قارن مصدرين من النوع نفسه وضمن التقييم والنطاق نفسيهما لمعرفة الحقول الموثّقة التي تغيّرت."
+  ],
+  "Beispielvergleich öffnen": [
+    "Open example comparison",
+    "Ouvrir un exemple de comparaison",
+    "Apri un confronto di esempio",
+    "فتح مثال للمقارنة"
+  ],
+  "Erster Stand": [
+    "First snapshot",
+    "Premier état",
+    "Prima versione",
+    "اللقطة الأولى"
+  ],
+  "Zweiter Stand": [
+    "Second snapshot",
+    "Second état",
+    "Seconda versione",
+    "اللقطة الثانية"
+  ],
+  "{first}–{last} von {total}": [
+    "{first}–{last} of {total}",
+    "{first}–{last} sur {total}",
+    "{first}–{last} di {total}",
+    "{first}–{last} من {total}"
+  ],
+  "Keine Einträge": [
+    "No entries",
+    "Aucune entrée",
+    "Nessuna voce",
+    "لا توجد سجلات"
+  ],
+  "Laden Sie zwei passende Belegstände in den Arbeitsbereich.": [
+    "Load two compatible evidence snapshots into the workspace.",
+    "Chargez deux états de preuves compatibles dans l’espace de travail.",
+    "Carica nell’area di lavoro due versioni compatibili delle evidenze.",
+    "حمّل لقطتين متوافقتين من الأدلة في مساحة العمل."
+  ],
+  "Wählen Sie zwei verschiedene Einträge.": [
+    "Select two different entries.",
+    "Sélectionnez deux entrées différentes.",
+    "Seleziona due voci diverse.",
+    "اختر سجلين مختلفين."
+  ],
+  "Vergleich nicht möglich. {reason}": [
+    "Comparison unavailable. {reason}",
+    "Comparaison impossible. {reason}",
+    "Confronto non disponibile. {reason}",
+    "تعذّرت المقارنة. {reason}"
+  ],
+  "Die Datei-Fingerabdrücke stimmen überein.": [
+    "The file fingerprints match.",
+    "Les empreintes des fichiers concordent.",
+    "Le impronte dei file coincidono.",
+    "بصمتا الملفين متطابقتان."
+  ],
+  "{first} Einträge im ersten, {second} im zweiten Stand. Insgesamt {total} unterschiedliche IDs.": [
+    "Entries in the first snapshot: {first}. Entries in the second: {second}. Distinct IDs: {total}.",
+    "Entrées dans le premier état : {first}. Dans le second : {second}. Identifiants distincts : {total}.",
+    "Voci nella prima versione: {first}. Nella seconda: {second}. ID distinti: {total}.",
+    "عدد السجلات في اللقطة الأولى: {first}، وفي الثانية: {second}. عدد المعرّفات المختلفة: {total}."
+  ],
+  "Angezeigte IDs": [
+    "IDs to display",
+    "Identifiants affichés",
+    "ID visualizzati",
+    "المعرّفات المعروضة"
+  ],
+  "Alle Einträge": [
+    "All entries",
+    "Toutes les entrées",
+    "Tutte le voci",
+    "جميع السجلات"
+  ],
+  "Zurück": [
+    "Previous",
+    "Précédent",
+    "Indietro",
+    "السابق"
+  ],
+  "Weiter": [
+    "Next",
+    "Suivant",
+    "Avanti",
+    "التالي"
+  ],
+  "Übungsfall · Stand {number}": [
+    "Practice case · Snapshot {number}",
+    "Cas pratique · État {number}",
+    "Caso di esercitazione · Versione {number}",
+    "حالة تدريبية · اللقطة {number}"
+  ],
+  "Zu meinen Belegständen": [
+    "Return to my snapshots",
+    "Revenir à mes états de preuves",
+    "Torna alle mie evidenze",
+    "العودة إلى لقطاتي"
+  ],
+  "Synthetisches Beispiel. Ein Fall wechselt im zweiten Stand den Status. Der zweite Fall bleibt ungeprüft und ist in beiden Ständen sichtbar.": [
+    "Synthetic example. One case changes status in the second snapshot. The other remains untested and is visible in both snapshots.",
+    "Exemple synthétique. Le statut d’un cas change dans le second état. L’autre reste non testé et visible dans les deux états.",
+    "Esempio sintetico. Un caso cambia stato nella seconda versione. L’altro resta non verificato ed è visibile in entrambe.",
+    "مثال اصطناعي. تتغيّر حالة أحد السجلين في اللقطة الثانية. يبقى السجل الآخر دون اختبار ويظهر في كلتا اللقطتين."
+  ],
+  "Die Übungsbelege konnten nicht gelesen werden.": [
+    "The practice evidence could not be read.",
+    "Impossible de lire les preuves de l’exercice.",
+    "Impossibile leggere le evidenze dell’esercitazione.",
+    "تعذّرت قراءة أدلة التمرين."
+  ],
+  "Wählen Sie zwei Belegstände.": [
+    "Select two evidence snapshots.",
+    "Sélectionnez deux états de preuves.",
+    "Seleziona due versioni delle evidenze.",
+    "اختر لقطتين من الأدلة."
+  ],
+  "Die Indizes enthalten ungeprüfte Quellverweise. Für einen Vergleich laden Sie zwei Originalexporte desselben Werkzeugs im lokalen Belegimport.": [
+    "The indexes contain unverified source references. To compare them, open two original exports from the same tool in the local evidence importer.",
+    "Les index contiennent des références non vérifiées. Pour comparer, ouvrez deux exports d’origine du même outil dans l’importateur local de preuves.",
+    "Gli indici contengono riferimenti non verificati. Per il confronto apri due esportazioni originali dello stesso strumento nell’importatore locale.",
+    "تحتوي الفهارس على مراجع مصادر غير متحقق منها. للمقارنة، افتح ملفَّي تصدير أصليين من الأداة نفسها في مستورد الأدلة المحلي."
+  ],
+  "SOC-Berichte lassen sich hier einzeln prüfen. Für einen gebundenen Standvergleich fehlen der ursprüngliche Retest und die Signaldatei. Die Hashangaben im Bericht allein belegen keine gemeinsame Herkunft.": [
+    "Review SOC reports individually here. A bound comparison requires the original retest and signal file. The reported hashes alone cannot establish common origin.",
+    "Examinez ici les rapports SOC individuellement. Une comparaison liée exige le test de contrôle d’origine et le fichier de signaux. Les seules empreintes du rapport ne prouvent pas une origine commune.",
+    "I rapporti SOC si possono esaminare singolarmente. Un confronto collegato richiede il nuovo test originale e il file dei segnali. Le sole impronte dichiarate non dimostrano un’origine comune.",
+    "يمكن مراجعة تقارير مركز العمليات الأمنية هنا كلٌّ على حدة. تتطلب المقارنة المرتبطة إعادة الاختبار الأصلية وملف الإشارات. لا تثبت البصمات الواردة في التقرير وحدها وحدة المصدر."
+  ],
+  "Die Quellentypen unterscheiden sich oder werden für einen Vergleich nicht unterstützt.": [
+    "The source types differ or are unsupported for comparison.",
+    "Les types de sources diffèrent ou ne sont pas pris en charge pour la comparaison.",
+    "I tipi di fonte differiscono o non sono supportati per il confronto.",
+    "نوعا المصدرين مختلفان أو غير مدعومين للمقارنة."
+  ],
+  "Die Assessment-IDs fehlen oder stimmen nicht überein.": [
+    "The assessment IDs are missing or do not match.",
+    "Les identifiants d’évaluation manquent ou ne concordent pas.",
+    "Gli ID delle valutazioni mancano o non coincidono.",
+    "معرّفات التقييم مفقودة أو غير متطابقة."
+  ],
+  "Der gemeinsame Scope ist anhand der beiden Fingerabdrücke nicht belegbar.": [
+    "The two fingerprints cannot establish a shared scope.",
+    "Les deux empreintes ne permettent pas d’établir un périmètre commun.",
+    "Le due impronte non consentono di verificare un perimetro comune.",
+    "لا يمكن إثبات تطابق النطاق من البصمتين."
+  ],
+  "Die Retests haben keine nachweislich gemeinsame Baseline-Ausführung.": [
+    "The retests lack a verifiably shared baseline execution.",
+    "Les nouveaux tests n’ont pas d’exécution de référence commune vérifiable.",
+    "I nuovi test non hanno un’esecuzione di riferimento comune verificabile.",
+    "لا تتوافر لإعادتي الاختبار عملية مرجعية مشتركة يمكن التحقق منها."
+  ],
+  "Mindestens einer der beiden Datei-Fingerabdrücke fehlt.": [
+    "At least one of the two file fingerprints is missing.",
+    "Au moins une des deux empreintes de fichier manque.",
+    "Manca almeno una delle due impronte dei file.",
+    "بصمة أحد الملفين على الأقل مفقودة."
+  ],
+  "Mindestens ein Stand enthält fehlende oder mehrdeutige Fall-IDs.": [
+    "At least one snapshot has missing or ambiguous case IDs.",
+    "Au moins un état contient des identifiants de cas absents ou ambigus.",
+    "Almeno una versione presenta ID di caso mancanti o ambigui.",
+    "تحتوي لقطة واحدة على الأقل على معرّفات حالات مفقودة أو ملتبسة."
+  ],
+  "Bezeichnung": [
+    "Name",
+    "Désignation",
+    "Nome",
+    "الاسم"
+  ],
+  "Status der Quelle": [
+    "Source status",
+    "Statut de la source",
+    "Stato della fonte",
+    "حالة المصدر"
+  ],
+  "Quelle": [
+    "Source",
+    "Source",
+    "Fonte",
+    "المصدر"
+  ],
+  "Einordnung": [
+    "Interpretation",
+    "Interprétation",
+    "Interpretazione",
+    "التفسير"
+  ],
+  "Kein neuer Beleg": [
+    "No new evidence",
+    "Aucune nouvelle preuve",
+    "Nessuna nuova evidenza",
+    "لا يوجد دليل جديد"
+  ]
+}

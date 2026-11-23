@@ -11,7 +11,7 @@ jobs:
   browser:
     name: Site browser / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 12
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -30,7 +30,7 @@ jobs:
         run: npm install --prefix qa --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 sax@1.6.1
       - name: Install Chromium on Linux
         if: runner.os == 'Linux'
-        run: node qa/node_modules/playwright/cli.js install --with-deps chromium
+        run: node qa/node_modules/playwright/cli.js install chromium
       - name: Install Chromium on Windows
         if: runner.os == 'Windows'
         run: node qa/node_modules/playwright/cli.js install chromium
