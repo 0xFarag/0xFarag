@@ -1,7 +1,7 @@
 name: Verify AuthzLedger public website
 on:
   push:
-    branches: [launch/evidence-site-20261121, launch/evidence-import-20261123, authzledger-website]
+    branches: [launch/evidence-site-20261121, launch/evidence-import-20261123, launch/storefront-20261123, authzledger-website]
   workflow_dispatch:
 
 permissions:
@@ -20,6 +20,10 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+      - name: Materialize checksum-pinned download files
+        run: node scripts/build-downloads.mjs
+      - name: Check the complete offline download inventory
+        run: node scripts/build-downloads.mjs --check
       - name: Install pinned browser test runner
         run: npm install --prefix qa --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 sax@1.6.1
       - name: Install Chromium on Linux
@@ -30,6 +34,8 @@ jobs:
         run: node qa/node_modules/playwright/cli.js install chromium
       - name: Check source-bound observation comparisons
         run: node --test qa/import-formats.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
+      - name: Verify billing readiness, checkout and customer journeys
+        run: node --test qa/billing-api.cjs qa/customer.cjs qa/customer-browser.cjs
       - name: Test public pages and their evidence
         run: node qa/website.cjs
 
@@ -44,6 +50,8 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+      - name: Assemble the public downloads
+        run: node scripts/build-downloads.mjs
       - name: Check the Hostinger document root
         run: test -s public/index.html
       - name: Upload static site with index.html at the archive root

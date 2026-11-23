@@ -35,7 +35,7 @@ async function serveFile(request, response) {
 
 async function checkLinks(page, origin) {
   const files = new Map();
-  const htmlPages = ['/index.html', '/lab.html', '/installation.html', '/technik/hkdf/', '/import/'];
+  const htmlPages = ['/index.html', '/lab.html', '/installation.html', '/technik/hkdf/', '/import/', '/downloads/'];
   for (const source of htmlPages) {
     const response = await page.goto(origin + source);
     assert.equal(response.status(), 200, source);
@@ -52,6 +52,7 @@ async function checkLinks(page, origin) {
   for (const [name, hashes] of files) {
     const response = await page.request.get(origin + name);
     assert.equal(response.status(),200,name);
+    await response.dispose();
     if ([...hashes].some(Boolean)) {
       await page.goto(origin + name);
       for (const hash of hashes) {
@@ -63,34 +64,25 @@ async function checkLinks(page, origin) {
 }
 
 async function verifyDownloads(page, origin) {
-  await page.goto(origin + '/installation.html');
-  const packageUrls = await page.locator('#downloads a[download]').evaluateAll(nodes =>
-    nodes.map(a => a.href));
-  assert(packageUrls.length > 0, 'download buttons are present');
-  const inventory = await page.request.get(origin + '/downloads/empfaengerpruefer/SHA256SUMS.txt');
-  assert.equal(inventory.status(), 200);
-  const sums = new Map((await inventory.text()).trim().split(/\r?\n/).map(line => {
-    const match=/^([a-f0-9]{64})\s+(.+)$/.exec(line);
-    assert(match);
-    return [match[2],match[1]];
-  }));
-  for (const url of packageUrls) {
-    const target=new URL(url);
-    const name=decodeURIComponent(target.pathname.split('/').pop());
-    if (name === 'SHA256SUMS.txt') continue;
-    const expected=sums.get(name);
-    assert(expected,'documented SHA-256 for ' + name);
-    if (target.origin !== origin) {
-      assert.equal(target.origin,'https://github.com');
-      assert(target.pathname.startsWith('/0xFarag/0xFarag/releases/download/recipient-verifier-'));
+  const {releases} = require('../scripts/download-releases.json');
+  await page.goto(origin + '/downloads/');
+  const links = await page.locator('main a[download]').evaluateAll(nodes => nodes.map(a => a.href));
+  const binaries = new Map();
+  for (const release of releases) {
+    for (const asset of release.assets.filter(a => /\.(zip|deb|zst|gz|whl)$/.test(a.name))) {
+      binaries.set(origin + '/downloads/' + release.directory + '/' + asset.name, asset);
     }
-    const response=await page.request.get(url,{timeout:90_000});
-    assert.equal(response.status(),200,name);
-    const observed=crypto.createHash('sha256').update(await response.body()).digest('hex');
-    assert.equal(observed,expected,name);
+  }
+  assert.deepEqual([...links].sort(), [...binaries.keys()].sort(), 'each released binary has one first-party download');
+  for (const [url, asset] of binaries) {
+    const response = await page.request.get(url, {timeout: 90_000, maxRedirects: 0});
+    assert.equal(response.status(), 200, asset.name);
+    const bytes = await response.body();
+    assert.equal(bytes.byteLength, asset.bytes, asset.name);
+    assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'), asset.sha256, asset.name);
     await response.dispose();
   }
-  console.log('Verified SHA-256 for the packages linked from the downloads guide.');
+  console.log('Matched every package on the downloads page to its release hash without following redirects.');
 }
 async function exercise(browser, origin, width) {
   const context = await browser.newContext({
@@ -140,7 +132,7 @@ async function exercise(browser, origin, width) {
       assert.deepEqual(record.coverage.map(r=>r.status).sort(),['fix_verified','not_retested']);
     }
 
-    for (const target of ['', '/lab.html', '/installation.html']) {
+    for (const target of ['', '/lab.html', '/installation.html', '/downloads/']) {
       await page.goto(origin + target);
       assert(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth), 'horizontal overflow ' + width + ' ' + target);
     }

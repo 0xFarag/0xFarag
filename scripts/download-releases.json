@@ -1,0 +1,107 @@
+{
+  "rights": "© Nasser Aldin Farag (0xFarag). All rights reserved.",
+  "releases": [
+    {
+      "directory": "recipient-studio-preview-3",
+      "tag": "recipient-studio-1.5.0-preview.3",
+      "assets": [
+        {
+          "name": "AuthzLedger-Recipient-Studio-Preview3-Windows-x64.zip",
+          "bytes": 16597707,
+          "sha256": "c08d9250dfa55c50a24d823f5dab2dfeccfbbe59a1a7db28abe1939404908b99"
+        },
+        {
+          "name": "authzledger-verifier_1.5.0-preview3_all.deb",
+          "bytes": 9540,
+          "sha256": "f819dd789bd2f3884fb84ec13c1f86fd95f2f57a82ab0a6d77ceaa92f9faa541"
+        },
+        {
+          "name": "INSTALL-Studio.md",
+          "bytes": 2012,
+          "sha256": "471675a4b0f91beb7ed6e3756ec3e54b72d6e54d05ba1055ccede75237ad6203"
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "bytes": 314,
+          "sha256": "16e02469b22008c787ee5ea4f7ad7135d3d0b88af327aed04f7ba812682d564c"
+        }
+      ]
+    },
+    {
+      "directory": "recipient-verifier-preview-2",
+      "tag": "recipient-verifier-1.5.0-preview.2",
+      "assets": [
+        {
+          "name": "AuthzLedger-Arch-Pruefer-PKGBUILD.tar.gz",
+          "bytes": 7329,
+          "sha256": "fbd02941c3c33e773db72f8f3e7a3bc501da52feb4c7fa5967cf1eca541db06e"
+        },
+        {
+          "name": "authzledger-recipient-verifier-1.5.0.post1-linux-amd64.docker.tar.gz",
+          "bytes": 43071429,
+          "sha256": "e85800e70755866d6fcc3cb2fee9041b12c2a163973e3cfcac1e2ed239c71553"
+        },
+        {
+          "name": "authzledger-verifier-1.5.0pre1-1-any.pkg.tar.zst",
+          "bytes": 9600,
+          "sha256": "4d9051bf028a748054a981e38fe0ad31863e7c96e46ed796cc2ff3c9199c1d8e"
+        },
+        {
+          "name": "authzledger-verifier_1.5.0-preview1_all.deb",
+          "bytes": 6908,
+          "sha256": "d6d6541ddd03069d0f3cfb7554944f6f17ebb38ceef4c567aa63d2eec2ae632a"
+        },
+        {
+          "name": "AuthzLedger-Windows-x64-Pruefer-Preview.zip",
+          "bytes": 1804399,
+          "sha256": "80cde53853674baae0097776acd6eeef925073eeb4ae41be1f6c46c375216aa9"
+        },
+        {
+          "name": "AuthzLedger-Windows-x64-SelfContained.zip",
+          "bytes": 12263328,
+          "sha256": "ff76b615f2aeff1ab2659adec14835fb1b4872b0fa01af11e40acdc732a5985f"
+        },
+        {
+          "name": "authzledger_recipient_verifier-1.5.0.post1-py3-none-any.whl",
+          "bytes": 10376,
+          "sha256": "676bc9954204a3bcb5962730066139164190ceecfd60e9118319ecfb16ed5a83"
+        },
+        {
+          "name": "authzledger_recipient_verifier-1.5.0.post1.tar.gz",
+          "bytes": 8764,
+          "sha256": "70e07191098b41a6a64d0b2763fa978e7afa501cd657706fd2385c649a9b26f2"
+        },
+        {
+          "name": "DOCKER_IMAGE_ID.txt",
+          "bytes": 72,
+          "sha256": "f465402c979f2603d965d1c7f420a003b5edd1ef463632ff6e679b5e4db058d1"
+        },
+        {
+          "name": "LICENSE.AuthzLedger.txt",
+          "bytes": 1726,
+          "sha256": "a29abff6cb7662bfaa515ce8f9c4d1f25c07e634aa66a1a83ab5b965b56cf9b9"
+        },
+        {
+          "name": "NOTICE.AuthzLedger.txt",
+          "bytes": 1611,
+          "sha256": "a92cb04d0bd7854fea0e122ffdbfad0b41e0fef68874f63e2439bcc15d835816"
+        },
+        {
+          "name": "README.md",
+          "bytes": 1761,
+          "sha256": "ce78ddb6aeecc0844760000fb2d2da746ffc27e0e968b149f4a4e54e16af5787"
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "bytes": 1352,
+          "sha256": "c759d8251f3ba5ed5d57506eac913727fb84a84989ebec5b1515338f648771e5"
+        },
+        {
+          "name": "verification.json",
+          "bytes": 5250,
+          "sha256": "be230e3a90d00f45ab9422fa601e85e79a9c8d167039249455e4810d15f26cf0"
+        }
+      ]
+    }
+  ]
+}

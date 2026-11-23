@@ -1,0 +1,21 @@
+/* © Nasser Aldin Farag (0xFarag). All rights reserved. */
+.intro .wrap { padding: 3.1rem 0; }
+.intro h1 { margin-top: .2em; }
+.content .meta { color: #49606a; margin-bottom: .5rem; }
+.studio { grid-template-columns: repeat(auto-fit,minmax(min(100%,21rem),1fr)); }
+.studio article { padding: 1.45rem; justify-content: space-between; gap: .6rem; }
+.file { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .45rem; padding: .7rem .9rem; background: #071722; border-radius: .2rem; color: #fff; text-decoration: none; }
+.file:hover, .file:focus-visible { background: #143645; text-decoration: underline; }
+.file span { color: #9ee4df; font-size: .9rem; }
+.platforms { list-style: none; padding: 0; }
+.platforms li { border-bottom: 1px solid var(--line); padding: 1rem 0; display: grid; grid-template-columns: 1.2fr 1fr; gap: .9rem; max-width: none; }
+.platforms p { margin: .2rem 0; color: var(--muted); }
+.choices { display: flex; justify-content: flex-end; align-items: center; gap: .6rem 1rem; flex-wrap: wrap; }
+.choices a { font-weight: 620; }
+@media(max-width: 38rem) {
+  .platforms li { grid-template-columns: 1fr; }
+  .choices { justify-content: flex-start; }
+}
+
+.download-nav { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:.35rem 1.15rem; }
+@media(max-width:36rem){.download-nav { gap:.3rem .7rem; font-size:.9rem }}
