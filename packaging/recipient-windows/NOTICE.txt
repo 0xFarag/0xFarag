@@ -1,0 +1,7 @@
+AuthzLedger recipient verifier preview for v1.5.0
+ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
+
+Historical recipient verifier byte-for-byte from release v1.5.0, commit
+03aea857e35358ddeb13d2a861b633e60c1ca873. See upstream LICENSE and NOTICE.
+This independent packaging preview grants no additional commercial rights.
+The Go runtime and NSIS components are subject to their own notices.
