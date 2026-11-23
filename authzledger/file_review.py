@@ -115,15 +115,16 @@ def _scan_status(code, output):
                          output, re.I | re.M)
     if limited:
         return {**details, "status": "incomplete", "reason": "engine_limit_or_opaque_content"}
-    scanned = re.search(r"^Scanned files:[ \t]*1[ \t]*$", output, re.M)
+    counts = re.findall(r"^Scanned files:[ \t]*([0-9]{1,10})[ \t]*$", output, re.M)
+    scanned = int(counts[0]) if len(counts) == 1 else None
     infected = re.search(r"^Infected files:[ \t]*1[ \t]*$", output, re.M)
     definitions = re.search(r"^Known viruses:[ \t]*[1-9][0-9]*[ \t]*$", output, re.M)
     if warnings or not (details["engine_version"] and definitions):
         return {**details, "status": "incomplete", "reason": "engine_warning_or_incomplete_summary"}
     # ClamAV 1.5's stdin handler increments the infected counter rather than the
-    # scanned counter for a detection. A clean verdict still needs one scanned file.
-    reported_scan_count = re.search(r"^Scanned files:[ \t]*[01][ \t]*$", output, re.M)
-    if code == 1 and reported_scan_count and infected and names:
+    # scanned counter for a detection. Decoded objects can increment it more
+    # than once for a single stdin input. A negative result needs a positive count.
+    if code == 1 and scanned is not None and infected and names:
         return {**details, "status": "detection_reported"}
     if (code == 0 and scanned and not names and re.search(r"^stdin: OK[ \t]*$", output, re.M)
             and re.search(r"^Infected files:[ \t]*0[ \t]*$", output, re.M)):

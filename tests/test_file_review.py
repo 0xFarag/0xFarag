@@ -55,6 +55,8 @@ class LocalFileReviewTests(unittest.TestCase):
         self.assertEqual(_scan_status(1, matched)["status"], "detection_reported")
         self.assertEqual(_scan_status(1, matched.replace("Scanned files: 1", "Scanned files: 0"))["status"], "detection_reported")
         self.assertEqual(_scan_status(0, "stdin: OK\n" + summary())["status"], "no_detection_reported")
+        clean_with_objects = "stdin: OK\n" + summary().replace("Scanned files: 1", "Scanned files: 2")
+        self.assertEqual(_scan_status(0, clean_with_objects)["status"], "no_detection_reported")
         for code, message in [(1, matched.replace("Local.Test", "Heuristics.Limits.Exceeded.MaxFileSize")),
                               (1, matched.replace("Local.Test", "Heuristics.Encrypted.Zip")),
                               (0, "stdin: OK\n" + summary().replace("Scanned files: 1", "Scanned files: 0")),
