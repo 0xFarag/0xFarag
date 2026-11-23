@@ -15,7 +15,12 @@ jobs:
   verify:
     # The 1.6 review branch has its own exact-source CI. This job is the
     # historical 1.5 verifier and includes the 1.5-specific publication path.
-    if: github.ref != 'refs/heads/review/authzledger-1.6-offline-federation' && github.head_ref != 'review/authzledger-1.6-offline-federation'
+    # The stacked offline alert-coverage proposal has its own SOC-only checks.
+    if: >-
+      github.ref != 'refs/heads/review/authzledger-1.6-offline-federation' &&
+      github.head_ref != 'review/authzledger-1.6-offline-federation' &&
+      github.ref != 'refs/heads/review/blue-evidence-alert-coverage' &&
+      !(github.head_ref == 'review/blue-evidence-alert-coverage' && github.base_ref == 'review/authzledger-blue-evidence-offline')
     runs-on: ubuntu-latest
     timeout-minutes: 35
     outputs:

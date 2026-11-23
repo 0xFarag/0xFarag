@@ -65,6 +65,15 @@
       <p class="subtle">Select a saved retest readback and its signal export (512 KiB each). The unsigned comparison uses the assessment ID in those files and preserves its retest coverage.</p>
       <div class="form-grid"><label>Retest readback JSON<input id="p-blue-anchor" type="file" accept=".json"></label><label>Signal export JSON<input id="p-blue-signals" type="file" accept=".json"></label></div>
       <button id="p-blue-evaluate">Evaluate and download JSON</button><p id="p-blue-status" role="status"></p>
+      <div id="p-blue-results" hidden>
+        <p id="p-blue-retest"></p>
+        <div class="table-wrap"><table class="graph-table">
+          <caption>Detection evidence by sample</caption>
+          <thead><tr><th scope="col">Sample</th><th scope="col">Evidence</th><th scope="col">Events with a linked alert</th><th scope="col">Excluded events</th></tr></thead>
+          <tbody id="p-blue-rows"></tbody>
+        </table></div>
+        <p class="subtle">Eligible events match the source, finding, scope, assessment and time window. The JSON lists eligible event IDs without a matching alert in this export.</p>
+      </div>
     </details>
     <details><summary>Finite local schedules</summary><p id="p-schedules" class="subtle">No schedules retained.</p><label class="check"><input id="p-due-authorized" type="checkbox">Run currently due work within its retained plan approval, expiry and request budget.</label><button id="p-run-due">Run due approved work now</button><p class="subtle">This action processes due work once. It does not install a daemon or continue after Studio closes.</p></details>
     <div id="p-evidence" class="platform-records" aria-label="Retained execution evidence"></div><div class="actions"><button id="p-retest" disabled>Preview selected source-bound retest</button><button id="p-inspector-focus">Focus evidence inspector</button></div><p class="subtle">Unselected evidence remains not_retested. A disappeared endpoint or invalid control cannot prove a fix.</p>

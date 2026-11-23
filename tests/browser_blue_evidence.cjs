@@ -45,6 +45,24 @@ async function run() {
     assert.equal(result.samples.foreign.status, 'incomparable');
     assert.equal(result.source_assertions_verified, false);
     assert.match(await page.locator('#p-blue-status').textContent(), /Synthetic/);
+    assert.match(await page.locator('#p-blue-retest').textContent(), /1 of 2 findings not retested/);
+    const row = name => page.getByRole('row').filter({has: page.getByRole('rowheader', {name, exact: true})});
+    assert.match(await row('matched').innerText(), /1 of 1/);
+    assert.match(await row('foreign').innerText(), /No eligible events/);
+
+    const signals = JSON.parse(await fs.readFile(path.join(fixtures, 'control-lab.json'), 'utf8'));
+    const matched = signals.controls.matched;
+    matched.events.push({...matched.events[0], event: 'evt-second'});
+    await page.locator('#p-blue-signals').setInputFiles({
+      name: 'partial.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(signals))
+    });
+    assert.equal(await page.locator('#p-blue-results').isVisible(), false);
+    const [partialDownload] = await Promise.all([
+      page.waitForEvent('download'), page.locator('#p-blue-evaluate').press('Enter')
+    ]);
+    const partial = JSON.parse(await fs.readFile(await partialDownload.path(), 'utf8'));
+    assert.deepEqual(partial.samples.matched.alert_coverage.unlinked_event_ids, ['evt-second']);
+    assert.match(await row('matched').innerText(), /1 of 2/);
     assert.deepEqual(foreign, []);
     assert.deepEqual(errors, []);
     console.log('PASS: keyboard input, offline correlation, JSON download, no foreign requests');

@@ -78,8 +78,17 @@ def _compare(sample, expected, start, end):
         status = "incomparable"
     else:
         status = "unavailable"
-    return {"status": status, "event_count": len(events), "alert_count": len(alerts),
-            "matching_events": sorted(matches), "alerted_events": sorted(alarmed)}
+    unlinked = sorted(matches - alarmed)
+    return {
+        "status": status, "event_count": len(events), "alert_count": len(alerts),
+        "matching_events": sorted(matches), "alerted_events": sorted(alarmed),
+        "alert_coverage": {
+            "eligible_events": len(matches),
+            "linked_events": len(alarmed),
+            "excluded_events": len(events) - len(matches),
+            "unlinked_event_ids": unlinked,
+        },
+    }
 
 
 def correlate_retest(anchor_bytes: bytes, signal_bytes: bytes) -> dict:

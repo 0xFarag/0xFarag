@@ -36,6 +36,40 @@ class BlueEvidenceTest(unittest.TestCase):
         self.assertTrue(result["synthetic"])
         self.assertFalse(result["signed"])
 
+    def test_partial_alert_coverage_counts_unique_eligible_events(self):
+        sample = self.signals["controls"]["matched"]
+        first_event, first_alert = sample["events"][0], sample["alerts"][0]
+        sample["events"].extend([
+            dict(first_event, event="evt-z"), dict(first_event, event="evt-a"),
+            dict(first_event, event="foreign", scope="other"),
+            dict(first_event, event="too-late", at=self.signals["expectation"]["until_utc"]),
+        ])
+        sample["alerts"].extend([
+            dict(first_alert), dict(first_alert, event="evt-a", rule="other"),
+            dict(first_alert, event="foreign"), dict(first_alert, event="too-late"),
+        ])
+        result = self.project()
+        self.assertEqual(result["samples"]["matched"]["status"], "observed")
+        self.assertEqual(result["samples"]["matched"]["alert_coverage"], {
+            "eligible_events": 3, "linked_events": 1, "excluded_events": 2,
+            "unlinked_event_ids": ["evt-a", "evt-z"],
+        })
+        self.assertIn("not_retested", result["source_coverage"].values())
+
+    def test_coverage_preserves_empty_foreign_and_unlinked_samples(self):
+        samples = self.project()["samples"]
+        for name, eligible, linked, excluded, unlinked in [
+            ("matched", 1, 1, 0, []),
+            ("telemetry_only", 1, 0, 0, ["evt-lab-001"]),
+            ("no_data", 0, 0, 0, []),
+            ("foreign", 0, 0, 1, []),
+        ]:
+            with self.subTest(name=name):
+                self.assertEqual(samples[name]["alert_coverage"], {
+                    "eligible_events": eligible, "linked_events": linked,
+                    "excluded_events": excluded, "unlinked_event_ids": unlinked,
+                })
+
     def test_changed_original_rejected_even_when_json_is_equivalent(self):
         self.anchor += b"\n"
         with self.assertRaisesRegex(ValueError, "anchor"):
