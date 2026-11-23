@@ -54,6 +54,12 @@ jobs:
           python -m unittest discover -s qa -p 'test_team*.py' -v
           PYTHONPATH=. python packaging/team/launcher.py --self-test
 
+      - name: Exercise the Team workspace in Chromium
+        run: |
+          npm install --prefix qa --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          node qa/node_modules/playwright/cli.js install --with-deps chromium
+          node --test qa/team-ui.cjs
+
   linux:
     needs: source
     runs-on: ubuntu-24.04
