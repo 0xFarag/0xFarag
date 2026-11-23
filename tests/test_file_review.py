@@ -53,6 +53,7 @@ class LocalFileReviewTests(unittest.TestCase):
     def test_scanner_contract_with_conservative_evidence_states(self):
         matched = "stdin: Local.Test FOUND\n" + summary(1)
         self.assertEqual(_scan_status(1, matched)["status"], "detection_reported")
+        self.assertEqual(_scan_status(1, matched.replace("Scanned files: 1", "Scanned files: 0"))["status"], "detection_reported")
         self.assertEqual(_scan_status(0, "stdin: OK\n" + summary())["status"], "no_detection_reported")
         for code, message in [(1, matched.replace("Local.Test", "Heuristics.Limits.Exceeded.MaxFileSize")),
                               (1, matched.replace("Local.Test", "Heuristics.Encrypted.Zip")),
