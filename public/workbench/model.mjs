@@ -541,6 +541,18 @@ export async function parseProjection(inputBytes) {
   }
   object(input);
   checkKeys(text);
+  if (input.schema === 'authzledger.workbench.manual-case/v1') {
+    requireField(Object.keys(input).length === 3, 'Ungültige Felder im manuellen Fall.');
+    const title = string(input.title, 'Fallbezeichnung', 160);
+    const summary = input.observation;
+    requireField(typeof summary === 'string' && summary.trim().length > 0 && summary.length <= 1600 &&
+      !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\u202a-\u202e\u2066-\u2069]/u.test(summary),
+    'Ungültige Beobachtung im manuellen Fall.');
+    const fingerprint = await sha256(bytes);
+    return {kind:'manual', title:'Manuell erfasster Fall', assessment:null, scope:null,
+      digest:fingerprint, coverage:null, rows:[{id:'manual-1', title, summary, binding:fingerprint,
+        source:'Eigene Beobachtung', status:'hint', details:[]}]};
+  }
   const profiles = [input.demo === 'B', input.demo === 'C', input.kind === 'federated-surface-index', input.schema === 'authzledger.blue-evidence.v1',
     input.schema === 'authzledger.evidence-index.v1'];
   requireField(profiles.filter(Boolean).length === 1, 'Erwartet wird ein AuthzLedger-Befund B, Retest C, Quelleninventar, Belegindex oder SOC-Signalbericht.');

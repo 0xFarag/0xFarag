@@ -1,0 +1,51 @@
+name: Verify AuthzLedger public website
+on:
+  push:
+    branches: [integration/team-workbench-1.5.0.1]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    name: Site browser / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Materialize checksum-pinned download files
+        run: node scripts/build-downloads.mjs
+      - name: Check the complete offline download inventory
+        run: node scripts/build-downloads.mjs --check
+      - name: Rebuild the standalone download and test the extracted CLIs
+        run: python qa/test_offline_download.py
+      - name: Install pinned browser test runner
+        run: npm install --prefix qa --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 sax@1.6.1
+      - name: Install Chromium on Linux
+        if: runner.os == 'Linux'
+        run: node qa/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Install Chromium on Windows
+        if: runner.os == 'Windows'
+        run: node qa/node_modules/playwright/cli.js install chromium
+      - name: Check source-bound observation comparisons
+        run: node --test qa/import-formats.cjs qa/format-extensions.cjs qa/asset-review.cjs qa/ferox-format.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
+      - name: Check evidence workbench projections and comparisons
+        run: node --test qa/board-blue.test.mjs qa/board-compare.test.mjs qa/board-model.test.mjs qa/board-index.test.mjs qa/board-exports.test.mjs
+      - name: Verify native policy permissions, retests, file triage and vetted access
+        run: node --test qa/rbac-policy.test.mjs qa/rbac-retest.test.mjs qa/rbac-browser.cjs qa/rbac-matrix.test.mjs qa/rbac-matrix-browser.cjs qa/file-triage.test.mjs qa/file-triage-browser.cjs qa/pro-review.cjs qa/pro-access-browser.cjs
+      - name: Verify billing readiness, checkout and customer journeys
+        run: node --test qa/billing-api.cjs qa/customer.cjs qa/customer-browser.cjs
+      - name: Build standalone language routes
+        run: node scripts/build-locales.mjs
+      - name: Verify language switching, direction and retained state
+        run: node qa/languages.cjs
+      - name: Test public pages and their evidence
+        run: node qa/website.cjs
+

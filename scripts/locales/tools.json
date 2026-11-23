@@ -1,0 +1,1196 @@
+{
+  "Lokaler Belegimport | AuthzLedger": [
+    "Local evidence import · AuthzLedger",
+    "Import local de preuves · AuthzLedger",
+    "Importazione locale delle evidenze · AuthzLedger",
+    "استيراد الأدلة محلياً · AuthzLedger"
+  ],
+  "Zum Inhalt": [
+    "Skip to content",
+    "Aller au contenu",
+    "Vai al contenuto",
+    "انتقل إلى المحتوى"
+  ],
+  "AuthzLedger": [
+    "AuthzLedger",
+    "AuthzLedger",
+    "AuthzLedger",
+    "AuthzLedger"
+  ],
+  "Hauptnavigation": [
+    "Main navigation",
+    "Navigation principale",
+    "Navigazione principale",
+    "التنقل الرئيسي"
+  ],
+  "Arbeitsbereich": [
+    "Workspace",
+    "Espace de travail",
+    "Area di lavoro",
+    "مساحة العمل"
+  ],
+  "Downloads": [
+    "Downloads",
+    "Téléchargements",
+    "Download",
+    "التنزيلات"
+  ],
+  "Fachzugang": [
+    "Professional access",
+    "Accès professionnel",
+    "Accesso professionale",
+    "دخول المختصين"
+  ],
+  "Lokaler Belegimport": [
+    "Local evidence import",
+    "Import local de preuves",
+    "Importazione locale delle evidenze",
+    "استيراد الأدلة محلياً"
+  ],
+  "Vergleichen Sie Werkzeugberichte aus einem Mandat und verfolgen Sie jede Beobachtung bis zum Quelldatensatz. Welche Systeme zum Mandat gehören und welche Kontrollen greifen, beurteilen Sie anschliessend.": [
+    "Compare tool reports from one engagement and trace each observation to its source record. Then assess which systems are in scope and which controls apply.",
+    "Comparez les rapports d’outils d’un même mandat et remontez de chaque observation à son enregistrement source. Déterminez ensuite les systèmes couverts par le mandat et les contrôles applicables.",
+    "Confronta i rapporti degli strumenti dello stesso incarico e risali da ogni osservazione al record di origine. Valuta poi quali sistemi rientrano nell’incarico e quali controlli si applicano.",
+    "قارن تقارير أدوات المهمة نفسها وتتبّع كل ملاحظة حتى سجلّها الأصلي. حدّد بعدها الأنظمة الداخلة في نطاق المهمة والضوابط التي تنطبق عليها."
+  ],
+  "Quelldateien": [
+    "Source files",
+    "Fichiers sources",
+    "File di origine",
+    "الملفات المصدرية"
+  ],
+  "Eigene Dateien": [
+    "Your files",
+    "Vos fichiers",
+    "I tuoi file",
+    "ملفاتك"
+  ],
+  "Beispiele": [
+    "Examples",
+    "Exemples",
+    "Esempi",
+    "أمثلة"
+  ],
+  "Quellformat": [
+    "Source format",
+    "Format source",
+    "Formato di origine",
+    "صيغة المصدر"
+  ],
+  "Dateien auswählen": [
+    "Choose files",
+    "Choisir des fichiers",
+    "Scegli i file",
+    "اختر ملفات"
+  ],
+  "Folgebeispiel hinzufügen": [
+    "Add a follow-up example",
+    "Ajouter un exemple de suivi",
+    "Aggiungi un esempio successivo",
+    "أضف مثالاً لاحقاً"
+  ],
+  "Synthetisches Formatbeispiel ansehen": [
+    "View a synthetic format example",
+    "Voir un exemple de format synthétique",
+    "Visualizza un esempio sintetico del formato",
+    "اعرض مثالاً اصطناعياً للصيغة"
+  ],
+  "Beobachtungen": [
+    "Observations",
+    "Observations",
+    "Osservazioni",
+    "الملاحظات"
+  ],
+  "Arbeitsbereich leeren": [
+    "Clear workspace",
+    "Vider l’espace de travail",
+    "Svuota l’area di lavoro",
+    "أفرغ مساحة العمل"
+  ],
+  "Nach Quelle filtern": [
+    "Filter by source",
+    "Filtrer par source",
+    "Filtra per origine",
+    "تصفية حسب المصدر"
+  ],
+  "Alle Quellen": [
+    "All sources",
+    "Toutes les sources",
+    "Tutte le origini",
+    "كل المصادر"
+  ],
+  "Quellmetadaten und Prüfstatus": [
+    "Source metadata and review status",
+    "Métadonnées sources et état de vérification",
+    "Metadati di origine e stato della verifica",
+    "بيانات المصدر الوصفية وحالة المراجعة"
+  ],
+  "Quelle": [
+    "Source",
+    "Source",
+    "Origine",
+    "المصدر"
+  ],
+  "Herkunft": [
+    "Origin",
+    "Provenance",
+    "Provenienza",
+    "المنشأ"
+  ],
+  "Asset-ID": [
+    "Asset ID",
+    "Identifiant de l’actif",
+    "ID della risorsa",
+    "معرّف الأصل"
+  ],
+  "Quellmetadaten": [
+    "Source metadata",
+    "Métadonnées sources",
+    "Metadati di origine",
+    "بيانات المصدر الوصفية"
+  ],
+  "Prüfstatus": [
+    "Review status",
+    "État de vérification",
+    "Stato della verifica",
+    "حالة المراجعة"
+  ],
+  "Zurück": [
+    "Back",
+    "Précédent",
+    "Indietro",
+    "السابق"
+  ],
+  "Weiter": [
+    "Next",
+    "Suivant",
+    "Avanti",
+    "التالي"
+  ],
+  "Dateiregister und SHA-256-Prüfsummen": [
+    "File inventory and SHA-256 hashes",
+    "Inventaire des fichiers et empreintes SHA-256",
+    "Registro dei file e impronte SHA-256",
+    "سجلّ الملفات وبصمات SHA-256"
+  ],
+  "Zur Evidence Workbench": [
+    "Open Evidence Workbench",
+    "Ouvrir Evidence Workbench",
+    "Apri Evidence Workbench",
+    "افتح Evidence Workbench"
+  ],
+  "Vergleich der Beobachtungen": [
+    "Compare observations",
+    "Comparer les observations",
+    "Confronta le osservazioni",
+    "مقارنة الملاحظات"
+  ],
+  "Werkzeugübergreifende Asset-Übersicht": [
+    "Assets across tools",
+    "Vue des actifs par outil",
+    "Risorse rilevate dai vari strumenti",
+    "الأصول عبر الأدوات"
+  ],
+  "So lesen Sie die Tabelle": [
+    "How to read the table",
+    "Comment lire le tableau",
+    "Come leggere la tabella",
+    "كيفية قراءة الجدول"
+  ],
+  "Die SHA-256-Prüfsumme identifiziert die exakten Bytes der gewählten Datei. Datensatznummern zählen passende Elemente in Dokumentreihenfolge. Bei Textexporten steht die Zeilennummer. Duplikate behalten ihren eigenen Quellverweis. Die Asset-ID ist der gekürzte Hash des gemeldeten Hosts. Relative Pfade enthalten keinen Host.": [
+    "The SHA-256 hash identifies the exact bytes in the selected file. Record numbers follow the order of matching elements in the document. Text exports use line numbers. Duplicates retain their own source reference. The asset ID is the truncated hash of the reported host. Relative paths contain no host.",
+    "L’empreinte SHA-256 identifie les octets exacts du fichier choisi. Les numéros d’enregistrement suivent l’ordre des éléments correspondants dans le document. Les exports texte utilisent les numéros de ligne. Chaque doublon conserve sa référence source. L’identifiant de l’actif est l’empreinte tronquée de l’hôte déclaré. Un chemin relatif ne contient pas d’hôte.",
+    "L’impronta SHA-256 identifica gli esatti byte del file selezionato. I numeri di record seguono l’ordine degli elementi corrispondenti nel documento. Le esportazioni di testo usano i numeri di riga. Ogni duplicato conserva il proprio riferimento di origine. L’ID della risorsa è l’hash troncato dell’host riportato. I percorsi relativi non contengono un host.",
+    "تحدّد بصمة SHA-256 البايتات الدقيقة للملف المحدّد. يتبع ترقيم السجلات ترتيب العناصر المطابقة في المستند. تستخدم الملفات النصية أرقام الأسطر. تحتفظ السجلات المكرّرة بمراجعها الخاصة. معرّف الأصل هو بصمة مختصرة للمضيف المذكور. لا تتضمن المسارات النسبية اسم مضيف."
+  ],
+  "Alle Berichte bleiben im Arbeitsspeicher dieses Tabs. Neuladen leert beide Arbeitsbereiche. Pro Datei gelten 1 MiB und 1’000 Datensätze. Zusammen fassen die Arbeitsbereiche 20 Dateien, 5 MiB und 2’500 Datensätze. Jede Datei wird vollständig angenommen oder abgelehnt. Die XML-Profile verwerfen Entity-Deklarationen und weitere Verarbeitungsanweisungen innerhalb des Dokuments, auch als Literaltext. Ein leerer Import enthält keine passenden Einträge des gewählten Profils. Die Tabelle zeigt ausgewählte Metadaten. Eine Freigabe des Scopes und die Bestätigung eines Findings erfordern separate Nachweise.": [
+    "All reports stay in this tab’s memory. Reloading clears both workspaces. Each file is limited to 1 MiB and 1,000 records. Together, the workspaces hold up to 20 files, 5 MiB and 2,500 records. Each file is accepted or rejected in full. XML profiles reject entity declarations and additional processing instructions inside the document, even as literal text. An empty import means no entries matched the selected profile. The table shows selected metadata. Authorising scope and confirming a finding require separate evidence.",
+    "Tous les rapports restent en mémoire dans cet onglet. Le rechargement vide les deux espaces. Chaque fichier est limité à 1 Mio et 1 000 enregistrements. Les deux espaces réunis acceptent 20 fichiers, 5 Mio et 2 500 enregistrements. Chaque fichier est entièrement accepté ou refusé. Les profils XML refusent les déclarations d’entités et toute instruction de traitement supplémentaire dans le document, même sous forme de texte littéral. Un import vide indique qu’aucune entrée ne correspond au profil choisi. Le tableau affiche certaines métadonnées. L’approbation du périmètre et la confirmation d’un constat exigent des preuves distinctes.",
+    "Tutti i rapporti restano nella memoria della scheda. Ricaricare la pagina svuota entrambe le aree. Il limite per file è di 1 MiB e 1.000 record. In totale le due aree accettano 20 file, 5 MiB e 2.500 record. Ogni file viene accettato o rifiutato per intero. I profili XML rifiutano dichiarazioni di entità e ulteriori istruzioni di elaborazione nel documento, anche come testo letterale. Un’importazione vuota indica che nessuna voce corrisponde al profilo scelto. La tabella mostra una selezione dei metadati. L’approvazione dell’ambito e la conferma di un rilievo richiedono evidenze distinte.",
+    "تبقى جميع التقارير في ذاكرة علامة التبويب هذه. تؤدي إعادة التحميل إلى إفراغ مساحتي العمل. الحدّ لكل ملف هو 1 MiB و1,000 سجل، والحدّ الإجمالي للمساحتين هو 20 ملفاً و5 MiB و2,500 سجل. يُقبل كل ملف أو يُرفض بالكامل. ترفض ملفات تعريف XML إعلانات الكيانات وتعليمات المعالجة الإضافية داخل المستند حتى عند ورودها كنص حرفي. يعني الاستيراد الفارغ أن أياً من السجلات لم يطابق الملف التعريفي المختار. يبيّن الجدول بيانات وصفية مختارة. يتطلب اعتماد النطاق وتأكيد النتيجة دليلين منفصلين."
+  ],
+  "© Nasser Aldin Farag (0xFarag). All rights reserved.": [
+    "© Nasser Aldin Farag (0xFarag). All rights reserved.",
+    "© Nasser Aldin Farag (0xFarag). Tous droits réservés.",
+    "© Nasser Aldin Farag (0xFarag). Tutti i diritti riservati.",
+    "© Nasser Aldin Farag (0xFarag). جميع الحقوق محفوظة."
+  ],
+  "Lokale Dateiprüfung · AuthzLedger": [
+    "Local file review · AuthzLedger",
+    "Vérification locale de fichiers · AuthzLedger",
+    "Verifica locale dei file · AuthzLedger",
+    "فحص الملفات محلياً · AuthzLedger"
+  ],
+  "Dateihashes und Formatmerkmale lokal prüfen und vorhandene VirusTotal-Berichte der passenden Datei zuordnen.": [
+    "Check file hashes and format signatures locally and match existing VirusTotal reports to the corresponding file.",
+    "Vérifiez localement les empreintes et les signatures de format et associez les rapports VirusTotal existants au fichier correspondant.",
+    "Verifica localmente le impronte e le firme di formato e associa i rapporti VirusTotal esistenti al file corrispondente.",
+    "افحص بصمات الملفات وسمات صيغها محلياً واربط تقارير VirusTotal الموجودة بالملف المطابق."
+  ],
+  "Lokale Dateiprüfung": [
+    "Local file review",
+    "Vérification locale de fichiers",
+    "Verifica locale dei file",
+    "فحص الملفات محلياً"
+  ],
+  "Ermitteln Sie Hashwerte und Formatmerkmale einer Datei. Einen vorhandenen VirusTotal-Bericht können Sie über ihren SHA-256 zuordnen. Alle Dateien bleiben in diesem Browserfenster.": [
+    "Inspect a file’s hashes and format signatures. Match an existing VirusTotal report using the file’s SHA-256. All files stay in this browser window.",
+    "Calculez les empreintes d’un fichier et examinez ses signatures de format. Associez un rapport VirusTotal existant à l’aide du SHA-256 du fichier. Tous les fichiers restent dans cette fenêtre.",
+    "Calcola le impronte di un file ed esaminane le firme di formato. Associa un rapporto VirusTotal esistente tramite il suo SHA-256. Tutti i file restano in questa finestra del browser.",
+    "احسب بصمات الملف وافحص سمات صيغته. اربط تقرير VirusTotal موجوداً باستخدام بصمة SHA-256 للملف. تبقى جميع الملفات في نافذة المتصفح هذه."
+  ],
+  "Aktivieren Sie JavaScript für die lokale Dateiprüfung.": [
+    "Enable JavaScript to review files locally.",
+    "Activez JavaScript pour vérifier les fichiers localement.",
+    "Attiva JavaScript per verificare i file localmente.",
+    "فعّل JavaScript لفحص الملفات محلياً."
+  ],
+  "Datei untersuchen": [
+    "Inspect a file",
+    "Examiner un fichier",
+    "Esamina un file",
+    "افحص ملفاً"
+  ],
+  "Bis 16 MiB. AuthzLedger liest die Dateibytes lokal und führt die Datei nicht aus.": [
+    "Up to 16 MiB. AuthzLedger reads the bytes locally without executing the file.",
+    "Jusqu’à 16 Mio. AuthzLedger lit les octets localement sans exécuter le fichier.",
+    "Fino a 16 MiB. AuthzLedger legge i byte localmente senza eseguire il file.",
+    "حتى 16 MiB. يقرأ AuthzLedger البايتات محلياً دون تشغيل الملف."
+  ],
+  "Datei auswählen": [
+    "Choose file",
+    "Choisir un fichier",
+    "Scegli un file",
+    "اختر ملفاً"
+  ],
+  "Sitzung leeren": [
+    "Clear session",
+    "Vider la session",
+    "Svuota la sessione",
+    "أفرغ الجلسة"
+  ],
+  "Formatmerkmal": [
+    "Format signature",
+    "Signature de format",
+    "Firma del formato",
+    "سمة الصيغة"
+  ],
+  "Grösse": [
+    "Size",
+    "Taille",
+    "Dimensione",
+    "الحجم"
+  ],
+  "Entropie": [
+    "Entropy",
+    "Entropie",
+    "Entropia",
+    "الإنتروبيا"
+  ],
+  "SHA-256": [
+    "SHA-256",
+    "SHA-256",
+    "SHA-256",
+    "SHA-256"
+  ],
+  "SHA-512": [
+    "SHA-512",
+    "SHA-512",
+    "SHA-512",
+    "SHA-512"
+  ],
+  "Statische Hinweise": [
+    "Static indicators",
+    "Indicateurs statiques",
+    "Indicatori statici",
+    "المؤشرات الساكنة"
+  ],
+  "Die Entropie beschreibt die Verteilung der Bytewerte. Formatmerkmale und Hinweise allein erlauben kein Urteil über Schadsoftware.": [
+    "Entropy describes the distribution of byte values. Format signatures and indicators alone cannot establish whether a file is malware.",
+    "L’entropie décrit la distribution des valeurs des octets. À eux seuls, les signatures de format et les indicateurs ne permettent pas de conclure qu’un fichier est malveillant.",
+    "L’entropia descrive la distribuzione dei valori dei byte. Da soli, firme di formato e indicatori non permettono di stabilire se un file sia dannoso.",
+    "تصف الإنتروبيا توزيع قيم البايتات. لا تكفي سمات الصيغة والمؤشرات وحدها للحكم على ما إذا كان الملف ضارّاً."
+  ],
+  "Mit Hashliste abgleichen": [
+    "Compare with a hash list",
+    "Comparer à une liste d’empreintes",
+    "Confronta con un elenco di impronte",
+    "قارن بقائمة بصمات"
+  ],
+  "Eine UTF-8-Textdatei mit einem SHA-256 je Zeile, bis 1 MiB. Leerzeilen und Kommentare mit": [
+    "A UTF-8 text file with one SHA-256 hash per line, up to 1 MiB. Blank lines and comments starting with",
+    "Un fichier texte UTF-8 contenant une empreinte SHA-256 par ligne, de 1 Mio maximum. Les lignes vides et les commentaires commençant par",
+    "Un file di testo UTF-8 con un’impronta SHA-256 per riga, fino a 1 MiB. Le righe vuote e i commenti che iniziano con",
+    "ملف نصّي بترميز UTF-8، فيه بصمة SHA-256 واحدة لكل سطر وحجمه حتى 1 MiB. الأسطر الفارغة والتعليقات التي تبدأ بالرمز"
+  ],
+  "sind erlaubt.": [
+    "are allowed.",
+    "sont autorisés.",
+    "sono ammessi.",
+    "مسموح بها."
+  ],
+  "Hashliste auswählen": [
+    "Choose hash list",
+    "Choisir une liste d’empreintes",
+    "Scegli un elenco di impronte",
+    "اختر قائمة بصمات"
+  ],
+  "VirusTotal-Bericht zuordnen": [
+    "Match a VirusTotal report",
+    "Associer un rapport VirusTotal",
+    "Associa un rapporto VirusTotal",
+    "اربط تقرير VirusTotal"
+  ],
+  "Öffnen Sie einen vorhandenen JSON-Bericht vom Typ VirusTotal API v3 File Object, bis 2 MiB. Die Zuordnung prüft den Dateihash. Herkunft und Aktualität des Berichts bleiben ungeprüft.": [
+    "Open an existing JSON report in the VirusTotal API v3 File Object format, up to 2 MiB. Matching checks the file hash. Report provenance and freshness are unverified.",
+    "Ouvrez un rapport JSON existant au format File Object de l’API VirusTotal v3, de 2 Mio maximum. L’association vérifie l’empreinte du fichier. La provenance et l’actualité du rapport restent à vérifier.",
+    "Apri un rapporto JSON esistente nel formato File Object dell’API VirusTotal v3, fino a 2 MiB. L’associazione controlla l’hash del file. Origine e attualità del rapporto non vengono verificate.",
+    "افتح تقرير JSON موجوداً بصيغة File Object من VirusTotal API v3، بحجم أقصاه 2 MiB. تتحقق المطابقة من بصمة الملف. يبقى مصدر التقرير وحداثته دون تحقق."
+  ],
+  "Bericht auswählen": [
+    "Choose report",
+    "Choisir un rapport",
+    "Scegli un rapporto",
+    "اختر تقريراً"
+  ],
+  "Dateibeleg sichern": [
+    "Save file evidence",
+    "Enregistrer les éléments de preuve du fichier",
+    "Salva le evidenze del file",
+    "احفظ أدلة الملف"
+  ],
+  "Die unsignierte JSON-Datei enthält Hashwerte, Formatmerkmale und zugeordnete Vergleichsergebnisse. Dateinamen, Originalinhalte und einzelne Einträge der Hashliste bleiben aus dem Export.": [
+    "The unsigned JSON contains hashes, format signatures and matching results. File names, original content and individual hash-list entries are excluded.",
+    "Le JSON non signé contient les empreintes, les signatures de format et les résultats des comparaisons. Les noms de fichiers, le contenu original et les entrées individuelles de la liste d’empreintes sont exclus.",
+    "Il JSON non firmato contiene impronte, firme di formato e risultati dei confronti. L’esportazione esclude nomi dei file, contenuti originali e singole voci dell’elenco di impronte.",
+    "يتضمن ملف JSON غير الموقّع البصمات وسمات الصيغة ونتائج المطابقة. يُستثنى من التصدير اسم الملف والمحتوى الأصلي والمدخلات الفردية لقائمة البصمات."
+  ],
+  "Für einen zusätzlichen Virenscan auf Ihrem Rechner enthält das": [
+    "For an additional antivirus scan on your computer, the",
+    "Pour effectuer une analyse antivirus supplémentaire sur votre ordinateur, le",
+    "Per una scansione antivirus aggiuntiva sul tuo computer, il",
+    "لإجراء فحص إضافي للفيروسات على حاسوبك، تتضمن"
+  ],
+  "Offline-Werkzeugpaket": [
+    "offline toolkit",
+    "kit d’outils hors ligne",
+    "pacchetto di strumenti offline",
+    "حزمة الأدوات دون اتصال"
+  ],
+  "eine Anbindung an Ihr installiertes ClamAV.": [
+    "can use your installed copy of ClamAV.",
+    "peut utiliser votre installation de ClamAV.",
+    "può usare la tua installazione di ClamAV.",
+    "تكاملاً مع نسخة ClamAV المثبّتة لديك."
+  ],
+  "Dateibeleg als JSON speichern": [
+    "Save file evidence as JSON",
+    "Enregistrer les preuves au format JSON",
+    "Salva le evidenze in JSON",
+    "احفظ أدلة الملف بصيغة JSON"
+  ],
+  "Nasser Aldin Farag (0xFarag) · Schweiz": [
+    "Nasser Aldin Farag (0xFarag) · Switzerland",
+    "Nasser Aldin Farag (0xFarag) · Suisse",
+    "Nasser Aldin Farag (0xFarag) · Svizzera",
+    "Nasser Aldin Farag (0xFarag) · سويسرا"
+  ],
+  "Weitere Informationen": [
+    "More information",
+    "Informations complémentaires",
+    "Altre informazioni",
+    "مزيد من المعلومات"
+  ],
+  "Produkt": [
+    "Product",
+    "Produit",
+    "Prodotto",
+    "المنتج"
+  ],
+  "Lizenz": [
+    "Licence",
+    "Licence",
+    "Licenza",
+    "الترخيص"
+  ],
+  "Fachzugang · AuthzLedger": [
+    "Professional access · AuthzLedger",
+    "Accès professionnel · AuthzLedger",
+    "Accesso professionale · AuthzLedger",
+    "دخول المختصين · AuthzLedger"
+  ],
+  "Fachzugang beantragen und offene Prüfschritte für mehrere Berechtigungsfälle auswerten.": [
+    "Request professional access and assess the outstanding review steps for several authorisation cases.",
+    "Demandez un accès professionnel et déterminez les étapes de vérification restantes pour plusieurs cas d’autorisation.",
+    "Richiedi l’accesso professionale e valuta i passaggi di verifica ancora aperti per più casi di autorizzazione.",
+    "اطلب دخول المختصين وحدّد خطوات المراجعة المتبقية لعدّة حالات تفويض."
+  ],
+  "Kundenkonto": [
+    "Customer account",
+    "Compte client",
+    "Account cliente",
+    "حساب العميل"
+  ],
+  "Welche Fälle brauchen einen Scope-Entscheid, einen Kontrollbeleg oder einen Retest? Die Fallprüfung ordnet den nächsten Arbeitsschritt für bis zu 32 Fälle.": [
+    "Which cases need a scope decision, control evidence or a retest? Prioritise the next review step for up to 32 cases.",
+    "Quels cas nécessitent une décision sur le périmètre, une preuve de contrôle ou un nouveau test ? Déterminez la prochaine étape pour un maximum de 32 cas.",
+    "Quali casi richiedono una decisione sull’ambito, un’evidenza di controllo o un nuovo test? Individua il passo successivo per un massimo di 32 casi.",
+    "ما الحالات التي تحتاج إلى قرار بشأن النطاق أو دليل على الضوابط أو إعادة اختبار؟ حدّد خطوة المراجعة التالية لما يصل إلى 32 حالة."
+  ],
+  "Mit diesem Browser anmelden": [
+    "Sign in with this browser",
+    "Se connecter avec ce navigateur",
+    "Accedi con questo browser",
+    "سجّل الدخول بهذا المتصفح"
+  ],
+  "Die Freigabe gilt für einen persönlichen Prüfschlüssel. Ihr Browser speichert den privaten Teil als nicht exportierbaren Schlüssel. Wenn Sie das Browserprofil wechseln oder seine Websitedaten löschen, brauchen Sie eine neue Freigabe.": [
+    "Approval is tied to a personal review key. Your browser stores its private part as a non-exportable key. Changing browser profiles or clearing site data requires a new approval.",
+    "L’accès est lié à une clé personnelle de vérification. Votre navigateur conserve sa partie privée sous forme de clé non exportable. Si vous changez de profil ou effacez les données du site, vous devrez obtenir une nouvelle autorisation.",
+    "L’accesso è associato a una chiave personale di verifica. Il browser ne conserva la parte privata come chiave non esportabile. Cambiando profilo o cancellando i dati del sito dovrai ottenere una nuova autorizzazione.",
+    "ترتبط الموافقة بمفتاح مراجعة شخصي. يحفظ المتصفح جزأه الخاص كمفتاح غير قابل للتصدير. إذا غيّرت ملف تعريف المتصفح أو حذفت بيانات الموقع، فستحتاج إلى موافقة جديدة."
+  ],
+  "Aktivieren Sie JavaScript, um einen Prüfschlüssel in diesem Browser zu verwenden.": [
+    "Enable JavaScript to use a review key in this browser.",
+    "Activez JavaScript pour utiliser une clé de vérification dans ce navigateur.",
+    "Attiva JavaScript per usare una chiave di verifica in questo browser.",
+    "فعّل JavaScript لاستخدام مفتاح مراجعة في هذا المتصفح."
+  ],
+  "Lokaler Schlüssel wird geprüft …": [
+    "Checking the local key …",
+    "Vérification de la clé locale…",
+    "Verifica della chiave locale in corso…",
+    "جارٍ التحقق من المفتاح المحلي…"
+  ],
+  "Prüfschlüssel erstellen": [
+    "Create review key",
+    "Créer une clé de vérification",
+    "Crea chiave di verifica",
+    "أنشئ مفتاح مراجعة"
+  ],
+  "Freigabe prüfen": [
+    "Check approval",
+    "Vérifier l’autorisation",
+    "Verifica l’autorizzazione",
+    "تحقّق من الموافقة"
+  ],
+  "Freigabe beantragen": [
+    "Request approval",
+    "Demander une autorisation",
+    "Richiedi l’autorizzazione",
+    "اطلب الموافقة"
+  ],
+  "Senden Sie den öffentlichen Antrag über den verlinkten Kontakt an Nasser Aldin Farag. Nennen Sie Ihre berufliche Rolle und den vorgesehenen Einsatz. Nasser prüft die Anfrage persönlich. Der Antrag enthält ausschliesslich öffentliche Schlüsseldaten.": [
+    "Send the public application to Nasser Aldin Farag using the contact link. Include your professional role and intended use. Nasser reviews each request personally. The application contains public key data only.",
+    "Envoyez la demande publique à Nasser Aldin Farag via le lien de contact. Précisez votre fonction et l’usage prévu. Nasser examine personnellement les demandes. Le dossier contient uniquement les données publiques de la clé.",
+    "Invia la richiesta pubblica a Nasser Aldin Farag tramite il collegamento di contatto. Indica il tuo ruolo professionale e l’uso previsto. Nasser esamina personalmente le richieste. La domanda contiene solo i dati pubblici della chiave.",
+    "أرسل الطلب العام إلى Nasser Aldin Farag عبر رابط التواصل، واذكر دورك المهني والاستخدام المقصود. يراجع ناصر كل طلب بنفسه. يتضمن الطلب بيانات المفتاح العامة فقط."
+  ],
+  "Fingerabdruck des öffentlichen Schlüssels (SHA-256, Base64url)": [
+    "Public key fingerprint (SHA-256, Base64url)",
+    "Empreinte de la clé publique (SHA-256, Base64url)",
+    "Impronta della chiave pubblica (SHA-256, Base64url)",
+    "بصمة المفتاح العام (SHA-256 وBase64url)"
+  ],
+  "Öffentlichen Antrag anzeigen": [
+    "Show public application",
+    "Afficher la demande publique",
+    "Mostra la richiesta pubblica",
+    "اعرض الطلب العام"
+  ],
+  "Antrag zum Kopieren": [
+    "Application to copy",
+    "Demande à copier",
+    "Richiesta da copiare",
+    "الطلب للنسخ"
+  ],
+  "Antrag als JSON speichern": [
+    "Save application as JSON",
+    "Enregistrer la demande en JSON",
+    "Salva la richiesta in JSON",
+    "احفظ الطلب بصيغة JSON"
+  ],
+  "Nasser auf LinkedIn kontaktieren": [
+    "Contact Nasser on LinkedIn",
+    "Contacter Nasser sur LinkedIn",
+    "Contatta Nasser su LinkedIn",
+    "تواصل مع ناصر عبر LinkedIn"
+  ],
+  "Öffentliche Werkzeuge": [
+    "Public tools",
+    "Outils publics",
+    "Strumenti pubblici",
+    "الأدوات العامة"
+  ],
+  "Für den lokalen Import und die Einzelprüfung von Belegen ist keine Anmeldung nötig.": [
+    "Local import and individual evidence review are available without signing in.",
+    "L’import local et la vérification individuelle des preuves sont accessibles sans connexion.",
+    "L’importazione locale e la verifica di singole evidenze sono disponibili senza accesso.",
+    "يمكن استيراد الأدلة محلياً ومراجعتها فرادى دون تسجيل الدخول."
+  ],
+  "Werkzeugberichte zusammenführen": [
+    "Combine tool reports",
+    "Regrouper les rapports d’outils",
+    "Riunisci i rapporti degli strumenti",
+    "ادمج تقارير الأدوات"
+  ],
+  "Belege in der Workbench prüfen": [
+    "Review evidence in the workbench",
+    "Examiner les preuves dans la workbench",
+    "Verifica le evidenze nella workbench",
+    "راجع الأدلة في مساحة العمل"
+  ],
+  "Rechnungen und Abos verwalten": [
+    "Manage invoices and subscriptions",
+    "Gérer les factures et les abonnements",
+    "Gestisci fatture e abbonamenti",
+    "أدر الفواتير والاشتراكات"
+  ],
+  "Fälle gemeinsam prüfen": [
+    "Review multiple cases",
+    "Vérifier plusieurs cas ensemble",
+    "Verifica più casi insieme",
+    "راجع عدة حالات معاً"
+  ],
+  "Wählen Sie pro Fall vier Prüfmerkmale. Beim Auswerten werden diese Auswahlen, Ihr Schlüsselfingerabdruck, die Antragszeit und die Signatur an AuthzLedger gesendet. Die Auswertung beruht auf Ihren Angaben. Halten Sie Fallnummern und Originalbelege lokal zusammen.": [
+    "Choose four review attributes per case. During evaluation, your selections, key fingerprint, request time and signature are sent to AuthzLedger. The results rely on your entries. Keep case numbers and their original evidence together locally.",
+    "Choisissez quatre critères par cas. Lors de l’évaluation, vos sélections, l’empreinte de votre clé, l’heure de la demande et la signature sont transmises à AuthzLedger. Le résultat repose sur vos indications. Conservez localement les numéros de cas avec leurs preuves originales.",
+    "Scegli quattro criteri per caso. Durante la valutazione, le scelte, l’impronta della chiave, l’ora della richiesta e la firma vengono inviate ad AuthzLedger. La valutazione si basa sui dati inseriti. Conserva localmente i numeri dei casi insieme alle evidenze originali.",
+    "اختر أربع سمات مراجعة لكل حالة. عند التقييم تُرسل اختياراتك وبصمة مفتاحك ووقت الطلب والتوقيع إلى AuthzLedger. يستند التقييم إلى مدخلاتك. احتفظ محلياً بأرقام الحالات مع أدلتها الأصلية."
+  ],
+  "Fall hinzufügen": [
+    "Add case",
+    "Ajouter un cas",
+    "Aggiungi caso",
+    "أضف حالة"
+  ],
+  "Fälle auswerten": [
+    "Evaluate cases",
+    "Évaluer les cas",
+    "Valuta i casi",
+    "قيّم الحالات"
+  ],
+  "RBAC-Prüfung · AuthzLedger": [
+    "RBAC review · AuthzLedger",
+    "Vérification RBAC · AuthzLedger",
+    "Verifica RBAC · AuthzLedger",
+    "مراجعة RBAC · AuthzLedger"
+  ],
+  "Kubernetes-Berechtigungen in lokalen RBAC-Snapshots nachvollziehen und ausgewählte Fragen erneut prüfen.": [
+    "Trace Kubernetes permissions in local RBAC snapshots and retest selected questions.",
+    "Retracez les autorisations Kubernetes dans des instantanés RBAC locaux et revérifiez les questions sélectionnées.",
+    "Ricostruisci le autorizzazioni Kubernetes da istantanee RBAC locali e ripeti le verifiche selezionate.",
+    "تتبّع صلاحيات Kubernetes في لقطات RBAC محلية وأعِد فحص الأسئلة المحدّدة."
+  ],
+  "Kubernetes-RBAC prüfen": [
+    "Review Kubernetes RBAC",
+    "Examiner le RBAC de Kubernetes",
+    "Verifica RBAC di Kubernetes",
+    "مراجعة RBAC في Kubernetes"
+  ],
+  "Welche Regel deckt eine konkrete Anfrage ab? Prüfen Sie lokale Richtlinienexporte und vergleichen Sie dieselbe Frage nach einer Änderung.": [
+    "Which rule covers a specific request? Examine local policy exports and compare the same question after a change.",
+    "Quelle règle couvre une requête précise ? Examinez les exports locaux de politiques et comparez la réponse à la même question après un changement.",
+    "Quale regola copre una determinata richiesta? Esamina le politiche esportate localmente e confronta la risposta alla stessa domanda dopo una modifica.",
+    "ما القاعدة التي تغطّي طلباً بعينه؟ افحص تصديرات السياسات محلياً وقارن إجابة السؤال نفسه بعد التغيير."
+  ],
+  "Aktivieren Sie JavaScript für die lokale Auswertung.": [
+    "Enable JavaScript for local evaluation.",
+    "Activez JavaScript pour effectuer l’évaluation localement.",
+    "Attiva JavaScript per eseguire la valutazione locale.",
+    "فعّل JavaScript للتقييم المحلي."
+  ],
+  "Ursprünglicher Snapshot": [
+    "Original snapshot",
+    "Instantané initial",
+    "Istantanea originale",
+    "اللقطة الأصلية"
+  ],
+  "Öffnen Sie einen Kubernetes-RBAC-v1-Export als UTF-8-JSON oder probieren Sie eine synthetische Leserolle aus. Beide Snapshots bleiben im Arbeitsspeicher. Je Snapshot gelten 2 MiB und 1’000 RBAC-Objekte.": [
+    "Open a Kubernetes RBAC v1 export as UTF-8 JSON or try a synthetic reader role. Both snapshots stay in memory. Each snapshot is limited to 2 MiB and 1,000 RBAC objects.",
+    "Ouvrez un export Kubernetes RBAC v1 au format JSON UTF-8 ou essayez un rôle de lecture synthétique. Les deux instantanés restent en mémoire. Chaque instantané est limité à 2 Mio et 1 000 objets RBAC.",
+    "Apri un’esportazione Kubernetes RBAC v1 in JSON UTF-8 oppure prova un ruolo sintetico di sola lettura. Entrambe le istantanee restano in memoria. Il limite per istantanea è di 2 MiB e 1.000 oggetti RBAC.",
+    "افتح تصدير Kubernetes RBAC v1 بصيغة JSON وترميز UTF-8 أو جرّب دور قراءة اصطناعياً. تبقى اللقطتان في الذاكرة. الحدّ لكل لقطة هو 2 MiB و1,000 كائن RBAC."
+  ],
+  "Original öffnen": [
+    "Open original",
+    "Ouvrir l’original",
+    "Apri originale",
+    "افتح الأصل"
+  ],
+  "Beispiel laden": [
+    "Load example",
+    "Charger un exemple",
+    "Carica esempio",
+    "حمّل المثال"
+  ],
+  "Prüffrage": [
+    "Review question",
+    "Question de vérification",
+    "Domanda di verifica",
+    "سؤال المراجعة"
+  ],
+  "Geben Sie die Anfrage so ein, wie sie vor dem API-Server aussehen würde. Benutzer- und Gruppenmitgliedschaften sind explizite Annahmen.": [
+    "Enter the request as it would appear to the API server. User and group memberships are explicit assumptions.",
+    "Saisissez la requête telle qu’elle se présenterait au serveur API. Les appartenances des utilisateurs et des groupes sont des hypothèses explicites.",
+    "Inserisci la richiesta come apparirebbe al server API. Le appartenenze degli utenti e dei gruppi sono ipotesi esplicite.",
+    "أدخل الطلب كما سيظهر لخادم API. تُعامَل عضويات المستخدمين والمجموعات كافتراضات صريحة."
+  ],
+  "Subjekttyp": [
+    "Subject type",
+    "Type de sujet",
+    "Tipo di soggetto",
+    "نوع الكيان"
+  ],
+  "User": [
+    "User",
+    "User",
+    "User",
+    "User"
+  ],
+  "Group": [
+    "Group",
+    "Group",
+    "Group",
+    "Group"
+  ],
+  "ServiceAccount": [
+    "ServiceAccount",
+    "ServiceAccount",
+    "ServiceAccount",
+    "ServiceAccount"
+  ],
+  "Subjektname": [
+    "Subject name",
+    "Nom du sujet",
+    "Nome del soggetto",
+    "اسم الكيان"
+  ],
+  "Namespace des ServiceAccounts": [
+    "ServiceAccount namespace",
+    "Espace de noms du ServiceAccount",
+    "Namespace del ServiceAccount",
+    "مساحة أسماء ServiceAccount"
+  ],
+  "Anfrage-Namespace": [
+    "Request namespace",
+    "Espace de noms de la requête",
+    "Namespace della richiesta",
+    "مساحة أسماء الطلب"
+  ],
+  "Leer für clusterweit": [
+    "Leave blank for cluster-wide",
+    "Laisser vide pour tout le cluster",
+    "Lascia vuoto per l’intero cluster",
+    "اتركه فارغاً ليشمل العنقود كله"
+  ],
+  "Verb": [
+    "Verb",
+    "Verbe",
+    "Verbo",
+    "الفعل"
+  ],
+  "API-Gruppe": [
+    "API group",
+    "Groupe API",
+    "Gruppo API",
+    "مجموعة API"
+  ],
+  "Leer für Core API": [
+    "Leave blank for the core API",
+    "Laisser vide pour l’API principale",
+    "Lascia vuoto per l’API core",
+    "اتركه فارغاً لواجهة API الأساسية"
+  ],
+  "Ressource (Plural)": [
+    "Resource (plural)",
+    "Ressource (pluriel)",
+    "Risorsa (plurale)",
+    "المورد (بصيغة الجمع)"
+  ],
+  "pods": [
+    "pods",
+    "pods",
+    "pods",
+    "pods"
+  ],
+  "Subressource (optional)": [
+    "Subresource (optional)",
+    "Sous-ressource (facultative)",
+    "Sottorisorsa (facoltativa)",
+    "المورد الفرعي (اختياري)"
+  ],
+  "log": [
+    "log",
+    "log",
+    "log",
+    "log"
+  ],
+  "Ressourcenname (optional)": [
+    "Resource name (optional)",
+    "Nom de la ressource (facultatif)",
+    "Nome della risorsa (facoltativo)",
+    "اسم المورد (اختياري)"
+  ],
+  "Namensselektor für list/watch": [
+    "Name selector for list/watch",
+    "Sélecteur de nom pour list/watch",
+    "Selettore di nome per list/watch",
+    "محدّد الاسم لعمليتَي list/watch"
+  ],
+  "Zusätzliche Gruppen (eine pro Zeile)": [
+    "Additional groups (one per line)",
+    "Groupes supplémentaires (un par ligne)",
+    "Gruppi aggiuntivi (uno per riga)",
+    "المجموعات الإضافية (مجموعة في كل سطر)"
+  ],
+  "Frage prüfen": [
+    "Evaluate question",
+    "Vérifier la question",
+    "Verifica la domanda",
+    "افحص السؤال"
+  ],
+  "Frage übernehmen": [
+    "Add question to selection",
+    "Ajouter la question à la sélection",
+    "Aggiungi la domanda alla selezione",
+    "أضف السؤال إلى التحديد"
+  ],
+  "Prüfbasis": [
+    "Baseline",
+    "Référence de vérification",
+    "Base di verifica",
+    "خط الأساس"
+  ],
+  "Die Basis verbindet bis zu 32 Fragen mit dem Original-Hash. Die exportierte Basis enthält auch die eingegebenen Subjektnamen, Gruppen und Ressourcennamen.": [
+    "The baseline links up to 32 questions to the original hash. The exported baseline also includes the subject names, groups and resource names you entered.",
+    "La référence associe jusqu’à 32 questions à l’empreinte d’origine. La référence exportée contient aussi les noms de sujets, les groupes et les noms de ressources saisis.",
+    "La base collega fino a 32 domande all’hash originale. L’esportazione della base include anche i nomi dei soggetti, i gruppi e i nomi delle risorse inseriti.",
+    "يربط خط الأساس حتى 32 سؤالاً بالبصمة الأصلية. يتضمن التصدير أيضاً أسماء الكيانات والمجموعات والموارد التي أدخلتها."
+  ],
+  "Prüfbasis erstellen": [
+    "Create baseline",
+    "Créer la référence",
+    "Crea base di verifica",
+    "أنشئ خط الأساس"
+  ],
+  "Basis als JSON speichern": [
+    "Save baseline as JSON",
+    "Enregistrer la référence en JSON",
+    "Salva la base in JSON",
+    "احفظ خط الأساس بصيغة JSON"
+  ],
+  "Gespeicherte Basis laden": [
+    "Load saved baseline",
+    "Charger une référence enregistrée",
+    "Carica una base salvata",
+    "حمّل خط أساس محفوظاً"
+  ],
+  "Ausgewählte Fragen erneut prüfen": [
+    "Retest selected questions",
+    "Revérifier les questions sélectionnées",
+    "Ripeti le verifiche selezionate",
+    "أعِد فحص الأسئلة المحدّدة"
+  ],
+  "Öffnen Sie den späteren Snapshot und wählen Sie die Fragen einzeln aus. Ausgelassene Fragen erscheinen als": [
+    "Open the later snapshot and select the questions individually. Omitted questions appear as",
+    "Ouvrez l’instantané ultérieur et sélectionnez les questions individuellement. Les questions omises apparaissent comme",
+    "Apri l’istantanea successiva e seleziona le singole domande. Le domande omesse sono indicate come",
+    "افتح اللقطة اللاحقة وحدّد الأسئلة بشكل منفصل. تظهر الأسئلة المتروكة بالحالة"
+  ],
+  ".": [
+    ".",
+    ".",
+    ".",
+    "."
+  ],
+  "Späteren Snapshot öffnen": [
+    "Open later snapshot",
+    "Ouvrir l’instantané ultérieur",
+    "Apri l’istantanea successiva",
+    "افتح اللقطة اللاحقة"
+  ],
+  "Geändertes Beispiel laden": [
+    "Load modified example",
+    "Charger l’exemple modifié",
+    "Carica l’esempio modificato",
+    "حمّل المثال المعدّل"
+  ],
+  "Fragen für diesen Retest": [
+    "Questions for this retest",
+    "Questions pour ce nouveau test",
+    "Domande per questa nuova verifica",
+    "أسئلة إعادة الاختبار هذه"
+  ],
+  "Auswahl erneut prüfen": [
+    "Retest selection",
+    "Revérifier la sélection",
+    "Ripeti la verifica della selezione",
+    "أعِد فحص التحديد"
+  ],
+  "Retest als JSON speichern": [
+    "Save retest as JSON",
+    "Enregistrer le nouveau test en JSON",
+    "Salva il nuovo test in JSON",
+    "احفظ إعادة الاختبار بصيغة JSON"
+  ],
+  "Geltungsbereich": [
+    "Scope",
+    "Périmètre",
+    "Ambito",
+    "النطاق"
+  ],
+  "Die Auswertung berücksichtigt Role, RoleBinding, ClusterRole und ClusterRoleBinding aus dem geöffneten Export. Sie bewertet Ressourcenanfragen anhand der gemeldeten Rollen und Bindungen. Live-Zugriff, andere Autorisierer, Admission-Regeln und Nicht-Ressourcen-URLs liegen ausserhalb der Prüfung. Unaufgelöste oder aggregierte Rollen und unvollständige Exporte können eine Entscheidung offenlassen.": [
+    "The evaluation covers Role, RoleBinding, ClusterRole and ClusterRoleBinding objects in the opened export. It assesses resource requests against the reported roles and bindings. Live access, other authorisers, admission rules and non-resource URLs are outside the review. Unresolved or aggregated roles and incomplete exports can leave a question undecided.",
+    "L’évaluation porte sur les objets Role, RoleBinding, ClusterRole et ClusterRoleBinding de l’export ouvert. Elle examine les requêtes de ressources au regard des rôles et des liaisons déclarés. L’accès en direct, les autres mécanismes d’autorisation, les règles d’admission et les URL hors ressources sont exclus. Les rôles non résolus ou agrégés et les exports incomplets peuvent empêcher de trancher.",
+    "La valutazione comprende gli oggetti Role, RoleBinding, ClusterRole e ClusterRoleBinding dell’esportazione aperta. Confronta le richieste di risorse con ruoli e associazioni riportati. Restano esclusi l’accesso live, altri sistemi di autorizzazione, le regole di ammissione e gli URL che non rappresentano risorse. Ruoli non risolti o aggregati ed esportazioni incomplete possono lasciare la domanda aperta.",
+    "يشمل التقييم كائنات Role وRoleBinding وClusterRole وClusterRoleBinding الواردة في التصدير المفتوح. ويقيّم طلبات الموارد حسب الأدوار والارتباطات المذكورة. يخرج عن نطاق المراجعة الوصول المباشر وآليات التفويض الأخرى وقواعد القبول وعناوين URL غير المرتبطة بالموارد. يمكن أن تمنع الأدوار غير المحلولة أو المجمّعة والتصديرات الناقصة حسم السؤال."
+  ],
+  "Unterstütztes RBAC-Profil und Grenzen": [
+    "Supported RBAC profile and limitations",
+    "Profil RBAC pris en charge et limites",
+    "Profilo RBAC supportato e limiti",
+    "ملف تعريف RBAC المدعوم وحدوده"
+  ],
+  "Evidence Workbench · AuthzLedger": [
+    "Evidence Workbench · AuthzLedger",
+    "Evidence Workbench · AuthzLedger",
+    "Evidence Workbench · AuthzLedger",
+    "Evidence Workbench · AuthzLedger"
+  ],
+  "Zum Arbeitsbereich": [
+    "Skip to workspace",
+    "Aller à l’espace de travail",
+    "Vai all’area di lavoro",
+    "انتقل إلى مساحة العمل"
+  ],
+  "Evidence Workbench": [
+    "Evidence Workbench",
+    "Evidence Workbench",
+    "Evidence Workbench",
+    "Evidence Workbench"
+  ],
+  "Belege prüfen": [
+    "Review evidence",
+    "Examiner les preuves",
+    "Verifica le evidenze",
+    "راجع الأدلة"
+  ],
+  "Öffnen Sie eine Belegquelle, prüfen Sie einzelne Fälle und dokumentieren Sie Ihren Entscheid für die Übergabe.": [
+    "Open an evidence source, review individual cases and record your decision for handover.",
+    "Ouvrez une source de preuves, examinez chaque cas et consignez votre décision pour la remise.",
+    "Apri una fonte di evidenze, verifica i singoli casi e registra la decisione per la consegna.",
+    "افتح مصدراً للأدلة وراجع الحالات منفردة ووثّق قرارك للتسليم."
+  ],
+  "Lokale Sitzung": [
+    "Local session",
+    "Session locale",
+    "Sessione locale",
+    "جلسة محلية"
+  ],
+  "Dateien und Notizen bleiben beim Prüfen in diesem Browserfenster.": [
+    "Files and notes stay in this browser window during review.",
+    "Les fichiers et les notes restent dans cette fenêtre pendant la vérification.",
+    "Durante la verifica, file e note restano in questa finestra del browser.",
+    "تبقى الملفات والملاحظات في نافذة المتصفح هذه أثناء المراجعة."
+  ],
+  "Aktivieren Sie JavaScript, um Belegdateien in diesem Browser auszuwerten.": [
+    "Enable JavaScript to review evidence files in this browser.",
+    "Activez JavaScript pour examiner les fichiers de preuve dans ce navigateur.",
+    "Attiva JavaScript per esaminare i file di evidenza in questo browser.",
+    "فعّل JavaScript لمراجعة ملفات الأدلة في هذا المتصفح."
+  ],
+  "Belegquelle": [
+    "Evidence source",
+    "Source de preuves",
+    "Fonte delle evidenze",
+    "مصدر الأدلة"
+  ],
+  "Demo C · Selektiver Retest": [
+    "Demo C · Selective retest",
+    "Démo C · Nouveau test sélectif",
+    "Demo C · Nuovo test selettivo",
+    "العرض C · إعادة اختبار انتقائية"
+  ],
+  "Demo B · Konfigurationsbefund": [
+    "Demo B · Configuration finding",
+    "Démo B · Constat de configuration",
+    "Demo B · Rilievo sulla configurazione",
+    "العرض B · نتيجة تخصّ الإعدادات"
+  ],
+  "Mischindex · Quelleninventar": [
+    "Mixed index · Source inventory",
+    "Index mixte · Inventaire des sources",
+    "Indice misto · Inventario delle fonti",
+    "فهرس مختلط · قائمة المصادر"
+  ],
+  "SOC-Signale · Alarmabdeckung": [
+    "SOC signals · Alert coverage",
+    "Signaux SOC · Couverture des alertes",
+    "Segnali SOC · Copertura degli avvisi",
+    "إشارات SOC · تغطية التنبيهات"
+  ],
+  "JSON-Dateien öffnen": [
+    "Open JSON files",
+    "Ouvrir des fichiers JSON",
+    "Apri file JSON",
+    "افتح ملفات JSON"
+  ],
+  "Öffnen Sie den Signalbericht": [
+    "Open the signal report",
+    "Ouvrez le rapport de signaux",
+    "Apri il rapporto dei segnali",
+    "افتح تقرير الإشارات"
+  ],
+  "aus AuthzLedger Studio oder der CLI direkt hier. Für Werkzeugexporte erstellen Sie zuerst im": [
+    "from AuthzLedger Studio or the CLI directly here. For tool exports, first use the",
+    "d’AuthzLedger Studio ou de la CLI directement ici. Pour les exports d’outils, utilisez d’abord l’",
+    "di AuthzLedger Studio o della CLI direttamente qui. Per le esportazioni degli strumenti, usa prima l’",
+    "من AuthzLedger Studio أو واجهة سطر الأوامر هنا مباشرة. لتصديرات الأدوات، استخدم أولاً"
+  ],
+  "lokalen Belegimport": [
+    "local evidence import",
+    "import local de preuves",
+    "importazione locale delle evidenze",
+    "أداة استيراد الأدلة محلياً"
+  ],
+  "einen Belegindex. Hier öffnen Sie den Index, Befund B, Retest C oder ein föderiertes Inventar. Maximal 2 MiB pro Datei.": [
+    "to create an evidence index. Then open the index, finding B, retest C or a federated inventory here. Up to 2 MiB per file.",
+    "pour créer un index de preuves. Ouvrez ensuite ici l’index, le constat B, le nouveau test C ou un inventaire fédéré. Maximum 2 Mio par fichier.",
+    "per creare un indice delle evidenze. Poi apri qui l’indice, il rilievo B, il nuovo test C o un inventario federato. Massimo 2 MiB per file.",
+    "لإنشاء فهرس للأدلة. ثم افتح هنا الفهرس أو النتيجة B أو إعادة الاختبار C أو قائمة موحّدة للمصادر. الحدّ الأقصى لكل ملف 2 MiB."
+  ],
+  "Das Retest-Beispiel wird geöffnet.": [
+    "Opening the retest example.",
+    "Ouverture de l’exemple de nouveau test.",
+    "Apertura dell’esempio di nuovo test.",
+    "جارٍ فتح مثال إعادة الاختبار."
+  ],
+  "Quelldateien und Originalbytes prüfen": [
+    "Verify source files and original bytes",
+    "Vérifier les fichiers sources et les octets originaux",
+    "Verifica i file di origine e i byte originali",
+    "تحقّق من الملفات المصدرية والبايتات الأصلية"
+  ],
+  "Wählen Sie die Originalexporte zum lokalen SHA-256-Abgleich. Die Workbench liest bis zu 1 MiB je Datei. Das Ergebnis bleibt in dieser Sitzung und ist im exportierten Review nicht enthalten.": [
+    "Select the original exports for a local SHA-256 comparison. The workbench reads up to 1 MiB per file. Results remain in this session and are excluded from the exported review.",
+    "Sélectionnez les exports originaux pour une comparaison locale des SHA-256. La workbench lit jusqu’à 1 Mio par fichier. Le résultat reste dans cette session et ne figure pas dans la revue exportée.",
+    "Seleziona le esportazioni originali per un confronto locale degli SHA-256. La workbench legge fino a 1 MiB per file. Il risultato resta nella sessione e viene escluso dalla revisione esportata.",
+    "حدّد التصديرات الأصلية لمقارنة بصمات SHA-256 محلياً. تقرأ مساحة العمل حتى 1 MiB لكل ملف. تبقى النتيجة في الجلسة الحالية ولا تُدرج في المراجعة المُصدَّرة."
+  ],
+  "Originaldateien abgleichen": [
+    "Compare original files",
+    "Comparer les fichiers originaux",
+    "Confronta i file originali",
+    "قارن الملفات الأصلية"
+  ],
+  "Quelldateien laut Index": [
+    "Source files listed in the index",
+    "Fichiers sources figurant dans l’index",
+    "File di origine elencati nell’indice",
+    "الملفات المصدرية الواردة في الفهرس"
+  ],
+  "Fallauswahl": [
+    "Case selection",
+    "Sélection des cas",
+    "Selezione dei casi",
+    "اختيار الحالات"
+  ],
+  "Suche": [
+    "Search",
+    "Rechercher",
+    "Cerca",
+    "بحث"
+  ],
+  "Titel, Quelle oder ID": [
+    "Title, source or ID",
+    "Titre, source ou identifiant",
+    "Titolo, origine o ID",
+    "العنوان أو المصدر أو المعرّف"
+  ],
+  "Prüfergebnis": [
+    "Review result",
+    "Résultat de vérification",
+    "Risultato della verifica",
+    "نتيجة المراجعة"
+  ],
+  "Alle Ergebnisse": [
+    "All results",
+    "Tous les résultats",
+    "Tutti i risultati",
+    "كل النتائج"
+  ],
+  "Fälle": [
+    "Cases",
+    "Cas",
+    "Casi",
+    "الحالات"
+  ],
+  "Weitere Fälle anzeigen": [
+    "Show more cases",
+    "Afficher plus de cas",
+    "Mostra altri casi",
+    "اعرض حالات إضافية"
+  ],
+  "Filter zurücksetzen": [
+    "Reset filters",
+    "Réinitialiser les filtres",
+    "Reimposta i filtri",
+    "أعد ضبط عوامل التصفية"
+  ],
+  "Falldetails": [
+    "Case details",
+    "Détails du cas",
+    "Dettagli del caso",
+    "تفاصيل الحالة"
+  ],
+  "Entscheid": [
+    "Decision",
+    "Décision",
+    "Decisione",
+    "القرار"
+  ],
+  "Bearbeitung": [
+    "Review progress",
+    "Suivi",
+    "Avanzamento",
+    "تقدّم المراجعة"
+  ],
+  "Technische Belege anzeigen": [
+    "Show technical evidence",
+    "Afficher les preuves techniques",
+    "Mostra le evidenze tecniche",
+    "اعرض الأدلة التقنية"
+  ],
+  "Eingabedateien für Studio oder CLI": [
+    "Input files for Studio or the CLI",
+    "Fichiers d’entrée pour Studio ou la CLI",
+    "File di input per Studio o la CLI",
+    "ملفات الإدخال لـ Studio أو واجهة سطر الأوامر"
+  ],
+  "Retest-Beleg (JSON)": [
+    "Retest evidence (JSON)",
+    "Preuve du nouveau test (JSON)",
+    "Evidenza del nuovo test (JSON)",
+    "دليل إعادة الاختبار (JSON)"
+  ],
+  "Kontrollsignale (JSON)": [
+    "Control signals (JSON)",
+    "Signaux de contrôle (JSON)",
+    "Segnali di controllo (JSON)",
+    "إشارات الضبط (JSON)"
+  ],
+  "Erzeugter Signalbericht (JSON)": [
+    "Generated signal report (JSON)",
+    "Rapport de signaux généré (JSON)",
+    "Rapporto dei segnali generato (JSON)",
+    "تقرير الإشارات الناتج (JSON)"
+  ],
+  "Beispiel mit der lokalen CLI erzeugen": [
+    "Generate the example with the local CLI",
+    "Générer l’exemple avec la CLI locale",
+    "Genera l’esempio con la CLI locale",
+    "أنشئ المثال باستخدام واجهة سطر الأوامر المحلية"
+  ],
+  "Legen Sie beide Eingabedateien in denselben Ordner und führen Sie dort diesen Befehl mit der installierten SOC-Erweiterung aus.": [
+    "Put both input files in one folder. With the SOC extension installed, run this command from that folder.",
+    "Placez les deux fichiers d’entrée dans le même dossier. Une fois l’extension SOC installée, exécutez cette commande depuis ce dossier.",
+    "Metti entrambi i file di input nella stessa cartella. Con l’estensione SOC installata, esegui questo comando dalla cartella.",
+    "ضَع ملفّي الإدخال في مجلد واحد. بعد تثبيت إضافة SOC، شغّل هذا الأمر من ذلك المجلد."
+  ],
+  "Bearbeitungsstand": [
+    "Review status",
+    "État du suivi",
+    "Stato della revisione",
+    "حالة المعالجة"
+  ],
+  "Offen": [
+    "Open",
+    "Ouvert",
+    "Aperto",
+    "مفتوحة"
+  ],
+  "Rückfrage nötig": [
+    "Follow-up needed",
+    "Précisions requises",
+    "Da chiarire",
+    "تحتاج إلى استيضاح"
+  ],
+  "Gesichtet": [
+    "Reviewed",
+    "Examiné",
+    "Esaminato",
+    "تمت مراجعتها"
+  ],
+  "Private Fallnotiz": [
+    "Private case note",
+    "Note privée sur le cas",
+    "Nota privata sul caso",
+    "ملاحظة خاصة بالحالة"
+  ],
+  "Welche Frage oder Entscheidung soll festgehalten werden?": [
+    "Which question or decision would you like to record?",
+    "Quelle question ou décision souhaitez-vous consigner ?",
+    "Quale domanda o decisione vuoi registrare?",
+    "ما السؤال أو القرار الذي تودّ تدوينه؟"
+  ],
+  "Die Bearbeitung verändert den fachlichen Befund nicht. Sichern Sie Ihre Notizen lokal, bevor Sie dieses Fenster schliessen.": [
+    "Updating the review does not change the underlying finding. Save your notes locally before closing this window.",
+    "Le suivi ne modifie pas le constat technique. Enregistrez vos notes localement avant de fermer cette fenêtre.",
+    "La revisione non modifica il rilievo tecnico. Salva le note localmente prima di chiudere questa finestra.",
+    "لا يغيّر تحديث حالة المعالجة النتيجة الفنية. احفظ ملاحظاتك محلياً قبل إغلاق النافذة."
+  ],
+  "Arbeitsstand sichern": [
+    "Save progress",
+    "Enregistrer l’avancement",
+    "Salva lo stato di avanzamento",
+    "احفظ تقدّم العمل"
+  ],
+  "Arbeitsstand laden": [
+    "Load saved progress",
+    "Charger l’avancement enregistré",
+    "Carica lo stato salvato",
+    "حمّل حالة العمل المحفوظة"
+  ],
+  "Belegstände vergleichen": [
+    "Compare evidence versions",
+    "Comparer les versions des preuves",
+    "Confronta le versioni delle evidenze",
+    "قارن نسخ الأدلة"
+  ],
+  "Übergabe": [
+    "Handover",
+    "Remise",
+    "Consegna",
+    "التسليم"
+  ],
+  "Redigierte Fallübersicht": [
+    "Redacted case summary",
+    "Synthèse des cas expurgée",
+    "Riepilogo dei casi con dati riservati omessi",
+    "ملخّص الحالات المنقّح"
+  ],
+  "Enthält Prüfergebnis, Bearbeitungsstand und Datei-Fingerabdruck. Signalberichte enthalten die Alarmabdeckung je Probe. Bei Belegindizes enthält die JSON-Übersicht Werkzeug, Quelldigest und Datensatzverweis. Dateinamen, Original-IDs und Freitext bleiben privat. Die Übersicht ist unsigniert.": [
+    "Includes the review result, review status and file fingerprint. Signal reports show alert coverage per probe. For evidence indexes, the JSON summary includes the tool, source digest and record reference. File names, original IDs and free text remain private. The summary is unsigned.",
+    "Contient le résultat, l’état du suivi et l’empreinte du fichier. Les rapports de signaux indiquent la couverture des alertes par sonde. Pour les index de preuves, la synthèse JSON inclut l’outil, l’empreinte source et la référence de l’enregistrement. Les noms de fichiers, identifiants d’origine et textes libres restent privés. La synthèse n’est pas signée.",
+    "Include risultato, stato della revisione e impronta del file. I rapporti dei segnali indicano la copertura degli avvisi per ciascuna sonda. Per gli indici delle evidenze, il riepilogo JSON contiene strumento, digest di origine e riferimento del record. Nomi dei file, ID originali e testo libero restano privati. Il riepilogo non è firmato.",
+    "يتضمن نتيجة المراجعة وحالة المعالجة وبصمة الملف. توضّح تقارير الإشارات تغطية التنبيهات لكل مسبار. ويحتوي ملخّص JSON لفهارس الأدلة على اسم الأداة وبصمة المصدر ومرجع السجل. تبقى أسماء الملفات والمعرّفات الأصلية والنصوص الحرّة خاصة. الملخّص غير موقّع."
+  ],
+  "JSON exportieren": [
+    "Export JSON",
+    "Exporter en JSON",
+    "Esporta JSON",
+    "صدّر بصيغة JSON"
+  ],
+  "Drucken / PDF": [
+    "Print / PDF",
+    "Imprimer / PDF",
+    "Stampa / PDF",
+    "طباعة / PDF"
+  ],
+  "AuthzLedger · © Nasser Aldin Farag (0xFarag). All rights reserved.": [
+    "AuthzLedger · © Nasser Aldin Farag (0xFarag). All rights reserved.",
+    "AuthzLedger · © Nasser Aldin Farag (0xFarag). Tous droits réservés.",
+    "AuthzLedger · © Nasser Aldin Farag (0xFarag). Tutti i diritti riservati.",
+    "AuthzLedger · © Nasser Aldin Farag (0xFarag). جميع الحقوق محفوظة."
+  ]
+}

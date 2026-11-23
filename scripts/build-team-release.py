@@ -27,7 +27,7 @@ def digest(path):
 
 def members():
     fixed = [ROOT / name for name in ['LICENSE', 'NOTICE.txt', 'public/assets/authzledger-logo.png', 'team/requirements.txt',
-             'scripts/build-team-release.py']]
+             'scripts/build-team-release.py', 'docs/Team-Login-RBAC.md']]
     scripts = list((ROOT / 'team').glob('*.py'))
     web = [p for p in (ROOT / 'team/static').rglob('*') if p.suffix.lower() in
            {'.html', '.js', '.mjs', '.css', '.json', '.png', '.svg', '.ico', '.woff', '.woff2'}]

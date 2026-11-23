@@ -103,3 +103,22 @@ test('JSON property coercion cannot turn an array into a supported enum', async 
   await assert.rejects(altered('mixed-c-result.json', p => p.transitions[0].status = ['fix_verified']));
   await assert.rejects(altered('mixed-index.json', p => p.observations[0].source_kind = ['ffuf']));
 });
+
+test('manual work retains its private fields and derives an unconfirmed evidence reference from the exact file', async () => {
+  const source = {schema: 'authzledger.workbench.manual-case/v1', title: 'Private case', observation: 'Observed locally.\r\nSecond line.'};
+  const bytes = encode(source);
+  const model = await parseProjection(bytes);
+  assert.equal(model.kind, 'manual');
+  assert.equal(model.rows.length, 1);
+  assert.equal(model.digest, createHash('sha256').update(bytes).digest('hex'));
+  assert.equal(model.rows[0].binding, model.digest);
+  assert.equal(model.rows[0].status, 'hint');
+  assert.equal(model.rows[0].title, source.title);
+  assert.equal(model.rows[0].summary, source.observation);
+  assert.deepEqual(await parseProjection(bytes), model);
+  assert.notEqual((await parseProjection(Buffer.concat([bytes, Buffer.from('\n')]))).digest, model.digest);
+  for (const change of [{title: '  '}, {observation: ''}, {observation: 'a'.repeat(1601)}, {title: 'X\u202eY'},
+    {observation: 'x\u0000a'}, {status: 'confirmed'}, {demo: 'B'}]) {
+    await assert.rejects(parseProjection(encode({...source, ...change})));
+  }
+});

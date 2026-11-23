@@ -73,7 +73,7 @@ textarea {resize:vertical}
 .list-count {padding:.52rem 1.3rem;background:var(--soft);border-block:1px solid var(--line);color:var(--slate);font-size:.88rem}
 .cases {margin:0;padding:0;list-style:none;max-height:34rem;overflow:auto}
 .cases li+li {border-top:1px solid #e6ebef}
-.case-link {display:block;width:100%;border:0;border-inline-start:4px solid transparent;padding:.78rem 1rem;text-align:left;background:white;color:var(--ink)}
+.case-link {display:block;width:100%;border:0;border-inline-start:4px solid transparent;padding:.78rem 1rem;text-align:start;background:white;color:var(--ink)}
 .case-link:hover {background:#f2f6f8}
 .case-link[aria-current="true"] {background:#eaf0f5;border-inline-start-color:var(--blue)}
 .case-link:focus-visible {outline-offset:-4px}
@@ -136,7 +136,7 @@ footer {border-top:1px solid var(--line);background:white;color:var(--slate);pad
   #print-report h1 {font-size:21pt;margin-bottom:.6em}
   #print-report p {margin:.6em 0;overflow-wrap:anywhere}
   #print-report table {border-collapse:collapse;width:100%;margin-top:1em}
-  #print-report td,#print-report th {text-align:left;padding:.4em;border-bottom:1px solid #999}
+  #print-report td,#print-report th {text-align:start;padding:.4em;border-bottom:1px solid #999}
   #print-report thead {display:table-header-group}
   #print-report tr {break-inside:avoid}
   @page {margin:15mm}
@@ -144,3 +144,19 @@ footer {border-top:1px solid var(--line);background:white;color:var(--slate);pad
 
 #import-registry { grid-column: 1 / -1; min-width: 0; }
 #import-sources { padding-inline-start: 1.4rem; overflow-wrap: anywhere; }
+
+.source-create,.delivery-box {grid-column:1 / -1;min-width:0}
+.source-create summary,.delivery-box summary {cursor:pointer;color:var(--blue);font-weight:700}
+.source-create form,.delivery-content {max-width:54rem;display:grid;gap:.45rem;padding-block:.8rem}
+.source-create label,.delivery-box label {display:block;font-weight:650;margin-top:.45rem}
+.source-create input,.source-create textarea,.delivery-box select,.delivery-content input,.delivery-content textarea {
+  display:block;width:100%;max-width:100%;min-width:0;font:inherit;padding:.6rem;border:1px solid var(--line);border-radius:6px;background:#fff}
+.source-create .btn {justify-self:start}
+.delivery-box {margin-block:1rem;padding:clamp(1rem,3vw,2rem)}
+.delivery-box>select {max-width:18rem}
+.delivery-box details {border-top:1px solid var(--line);padding-top:.8rem;margin-top:1rem}
+.delivery-pair {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.delivery-content .export-preview {color:var(--ink);background:var(--soft);font:90%/1.45 "IBM Plex Mono",monospace;resize:vertical}
+.delivery-content .case-caption {font-weight:650;overflow-wrap:anywhere}
+.delivery-box .actions {flex-wrap:wrap;gap:.5rem;margin-block:.65rem}
+@media(max-width:700px){.delivery-pair{grid-template-columns:1fr;gap:.45rem}}

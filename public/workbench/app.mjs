@@ -1,6 +1,9 @@
 // ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
 import {MAX_BYTES, originalFileChecks, parseProjection, statusLabels} from './model.mjs';
 import {renderComparison} from './compare-view.mjs';
+import {saveFile, setupDelivery} from './delivery.mjs';
+import {rowSummary, rowTitle, tr} from './language.mjs';
+import {detailValue, indexLocator, normalizedText, sourceLabel} from './model-language.mjs';
 
 const demos = new Map([
   ['demo-c', {name: 'Demo C', file: 'mixed-c-result.json', digest: 'e88fa8b182ad1d7b3477516c1432e24a919d1882a4221bf2cb8e25265cff4bd8'}],
@@ -20,6 +23,8 @@ let searchResults = [];
 let visibleCount = pageSize;
 let pickerValue = '';
 let tabName = 'decision';
+const delivery = setupDelivery();
+const notices = new Map();
 
 function element(tag, text) {
   const node = document.createElement(tag);
@@ -27,8 +32,13 @@ function element(tag, text) {
   return node;
 }
 
+function formatMessage(text) {
+  return text === 'Diese Sitzung enthält bereits {n} eigene Quellen.' ? tr(text, {n:sourceLimit}) : normalizedText(text);
+}
+
 function notice(text, error = false, target = 'feedback') {
-  $(target).textContent = text;
+  notices.set(target, {text, error});
+  $(target).textContent = typeof text === 'function' ? text() : text ? formatMessage(text) : '';
   $(target).dataset.level = error ? 'error' : 'ok';
 }
 
@@ -39,7 +49,7 @@ function option(value, label) {
 }
 
 function humanStatus(status) {
-  return statusLabels[status];
+  return tr(statusLabels[status]);
 }
 
 function getReview(doc, id) {
@@ -59,34 +69,43 @@ function register(model, name) {
 }
 
 function updateComparison() {
-  renderComparison($('snapshot-comparison'), [...documents.values()].map(({model, name}) => ({model, name})));
+  renderComparison($('snapshot-comparison'), [...documents.values()].map(({model, name, known}) => ({model, name, translateName:Boolean(known)})));
 }
 
-function showDocument(doc, key) {
-  active?.originals?.cancel();
+function showDocument(doc, key, refresh = false) {
+  if (!refresh) active?.originals?.cancel();
+  const filter = refresh ? $('filter').value : '';
   active = doc;
   pickerValue = key;
   $('source').value = key;
-  $('search').value = '';
-  $('filter').replaceChildren(option('', 'Alle Ergebnisse'));
+  if (!refresh) $('search').value = '';
+  $('filter').replaceChildren(option('', tr('Alle Ergebnisse')));
   for (const status of new Set(doc.model.rows.map(row => row.status))) {
     $('filter').append(option(status, humanStatus(status)));
   }
-  $('summary-title').textContent = doc.model.title;
-  $('origin').textContent = doc.known ? 'Mitgeliefertes Beispiel' : doc.model.importIndex?.workspace === 'example'
-    ? 'Belegindex aus dem Beispielbereich' : 'Lokale Belegdatei';
-  $('identity').textContent = doc.known ? doc.name + ' · Beispieldatei per SHA-256 abgeglichen' : doc.name + ' · Dateimuster geprüft';
+  $('filter').value = filter;
+  $('summary-title').textContent = tr(doc.model.title);
+  $('save-manual').hidden = !doc.manualBytes;
+  $('origin').textContent = tr(doc.known ? 'Mitgeliefertes Beispiel' : doc.model.importIndex?.workspace === 'example'
+    ? 'Belegindex aus dem Beispielbereich' : doc.model.kind === 'manual' ? 'Privat erfasster Fall' : 'Lokale Belegdatei');
+  $('identity').textContent = (doc.known ? tr(doc.name) : doc.name) + ' · ' + tr(doc.known ? 'Beispieldatei per SHA-256 abgeglichen' : 'Dateimuster geprüft');
   const index = doc.model.importIndex;
   $('import-registry').hidden = !index;
-  $('import-registry').open = false;
+  if (!refresh) $('import-registry').open = false;
   renderOriginalChecks();
-  $('cases-title').textContent = index ? 'Importbeleg auswählen' : doc.model.kind === 'blue' ? 'Signalprobe auswählen' : 'Fallauswahl';
-  $('cases').setAttribute('aria-label', index ? 'Importbelege' : doc.model.kind === 'blue' ? 'Signalproben' : 'Fälle');
+  $('cases-title').textContent = tr(index ? 'Importbeleg auswählen' : doc.model.kind === 'blue' ? 'Signalprobe auswählen' : 'Fallauswahl');
+  $('cases').setAttribute('aria-label', tr(index ? 'Importbelege' : doc.model.kind === 'blue' ? 'Signalproben' : 'Fälle'));
   $('sample-sources').hidden = doc.known?.file !== 'blue-evidence-example.json';
   $('document').hidden = false;
-  visibleCount = Math.ceil((doc.selected + 1) / pageSize) * pageSize;
   renderMetrics();
-  applyFilter();
+  if (refresh) {
+    renderList();
+    if (searchResults.length) renderCase(true);
+    else delivery.render(active, null);
+  } else {
+    visibleCount = Math.ceil((doc.selected + 1) / pageSize) * pageSize;
+    applyFilter();
+  }
   updateComparison();
 }
 
@@ -96,20 +115,20 @@ function renderOriginalChecks() {
   const last = checks?.last;
   const outcomes = last?.outcomes || [];
   $('import-sources').replaceChildren(...sources.map(file => {
-    const li = element('li', file.label + ' · ' + file.count + ' Beobachtungen · ');
+    const li = element('li', file.label + ' · ' + tr('{n} Beobachtungen', {n:file.count}) + ' · ');
     li.append(element('code', file.sha256), document.createTextNode(checks.has(file.sha256)
-      ? ' · Originalbytes abgeglichen' : ' · Originalbytes ausstehend'));
+      ? ' · ' + tr('Originalbytes abgeglichen') : ' · ' + tr('Originalbytes ausstehend')));
     return li;
   }));
   const explanations = {unmatched: 'Kein registrierter SHA-256 passt.', size: 'Zulässig sind 1 Byte bis 1 MiB.',
     unreadable: 'Die Datei konnte nicht gelesen oder gehasht werden.'};
   $('original-outcomes').replaceChildren(...outcomes.map(result => {
     const labels = sources.filter(source => source.sha256 === result.sha256).map(source => source.label);
-    const message = result.status === 'matched' ? 'SHA-256 stimmt mit ' + labels.join(', ') + ' überein.' : explanations[result.status];
-    return element('li', 'Datei ' + result.position + ' · ' + message + (result.duplicate ? ' Identische Bytes in dieser Auswahl.' : ''));
+    const message = result.status === 'matched' ? tr('SHA-256 stimmt mit {sources} überein.', {sources:labels.join(', ')}) : tr(explanations[result.status]);
+    return element('li', tr('Datei {n}', {n:result.position}) + ' · ' + message + (result.duplicate ? ' ' + tr('Identische Bytes in dieser Auswahl.') : ''));
   }));
   const matches = outcomes.filter(result => result.status === 'matched').length;
-  notice(last?.error || (outcomes.length ? matches + ' von ' + outcomes.length + ' ausgewählten Dateien passen zu einem registrierten SHA-256.' : ''),
+  notice(last?.error || (outcomes.length ? () => tr('{matched} von {total} ausgewählten Dateien passen zu einem registrierten SHA-256.', {matched:matches, total:outcomes.length}) : ''),
     Boolean(last?.error), 'original-status');
 }
 
@@ -141,7 +160,7 @@ async function selectSource(key) {
       doc = documents.get(demo.digest);
       if (!doc) {
         notice('Beispiel wird geladen und mit dem erwarteten SHA-256 verglichen.');
-        const response = await fetch('../proof/' + demo.file, {credentials: 'omit', redirect: 'error'});
+        const response = await fetch('/proof/' + demo.file, {credentials: 'omit', redirect: 'error'});
         if (!response.ok) throw Error('Die Beispieldatei konnte nicht geladen werden.');
         const model = await parseProjection(await response.arrayBuffer());
         if (model.digest !== demo.digest) throw Error('Der SHA-256 des Beispiels weicht vom erwarteten Wert ab.');
@@ -166,7 +185,7 @@ async function importFiles(fileList) {
   const files = [...fileList];
   if (!files.length) return;
   if (files.length > sourceLimit) {
-    notice('Öffnen Sie höchstens ' + sourceLimit + ' Dateien auf einmal.', true);
+    notice(() => tr('Öffnen Sie höchstens {n} Dateien auf einmal.', {n:sourceLimit}), true);
     return;
   }
   cancelOriginalChecks();
@@ -178,21 +197,23 @@ async function importFiles(fileList) {
   for (const file of files) {
     try {
       if (file.size > MAX_BYTES || !file.size) throw Error('Zulässig sind 1 Byte bis 2 MiB.');
-      const model = await parseProjection(await file.arrayBuffer());
+      const original = await file.arrayBuffer();
+      const model = await parseProjection(original);
       const knownKey = [...demos.keys()].find(key => demos.get(key).digest === model.digest);
       const key = knownKey || 'file:' + model.digest;
       if (!documents.has(model.digest) && !knownKey && $('local-options').children.length >= sourceLimit) {
-        throw Error('Diese Sitzung enthält bereits ' + sourceLimit + ' eigene Quellen.');
+        throw Error('Diese Sitzung enthält bereits {n} eigene Quellen.');
       }
       const name = file.name.replace(/[\u0000-\u001F\u007F-\u009F\u202A-\u202E\u2066-\u2069]/gu, '').slice(0, 150);
       const doc = register(model, name);
+      if (model.kind === 'manual') doc.manualBytes = original;
       if (!knownKey && ![...$('local-options').children].some(o => o.value === key)) {
         $('local-options').append(option(key, name + ' · ' + model.digest.slice(0, 8)));
       }
       last = {doc, key};
       accepted++;
     } catch (err) {
-      errors.push('Datei ' + (accepted + errors.length + 1) + ' – ' + err.message);
+      errors.push({position:accepted + errors.length + 1, message:err.message});
     }
   }
   $('add-file').disabled = false;
@@ -202,8 +223,11 @@ async function importFiles(fileList) {
   }
   if (last) showDocument(last.doc, last.key);
   else if (active) $('source').value = pickerValue;
-  const count = accepted === 1 ? '1 Datei geöffnet.' : accepted + ' Dateien geöffnet.';
-  notice([count, ...errors].join(' '), Boolean(errors.length));
+  notice(() => {
+    const count = accepted === 1 ? tr('1 Datei geöffnet.') : tr('{n} Dateien geöffnet.', {n:accepted});
+    const details = errors.map(({position, message}) => tr('Datei {n}', {n:position}) + ' – ' + formatMessage(message));
+    return [count, ...details].join(' ');
+  }, Boolean(errors.length));
 }
 
 function renderMetrics() {
@@ -212,11 +236,10 @@ function renderMetrics() {
   $('metric-note').hidden = !signalCoverage && !importIndex;
   if (importIndex) {
     entries.push(['Quelldateien', importIndex.sources.length], ['Asset-IDs', importIndex.assets], ['Belege ohne Host', importIndex.unassigned]);
-    $('metric-note').textContent = 'Gezählt werden die Verweise aller aufgeführten Quelldateien, einschliesslich mehrfacher Beobachtungen. Die Abdeckung des Mandats ist unbekannt.';
+    $('metric-note').textContent = tr('Gezählt werden die Verweise aller aufgeführten Quelldateien, einschliesslich mehrfacher Beobachtungen. Die Abdeckung des Mandats ist unbekannt.');
   } else if (signalCoverage) {
     entries.push(['Mit Alarm', signalCoverage.observedWindows], ['Nur Telemetrie', signalCoverage.telemetryOnlyWindows]);
-    $('metric-note').textContent = signalCoverage.incomparableWindows + ' nicht vergleichbare und ' +
-      signalCoverage.unavailableWindows + ' unbelegte Signalproben. Die Ereignisabdeckung steht bei der jeweiligen Probe.';
+    $('metric-note').textContent = tr('{unknown} nicht vergleichbare und {missing} unbelegte Signalproben. Die Ereignisabdeckung steht bei der jeweiligen Probe.', {unknown:signalCoverage.incomparableWindows, missing:signalCoverage.unavailableWindows});
   } else if (coverage) {
     entries.push(['Nachgeprüft', coverage.reviewed], ['Fix belegt', rows.filter(r => r.status === 'fix_verified').length], ['Ausgelassen', coverage.open]);
   } else {
@@ -225,25 +248,25 @@ function renderMetrics() {
   }
   $('metrics').replaceChildren(...entries.map(([label, value]) => {
     const wrap = element('div');
-    wrap.append(element('dt', label), element('dd', value));
+    wrap.append(element('dt', tr(label)), element('dd', value));
     return wrap;
   }));
 }
 
 function displayTitle(row) {
   if (active?.known?.file === 'mixed-c-result.json') {
-    if (row.title === 'Retest-Fall one') return 'Retest-Fall 1';
-    if (row.title === 'Retest-Fall two') return 'Retest-Fall 2';
+    if (row.title === 'Retest-Fall one') return tr('Retest-Fall {id}', {id:1});
+    if (row.title === 'Retest-Fall two') return tr('Retest-Fall {id}', {id:2});
   }
-  return row.title;
+  return rowTitle(active.model, row);
 }
 
 function applyFilter() {
-  const text = $('search').value.trim().toLocaleLowerCase('de-CH');
+  const text = $('search').value.trim().toLocaleLowerCase(document.documentElement.lang);
   const status = $('filter').value;
   searchResults = [];
   active.model.rows.forEach((row, i) => {
-    if ((!status || row.status === status) && [row.id, row.title, displayTitle(row), row.source].some(v => v.toLocaleLowerCase('de-CH').includes(text))) {
+    if ((!status || row.status === status) && [row.id, row.title, displayTitle(row), row.source].some(v => v.toLocaleLowerCase(document.documentElement.lang).includes(text))) {
       searchResults.push(i);
     }
   });
@@ -252,10 +275,11 @@ function applyFilter() {
   $('reset-filter').hidden = !(status || text) || Boolean(searchResults.length);
   renderList();
   if (searchResults.length) renderCase();
+  else delivery.render(active, null);
 }
 
 function renderList() {
-  $('count').textContent = searchResults.length + ' von ' + active.model.rows.length + (active.model.importIndex ? ' Importbelegen sichtbar' : active.model.kind === 'blue' ? ' Signalproben sichtbar' : ' Fällen sichtbar');
+  $('count').textContent = tr('{visible} von {total} sichtbar', {visible:searchResults.length, total:active.model.rows.length});
   const displayed = searchResults.slice(0, visibleCount);
   const fragment = document.createDocumentFragment();
   for (const index of displayed) {
@@ -267,7 +291,7 @@ function renderList() {
     btn.dataset.index = index;
     if (active.selected === index) btn.setAttribute('aria-current', 'true');
     const state = getReview(active, row.id).state;
-    const stateLabel = state === 'todo' ? '' : ' · ' + dispositions[state];
+    const stateLabel = state === 'todo' ? '' : ' · ' + tr(dispositions[state]);
     btn.append(element('strong', displayTitle(row)), element('span', humanStatus(row.status) + stateLabel));
     li.append(btn);
     fragment.append(li);
@@ -281,7 +305,7 @@ function fields(id, entries) {
     const line = element('div');
     const detail = element('dd', value);
     if (/^[a-f0-9]{64}$/.test(value)) detail.className = 'mono';
-    line.append(element('dt', label), detail);
+    line.append(element('dt', tr(label)), detail);
     return line;
   }));
 }
@@ -314,41 +338,43 @@ function extent(row) {
   return 'Die Einordnung gilt für den dokumentierten Fall und die angegebenen Quellbelege.';
 }
 
-function renderCase() {
+function renderCase(preserveFeedback = false) {
   const model = active.model;
   const row = model.rows[active.selected];
-  $('case-position').textContent = (model.importIndex ? 'Importbeleg ' : model.kind === 'blue' ? 'Signalprobe ' : 'Fall ') + (active.selected + 1) + ' von ' + model.rows.length;
+  $('case-position').textContent = tr('{kind} {index} von {total}', {kind:tr(model.importIndex ? 'Importbeleg' : model.kind === 'blue' ? 'Signalprobe' : 'Fall'), index:active.selected + 1, total:model.rows.length});
   $('case-title').textContent = displayTitle(row);
   $('case-status').textContent = humanStatus(row.status);
   const good = ['confirmed', 'fix_verified', 'soc_observed'];
   const attention = ['not_verified', 'not_retested', 'inconclusive', 'regression', 'violation_persists', 'soc_telemetry_only', 'soc_unavailable', 'soc_incomparable'];
   $('case-status').dataset.tone = good.includes(row.status) ? 'good' : attention.includes(row.status) ? 'attention' : 'neutral';
-  $('decision').textContent = row.summary;
-  $('extent').textContent = extent(row);
+  $('decision').textContent = rowSummary(model, row);
+  $('technical').hidden = !row.details.length;
+  $('extent').textContent = tr(extent(row));
   $('window-coverage').hidden = !row.signalCoverage;
   if (row.signalCoverage) $('window-coverage').textContent = signalRatio(row.signalCoverage);
-  fields('fields', row.details);
-  const provenance = [['Datensatz', active.name], ['Quelle', row.source], ['Fall-ID', row.id],
+  fields('fields', row.details.map(detail => ({label:detail.label, value:detailValue(model, row, detail)})));
+  const provenance = [['Datensatz', active.known ? tr(active.name) : active.name], ['Quelle', sourceLabel(model, row)], ['Fall-ID', row.id],
     ['SHA-256 der geöffneten Datei', model.digest]];
   if (row.reference) {
-    provenance.push(['Quelldatei laut Index', row.reference.file_sha256], ['Position laut Index', row.reference.locator],
+    provenance.push(['Quelldatei laut Index', row.reference.file_sha256], ['Position laut Index', indexLocator(row.reference.locator)],
       ['Datensatz-Fingerabdruck laut Index', row.reference.fingerprint],
-      ['Originalbytes', active.originals.has(row.reference.file_sha256) ? 'SHA-256 in dieser Sitzung abgeglichen' : 'Abgleich ausstehend'],
-      ['Scope und Controls', 'Ungeprüft']);
-  } else {
+      ['Originalbytes', tr(active.originals.has(row.reference.file_sha256) ? 'SHA-256 in dieser Sitzung abgeglichen' : 'Abgleich ausstehend')],
+      ['Scope und Controls', tr('Ungeprüft')]);
+  } else if (model.kind !== 'manual') {
     provenance.push(['Assessment', model.assessment], ['Scope-Digest', model.scope]);
   }
   fields('provenance', provenance.map(([label, value]) => ({label, value})));
-  $('trust').textContent = model.importIndex
+  $('trust').textContent = tr(model.importIndex
     ? 'Ein erfolgreicher Byteabgleich bestätigt die Übereinstimmung der Datei mit dem registrierten SHA-256. Datensatzinhalt, Urheberschaft und Befundstatus erfordern eigene Nachweise.'
     : active.known
     ? 'Die Dateibytes stimmen mit dem hinterlegten Beispiel überein. Die fachliche Aussage stammt aus dieser Projektion.'
-    : 'Der Fingerabdruck bezeichnet die hier geöffneten Dateibytes. Herkunft, Signatur und tatsächliche Ausführung benötigen eigene Nachweise.';
+    : 'Der Fingerabdruck bezeichnet die hier geöffneten Dateibytes. Herkunft, Signatur und tatsächliche Ausführung benötigen eigene Nachweise.');
   const review = getReview(active, row.id);
   $('disposition').value = review.state;
   $('note').value = review.note;
-  notice('', false, 'draft-status');
+  if (!preserveFeedback) notice('', false, 'draft-status');
   activateTab(tabName);
+  delivery.render(active, row);
 }
 
 function selectCase(index, focusButton) {
@@ -381,9 +407,8 @@ function downloadJSON(object, name) {
 }
 
 function signalRatio(signal) {
-  const ratio = signal.eligible ? signal.linked + ' von ' + signal.eligible + ' passenden Ereignissen mit zugeordnetem Alarm'
-    : 'Keine passenden Ereignisse für eine Alarmzuordnung';
-  return ratio + ' · ' + signal.excluded + ' ausgeschlossen';
+  const ratio = signal.eligible ? tr('{linked} von {eligible} passenden Ereignissen mit zugeordnetem Alarm', signal) : tr('Keine passenden Ereignisse für eine Alarmzuordnung');
+  return ratio + ' · ' + tr('{excluded} ausgeschlossen', signal);
 }
 
 function redactedReview() {
@@ -402,43 +427,46 @@ function redactedReview() {
 
 function preparePrint() {
   const area = $('print-report');
-  area.replaceChildren(element('h1', 'AuthzLedger · Fallübersicht'));
+  area.replaceChildren(element('h1', tr('AuthzLedger · Fallübersicht')));
   if (!active) {
-    area.append(element('p', 'Keine Belegquelle geöffnet.'));
+    area.append(element('p', tr('Keine Belegquelle geöffnet.')));
     return;
   }
   const review = redactedReview();
-  area.append(element('p', 'Unsignierte, redigierte Übersicht · ' + active.model.title),
-    element('p', 'Erstellt am ' + new Date(review.created_at).toLocaleString('de-CH', {timeZone: 'Europe/Zurich'}) + ' (Europe/Zurich)'),
-    element('p', 'SHA-256 der Quelle · ' + review.source_sha256), element('p', review.total + (review.import_index ? ' Importbelege' : review.signal_coverage ? ' Signalproben' : ' Fälle') + ' im vollständigen Umfang'));
+  const date = new Date(review.created_at).toLocaleString(document.documentElement.lang, {timeZone: 'Europe/Zurich'});
+  const unit = tr(review.import_index ? 'Importbelege' : review.signal_coverage ? 'Signalproben' : 'Fälle');
+  area.append(element('p', tr('Unsignierte, redigierte Übersicht') + ' · ' + tr(active.model.title)),
+    element('p', tr('Erstellt am {date}', {date}) + ' (Europe/Zurich)'),
+    element('p', tr('SHA-256 der Quelle') + ' · ' + review.source_sha256),
+    element('p', tr('Gesamtumfang') + ' · ' + unit + ' · ' + review.total));
   if (review.import_index) {
     const info = review.import_index;
-    const workspace = info.workspace === 'example' ? 'Beispieldaten' : 'Eigene Dateien';
-    area.append(element('p', workspace + ' · ' + info.sources.length + ' Quelldateien · ' + info.asset_ids +
-      ' Asset-IDs · ' + info.observations_without_host + ' Belege ohne Hostbezug. Scope und Kontrollen ungeprüft. Abdeckung unbekannt.'));
+    area.append(element('p', tr(info.workspace === 'example' ? 'Beispieldaten' : 'Eigene Dateien') + ' · ' +
+      tr('Quelldateien') + ' ' + info.sources.length + ' · ' + tr('Asset-IDs') + ' ' + info.asset_ids + ' · ' +
+      tr('Belege ohne Host') + ' ' + info.observations_without_host + '. ' + tr('Scope und Kontrollen ungeprüft. Abdeckung unbekannt.')));
   }
   if (review.retest_coverage) {
-    area.append(element('p', review.retest_coverage.reviewed + ' nachgeprüft · ' +
-      review.cases.filter(r => r.evidence_status === 'fix_verified').length + ' Fix belegt · ' + review.retest_coverage.open + ' ausgelassen'));
+    area.append(element('p', tr('Nachgeprüft') + ' ' + review.retest_coverage.reviewed + ' · ' +
+      tr('Fix belegt') + ' ' + review.cases.filter(r => r.evidence_status === 'fix_verified').length + ' · ' +
+      tr('Ausgelassen') + ' ' + review.retest_coverage.open));
   }
   if (review.signal_coverage) {
     const c = review.signal_coverage;
-    area.append(element('p', c.observedWindows + ' Proben mit Alarm · ' + c.telemetryOnlyWindows + ' nur Telemetrie · ' +
-      c.incomparableWindows + ' nicht vergleichbar · ' + c.unavailableWindows + ' ohne Daten'),
-      element('p', 'Über alle Proben wurden ' + c.linkedOccurrences + ' von ' + c.eligibleOccurrences +
-        ' passenden Ereignisvorkommen einem Alarm zugeordnet. Dieselbe Ereignis-ID kann in mehreren Proben vorkommen.'));
+    area.append(element('p', tr('Mit Alarm') + ' ' + c.observedWindows + ' · ' + tr('Nur Telemetrie') + ' ' + c.telemetryOnlyWindows + ' · ' +
+      tr('Nicht vergleichbar') + ' ' + c.incomparableWindows + ' · ' + tr('Ohne Daten') + ' ' + c.unavailableWindows),
+      element('p', tr('Über alle Proben wurden {linked} von {eligible} passenden Ereignisvorkommen einem Alarm zugeordnet. Dieselbe Ereignis-ID kann in mehreren Proben vorkommen.', {linked:c.linkedOccurrences, eligible:c.eligibleOccurrences})));
   }
   const table = element('table'), head = table.createTHead().insertRow(), body = table.createTBody();
   const titles = [review.import_index ? 'Importbeleg' : review.signal_coverage ? 'Signalprobe' : 'Fall', 'Prüfergebnis', 'Bearbeitungsstand'];
   if (review.signal_coverage) titles.push('Ereignisabdeckung je Probe');
   for (const title of titles) {
-    const th = element('th', title); th.scope = 'col'; head.append(th);
+    const th = element('th', tr(title)); th.scope = 'col'; head.append(th);
   }
   for (const row of review.cases) {
-    const tr = body.insertRow();
-    const cells = [row.case_number, humanStatus(row.evidence_status), dispositions[row.review_state]];
+    const tableRow = body.insertRow();
+    const cells = [row.case_number, humanStatus(row.evidence_status), tr(dispositions[row.review_state])];
     if (row.signal_coverage) cells.push(signalRatio(row.signal_coverage));
-    for (const cell of cells) tr.append(element('td', cell));
+    for (const cell of cells) tableRow.append(element('td', cell));
   }
   area.append(table);
 }
@@ -480,7 +508,7 @@ async function loadDraft(file) {
     renderMetrics();
     renderList();
     renderCase();
-    notice('Arbeitsstand geladen. ' + incoming.size + ' Einträge zugeordnet.', false, 'draft-status');
+    notice(() => tr('Arbeitsstand geladen. {n} Einträge zugeordnet.', {n:incoming.size}), false, 'draft-status');
   } catch (err) {
     if (active === doc) notice(err instanceof SyntaxError ? 'Der Arbeitsstand enthält kein gültiges JSON.' : err.message, true, 'draft-status');
   }
@@ -533,7 +561,7 @@ $('inspector').addEventListener('keydown', event => {
   if (event.key === 'Escape') $('cases').querySelector('[aria-current="true"]')?.focus();
 });
 $('note').addEventListener('input', updateReview);
-$('disposition').addEventListener('change', () => {updateReview(); renderMetrics(); renderList();});
+$('disposition').addEventListener('change', () => {updateReview(); renderMetrics(); renderList(); delivery.render(active, active.model.rows[active.selected]);});
 $('save-notes').addEventListener('click', saveDraft);
 $('load-notes').addEventListener('click', () => $('draft-file').click());
 $('draft-file').addEventListener('change', () => {const file = $('draft-file').files[0]; $('draft-file').value = ''; loadDraft(file);});
@@ -544,4 +572,37 @@ $('download').addEventListener('click', () => {
 $('print').addEventListener('click', () => {preparePrint(); window.print();});
 window.addEventListener('beforeprint', preparePrint);
 $('add-file').disabled = false;
-selectSource('demo-c');
+$('new-case-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  const version = ++selectionVersion;
+  const title = $('new-title').value.trim();
+  const observation = $('new-summary').value.trim();
+  const source = {schema:'authzledger.workbench.manual-case/v1', title, observation};
+  const bytes = new TextEncoder().encode(JSON.stringify(source, null, 2) + '\n');
+  try {
+    const model = await parseProjection(bytes);
+    if (version !== selectionVersion) return;
+    const key = 'file:' + model.digest;
+    if (!documents.has(model.digest) && $('local-options').children.length >= sourceLimit) {
+      throw Error('Diese Sitzung enthält bereits {n} eigene Quellen.');
+    }
+    const doc = register(model, title);
+    doc.manualBytes = bytes;
+    if (![...$('local-options').children].some(o => o.value === key)) {
+      $('local-options').append(option(key, title + ' · ' + model.digest.slice(0, 8)));
+    }
+    showDocument(doc, key);
+    $('new-case-form').reset();
+    $('new-source').open = false;
+    notice('Privater Fall in dieser Sitzung geöffnet.');
+  } catch (error) {
+    if (version === selectionVersion) notice(error.message, true);
+  }
+});
+$('save-manual').addEventListener('click', () => {
+  if (active?.manualBytes) saveFile({text:active.manualBytes, mime:'application/json', filename:'authzledger-case-' + active.model.digest.slice(0, 12) + '.json'});
+});
+window.addEventListener('authzlanguage', () => {
+  if (active) showDocument(active, pickerValue, true);
+  for (const [target, {text, error}] of notices) notice(text, error, target);
+});

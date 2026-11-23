@@ -28,6 +28,7 @@
       <noscript><p>Aktivieren Sie JavaScript, um Belegdateien in diesem Browser auszuwerten.</p></noscript>
       <section class="source-box card" aria-labelledby="source-title">
         <div class="source-pick"><label id="source-title" for="source">Belegquelle</label><select id="source">
+          <option value="" selected disabled>Quelle auswählen</option>
           <optgroup label="Mitgelieferte Beispiele">
             <option value="demo-c">Demo C · Selektiver Retest</option>
             <option value="demo-b">Demo B · Konfigurationsbefund</option>
@@ -36,13 +37,24 @@
           </optgroup><optgroup label="Eigene Dateien" id="local-options"></optgroup>
         </select></div>
         <div class="import-action"><button id="add-file" class="btn primary" type="button" disabled>JSON-Dateien öffnen</button><input type="file" id="files" multiple accept=".json,application/json" hidden></div>
+        <details id="new-source" class="source-create"><summary>Eigenen Fall erfassen</summary>
+          <form id="new-case-form">
+            <label for="new-title">Private Fallbezeichnung</label>
+            <input id="new-title" type="text" required maxlength="160" autocomplete="off" dir="auto">
+            <label for="new-summary">Eigene Beobachtung</label>
+            <textarea id="new-summary" required rows="3" maxlength="1600" dir="auto"></textarea>
+            <p class="fine">Der Eintrag beginnt als unbestätigter Hinweis. Bezeichnung und Beobachtung bleiben im privaten Fall.</p>
+            <button class="btn" type="submit">Fall öffnen</button>
+          </form>
+        </details>
         <p class="source-help">Öffnen Sie den Signalbericht <code>blue-evidence.json</code> aus AuthzLedger Studio oder der CLI direkt hier. Für Werkzeugexporte erstellen Sie zuerst im <a href="../import/">lokalen Belegimport</a> einen Belegindex. Hier öffnen Sie den Index, Befund B, Retest C oder ein föderiertes Inventar. Maximal 2 MiB pro Datei.</p>
       </section>
-      <p id="feedback" class="feedback" role="status" aria-live="polite">Das Retest-Beispiel wird geöffnet.</p>
+      <p id="feedback" class="feedback" role="status" aria-live="polite">Öffnen Sie einen Belegindex oder erfassen Sie einen eigenen Fall.</p>
       <div id="document" hidden>
         <section class="summary card" aria-labelledby="summary-title">
           <div class="summary-copy"><span class="small-label" id="origin"></span><h2 id="summary-title"></h2><p id="identity"></p><p id="metric-note" class="fine" hidden></p></div>
           <dl id="metrics" class="metrics"></dl>
+          <button type="button" class="btn" id="save-manual" hidden>Private Fallquelle sichern</button>
           <details id="import-registry" class="technical" hidden><summary>Quelldateien und Originalbytes prüfen</summary>
             <p>Wählen Sie die Originalexporte zum lokalen SHA-256-Abgleich. Die Workbench liest bis zu 1 MiB je Datei. Das Ergebnis bleibt in dieser Sitzung und ist im exportierten Review nicht enthalten.</p>
             <button id="verify-originals" class="btn" type="button">Originaldateien abgleichen</button><input type="file" id="original-files" multiple hidden>
@@ -88,6 +100,42 @@
             </div>
           </section>
         </div>
+        <section class="delivery-box card" aria-labelledby="delivery-title">
+          <h2 id="delivery-title">Entwicklerticket und Kundenbericht</h2>
+          <p>Das Ticket bezieht sich auf den ausgewählten Fall. Der Kundenbericht umfasst alle Fälle der geöffneten Quelle.</p>
+          <label for="export-language">Ausgabesprache</label>
+          <select id="export-language">
+            <option value="de" lang="de">Deutsch</option><option value="en" lang="en">English</option>
+            <option value="fr" lang="fr">Français</option><option value="it" lang="it">Italiano</option>
+            <option value="ar" lang="ar">العربية</option>
+          </select>
+          <details id="ticket-tools"><summary>Entwicklerticket erstellen</summary>
+            <div class="delivery-content"><p id="ticket-case" class="case-caption" dir="auto"></p>
+              <p>Tragen Sie nur Angaben ein, die das Entwicklungsteam erhalten darf. Private Fallnotizen bleiben ausgeschlossen.</p>
+              <label for="ticket-subject">Freigegebener Tickettitel</label><input type="text" id="ticket-subject" maxlength="160" dir="auto">
+              <div class="delivery-pair">
+                <div><label for="ticket-owner">Zuständige Person oder Team</label><input type="text" id="ticket-owner" maxlength="120" dir="auto"></div>
+                <div><label for="ticket-due">Frist</label><input type="date" id="ticket-due" max="9999-12-31"></div>
+              </div>
+              <label for="ticket-remediation">Empfohlene Behebung</label><textarea rows="3" id="ticket-remediation" maxlength="1200" dir="auto"></textarea>
+              <label for="ticket-acceptance">Abnahme- und Retestkriterien</label><textarea rows="3" id="ticket-acceptance" maxlength="1200" dir="auto"></textarea>
+              <label for="ticket-format">Ticketformat</label>
+              <select id="ticket-format"><option value="github">GitHub Markdown</option><option value="jira">Jira</option></select>
+              <label for="ticket-preview">Ticketvorschau</label><textarea class="export-preview" id="ticket-preview" rows="10" readonly data-no-i18n></textarea>
+              <div class="actions"><button class="btn primary" id="copy-ticket" type="button">Ticket kopieren</button><button class="btn" id="download-ticket" type="button">Ticket herunterladen</button></div>
+              <p id="ticket-status" class="feedback" role="status"></p>
+            </div>
+          </details>
+          <details id="report-tools"><summary>Kundenbericht erstellen</summary>
+            <div class="delivery-content">
+              <p>Die Managementübersicht ordnet bestätigte, offene und ungeprüfte Fälle ein. Der Belegteil führt jede Einordnung auf ihre Quelle zurück.</p>
+              <label for="report-preview">Berichtsvorschau</label><textarea class="export-preview" id="report-preview" rows="12" readonly data-no-i18n></textarea>
+              <div class="actions"><button class="btn primary" id="download-report" type="button">HTML-Bericht herunterladen</button><button class="btn" id="markdown-report" type="button">Markdown herunterladen</button><button class="btn" id="copy-report" type="button">Bericht kopieren</button></div>
+              <p class="fine">Öffnen Sie den HTML-Bericht lokal und wählen Sie im Druckdialog «Als PDF speichern».</p>
+              <p id="report-status" class="feedback" role="status"></p>
+            </div>
+          </details>
+        </section>
         <section id="snapshot-comparison" aria-label="Belegstände vergleichen"></section>
         <section id="handover" class="handover card" aria-labelledby="handover-title"><div><p class="small-label">Übergabe</p><h2 id="handover-title">Redigierte Fallübersicht</h2><p>Enthält Prüfergebnis, Bearbeitungsstand und Datei-Fingerabdruck. Signalberichte enthalten die Alarmabdeckung je Probe. Bei Belegindizes enthält die JSON-Übersicht Werkzeug, Quelldigest und Datensatzverweis. Dateinamen, Original-IDs und Freitext bleiben privat. Die Übersicht ist unsigniert.</p></div>
           <div class="actions"><button class="btn primary" id="download" type="button">JSON exportieren</button><button class="btn" id="print" type="button">Drucken / PDF</button></div>
