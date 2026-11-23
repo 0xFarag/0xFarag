@@ -18,7 +18,7 @@
     $('sample-detail').hidden = automatic;
     if (automatic) {
       $('file').accept = [...new Set(Object.values(definitions).flatMap(def => def.accept.split(',')))].join(',');
-      $('hint').textContent = 'Du kannst Exporte verschiedener Werkzeuge zusammen auswählen. Das Format wird am Dateiinhalt erkannt. Jede Datei wird einzeln geprüft.';
+      $('hint').textContent = 'Sie können Exporte verschiedener Werkzeuge zusammen auswählen. Das Format wird am Dateiinhalt erkannt. Jede Datei wird einzeln geprüft.';
       $('follow').hidden = true;
       return;
     }
@@ -41,7 +41,7 @@
     page = Math.min(page,pages-1);
     $('real').setAttribute('aria-pressed',String(!example));
     $('examples').setAttribute('aria-pressed',String(example));
-    $('context').textContent = example ? 'Beispieldaten mit frei erfundenen Datensätzen. Deine eigenen Dateien liegen im separaten Arbeitsbereich.' : 'Wähle Dateien aus demselben Mandat. Alle Importe bleiben lokal in diesem Tab.';
+    $('context').textContent = example ? 'Beispieldaten mit frei erfundenen Datensätzen. Ihre eigenen Dateien liegen im separaten Arbeitsbereich.' : 'Wählen Sie Dateien aus demselben Mandat. Alle Importe bleiben lokal in diesem Tab.';
     $('add').textContent = example ? 'Beispiel hinzufügen' : 'Dateien auswählen';
     $('clear').disabled = busy || !files.length;
     $('add').disabled = $('adapter').disabled = $('real').disabled = $('examples').disabled = $('follow').disabled = busy;

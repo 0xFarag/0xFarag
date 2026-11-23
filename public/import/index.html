@@ -3,17 +3,19 @@
 <html lang="de-CH">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
-<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src data:; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#071722">
 <title>Lokaler Belegimport | AuthzLedger</title>
 <link rel="stylesheet" href="./styles.css">
 <script src="./adapters.js" defer></script><script src="./compare.js" defer></script><script src="./asset-review.js" defer></script><script src="./app.js" defer></script>
 </head>
 <body>
-<header><div class="bar"><a class="brand" href="/">AuthzLedger</a><nav aria-label="Hauptnavigation"><a href="/#werkzeuge">Arbeitsbereich</a><a href="/downloads/">Downloads</a><a href="/fachzugang/">Fachzugang</a></nav></div></header>
-<main>
+<a class="skip" href="#inhalt">Zum Inhalt</a>
+<header><div class="bar"><!-- Embedded product icon keeps image loads offline. -->
+<a class="brand" href="/"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAgVBMVEUIFy0PHC8ADCp5Z0gcJDHhsV/otmCJc0v2wWQtMTbquWEmKzSfgk/5w2T5w2VAPjryvmPot2C4lFWUek1UTD7LolrtuWFoWkKwj1UUHS/Wql3vvGP8xWWafk+dgU/esF41NjftumJ/bEnDnVmmh1FbT0D/1GtJRDxuX0X1wGNcUkCUOV2xAAABkklEQVRIx+1U0XKCMBAsp43hMJjEQhGQQsFS/f8P7CVhqq2gYaYPfXCfmHDL3t5teHp64D8jCOaVw2IBsyjLZ7acJbDifDVDAkJEZBH4E9aCsdhfAjZSzZIAzYnAxNZPIoAXwVARRflKJFIpmSKLtz6EAF5jpniWGB+hD2OXS8QiWpQ0qP19AoUipsoKlm8pYuohQYXKFDri/t6gKBRUJyqq85OAiKErc70R9Y7AVlgHQ3PErW8yIKQabGrTeQDvpevuhg2TOkWRcNjlzoXDaH1NK0Cpq7VFlTfImnZvn7vDCAU6bjzzWFjEDcpCitIg/hiJIvQmDuwMTJM2SVqL/PNaAbIjCfABhUn4zV8B9OYaYNYZZJ1uyDFrB+jkWgH0USnRDUOBgCzTBMpyyoMT4Jvh3G6auuoqh+4EVwKcMZ6dj00MGT/AxB6sgOL99wubQyUTs/RRy1rS9/TFhyiI5p6eRgcVQE8jZRcCNomU16KdGKoWaSr0T9EIZZqWh3GJ2uD3Dzg0h9HE2kYnMZnTB/4WX6jMHmAsD0h8AAAAAElFTkSuQmCC" width="40" height="40" alt="">AuthzLedger</a><nav aria-label="Hauptnavigation"><a href="/#werkzeuge">Arbeitsbereich</a><a href="/downloads/">Downloads</a><a href="/fachzugang/">Fachzugang</a></nav></div></header>
+<main id="inhalt">
 <h1>Lokaler Belegimport</h1>
-<p class="lead">Führe Berichte aus einem Mandat zusammen. Sieh, welche Werkzeuge denselben Host melden, und öffne die zugehörigen Datensätze. Scope und Controls bleiben bis zur fachlichen Prüfung offen.</p>
+<p class="lead">Vergleichen Sie Werkzeugberichte aus einem Mandat und verfolgen Sie jede Beobachtung bis zum Quelldatensatz. Welche Systeme zum Mandat gehören und welche Kontrollen greifen, beurteilen Sie anschliessend.</p>
 <section class="panel ingest" aria-labelledby="input-heading">
 <div class="row between"><h2 id="input-heading">Quelldateien</h2><div class="switch" aria-label="Arbeitsbereich"><button id="real" aria-pressed="true">Eigene Dateien</button><button id="examples" aria-pressed="false">Beispiele</button></div></div>
 <p id="context"></p>
@@ -31,6 +33,6 @@
 <p class="review-next"><a href="/workbench/">Zur Evidence Workbench</a></p>
 <section class="panel" id="comparison" aria-label="Vergleich der Beobachtungen"></section>
 <section class="panel" id="asset-review" aria-label="Werkzeugübergreifende Asset-Übersicht"></section>
-<section class="notes"><h2>So liest du die Tabelle</h2><p>Die SHA-256-Prüfsumme identifiziert die exakten Bytes der gewählten Datei. Datensatznummern zählen passende Elemente in Dokumentreihenfolge. Bei Textexporten steht die Zeilennummer. Duplikate behalten ihren eigenen Quellverweis. Die Asset-ID ist der gekürzte Hash des gemeldeten Hosts. Relative Pfade enthalten keinen Host.</p><p>Alle Berichte bleiben im Arbeitsspeicher dieses Tabs. Neuladen leert beide Arbeitsbereiche. Pro Datei gelten 1 MiB und 1’000 Datensätze. Zusammen fassen die Arbeitsbereiche 20 Dateien, 5 MiB und 2’500 Datensätze. Jede Datei wird vollständig angenommen oder abgelehnt. Die XML-Profile verwerfen Entity-Deklarationen und weitere Verarbeitungsanweisungen innerhalb des Dokuments, auch als Literaltext. Ein leerer Import enthält keine passenden Einträge des gewählten Profils. Die Tabelle zeigt ausgewählte Metadaten. Eine Freigabe des Scopes und die Bestätigung eines Findings erfordern separate Nachweise.</p></section>
+<section class="notes"><h2>So lesen Sie die Tabelle</h2><p>Die SHA-256-Prüfsumme identifiziert die exakten Bytes der gewählten Datei. Datensatznummern zählen passende Elemente in Dokumentreihenfolge. Bei Textexporten steht die Zeilennummer. Duplikate behalten ihren eigenen Quellverweis. Die Asset-ID ist der gekürzte Hash des gemeldeten Hosts. Relative Pfade enthalten keinen Host.</p><p>Alle Berichte bleiben im Arbeitsspeicher dieses Tabs. Neuladen leert beide Arbeitsbereiche. Pro Datei gelten 1 MiB und 1’000 Datensätze. Zusammen fassen die Arbeitsbereiche 20 Dateien, 5 MiB und 2’500 Datensätze. Jede Datei wird vollständig angenommen oder abgelehnt. Die XML-Profile verwerfen Entity-Deklarationen und weitere Verarbeitungsanweisungen innerhalb des Dokuments, auch als Literaltext. Ein leerer Import enthält keine passenden Einträge des gewählten Profils. Die Tabelle zeigt ausgewählte Metadaten. Eine Freigabe des Scopes und die Bestätigung eines Findings erfordern separate Nachweise.</p></section>
 </main><footer>© Nasser Aldin Farag (0xFarag). All rights reserved.</footer>
 </body></html>

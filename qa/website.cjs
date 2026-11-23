@@ -111,13 +111,18 @@ async function exercise(browser, origin, width) {
     await page.goto(origin);
     const select = page.locator('#finding-select');
     await page.waitForFunction(()=>!document.getElementById('finding-select').disabled);
-    assert.equal(await page.locator('#finding-state').innerText(),'fix_verified');
+    assert.equal(await page.locator('#finding-state').innerText(), 'Korrektur bestätigt');
+    assert.deepEqual(await select.locator('option').allTextContents(), [
+      'Befund 1 · Korrektur bestätigt', 'Befund 2 · Noch nicht nachgeprüft'
+    ]);
     await checkFits(page, select, 'Cockpit finding selector');
     const sourceDetails = page.locator('#cockpit details').filter({has: page.locator('#finding-baseline')});
     await sourceDetails.locator('summary').click();
+    assert.equal(await sourceDetails.locator('#finding-status-code').innerText(), 'fix_verified');
     await checkFits(page, page.locator('#finding-baseline'), 'Cockpit baseline fingerprint');
     await select.selectOption({index:1});
-    assert.equal(await page.locator('#finding-state').innerText(),'not_retested');
+    assert.equal(await page.locator('#finding-state').innerText(), 'Noch nicht nachgeprüft');
+    assert.equal(await sourceDetails.locator('#finding-status-code').innerText(), 'not_retested');
     assert.equal(await page.locator('#finding-id').innerText(),'finding-c05b584f5c488a0155a3397e');
     await page.locator('#cockpit a[href$="#signatur"]').click();
     await page.waitForURL(url => url.hash === '#signatur');

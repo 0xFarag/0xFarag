@@ -1,7 +1,7 @@
 :root {
-  --ink:#112238; --navy:#0c192c; --slate:#485c70; --gold:#efc373; --paper:#f3f5f7;
-  --line:#d3dce4; --soft:#f5f7f9; --blue:#234f74; --radius:12px;
-  color:var(--ink); font:100%/1.55 Inter,"Instrument Sans","Segoe UI",Arial,sans-serif; color-scheme:light;
+  --ink:#112238; --navy:#071722; --slate:#485c70; --gold:#c8a66b; --paper:#f7f6f2;
+  --line:#d3dce4; --soft:#f5f7f9; --blue:#153765; --radius:12px;
+  color:var(--ink); font:100%/1.55 "Instrument Sans","Segoe UI",Arial,sans-serif; color-scheme:light;
 }
 * {box-sizing:border-box}
 body {margin:0;background:var(--paper)}
@@ -10,21 +10,22 @@ a {color:inherit}
 button,input,select,textarea {font:inherit;color:inherit}
 button,a,input,select,textarea {touch-action:manipulation}
 button {cursor:pointer}
-:focus-visible {outline:3px solid #317eaf;outline-offset:3px}
+:focus-visible {outline:3px solid #326caa;outline-offset:3px}
 .shell {width:min(1200px,92%);margin-inline:auto}
 .skip {position:absolute;left:1rem;top:-6rem;background:white;padding:.7rem;z-index:10}
 .skip:focus {top:.5rem}
 .masthead,.hero {color:#fff;background:var(--navy)}
-.masthead {border-bottom:1px solid #2b3c50}
+.masthead {border-block:2px solid var(--gold);border-bottom:1px solid #34445c}
+.masthead :focus-visible {outline-color:var(--gold)}
 .bar,.brand,.actions,.meta,.tabs {display:flex;align-items:center}
 .bar {min-height:64px;justify-content:space-between}
-.brand {gap:.6rem;font-size:1.2rem;font-weight:750;letter-spacing:-.04em;text-decoration:none}
+.brand {color:#fff3d8;gap:.6rem;font-size:1.2rem;font-weight:750;letter-spacing:-.04em;text-decoration:none}
 .brand img {display:block;object-fit:contain}
 .bar {gap:.25rem 1.5rem;flex-wrap:wrap;padding-block:.45rem}
 .bar nav {display:flex;align-items:center;gap:0 1rem;flex-wrap:wrap}
 .bar nav a {padding-block:.6rem;color:#d6dfea;font-size:.95rem;text-decoration:none;text-underline-offset:4px}
-.bar nav a:hover,.bar nav a:focus-visible {color:white;text-decoration:underline}
-.hero {background:linear-gradient(110deg,#101e31 40%,#20374c)}
+.bar nav a:hover,.bar nav a:focus-visible {color:var(--gold);text-decoration:underline}
+.hero {background:linear-gradient(115deg,var(--navy) 16%,var(--blue));border-bottom:1px solid var(--gold)}
 .hero-content {display:flex;justify-content:space-between;align-items:center;gap:2rem;padding-block:2.5rem 2.9rem}
 .eyebrow,.small-label {font:650 .8rem/1.45 "IBM Plex Mono","Courier New",monospace;letter-spacing:.085em;text-transform:uppercase}
 .eyebrow {color:var(--gold);margin:0 0 .55rem;display:flex;align-items:center;gap:.65rem}
@@ -47,8 +48,8 @@ textarea {resize:vertical}
 .source-pick select {max-width:36rem}
 .btn,.text-btn {border-radius:6px;padding:.57rem 1rem;min-height:44px;background:white;border:1px solid #a7b5c2;font-weight:630;font-size:.94rem}
 .btn:hover {background:#edf2f5;border-color:#5b7184}
-.btn.primary {color:#111f2d;background:var(--gold);border-color:#cb9e52}
-.btn.primary:hover {background:#f6d492}
+.btn.primary {color:var(--navy);background:var(--gold);border-color:#96733b}
+.btn.primary:hover:not(:disabled) {background:#e2c58e}
 .text-btn {background:transparent;border:0;text-decoration:underline;text-underline-offset:.2rem;color:var(--blue)}
 .source-help,.fine,.trust-explanation {color:var(--slate);font-size:.91rem}
 .source-help {grid-column:1/-1}

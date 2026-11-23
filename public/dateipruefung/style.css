@@ -10,7 +10,7 @@ dd { margin:.2rem 0 .85rem; }
 .metrics dd { font-weight:650; }
 .digests code { overflow-wrap:anywhere; }
 .feedback:empty { display:none; }
-.feedback:not(:empty) { margin:1rem 0 0; border-inline-start:3px solid #307b77; padding:.45rem .7rem; }
+.feedback:not(:empty) { margin:1rem 0 0; border-inline-start:3px solid var(--royal); padding:.45rem .7rem; }
 .feedback[data-error] { border-color:#935122; }
 #signals ul { padding-left:1.3rem; }
 #vt-result table { width:100%; margin-top:1rem; border-collapse:collapse; font-size:1rem; }

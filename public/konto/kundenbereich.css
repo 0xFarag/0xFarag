@@ -1,8 +1,8 @@
 /* © Nasser Aldin Farag (0xFarag). All rights reserved. */
 :root {
   color-scheme: light;
-  --navy: #071722; --ink: #122933; --muted: #455c62;
-  --teal: #43d6cf; --gold: #c8a66b; --line: #c4cdca; --paper: #f6f5f0;
+  --navy: #071722; --royal: #153765; --ink: #16283d; --muted: #46586e;
+  --gold: #c8a66b; --line: #c8cfda; --paper: #f7f6f2;
   font-family: "Instrument Sans", system-ui, sans-serif;
   color: var(--ink); background: var(--paper);
 }
@@ -11,29 +11,29 @@ body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
 main { flex: 1; }
 [hidden] { display: none !important; }
 a { color: inherit; }
-a:focus-visible, button:focus-visible { outline: 3px solid #00837f; outline-offset: 4px; }
-header a:focus-visible, footer a:focus-visible { outline-color: var(--teal); }
+:focus-visible { outline: 3px solid #326caa; outline-offset: 3px; }
+header a:focus-visible, footer a:focus-visible { outline-color: var(--gold); }
 .wrap { width: min(70rem, calc(100% - 3rem)); margin: 0 auto; }
 header, footer, .intro { background: var(--navy); color: #fff; }
 header { border-top: 3px solid var(--gold); }
-.masthead { min-height: 5rem; display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; border-bottom: 1px solid #314750; }
-.brand { display: inline-flex; align-items: center; gap: .6rem; text-decoration: none; font-size: 1.35rem; font-weight: 720; }
+.masthead { min-height: 5rem; display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; border-bottom: 1px solid #34445c; }
+.brand { color: #fff3d8; display: inline-flex; align-items: center; gap: .6rem; text-decoration: none; font-size: 1.35rem; font-weight: 720; }
 .brand img { width: 2.4rem; height: 2.4rem; }
 nav { display: flex; align-items: center; flex-wrap: wrap; gap: .2rem 1.4rem; }
 nav a { padding: .65rem 0; font-size: .95rem; text-decoration: none; }
-nav a:hover, nav a[aria-current] { color: var(--teal); }
-.skip { position: absolute; z-index: 1; left: 1rem; top: -10rem; background: white; padding: .75rem; }
+nav a:hover, nav a[aria-current] { color: var(--gold); text-decoration: underline; text-underline-offset: .3em; }
+.skip { position: absolute; z-index: 1; left: 1rem; top: -10rem; background: white; color: var(--ink); padding: .75rem; }
 .skip:focus { top: .8rem; }
-.intro { padding: clamp(2.6rem, 6vw, 5rem) 0 clamp(2.7rem, 6vw, 4.7rem); }
+.intro { background: linear-gradient(115deg, var(--navy) 16%, var(--royal)); border-bottom: 1px solid var(--gold); padding: clamp(2.6rem, 6vw, 5rem) 0 clamp(2.7rem, 6vw, 4.7rem); }
 h1,h2,p { margin: 0; }
-h1 { color: #f6f4ed; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.7rem, 6.8vw, 5.3rem); font-weight: 500; letter-spacing: -.045em; line-height: 1.02; }
-.intro p { color: #c7d6d9; margin-top: 1.15rem; font-size: clamp(1.03rem, 2vw, 1.26rem); line-height: 1.6; max-width: 49rem; }
+h1 { color: #f6f4ed; font-family: "Instrument Sans", system-ui, sans-serif; font-size: clamp(2.5rem, 5.2vw, 4.5rem); font-weight: 690; overflow-wrap: break-word; letter-spacing: -.045em; line-height: 1.02; }
+.intro p { color: #d1dbea; margin-top: 1.15rem; font-size: clamp(1.03rem, 2vw, 1.26rem); line-height: 1.6; max-width: 49rem; }
 h2 { letter-spacing: -.025em; font-weight: 700; font-size: clamp(1.4rem, 2.6vw, 1.75rem); line-height: 1.2; }
 .content { padding-top: clamp(1.8rem, 4vw, 3.2rem); padding-bottom: clamp(3.4rem, 6vw, 5rem); }
 .content p { line-height: 1.65; }
 .plans { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; }
 .card,.panel { background: #fff; border: 1px solid var(--line); border-radius: .3rem; padding: clamp(1.3rem, 3.1vw, 2.2rem); }
-.card { display: flex; flex-direction: column; border-top: 4px solid #479b98; }
+.card { display: flex; flex-direction: column; border-top: 4px solid var(--royal); }
 .card.team { border-top-color: var(--navy); }
 .card.pilot { border-top-color: var(--gold); }
 .price { margin: 1.25rem 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.1rem, 3.3vw, 3.2rem); font-weight: 500; letter-spacing: -.045em; }
@@ -43,10 +43,10 @@ h2 { letter-spacing: -.025em; font-weight: 700; font-size: clamp(1.4rem, 2.6vw, 
 .card > p:not(.price), .panel > p:not(.price), .sidebar p, .line-item p { color: var(--muted); }
 .card-action { margin-top: auto; padding-top: 1.4rem; }
 .primary,.secondary { display: inline-block; appearance: none; padding: .76rem 1.05rem; border: 1px solid var(--navy); border-radius: .25rem; font: 650 1rem/1.4 system-ui,sans-serif; text-decoration: none; text-align: center; cursor: pointer; }
-.primary { color: #fff; background: var(--navy); }
-.primary:hover { background: #153a45; }
-.secondary { background: transparent; color: var(--ink); border-color: #899c9a; }
-.secondary:hover { background: #e7eeeb; }
+.primary { color: var(--navy); background: var(--gold); border-color: #96733b; }
+.primary:hover:not(:disabled) { background: #e2c58e; }
+.secondary { background: transparent; color: var(--ink); border-color: #7c8ca0; }
+.secondary:hover { background: #e9edf3; }
 .primary:disabled { opacity: .68; cursor: progress; }
 .actions { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; margin-top: 1.3rem; }
 .fine { font-size: .93rem; color: var(--muted); margin: 1rem 0 2.5rem; }
@@ -56,8 +56,8 @@ h2 { letter-spacing: -.025em; font-weight: 700; font-size: clamp(1.4rem, 2.6vw, 
 .account-grid { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(0,1fr); gap: clamp(1.5rem,6vw,4rem); align-items: start; }
 .checkout-grid { grid-template-columns: minmax(0,2.2fr) minmax(0,1fr); }
 .sidebar { border-top: 2px solid var(--gold); padding-top: 1.3rem; }
-.text-link { display: block; width: fit-content; text-decoration-thickness: 1px; text-underline-offset: .25em; color: #005957; font-weight: 650; margin-top: 1rem; }
-.status { border-inline-start: 3px solid #228782; padding: .6rem .9rem; background: #f0f5f3; }
+.text-link { display: block; width: fit-content; text-decoration-thickness: 1px; text-underline-offset: .25em; color: var(--royal); font-weight: 650; margin-top: 1rem; }
+.status { border-inline-start: 3px solid var(--royal); padding: .6rem .9rem; background: #edf1f7; }
 #embedded:not(:empty) { margin-top: 1.3rem; }
 .compact { max-width: 48rem; }
 footer .wrap { padding: 1.8rem 0; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1.4rem 2rem; }

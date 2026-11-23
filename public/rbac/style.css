@@ -2,8 +2,7 @@
 .panel { margin-bottom:1rem; min-width:0; }
 .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr)); gap:1rem; margin-top:1rem; }
 .grid label { display:flex; flex-direction:column; gap:.35rem; font-size:.95rem; font-weight:600; }
-input,select,textarea { max-width:100%; min-width:0; font:inherit; padding:.5rem; color:var(--ink); background:#fff; border:1px solid #728b8d; border-radius:.25rem; }
-input:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid #00837f; outline-offset:2px; }
+input,select,textarea { max-width:100%; min-width:0; font:inherit; padding:.5rem; color:var(--ink); background:#fff; border:1px solid #76869a; border-radius:.25rem; }
 .panel code,.panel li,.panel dd { overflow-wrap:anywhere; }
 .panel dd { margin:.28rem 0 .9rem; }
 .panel p:empty,.panel ol:empty { display:none; }

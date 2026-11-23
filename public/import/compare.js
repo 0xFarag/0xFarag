@@ -132,7 +132,7 @@ const AuthzCompare = (() => {
     const previousA = container.querySelector('[data-snapshot="earlier"]')?.value;
     const previousB = container.querySelector('[data-snapshot="later"]')?.value;
     container.replaceChildren(element('h2', 'Zwei Importstände vergleichen'));
-    container.append(element('p', 'Wähle die zeitliche Reihenfolge selbst. Der Vergleich benötigt zwei Dateien desselben Werkzeugs mit eindeutigem Asset- und Fallbezug.'));
+    container.append(element('p', 'Legen Sie die zeitliche Reihenfolge fest. Der Vergleich benötigt zwei Dateien desselben Werkzeugs mit eindeutigem Asset- und Fallbezug.'));
     if (files.length < 2) {
       container.append(element('p', 'Für den Vergleich mindestens zwei Quelldateien laden.'));
       return;

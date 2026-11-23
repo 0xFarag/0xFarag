@@ -33,20 +33,26 @@
     if (await sha256(bytes) !== receiptDigest) throw new Error('receipt mismatch');
     const receipt = JSON.parse(decoder.decode(bytes));
     const records = receipt.transitions;
+    const labels = new Map([
+      ['fix_verified', 'Korrektur bestätigt'],
+      ['not_retested', 'Noch nicht nachgeprüft']
+    ]);
+    if (records.some(record => !labels.has(record.status))) throw new Error('unknown retest status');
     const ledger = receipt.execution_ledger;
     document.getElementById('budget').textContent =
       'Im Demolauf wurden ' + ledger.dispatched_total + ' von ' + ledger.approved_total + ' freigegebenen Operationen ausgeführt.';
     select.replaceChildren(...records.map((record, index) => {
       const option = document.createElement('option');
       option.value = record.finding_id;
-      option.textContent = 'Befund ' + (index + 1) + ' · ' + record.status;
+      option.textContent = 'Befund ' + (index + 1) + ' · ' + labels.get(record.status);
       return option;
     }));
 
     function renderFinding() {
       const record = records.find(entry => entry.finding_id === select.value);
       const state = document.getElementById('finding-state');
-      state.textContent = record.status;
+      state.textContent = labels.get(record.status);
+      document.getElementById('finding-status-code').textContent = record.status;
       state.closest('.decision').dataset.state = record.status;
       document.getElementById('finding-note').textContent = record.status === 'fix_verified'
         ? 'Korrektur im Demofall nachgewiesen. Beide SHA-256-Werte verknüpfen den ursprünglichen Befund und seine Nachprüfung.'
