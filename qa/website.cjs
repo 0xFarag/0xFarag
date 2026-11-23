@@ -37,7 +37,7 @@ async function serveFile(request, response) {
 
 async function checkLinks(page, origin) {
   const files = new Map();
-  const htmlPages = ['/index.html', '/lab.html', '/installation.html', '/technik/hkdf/', '/import/', '/downloads/', '/workbench/', '/rbac/', '/dateipruefung/', '/fachzugang/'];
+  const htmlPages = ['/index.html', '/lab/referenz.html', '/lab.html', '/installation.html', '/technik/hkdf/', '/import/', '/downloads/', '/workbench/', '/rbac/', '/dateipruefung/', '/fachzugang/'];
   for (const source of htmlPages) {
     const response = await page.goto(origin + source);
     assert.equal(response.status(), 200, source);
@@ -108,7 +108,7 @@ async function exercise(browser, origin, width) {
     const errors = [];
     page.on('pageerror',e=>errors.push(String(e)));
     await verifyHomepagePaths(page, origin, width);
-    await page.goto(origin);
+    await page.goto(origin + '/lab/referenz.html');
     const select = page.locator('#finding-select');
     await page.waitForFunction(()=>!document.getElementById('finding-select').disabled);
     assert.equal(await page.locator('#finding-state').innerText(), 'Korrektur bestätigt');
@@ -168,7 +168,7 @@ async function exercise(browser, origin, width) {
     }
 
     await page.route('**/proof/v1.5.0/report.json', route => route.fulfill({status:200,contentType:'application/json',body:'{}'}));
-    await page.goto(origin);
+    await page.goto(origin + '/lab/referenz.html');
     await page.getByRole('status').filter({hasText:'Prüfung nicht verfügbar'}).waitFor();
     assert(await page.locator('#verify').isDisabled());
     await page.unroute('**/proof/v1.5.0/report.json');

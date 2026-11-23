@@ -1,5 +1,11 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
 (function () {
+  const referenceSections = ['cockpit', 'signatur', 'demos', 'film', 'case-a', 'case-b', 'case-c', 'tab-a', 'tab-b', 'tab-c'];
+  if (!location.pathname.endsWith('/lab/referenz.html') && referenceSections.includes(location.hash.slice(1))) {
+    const target = '/lab/referenz.html' + location.hash;
+    location.replace(window.AuthzI18n?.url(target) ?? target);
+    return;
+  }
   const legacyLabSections = ['kontrolllabor', 'foederation', 'kandidatenpruefung', 'beweisfilm', 'status'];
   if (legacyLabSections.includes(location.hash.slice(1))) {
     const target = '/lab.html' + location.hash;
@@ -19,6 +25,7 @@
     }
   });
   const nav = document.querySelector('.proof-nav');
+  if (!nav) return;
   const tabs = Array.from(nav.querySelectorAll('a'));
   const panels = tabs.map(tab => document.getElementById(tab.hash.slice(1)));
   nav.setAttribute('role', 'tablist');

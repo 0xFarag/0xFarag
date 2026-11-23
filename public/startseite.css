@@ -148,3 +148,8 @@
   .home .nav { gap: .3rem; }
   .home .head-cta { padding-inline: .45rem; }
 }
+
+.home .workspace-paths {align-self:center; display:grid; gap:1.6rem; border-inline-start:2px solid #43d6cf; padding-inline-start:clamp(1.1rem, 3vw, 2.4rem); text-align:start}
+.home .workspace-paths h2 {margin:0; font-size:clamp(1.15rem,2vw,1.5rem); color:#fff}
+.home .workspace-paths p {margin:.45rem 0; max-width:42ch; color:#d6e0ed}
+.home .workspace-paths a {color:#e7c78b}

@@ -1,0 +1,98 @@
+{
+  "AuthzLedger · Workbench für Berechtigungsnachweise": [
+    "AuthzLedger · Authorization evidence workbench",
+    "AuthzLedger · Espace de travail pour les preuves d’autorisation",
+    "AuthzLedger · Ambiente di lavoro per le prove di autorizzazione",
+    "AuthzLedger · مساحة عمل لأدلة الصلاحيات"
+  ],
+  "Prüfen Sie eigene Belege, vergleichen Sie Berechtigungen und dokumentieren Sie Retests. Arbeiten Sie im Browser oder in der lokal installierten Team-Workbench.": [
+    "Review your evidence, compare permissions and document retests. Work in your browser or in your locally installed team workspace.",
+    "Examinez vos preuves, comparez les autorisations et documentez les nouveaux tests dans le navigateur ou dans l’espace d’équipe installé localement.",
+    "Esamina le tue prove, confronta le autorizzazioni e documenta le verifiche successive nel browser o nella piattaforma per team installata localmente.",
+    "راجع أدلتك وقارن الصلاحيات ووثّق نتائج إعادة الاختبار في المتصفح أو في مساحة الفريق المثبّتة محلياً."
+  ],
+  "AuthzLedger Lab · Release-Referenz 1.5.0": [
+    "AuthzLedger Lab · Release 1.5.0 reference",
+    "AuthzLedger Lab · Référence de la version 1.5.0",
+    "AuthzLedger Lab · Riferimento della versione 1.5.0",
+    "مختبر AuthzLedger · مرجع الإصدار 1.5.0"
+  ],
+  "Lab · Release 1.5.0": [
+    "Lab · Release 1.5.0",
+    "Lab · Version 1.5.0",
+    "Lab · Versione 1.5.0",
+    "المختبر · الإصدار 1.5.0"
+  ],
+  "Prüfen Sie Ihre eigenen Werkzeugexporte. Halten Sie fest, welche Kontrolle einen Befund stützt, welcher Fix nachgeprüft wurde und was für die Übergabe offen bleibt.": [
+    "Review your own tool exports. Record the control supporting each finding, the fixes that were retested and the issues still open at handover.",
+    "Examinez vos propres exports. Documentez le contrôle qui étaye chaque constat, les corrections vérifiées et les points encore ouverts lors de la remise.",
+    "Esamina i dati esportati dai tuoi strumenti. Documenta il controllo che sostiene ogni rilievo, le correzioni verificate e i punti ancora aperti alla consegna.",
+    "راجع صادرات أدواتك ووثّق الاختبار الضابط الذي يدعم كل نتيجة، والإصلاحات التي أُعيد اختبارها، والمسائل المفتوحة عند التسليم."
+  ],
+  "Workbench öffnen": [
+    "Open workbench",
+    "Ouvrir l’espace de travail",
+    "Apri l’ambiente di lavoro",
+    "فتح مساحة العمل"
+  ],
+  "Team-Workbench installieren": [
+    "Install the team workspace",
+    "Installer l’espace d’équipe",
+    "Installa lo spazio di lavoro del team",
+    "تثبيت مساحة عمل الفريق"
+  ],
+  "Arbeitsbereich wählen": [
+    "Choose a workspace",
+    "Choisir un espace de travail",
+    "Scegli lo spazio di lavoro",
+    "اختيار مساحة العمل"
+  ],
+  "Im Browser arbeiten": [
+    "Work in your browser",
+    "Travailler dans le navigateur",
+    "Lavora nel browser",
+    "العمل في المتصفح"
+  ],
+  "Öffnen Sie einen lokalen Fall und erstellen Sie ein Entwicklerticket oder einen Bericht in der gewünschten Sprache.": [
+    "Open a local case and create a developer ticket or a report in your chosen language.",
+    "Ouvrez un dossier local et créez un ticket de développement ou un rapport dans la langue de votre choix.",
+    "Apri un caso locale e crea un ticket per gli sviluppatori o un rapporto nella lingua che preferisci.",
+    "افتح حالة محلية وأنشئ تذكرة للمطوّرين أو تقريراً باللغة التي تختارها."
+  ],
+  "Im Team arbeiten": [
+    "Work as a team",
+    "Travailler en équipe",
+    "Lavora in team",
+    "العمل ضمن فريق"
+  ],
+  "Verwalten Sie Zugriffsrollen, Kontrollen und signierte Übergaben in Ihrer eigenen Installation.": [
+    "Manage access roles, controls and signed handovers in your own installation.",
+    "Gérez les rôles d’accès, les contrôles et les remises signées dans votre propre installation.",
+    "Gestisci ruoli di accesso, controlli e consegne firmate nella tua installazione.",
+    "أدر أدوار الوصول والاختبارات الضابطة وحزم التسليم الموقّعة في نسختك المثبّتة."
+  ],
+  "Pakete und Installation": [
+    "Packages and installation",
+    "Paquets et installation",
+    "Pacchetti e installazione",
+    "الحزم والتثبيت"
+  ],
+  "Erfassen Sie eigene Fälle, prüfen Sie Befunde und exportieren Sie Entwicklertickets und Kundenberichte.": [
+    "Record your own cases, review findings and export developer tickets and client reports.",
+    "Créez vos dossiers, examinez les constats et exportez des tickets de développement et des rapports clients.",
+    "Registra i tuoi casi, esamina i rilievi ed esporta ticket per gli sviluppatori e rapporti per i clienti.",
+    "سجّل حالاتك وراجع النتائج وصدّر تذاكر المطوّرين وتقارير العملاء."
+  ],
+  "Release-Referenz öffnen": [
+    "Open the release reference",
+    "Ouvrir la référence de version",
+    "Apri il riferimento della versione",
+    "فتح مرجع الإصدار"
+  ],
+  "Importformate ansehen": [
+    "View import formats",
+    "Voir les formats d’import",
+    "Visualizza i formati di importazione",
+    "عرض صيغ الاستيراد"
+  ]
+}

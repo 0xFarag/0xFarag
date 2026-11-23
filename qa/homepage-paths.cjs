@@ -22,13 +22,15 @@ async function checkFits(page, locator, label) {
 async function verifyHomepagePaths(page, origin, width) {
   await page.goto(origin);
   const hero = page.locator('section').filter({has: page.getByRole('heading', {level: 1})}).first();
-  assert(await hero.locator('#cockpit #finding-select').isVisible(), 'Interactive cockpit is in the hero');
-  const offlinePath = '/downloads/pruefwerkzeuge/AuthzLedger-Offline-Pruefwerkzeuge.zip';
-  const offline = routeLinks(hero, offlinePath);
-  await checkFits(page, offline, 'Hero offline ZIP');
-  const [download] = await Promise.all([page.waitForEvent('download'), offline.click()]);
-  assert.equal(download.suggestedFilename(), offlinePath.split('/').pop());
-  assert.equal(await download.failure(), null);
+  assert.equal(await hero.locator('#cockpit, #finding-select').count(), 0);
+  for (const destination of ['/workbench/', '/downloads/#team']) {
+    const action = routeLinks(hero, destination).first();
+    await checkFits(page, action, destination);
+    await action.click();
+    await page.waitForURL(origin + destination);
+    if (destination.includes('#team')) assert(await page.locator('#team').isVisible());
+    await page.goto(origin);
+  }
   const startTools = hero.locator('a[href$="#werkzeuge"]');
   await checkFits(page, startTools, 'Hero tools action');
   await startTools.click();
