@@ -21,6 +21,12 @@ The example retest is a byte-for-byte copy of the public mixed-C artifact with S
 | unavailable | Both event and alert lists are empty. |
 | incomparable | Records exist, but no event has the required source, assessment, scope, finding and timestamp. Includes an alert with no qualifying event. |
 
+### Read the event coverage
+
+Studio shows the number of distinct eligible events with a linked alert for each sample and how many input events were excluded. In the JSON these are `alert_coverage.linked_events`, `eligible_events` and `excluded_events` within each sample's `alert_coverage` object. Its sorted `unlinked_event_ids` lists eligible events without an alert for the expected rule in this export. Duplicate alert rows for one event count once. A sample with one linked event out of two can be `observed` while the second event has no linked alert. If no events qualify, Studio shows “No eligible events”. An empty sample and a foreign-scope sample keep their distinct evidence statuses.
+
+The source finding and the number of omitted retests are displayed alongside the sample table. These counts describe different populations: event linkage concerns the selected finding and supplied signals; retest coverage refers to all finding transitions in the saved retest.
+
 ## Operator export contract
 
 Use UTF-8 JSON. Set `schema` to `authzledger.control-signals.v1` and `dataset` to `operator-supplied-signals`. The example's `authzledger.website-lab.v1` identifies the published synthetic profile. Choose opaque, non-sensitive IDs. The input label records the operator's declaration. It does not authenticate the origin of the events.
