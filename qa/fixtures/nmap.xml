@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="https://egress.invalid/nmap.xsl" type="text/xsl"?>
+<nmaprun scanner="nmap"><host><address addr="2001:db8::12" addrtype="ipv6"/><ports><port protocol="tcp" portid="443"><state state="open"/></port><extraports state="closed" count="100"/></ports></host></nmaprun>

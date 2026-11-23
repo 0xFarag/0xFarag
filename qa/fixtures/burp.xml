@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE issues [
+<!ELEMENT issues (issue*)>
+<!ATTLIST issues burpVersion CDATA "">
+<!ELEMENT issue (serialNumber,type,name,host,path,severity,requestresponse*)>
+<!ELEMENT host (#PCDATA)>
+<!ATTLIST host ip CDATA "">
+<!ELEMENT requestresponse (request?,response?)>
+<!ATTLIST request base64 (true|false) "false">
+]>
+<issues><issue><serialNumber>108</serialNumber><type>88</type><name>Fixture</name><host>https://app.example</host><path>/private-path</path><severity>Low</severity><requestresponse><request base64="false">PRIVATE_PAYLOAD</request></requestresponse></issue></issues>

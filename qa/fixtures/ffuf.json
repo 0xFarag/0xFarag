@@ -1,0 +1,1 @@
+{"results":[{"url":"https://app.example/private-path?token=PRIVATE_PAYLOAD","status":200},{"url":"https://app.example/other","status":403},{"url":"https://app.example/private-path?token=PRIVATE_PAYLOAD","status":200}]}

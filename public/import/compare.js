@@ -110,7 +110,7 @@ const AuthzCompare = (() => {
         const entry = result.entries[shown];
         const row = body.insertRow();
         const subject = row.insertCell();
-        subject.textContent = entry.asset ? entry.asset : 'Unbekannt asset';
+        subject.textContent = entry.asset ? entry.asset : 'Unbekanntes Asset';
         if (entry.identity) {
           subject.append(element('br'));
           const check = element('small', entry.identity.slice(0, 12));

@@ -61,10 +61,10 @@ const AuthzImport = (() => {
     function discardPrologTrivia() {
       while (true) {
         skipSpace();
-      const term = input.startsWith('<?',pos) ? '?>' : input.startsWith('<!--',pos) ? '-->' : '';
-      if (!term) break;
-      const end=input.indexOf(term,pos+2);
-      requireThat(end>=0,'Unvollständiger XML-Prolog.');
+        const term = input.startsWith('<?',pos) ? '?>' : input.startsWith('<!--',pos) ? '-->' : '';
+        if (!term) break;
+        const end=input.indexOf(term,pos+2);
+        requireThat(end>=0,'Unvollständiger XML-Prolog.');
         pos=end+term.length;
       }
     }

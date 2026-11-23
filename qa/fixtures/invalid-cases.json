@@ -1,0 +1,120 @@
+[
+  {
+    "source": "ffuf",
+    "text": "{\"results\":[{\"url\":\"https://app.example\",\"status\":[200]}]}"
+  },
+  {
+    "source": "ffuf",
+    "text": "{\"results\":[{\"url\":\"https://app.example\",\"status\":\"200\"}]}"
+  },
+  {
+    "source": "ffuf",
+    "text": "{\"results\":[{\"url\":\"https://app.example\",\"status\":200},{}]}"
+  },
+  {
+    "source": "ffuf",
+    "text": "{\"results\":[{\"url\":\"data:,test\",\"status\":200}]}"
+  },
+  {
+    "source": "ffuf",
+    "text": "[]"
+  },
+  {
+    "source": "ffuf",
+    "text": "[broken]"
+  },
+  {
+    "source": "ffuf",
+    "text": ""
+  },
+  {
+    "source": "gobuster",
+    "text": "DNS: example"
+  },
+  {
+    "source": "gobuster",
+    "text": "/first (Status: 200) [Size: 18]\\n/second (Status: 403) [Size: 32]\\nbanner\n"
+  },
+  {
+    "source": "nmap",
+    "text": "<!DOCTYPE nmaprun SYSTEM \"https://egress.invalid/test\"><nmaprun><host><address addr=\"192.0.2.12\" addrtype=\"ipv4\"/><ports><port protocol=\"tcp\" portid=\"443\"><state state=\"open\"/></port></ports></host></nmaprun>"
+  },
+  {
+    "source": "nmap",
+    "text": "<!DOCTYPE nmaprun [<!ENTITY local 'test'>]><nmaprun><host><address addr=\"192.0.2.12\" addrtype=\"ipv4\"/><ports><port protocol=\"tcp\" portid=\"443\"><state state=\"open\"/></port></ports></host></nmaprun>"
+  },
+  {
+    "source": "nmap",
+    "text": "<nmaprun><host><address addr=\"999.0.2.12\" addrtype=\"ipv4\"/><ports><port protocol=\"tcp\" portid=\"443\"><state state=\"open\"/></port></ports></host></nmaprun>"
+  },
+  {
+    "source": "nmap",
+    "text": "<nmaprun><host><address addr=\"192.0.2.12\" addrtype=\"ipv4\"/><ports><port protocol=\"tcp\" portid=\"443\"><state state=\"unknown\"/></port></ports></host></nmaprun>"
+  },
+  {
+    "source": "nmap",
+    "text": "<nmaprun>"
+  },
+  {
+    "source": "nmap",
+    "text": "<other/>"
+  },
+  {
+    "source": "burp",
+    "text": "<!DOCTYPE issues [<!ENTITY x SYSTEM 'https://egress.invalid/test'>]><issues/>"
+  },
+  {
+    "source": "burp",
+    "text": "<!DOCTYPE issues [<!ATTLIST x a CDATA '&x;'>]><issues/>"
+  },
+  {
+    "source": "burp",
+    "text": "<!DOCTYPE issues PUBLIC 'a' 'b'><issues/>"
+  },
+  {
+    "source": "burp",
+    "text": "<!DOCTYPE issues [<![IGNORE[abc]]>]><issues/>"
+  },
+  {
+    "source": "burp",
+    "text": "<?x <!--?><!DOCTYPE issues SYSTEM 'https://egress.invalid/x'><issues/>"
+  },
+  {
+    "source": "nessus",
+    "text": "<NessusClientData_v2><Report name=\"Example\"><ReportHost name=\"training.example\"><ReportItem pluginID=\"123\" port=\"443\" protocol=\"tcp\" severity=\"9\"/></ReportHost></Report></NessusClientData_v2>"
+  },
+  {
+    "source": "cobalt",
+    "text": "{\"schema\":\"authzledger.defensive-telemetry.v1\",\"source\":\"cobalt-strike\",\"events\":[{\"record_id\":\"example-1\",\"asset\":\"training.example\",\"observed_at\":\"2026-02-30T10:00:00Z\",\"event_type\":\"detection\"}]}"
+  },
+  {
+    "source": "cobalt",
+    "text": "{\"schema\":\"authzledger.defensive-telemetry.v1\",\"source\":\"cobalt-strike\",\"events\":[{\"record_id\":\"example-1\",\"asset\":\"training.example\",\"observed_at\":\"2026-01-15T10:00:00Z\",\"event_type\":\"unknown\"}]}"
+  },
+  {
+    "source": "cobalt",
+    "text": "{\"schema\":\"authzledger.defensive-telemetry.v1\",\"source\":\"cobalt-strike\",\"events\":[{\"raw\":\"text\",\"record_id\":\"example-1\",\"asset\":\"training.example\",\"observed_at\":\"2026-01-15T10:00:00Z\",\"event_type\":\"detection\"}]}"
+  },
+  {
+    "source": "cobalt",
+    "text": "{\"events\":[]}"
+  },
+  {
+    "source": "other",
+    "text": "{}"
+  },
+  {
+    "source": "ffuf",
+    "repeat": "x",
+    "count": 1048577
+  },
+  {
+    "source": "nmap",
+    "repeat": "<!--",
+    "count": 20000
+  },
+  {
+    "source": "ffuf",
+    "ffufRows": 1001
+  }
+]

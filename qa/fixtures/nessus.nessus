@@ -1,0 +1,1 @@
+<NessusClientData_v2><Report name="Example"><ReportHost name="app.example"><ReportItem pluginID="123" port="443" protocol="tcp" severity="0"><plugin_output>PRIVATE_PAYLOAD</plugin_output></ReportItem></ReportHost></Report></NessusClientData_v2>

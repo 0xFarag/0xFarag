@@ -1,8 +1,9 @@
+/* © Nasser Aldin Farag (0xFarag). All rights reserved. */
 /* Shared 0xFarag identity across the product, lab, installation and articles. */
 :root {
-  --midnight: #081426;
+  --midnight: #071722;
   --royal: #153765;
-  --brass: #e2b65f;
+  --brass: #C8A66B;
   --navy: var(--midnight);
   --navy2: var(--royal);
   --gold: var(--brass);
@@ -72,3 +73,6 @@ header.head, body > header, body > footer {
   .hero h1 { max-width: 17ch; }
   .brand img, .wordmark img { width: 2.6rem; }
 }
+
+.source-import { border-left: 4px solid #43D6CF; padding: .25rem 1.25rem; margin-top: 2rem; }
+.source-import p { max-width: 75ch; line-height: 1.55; }

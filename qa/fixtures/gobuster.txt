@@ -1,0 +1,4 @@
+dashboard               (Status: 200) [Size: 18]
+/private-path (Status: 403) [Size: 32]
+
+https://app.example/dashboard (Status: 301) [Size: 30] [--> https://app.example/review]

@@ -21,7 +21,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install pinned browser test runner
-        run: npm install --prefix qa --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+        run: npm install --prefix qa --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 sax@1.6.1
       - name: Install Chromium on Linux
         if: runner.os == 'Linux'
         run: node qa/node_modules/playwright/cli.js install --with-deps chromium
@@ -29,7 +29,7 @@ jobs:
         if: runner.os == 'Windows'
         run: node qa/node_modules/playwright/cli.js install chromium
       - name: Check source-bound observation comparisons
-        run: node --test qa/import-compare.cjs qa/import-compare-browser.cjs
+        run: node --test qa/import-formats.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
       - name: Test public pages and their evidence
         run: node qa/website.cjs
 

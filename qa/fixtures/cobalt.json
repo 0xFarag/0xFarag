@@ -1,0 +1,1 @@
+{"schema":"authzledger.defensive-telemetry.v1","source":"cobalt-strike","events":[{"record_id":"r21","asset":"app.example","observed_at":"2024-02-29T23:59:59.120Z","event_type":"detection"}]}
