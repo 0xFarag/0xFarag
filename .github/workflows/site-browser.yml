@@ -11,7 +11,7 @@ jobs:
   browser:
     name: Site browser / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 12
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -37,11 +37,15 @@ jobs:
       - name: Check source-bound observation comparisons
         run: node --test qa/import-formats.cjs qa/format-extensions.cjs qa/asset-review.cjs qa/ferox-format.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
       - name: Check evidence workbench projections and comparisons
-        run: node --test qa/board-blue.test.mjs qa/board-compare.test.mjs qa/board-model.test.mjs qa/board-index.test.mjs
+        run: node --test qa/board-blue.test.mjs qa/board-compare.test.mjs qa/board-model.test.mjs qa/board-index.test.mjs qa/board-exports.test.mjs
       - name: Verify native policy permissions, retests, file triage and vetted access
-        run: node --test qa/rbac-policy.test.mjs qa/rbac-retest.test.mjs qa/rbac-browser.cjs qa/file-triage.test.mjs qa/file-triage-browser.cjs qa/pro-review.cjs qa/pro-access-browser.cjs
+        run: node --test qa/rbac-policy.test.mjs qa/rbac-retest.test.mjs qa/rbac-browser.cjs qa/rbac-matrix.test.mjs qa/rbac-matrix-browser.cjs qa/file-triage.test.mjs qa/file-triage-browser.cjs qa/pro-review.cjs qa/pro-access-browser.cjs
       - name: Verify billing readiness, checkout and customer journeys
         run: node --test qa/billing-api.cjs qa/customer.cjs qa/customer-browser.cjs
+      - name: Build standalone language routes
+        run: node scripts/build-locales.mjs
+      - name: Verify language switching, direction and retained state
+        run: node qa/languages.cjs
       - name: Test public pages and their evidence
         run: node qa/website.cjs
 
@@ -58,11 +62,13 @@ jobs:
           persist-credentials: false
       - name: Assemble the public downloads
         run: node scripts/build-downloads.mjs
+      - name: Build all language editions
+        run: node scripts/build-locales.mjs
       - name: Check the Hostinger document root
-        run: test -s public/index.html
+        run: test -s dist/index.html && test -s dist/fr/workbench/index.html
       - name: Upload static site with index.html at the archive root
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: AuthzLedger-Hostinger-${{ github.sha }}
-          path: public/
+          path: dist/
           if-no-files-found: error

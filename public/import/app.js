@@ -2,14 +2,18 @@
 'use strict';
 (() => {
   const {limits, definitions, samples, parse, ImportError} = AuthzImport;
+  const {t, write} = AuthzToolCopy;
   const $ = id => document.getElementById(id);
   const element = (tag, value) => {const e = document.createElement(tag); e.textContent = value; return e;};
   const stores = {real: [], examples: []};
   let mode = 'real', page = 0, busy = false, sequence = 0;
   for (const [key, info] of Object.entries(definitions)) {
-    for (const id of ['adapter','filter']) $(id).add(new Option(info.label,key));
+    for (const id of ['adapter','filter']) {
+      const option = new Option('',key); write(option, info.label); $(id).add(option);
+    }
   }
-  const autoOption = new Option('Automatisch erkennen', 'auto');
+  const autoOption = new Option('', 'auto');
+  write(autoOption, 'Automatisch erkennen');
   $('adapter').add(autoOption, 0);
   $('adapter').value = 'auto';
   function updateHint() {
@@ -18,12 +22,12 @@
     $('sample-detail').hidden = automatic;
     if (automatic) {
       $('file').accept = [...new Set(Object.values(definitions).flatMap(def => def.accept.split(',')))].join(',');
-      $('hint').textContent = 'Sie können Exporte verschiedener Werkzeuge zusammen auswählen. Das Format wird am Dateiinhalt erkannt. Jede Datei wird einzeln geprüft.';
+      write($('hint'), 'Sie können Exporte verschiedener Werkzeuge zusammen auswählen. Das Format wird am Dateiinhalt erkannt. Jede Datei wird einzeln geprüft.');
       $('follow').hidden = true;
       return;
     }
     $('file').accept = definitions[key].accept;
-    $('hint').textContent = definitions[key].hint;
+    write($('hint'), definitions[key].hint);
     $('sample').textContent = key === 'ffuf' || key === 'cobalt' ? JSON.stringify(JSON.parse(samples[key]),null,2) : samples[key];
     $('follow').hidden = mode !== 'examples' || key !== 'ffuf';
   }
@@ -41,56 +45,68 @@
     page = Math.min(page,pages-1);
     $('real').setAttribute('aria-pressed',String(!example));
     $('examples').setAttribute('aria-pressed',String(example));
-    $('context').textContent = example ? 'Beispieldaten mit frei erfundenen Datensätzen. Ihre eigenen Dateien liegen im separaten Arbeitsbereich.' : 'Wählen Sie Dateien aus demselben Mandat. Alle Importe bleiben lokal in diesem Tab.';
-    $('add').textContent = example ? 'Beispiel hinzufügen' : 'Dateien auswählen';
+    write($('context'), example ? 'Beispieldaten mit frei erfundenen Datensätzen. Ihre eigenen Dateien liegen im separaten Arbeitsbereich.' : 'Wählen Sie Dateien aus demselben Mandat. Alle Importe bleiben lokal in diesem Tab.');
+    write($('add'), example ? 'Beispiel hinzufügen' : 'Dateien auswählen');
     $('clear').disabled = busy || !files.length;
     $('add').disabled = $('adapter').disabled = $('real').disabled = $('examples').disabled = $('follow').disabled = busy;
     $('prev').disabled = !page; $('next').disabled = page+1 >= pages;
-    $('totals').textContent = files.length + ' Dateien · ' + selected.length + ' Beobachtungen in der Auswahl';
-    $('page').textContent = 'Seite ' + (page+1) + ' von ' + pages;
+    write($('totals'), '{files} Dateien · {observations} Beobachtungen in der Auswahl', {files:files.length, observations:selected.length});
+    write($('page'), 'Seite {page} von {total}', {page:page+1, total:pages});
     $('body').replaceChildren();
     for (const {f,r,prior} of selected.slice(page*50,(page+1)*50)) {
       const tr = document.createElement('tr');
-      for (const v of [definitions[f.source].label, f.id+' · '+r.locator, r.asset || 'Kein Hostbezug', r.detail, prior ? 'Duplikat zu '+prior+' · ungeprüft' : 'Scope und Controls ungeprüft']) tr.append(element('td', v));
+      write(tr.insertCell(), definitions[f.source].label);
+      tr.insertCell().textContent = f.id + ' · ' + r.locator;
+      const host = tr.insertCell();
+      if (r.asset) host.textContent = r.asset;
+      else write(host, 'Kein Hostbezug');
+      tr.insertCell().textContent = r.detail;
+      write(tr.insertCell(), prior ? 'Duplikat zu {prior} · ungeprüft' : 'Scope und Controls ungeprüft', {prior});
       $('body').append(tr);
     }
     if (!selected.length) {
-      const tr = document.createElement('tr'); const td = element('td', files.length ? 'Für diese Auswahl liegen keine Beobachtungen vor.' : 'Dieser Arbeitsbereich enthält noch keine Dateien.');
-      td.className = 'empty'; td.colSpan=5; tr.append(td); $('body').append(tr);
+      const tr = document.createElement('tr'); const td = tr.insertCell(); write(td, files.length ? 'Für diese Auswahl liegen keine Beobachtungen vor.' : 'Dieser Arbeitsbereich enthält noch keine Dateien.');
+      td.className = 'empty'; td.colSpan=5; $('body').append(tr);
     }
     $('files').replaceChildren();
     for (const f of files) {
-      const li = element('li', f.id+' · '+definitions[f.source].label+' · '+f.rows.length+' Datensätze · '+f.bytes+' Bytes · SHA-256 ');
+      const li = document.createElement('li');
+      write(li, () => f.id+' · '+t(definitions[f.source].label)+' · '+t('{records} Datensätze · {bytes} Bytes · SHA-256', {records:f.rows.length, bytes:f.bytes})+' ');
       li.append(element('code', f.digest)); $('files').append(li);
     }
-    if (!files.length) $('files').append(element('li','Keine Quelldateien.'));
+    if (!files.length) {const item=document.createElement('li'); write(item, 'Keine Quelldateien.'); $('files').append(item);}
     updateHint();
     if (typeof AuthzCompare !== 'undefined') AuthzCompare.render($('comparison'), files);
     AuthzAssets.render($('asset-review'), files);
   }
   function fileList() { return [...stores.real, ...stores.examples]; }
+  function errorText(error) {
+    if (!(error instanceof ImportError)) return t('Die Datei lässt sich in diesem Format nicht verarbeiten.');
+    const line = error.message.match(/^(.* in Zeile )(\d+)\.$/);
+    return line ? t(line[1] + '{n}.', {n:line[2]}) : t(error.message);
+  }
   async function add(inputs) {
     if (busy) return;
     const source = $('adapter').value;
-    busy = true; refresh(); $('status').textContent = 'Dateien werden lokal geprüft …';
+    busy = true; refresh(); write($('status'), 'Dateien werden lokal geprüft …');
     const messages = [];
     try {
-      if (inputs.length > limits.files) { messages.push('Pro Auswahl sind höchstens 20 Dateien zulässig.'); return; }
+      if (inputs.length > limits.files) { messages.push(() => t('Pro Auswahl sind höchstens 20 Dateien zulässig.')); return; }
       for (const [index, item] of inputs.entries()) {
         try {
           if (!item.size || item.size > limits.bytes) throw new ImportError('Die Datei muss zwischen 1 Byte und 1 MiB gross sein.');
           const parsed = await parse(source, await item.arrayBuffer());
           const duplicate = stores[mode].find(f => f.digest === parsed.digest);
-          if (duplicate) {messages.push('Datei '+(index+1)+' ist bereits als '+duplicate.id+' enthalten (identische Bytes).'); continue;}
+          if (duplicate) {messages.push(() => t('Datei {n} ist bereits als {id} enthalten (identische Bytes).', {n:index+1, id:duplicate.id})); continue;}
           const all = fileList();
           if (all.length >= limits.files || all.reduce((s,f) => s+f.bytes,0)+parsed.bytes > limits.totalBytes || all.reduce((s,f) => s+f.rows.length,0)+parsed.rows.length > limits.totalRows) throw new ImportError('Die gemeinsame Dateigrenze ist erreicht. Leere bei Bedarf einen Arbeitsbereich.');
           const id = 'S'+String(++sequence).padStart(2,'0');
           stores[mode].push({...parsed, id, example:mode==='examples'});
-          messages.push(id+' eingelesen · '+definitions[parsed.source].label+' · '+parsed.rows.length+' Beobachtungen.');
-        } catch (e) { messages.push('Datei '+(index+1)+' abgelehnt. '+(e instanceof ImportError ? e.message : 'Die Datei lässt sich in diesem Format nicht verarbeiten.')); }
+          messages.push(() => t('{id} eingelesen · {tool} · {count} Beobachtungen.', {id, tool:t(definitions[parsed.source].label), count:parsed.rows.length}));
+        } catch (e) { messages.push(() => t('Datei {n} abgelehnt. {reason}', {n:index+1, reason:errorText(e)})); }
       }
     } finally {
-      busy=false; $('file').value=''; $('status').textContent=messages.join('\n'); refresh();
+      busy=false; $('file').value=''; write($('status'), () => messages.map(render => render()).join('\n')); refresh();
     }
   }
   function switchMode(next) {
@@ -108,7 +124,7 @@
   $('file').onchange=()=>add(Array.from($('file').files));
   $('add').onclick=()=> mode==='examples' ? add([new Blob([samples[$('adapter').value]])]) : $('file').click();
   $('follow').onclick=()=>add([new Blob(['{"results":[{"url":"https://training.example/first","status":403},{"url":"https://training.example/third","status":200}]}'])]);
-  $('clear').onclick=()=>{if(busy)return;stores[mode]=[]; page=0; $('status').textContent='Arbeitsbereich geleert.';refresh();};
+  $('clear').onclick=()=>{if(busy)return;stores[mode]=[]; page=0; write($('status'), 'Arbeitsbereich geleert.');refresh();};
   $('prev').onclick=()=>{if(page>0)page--;refresh();}; $('next').onclick=()=>{page++;refresh();};
   refresh();
 })();

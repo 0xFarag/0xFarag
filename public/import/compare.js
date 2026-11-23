@@ -64,7 +64,10 @@ const AuthzCompare = (() => {
 
   function element(tag, text) {
     const node = document.createElement(tag);
-    if (text !== undefined) node.textContent = text;
+    if (text !== undefined) {
+      if (tag === 'small') node.textContent = text;
+      else AuthzToolCopy.write(node, text);
+    }
     return node;
   }
 
@@ -82,12 +85,11 @@ const AuthzCompare = (() => {
       target.append(element('p', result.message));
       return;
     }
-    const summary = result.beforeCount + ' Datensätze früher, ' + result.afterCount + ' später. '
-      + 'Der Vergleich ordnet Importbelege zu. Eine Korrektur ist erst durch einen belegten Retest prüfbar.';
+    const summary = () => AuthzToolCopy.t('{before} Datensätze früher, {after} später. Der Vergleich ordnet Importbelege zu. Eine Korrektur ist erst durch einen belegten Retest prüfbar.', {before:result.beforeCount, after:result.afterCount});
     target.append(element('p', summary));
     if (!result.entries.length) return;
     const table = element('table');
-    const caption = element('caption', 'Vergleich je Asset und Fallbezug · ' + AuthzImport.definitions[result.source].label);
+    const caption = element('caption', () => AuthzToolCopy.t('Vergleich je Asset und Fallbezug · {source}', {source:AuthzToolCopy.t(AuthzImport.definitions[result.source].label)}));
     table.append(caption);
     const header = table.createTHead().insertRow();
     for (const title of ['Asset / Fallbezug', 'Frühere Quelle', 'Spätere Quelle', 'Belegstatus']) {
@@ -110,7 +112,8 @@ const AuthzCompare = (() => {
         const entry = result.entries[shown];
         const row = body.insertRow();
         const subject = row.insertCell();
-        subject.textContent = entry.asset ? entry.asset : 'Unbekanntes Asset';
+        if (entry.asset) subject.textContent = entry.asset;
+        else AuthzToolCopy.write(subject, 'Unbekanntes Asset');
         if (entry.identity) {
           subject.append(element('br'));
           const check = element('small', entry.identity.slice(0, 12));
@@ -119,7 +122,7 @@ const AuthzCompare = (() => {
         }
         row.insertCell().textContent = locations(entry.earlier);
         row.insertCell().textContent = locations(entry.later);
-        row.insertCell().textContent = statusNames[entry.status];
+        AuthzToolCopy.write(row.insertCell(), statusNames[entry.status]);
       }
       if (shown === result.entries.length) more.remove();
     }
@@ -141,7 +144,7 @@ const AuthzCompare = (() => {
     controls.className = 'row controls';
     const fileByKey = new Map(files.map(file => [JSON.stringify([file.id, file.digest]), file]));
     function selector(side, name, previous) {
-      const label = element('label', name + ' ');
+      const label = element('label', () => AuthzToolCopy.t(name) + ' ');
       const select = element('select');
       select.dataset.snapshot = side;
       const placeholder = element('option', 'Datei wählen');
@@ -151,7 +154,7 @@ const AuthzCompare = (() => {
         const source = Object.hasOwn(AuthzImport.definitions, file.source) ? AuthzImport.definitions[file.source].label : 'Unbekannt';
         const id = /^S\d+$/.test(file.id) ? file.id : 'Quelle';
         const digest = validHash(file.digest) ? file.digest.slice(0, 12) : 'Hash fehlt';
-        const option = element('option', id + ' · ' + source + ' · ' + digest + (file.example ? ' · Beispiel' : ''));
+        const option = element('option', () => id + ' · ' + AuthzToolCopy.t(source) + ' · ' + digest + (file.example ? ' · ' + AuthzToolCopy.t('Beispiel') : ''));
         option.value = key;
         option.selected = previous !== undefined && previous === option.value;
         select.append(option);

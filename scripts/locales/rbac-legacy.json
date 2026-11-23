@@ -1,0 +1,692 @@
+{
+  "Eine Regel im Snapshot gewährt diese Anfrage": [
+    "A rule in this snapshot grants the request",
+    "Une règle de cet instantané autorise la requête",
+    "Una regola dello snapshot autorizza la richiesta",
+    "تسمح قاعدة في هذه اللقطة بالطلب"
+  ],
+  "Im Snapshot wurde keine passende Erlaubnis gefunden": [
+    "No matching grant was found in the snapshot",
+    "Aucune autorisation correspondante dans l’instantané",
+    "Nello snapshot non è stata trovata un’autorizzazione corrispondente",
+    "لم يُعثر في اللقطة على إذن مطابق"
+  ],
+  "Aus den vorhandenen Belegen nicht entscheidbar": [
+    "The available evidence is insufficient to decide",
+    "Les preuves disponibles ne permettent pas de conclure",
+    "Le evidenze disponibili non consentono di decidere",
+    "الأدلة المتاحة لا تكفي لاتخاذ قرار"
+  ],
+  "Nicht erneut geprüft (not_retested)": [
+    "Not retested (not_retested)",
+    "Non retesté (not_retested)",
+    "Non verificato di nuovo (not_retested)",
+    "لم يُعَد اختباره (not_retested)"
+  ],
+  "Entscheidung im Snapshot geändert": [
+    "Snapshot decision changed",
+    "Décision de l’instantané modifiée",
+    "Decisione dello snapshot cambiata",
+    "تغيّر قرار اللقطة"
+  ],
+  "Regelbeleg oder Begründung für dieselbe Entscheidung geändert": [
+    "Same decision with different rule evidence or reasoning",
+    "Même décision avec preuve de règle ou justification différente",
+    "Stessa decisione con evidenza o motivazione diversa",
+    "بقي القرار نفسه وتغيّر دليل القاعدة أو تعليلها"
+  ],
+  "Entscheidung und dokumentierter Regelbeleg wiederholt": [
+    "Decision and documented rule evidence reproduced",
+    "Décision et preuve de règle documentée reproduites",
+    "Decisione ed evidenza documentata della regola riprodotte",
+    "تكرّر القرار ودليل القاعدة الموثّق"
+  ],
+  "Datei-SHA-256": [
+    "File SHA-256",
+    "SHA-256 du fichier",
+    "SHA-256 del file",
+    "بصمة SHA-256 للملف"
+  ],
+  "Rollen und Bindungen": [
+    "Roles and bindings",
+    "Rôles et liaisons",
+    "Ruoli e associazioni",
+    "الأدوار والارتباطات"
+  ],
+  "{roles} Rollen · {bindings} Bindungen": [
+    "Roles: {roles} · Bindings: {bindings}",
+    "Rôles : {roles} · Liaisons : {bindings}",
+    "Ruoli: {roles} · Associazioni: {bindings}",
+    "الأدوار: {roles} · الارتباطات: {bindings}"
+  ],
+  "clusterweit": [
+    "cluster-wide",
+    "tout le cluster",
+    "intero cluster",
+    "على مستوى العنقود"
+  ],
+  "Name {value}": [
+    "Name {value}",
+    "Nom {value}",
+    "Nome {value}",
+    "الاسم {value}"
+  ],
+  "Namensselektor {value}": [
+    "Name selector {value}",
+    "Sélecteur de nom {value}",
+    "Selettore del nome {value}",
+    "محدِّد الاسم {value}"
+  ],
+  "Gruppen {value}": [
+    "Groups {value}",
+    "Groupes {value}",
+    "Gruppi {value}",
+    "المجموعات {value}"
+  ],
+  "Fragen für diesen Retest": [
+    "Requests for this retest",
+    "Requêtes pour ce nouveau test",
+    "Richieste per questo nuovo test",
+    "طلبات إعادة الاختبار"
+  ],
+  "Entfernen": [
+    "Remove",
+    "Retirer",
+    "Rimuovi",
+    "إزالة"
+  ],
+  "Frage {n} entfernen": [
+    "Remove request {n}",
+    "Retirer la requête {n}",
+    "Rimuovi la richiesta {n}",
+    "إزالة الطلب {n}"
+  ],
+  "Synthetischer Beispiel-Snapshot geöffnet.": [
+    "Synthetic example snapshot opened.",
+    "Instantané synthétique d’exemple ouvert.",
+    "Aperto lo snapshot di esempio sintetico.",
+    "فُتحت لقطة المثال الاصطناعي."
+  ],
+  "Eigener Snapshot geöffnet.": [
+    "Your snapshot is open.",
+    "Votre instantané est ouvert.",
+    "Il tuo snapshot è aperto.",
+    "فُتحت لقطتك."
+  ],
+  "{state} · {n} passende Regeln.": [
+    "{state} · Matching rules: {n}.",
+    "{state} · Règles correspondantes : {n}.",
+    "{state} · Regole corrispondenti: {n}.",
+    "{state} · عدد القواعد المطابقة: {n}."
+  ],
+  "Weitere Regelbelege anzeigen": [
+    "Show more rule evidence",
+    "Afficher d’autres preuves de règles",
+    "Mostra ulteriori evidenze delle regole",
+    "عرض المزيد من أدلة القواعد"
+  ],
+  "{binding} (Objekt {b}) · {role} (Objekt {r}) · Regel {n}": [
+    "{binding} (object {b}) · {role} (object {r}) · Rule {n}",
+    "{binding} (objet {b}) · {role} (objet {r}) · Règle {n}",
+    "{binding} (oggetto {b}) · {role} (oggetto {r}) · Regola {n}",
+    "{binding} (الكائن {b}) · {role} (الكائن {r}) · القاعدة {n}"
+  ],
+  "Verben {verbs} · API-Gruppen {groups} · Ressourcen {resources}": [
+    "Verbs {verbs} · API groups {groups} · Resources {resources}",
+    "Verbes {verbs} · Groupes d’API {groups} · Ressources {resources}",
+    "Verbi {verbs} · Gruppi API {groups} · Risorse {resources}",
+    "الأفعال {verbs} · مجموعات API ‏{groups} · الموارد {resources}"
+  ],
+  "Namen {names}": [
+    "Names {names}",
+    "Noms {names}",
+    "Nomi {names}",
+    "الأسماء {names}"
+  ],
+  "{n} Fragen an den ursprünglichen Snapshot gebunden.": [
+    "Requests bound to the original snapshot: {n}.",
+    "Requêtes liées à l’instantané initial : {n}.",
+    "Richieste associate allo snapshot originale: {n}.",
+    "عدد الطلبات المرتبطة باللقطة الأصلية: {n}."
+  ],
+  "SHA-256 der Prüfbasis": [
+    "Baseline SHA-256",
+    "SHA-256 de la base de contrôle",
+    "SHA-256 della base di verifica",
+    "بصمة SHA-256 لخط الأساس"
+  ],
+  "Geänderter Beispiel-Snapshot geöffnet.": [
+    "Modified example snapshot opened.",
+    "Instantané d’exemple modifié ouvert.",
+    "Aperto lo snapshot di esempio modificato.",
+    "فُتحت لقطة المثال المعدلة."
+  ],
+  "Späterer Snapshot geöffnet.": [
+    "Later snapshot opened.",
+    "Instantané ultérieur ouvert.",
+    "Aperto lo snapshot successivo.",
+    "فُتحت اللقطة اللاحقة."
+  ],
+  "{retested} von {total} erneut geprüft · {not_retested} not_retested.": [
+    "Retested: {retested} of {total} · {not_retested} not_retested.",
+    "Retestées : {retested} sur {total} · {not_retested} not_retested.",
+    "Verificate di nuovo: {retested} su {total} · {not_retested} not_retested.",
+    "أُعيد اختبار {retested} من أصل {total} · لم يُعَد اختبار {not_retested} (not_retested)."
+  ],
+  "Beide Snapshots haben identische Bytes.": [
+    "Both snapshots have identical bytes.",
+    "Les deux instantanés sont identiques octet par octet.",
+    "I due snapshot sono identici byte per byte.",
+    "اللقطتان متطابقتان بايتاً ببايت."
+  ],
+  "Original-SHA-256": [
+    "Original SHA-256",
+    "SHA-256 initial",
+    "SHA-256 originale",
+    "بصمة SHA-256 الأصلية"
+  ],
+  "Späterer SHA-256": [
+    "Later SHA-256",
+    "SHA-256 ultérieur",
+    "SHA-256 successivo",
+    "بصمة SHA-256 اللاحقة"
+  ],
+  "Basis-SHA-256": [
+    "Baseline SHA-256",
+    "SHA-256 de référence",
+    "SHA-256 di riferimento",
+    "بصمة SHA-256 لخط الأساس"
+  ],
+  "{state} · Vorher: {before}": [
+    "{state} · Before: {before}",
+    "{state} · Avant : {before}",
+    "{state} · Prima: {before}",
+    "{state} · قبل: {before}"
+  ],
+  "Danach: {after}": [
+    "After: {after}",
+    "Après : {after}",
+    "Dopo: {after}",
+    "بعد: {after}"
+  ],
+  "Lokale Sitzung geleert.": [
+    "Local session cleared.",
+    "Session locale effacée.",
+    "Sessione locale cancellata.",
+    "مُسحت الجلسة المحلية."
+  ],
+  "Frage {n} übernommen.": [
+    "Request {n} added.",
+    "Requête {n} ajoutée.",
+    "Richiesta {n} aggiunta.",
+    "أُضيف الطلب {n}."
+  ],
+  "Wählen Sie eine UTF-8-JSON-Datei von 1 Byte bis 2 MiB.": [
+    "Choose a UTF-8 JSON file between 1 byte and 2 MiB.",
+    "Choisissez un fichier JSON UTF-8 de 1 octet à 2 Mio.",
+    "Seleziona un file JSON UTF-8 da 1 byte a 2 MiB.",
+    "اختر ملف JSON بترميز UTF-8 بين بايت واحد و2 ميبيبايت."
+  ],
+  "Die gespeicherte Basis ist kein gültiges UTF-8-JSON.": [
+    "The saved baseline is not valid UTF-8 JSON.",
+    "La base enregistrée n’est pas un JSON UTF-8 valide.",
+    "La base salvata non è un JSON UTF-8 valido.",
+    "خط الأساس المحفوظ ليس بصيغة JSON صالحة بترميز UTF-8."
+  ],
+  "Diese Frage ist bereits in der Liste.": [
+    "This request is already listed.",
+    "Cette requête figure déjà dans la liste.",
+    "La richiesta è già nell’elenco.",
+    "هذا الطلب موجود في القائمة."
+  ],
+  "Die Prüfbasis enthält bereits 32 Fragen.": [
+    "The baseline already contains 32 requests.",
+    "La base de contrôle contient déjà 32 requêtes.",
+    "La base contiene già 32 richieste.",
+    "يضم خط الأساس 32 طلباً بالفعل."
+  ],
+  "{n} Bindungen verweisen auf fehlende Rollen.": [
+    "Bindings referring to missing roles: {n}.",
+    "Liaisons renvoyant à des rôles absents : {n}.",
+    "Associazioni a ruoli mancanti: {n}.",
+    "عدد الارتباطات التي تشير إلى أدوار مفقودة: {n}."
+  ],
+  "{n} aggregierte Clusterrollen benötigen einen separaten Nachweis.": [
+    "Aggregated cluster roles requiring separate evidence: {n}.",
+    "Rôles agrégés du cluster exigeant une preuve distincte : {n}.",
+    "Ruoli aggregati del cluster che richiedono prove distinte: {n}.",
+    "عدد أدوار العنقود المجمّعة التي تتطلب دليلاً منفصلاً: {n}."
+  ],
+  "Die ersten {shown} von {total} Regelverweisen werden angezeigt.": [
+    "Showing the first {shown} of {total} rule references.",
+    "Affichage des {shown} premières références de règles sur {total}.",
+    "Visualizzati i primi {shown} riferimenti alle regole su {total}.",
+    "تُعرض أول {shown} إحالة إلى القواعد من أصل {total}."
+  ],
+  "{binding} · {reason}": [
+    "{binding} · {reason}",
+    "{binding} · {reason}",
+    "{binding} · {reason}",
+    "{binding} · {reason}"
+  ],
+  "Rollenbeleg fehlt.": [
+    "Role evidence is missing.",
+    "La preuve du rôle manque.",
+    "Manca l’evidenza del ruolo.",
+    "دليل الدور مفقود."
+  ],
+  "Clusterrolle aggregiert.": [
+    "The cluster role is aggregated.",
+    "Le rôle du cluster est agrégé.",
+    "Il ruolo del cluster è aggregato.",
+    "دور العنقود مجمّع."
+  ],
+  "Der Listenexport weist weitere Seiten aus.": [
+    "The list export indicates additional pages.",
+    "L’export de liste signale des pages supplémentaires.",
+    "L’esportazione dell’elenco indica altre pagine.",
+    "يشير تصدير القائمة إلى وجود صفحات إضافية."
+  ],
+  "Nicht-Ressourcen-URLs liegen ausserhalb dieses Ressourcenprofils.": [
+    "Non-resource URLs are outside this resource profile.",
+    "Les URL hors ressources sortent de ce profil de ressources.",
+    "Gli URL non associati a risorse non rientrano nel profilo.",
+    "عناوين URL التي لا تخص موارد تقع خارج نطاق هذا الملف التعريفي."
+  ],
+  "Der Snapshot enthält eine nicht vollständig exportierte Liste.": [
+    "The snapshot contains a partially exported list.",
+    "L’instantané contient une liste exportée en partie.",
+    "Lo snapshot contiene un elenco esportato parzialmente.",
+    "تحتوي اللقطة على قائمة لم تُصدّر بالكامل."
+  ],
+  "Eine namensraumgebundene Regel passt. Für diese API-Gruppe und Ressource fehlt ein Nachweis des Namespace-Geltungsbereichs.": [
+    "A namespaced rule matches, but the namespace scope of this API group and resource is unproven.",
+    "Une règle d’espace de noms correspond, mais la portée de ce groupe d’API et de cette ressource reste à vérifier.",
+    "Corrisponde una regola del namespace, ma manca la prova del suo ambito per questo gruppo API e questa risorsa.",
+    "تطابق الطلبَ قاعدةٌ مرتبطة بمساحة أسماء، لكن لا يوجد دليل على نطاق مجموعة API والمورد ضمنها."
+  ],
+  "{field} muss ein JSON-Objekt sein.": [
+    "{field} must be a JSON object.",
+    "{field} doit être un objet JSON.",
+    "{field} deve essere un oggetto JSON.",
+    "يجب أن يكون {field} كائن JSON."
+  ],
+  "{field} ist ungültig.": [
+    "Invalid field: {field}.",
+    "Champ non valide : {field}.",
+    "Campo non valido: {field}.",
+    "هذا الحقل غير صالح: {field}."
+  ],
+  "Ungültige Anzahl für {field}.": [
+    "Invalid number of entries for {field}.",
+    "Nombre d’entrées non valide pour {field}.",
+    "Numero di voci non valido per {field}.",
+    "عدد الإدخالات غير صالح للحقل {field}."
+  ],
+  "{field} benötigt einen konkreten API-Wert.": [
+    "{field} requires a specific API value.",
+    "{field} exige une valeur API précise.",
+    "{field} richiede un valore API specifico.",
+    "يتطلب {field} قيمة API محددة."
+  ],
+  "{field} enthält nicht unterstützte Felder.": [
+    "{field} contains unsupported fields.",
+    "{field} contient des champs non pris en charge.",
+    "{field} contiene campi non supportati.",
+    "يحتوي {field} على حقول غير مدعومة."
+  ],
+  "Ungültiger Kubernetes-Objektname.": [
+    "Invalid Kubernetes object name.",
+    "Nom d’objet Kubernetes non valide.",
+    "Nome dell’oggetto Kubernetes non valido.",
+    "اسم كائن Kubernetes غير صالح."
+  ],
+  "Ungültiger ServiceAccount-Name.": [
+    "Invalid ServiceAccount name.",
+    "Nom de ServiceAccount non valide.",
+    "Nome del ServiceAccount non valido.",
+    "اسم ServiceAccount غير صالح."
+  ],
+  "Ein gültiger Namespace fehlt.": [
+    "A valid namespace is required.",
+    "Un espace de noms valide est requis.",
+    "È richiesto un namespace valido.",
+    "مساحة أسماء صالحة مطلوبة."
+  ],
+  "Nicht-Ressourcen-URLs und Ressourcenregeln können nicht kombiniert werden.": [
+    "Non-resource URLs and resource rules cannot be combined.",
+    "Les URL hors ressources et les règles de ressources ne peuvent pas être combinées.",
+    "Gli URL non associati a risorse e le regole di risorsa non possono essere combinati.",
+    "لا يمكن جمع عناوين URL غير المرتبطة بموارد مع قواعد الموارد."
+  ],
+  "Nicht unterstützter Subjekttyp.": [
+    "Unsupported subject type.",
+    "Type de sujet non pris en charge.",
+    "Tipo di soggetto non supportato.",
+    "نوع الهوية غير مدعوم."
+  ],
+  "Ein ServiceAccount gehört zur Core-API-Gruppe.": [
+    "A ServiceAccount belongs to the core API group.",
+    "Un ServiceAccount appartient au groupe d’API principal.",
+    "Un ServiceAccount appartiene al gruppo API principale.",
+    "ينتمي ServiceAccount إلى مجموعة API الأساسية."
+  ],
+  "API-Gruppe oder Namespace des Benutzers oder der Gruppe widerspricht RBAC v1.": [
+    "The API group or namespace of this user or group conflicts with RBAC v1.",
+    "Le groupe d’API ou l’espace de noms de cet utilisateur ou groupe est incompatible avec RBAC v1.",
+    "Il gruppo API o il namespace dell’utente o del gruppo è incompatibile con RBAC v1.",
+    "تتعارض مجموعة API أو مساحة الأسماء للمستخدم أو المجموعة مع RBAC v1."
+  ],
+  "Zu viele verschachtelte Listen.": [
+    "Too many nested lists.",
+    "Imbrication de listes trop profonde.",
+    "Troppi elenchi annidati.",
+    "عدد القوائم المتداخلة كبير جداً."
+  ],
+  "Der Objekttyp widerspricht der typisierten Liste.": [
+    "The object type conflicts with the typed list.",
+    "Le type d’objet est incompatible avec la liste typée.",
+    "Il tipo di oggetto è incompatibile con l’elenco tipizzato.",
+    "نوع الكائن يتعارض مع نوع القائمة."
+  ],
+  "Unbekannte Listenversion oder zu viele Listen.": [
+    "Unknown list version or too many lists.",
+    "Version de liste inconnue ou trop de listes.",
+    "Versione dell’elenco sconosciuta o troppi elenchi.",
+    "إصدار القائمة غير معروف أو عدد القوائم كبير جداً."
+  ],
+  "Ungültige Angaben zur Vollständigkeit der Liste.": [
+    "Invalid list completeness metadata.",
+    "Métadonnées de complétude de la liste non valides.",
+    "Metadati non validi sulla completezza dell’elenco.",
+    "بيانات اكتمال القائمة غير صالحة."
+  ],
+  "Unterstützt werden Role, ClusterRole, RoleBinding und ClusterRoleBinding der RBAC API v1.": [
+    "Supported RBAC API v1 objects: Role, ClusterRole, RoleBinding and ClusterRoleBinding.",
+    "Objets RBAC API v1 pris en charge : Role, ClusterRole, RoleBinding et ClusterRoleBinding.",
+    "Oggetti RBAC API v1 supportati: Role, ClusterRole, RoleBinding e ClusterRoleBinding.",
+    "الكائنات المدعومة في RBAC API v1 هي Role وClusterRole وRoleBinding وClusterRoleBinding."
+  ],
+  "Höchstens 1’000 RBAC-Objekte pro Snapshot.": [
+    "Maximum of 1,000 RBAC objects per snapshot.",
+    "Maximum de 1 000 objets RBAC par instantané.",
+    "Massimo 1.000 oggetti RBAC per snapshot.",
+    "الحد الأقصى 1000 كائن RBAC لكل لقطة."
+  ],
+  "Ein Clusterobjekt darf keinen Namespace tragen.": [
+    "A cluster-scoped object cannot declare a namespace.",
+    "Un objet à portée cluster ne peut pas déclarer d’espace de noms.",
+    "Un oggetto a livello di cluster non può dichiarare un namespace.",
+    "لا يجوز أن يحدد كائن على مستوى العنقود مساحة أسماء."
+  ],
+  "Doppeltes Objekt mit gleichem Typ, Namespace und Namen.": [
+    "Duplicate object with the same type, namespace and name.",
+    "Objet en double avec le même type, espace de noms et nom.",
+    "Oggetto duplicato con gli stessi tipo, namespace e nome.",
+    "كائن مكرر بالنوع والاسم ومساحة الأسماء نفسها."
+  ],
+  "Eine Role kann keine Aggregationsregel tragen.": [
+    "A Role cannot have an aggregation rule.",
+    "Une Role ne peut pas contenir de règle d’agrégation.",
+    "Una Role non può contenere regole di aggregazione.",
+    "لا يمكن أن يحتوي Role على قاعدة تجميع."
+  ],
+  "Ungültiger Rollenverweis oder ClusterRoleBinding auf eine Role.": [
+    "Invalid role reference, or a ClusterRoleBinding references a Role.",
+    "Référence de rôle non valide ou ClusterRoleBinding renvoyant à une Role.",
+    "Riferimento a ruolo non valido, o un ClusterRoleBinding punta a una Role.",
+    "مرجع دور غير صالح أو يشير ClusterRoleBinding إلى Role."
+  ],
+  "Die angegebene Clusterressource benötigt einen leeren Anfrage-Namespace.": [
+    "Leave the request namespace empty for this cluster-scoped resource.",
+    "Laissez vide l’espace de noms de la requête pour cette ressource à portée cluster.",
+    "Lascia vuoto il namespace della richiesta per questa risorsa a livello di cluster.",
+    "اترك مساحة أسماء الطلب فارغة لهذا المورد على مستوى العنقود."
+  ],
+  "Ein Namensselektor ist nur für list/watch zulässig.": [
+    "A name selector is allowed only for list/watch.",
+    "Un sélecteur de nom est autorisé uniquement pour list/watch.",
+    "Il selettore del nome è consentito solo per list/watch.",
+    "لا يُسمح بمحدِّد الاسم إلا لعمليتَي list/watch."
+  ],
+  "Richtliniendateien müssen zwischen 1 Byte und 2 MiB gross sein.": [
+    "Policy files must be between 1 byte and 2 MiB.",
+    "Les fichiers de règles doivent peser de 1 octet à 2 Mio.",
+    "I file delle regole devono essere da 1 byte a 2 MiB.",
+    "يجب أن يكون حجم ملفات السياسات بين بايت واحد و2 ميبيبايت."
+  ],
+  "Die Richtliniendatei enthält kein gültiges UTF-8-JSON.": [
+    "The policy file is not valid UTF-8 JSON.",
+    "Le fichier de règles n’est pas un JSON UTF-8 valide.",
+    "Il file delle regole non è un JSON UTF-8 valido.",
+    "ملف السياسة ليس بصيغة JSON صالحة بترميز UTF-8."
+  ],
+  "Ungültige Prüfanfrage.": [
+    "Invalid request.",
+    "Requête non valide.",
+    "Richiesta non valida.",
+    "طلب غير صالح."
+  ],
+  "Die Prüfanfrage enthält fehlende oder unbekannte Felder.": [
+    "The request contains missing or unknown fields.",
+    "La requête contient des champs manquants ou inconnus.",
+    "La richiesta contiene campi mancanti o sconosciuti.",
+    "يتضمن الطلب حقولاً مفقودة أو غير معروفة."
+  ],
+  "Ungültiger Wert in der Prüfanfrage.": [
+    "Invalid value in the request.",
+    "Valeur non valide dans la requête.",
+    "Valore non valido nella richiesta.",
+    "قيمة غير صالحة في الطلب."
+  ],
+  "Ungültige Gruppenliste.": [
+    "Invalid group list.",
+    "Liste de groupes non valide.",
+    "Elenco gruppi non valido.",
+    "قائمة مجموعات غير صالحة."
+  ],
+  "Der ursprüngliche Datei-Hash fehlt.": [
+    "The original file hash is missing.",
+    "L’empreinte du fichier initial est absente.",
+    "Manca l’impronta del file originale.",
+    "بصمة الملف الأصلي مفقودة."
+  ],
+  "Eine Prüfbasis benötigt 1 bis 32 Fragen.": [
+    "A baseline requires 1 to 32 requests.",
+    "Une base de contrôle requiert de 1 à 32 requêtes.",
+    "La base di verifica richiede da 1 a 32 richieste.",
+    "يتطلب خط الأساس من طلب واحد إلى 32 طلباً."
+  ],
+  "Die Prüfbasis enthält eine doppelte Frage.": [
+    "The baseline contains a duplicate request.",
+    "La base de contrôle contient une requête en double.",
+    "La base contiene una richiesta duplicata.",
+    "يحتوي خط الأساس على طلب مكرر."
+  ],
+  "Ungültige Prüfbasis.": [
+    "Invalid baseline.",
+    "Base de contrôle non valide.",
+    "Base di verifica non valida.",
+    "خط أساس غير صالح."
+  ],
+  "Die ursprüngliche Datei passt nicht zur Prüfbasis (SHA-256).": [
+    "The original file does not match the baseline (SHA-256).",
+    "Le fichier initial ne correspond pas à la base de contrôle (SHA-256).",
+    "Il file originale non corrisponde alla base di verifica (SHA-256).",
+    "الملف الأصلي لا يطابق خط الأساس (SHA-256)."
+  ],
+  "Die Prüfbasis stimmt nicht mit der erneuten Auswertung des Originals überein.": [
+    "The baseline does not match a fresh evaluation of the original.",
+    "La base de contrôle ne correspond pas à la nouvelle évaluation de l’original.",
+    "La base non corrisponde a una nuova valutazione dell’originale.",
+    "لا يطابق خط الأساس نتيجة إعادة تقييم الأصل."
+  ],
+  "Die Fallauswahl ist ungültig.": [
+    "Invalid case selection.",
+    "Sélection de cas non valide.",
+    "Selezione dei casi non valida.",
+    "اختيار الحالات غير صالح."
+  ],
+  "Objektname": [
+    "Object name",
+    "Nom d’objet",
+    "Nome oggetto",
+    "اسم الكائن"
+  ],
+  "ServiceAccount-Name": [
+    "ServiceAccount name",
+    "Nom du ServiceAccount",
+    "Nome del ServiceAccount",
+    "اسم ServiceAccount"
+  ],
+  "Regel": [
+    "Rule",
+    "Règle",
+    "Regola",
+    "القاعدة"
+  ],
+  "Verben": [
+    "Verbs",
+    "Verbes",
+    "Verbi",
+    "الأفعال"
+  ],
+  "Nicht-Ressourcen-URLs": [
+    "Non-resource URLs",
+    "URL hors ressources",
+    "URL non associate a risorse",
+    "عناوين URL غير المرتبطة بموارد"
+  ],
+  "API-Gruppen": [
+    "API groups",
+    "Groupes d’API",
+    "Gruppi API",
+    "مجموعات API"
+  ],
+  "Ressourcen": [
+    "Resources",
+    "Ressources",
+    "Risorse",
+    "الموارد"
+  ],
+  "Ressourcennamen": [
+    "Resource names",
+    "Noms de ressources",
+    "Nomi delle risorse",
+    "أسماء الموارد"
+  ],
+  "Subjekt": [
+    "Subject",
+    "Sujet",
+    "Soggetto",
+    "الهوية"
+  ],
+  "Subjektname": [
+    "Subject name",
+    "Nom du sujet",
+    "Nome del soggetto",
+    "اسم الهوية"
+  ],
+  "RBAC-Objekt": [
+    "RBAC object",
+    "Objet RBAC",
+    "Oggetto RBAC",
+    "كائن RBAC"
+  ],
+  "Listenmetadaten": [
+    "List metadata",
+    "Métadonnées de liste",
+    "Metadati dell’elenco",
+    "بيانات القائمة الوصفية"
+  ],
+  "Listenobjekte": [
+    "List objects",
+    "Objets de liste",
+    "Oggetti dell’elenco",
+    "كائنات القائمة"
+  ],
+  "Metadaten": [
+    "Metadata",
+    "Métadonnées",
+    "Metadati",
+    "البيانات الوصفية"
+  ],
+  "Aggregationsregel": [
+    "Aggregation rule",
+    "Règle d’agrégation",
+    "Regola di aggregazione",
+    "قاعدة التجميع"
+  ],
+  "Regeln": [
+    "Rules",
+    "Règles",
+    "Regole",
+    "القواعد"
+  ],
+  "Rollenverweis": [
+    "Role reference",
+    "Référence de rôle",
+    "Riferimento al ruolo",
+    "مرجع الدور"
+  ],
+  "Subjekte": [
+    "Subjects",
+    "Sujets",
+    "Soggetti",
+    "الهويات"
+  ],
+  "RBAC-Objekte": [
+    "RBAC objects",
+    "Objets RBAC",
+    "Oggetti RBAC",
+    "كائنات RBAC"
+  ],
+  "Prüfanfrage": [
+    "Request",
+    "Requête",
+    "Richiesta",
+    "الطلب"
+  ],
+  "Explizite Gruppen": [
+    "Explicit groups",
+    "Groupes explicites",
+    "Gruppi espliciti",
+    "المجموعات الصريحة"
+  ],
+  "Verb": [
+    "Verb",
+    "Verbe",
+    "Verbo",
+    "الفعل"
+  ],
+  "Ressource": [
+    "Resource",
+    "Ressource",
+    "Risorsa",
+    "المورد"
+  ],
+  "API-Gruppe": [
+    "API group",
+    "Groupe d’API",
+    "Gruppo API",
+    "مجموعة API"
+  ],
+  "Subressource": [
+    "Subresource",
+    "Sous-ressource",
+    "Sottorisorsa",
+    "المورد الفرعي"
+  ],
+  "Ressourcenname": [
+    "Resource name",
+    "Nom de ressource",
+    "Nome della risorsa",
+    "اسم المورد"
+  ],
+  "Namensselektor": [
+    "Name selector",
+    "Sélecteur de nom",
+    "Selettore del nome",
+    "محدِّد الاسم"
+  ]
+}

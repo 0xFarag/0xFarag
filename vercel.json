@@ -1,10 +1,18 @@
 {
   "framework": null,
-  "outputDirectory": "public",
-  "buildCommand": "node scripts/build-downloads.mjs",
+  "outputDirectory": "dist",
+  "buildCommand": "node scripts/build-downloads.mjs && node scripts/build-locales.mjs",
   "headers": [
     {
       "source": "/fachzugang/:path*",
+      "headers": [
+        {"key": "Content-Security-Policy", "value": "frame-ancestors 'none'"},
+        {"key": "X-Content-Type-Options", "value": "nosniff"},
+        {"key": "X-Frame-Options", "value": "DENY"}
+      ]
+    },
+    {
+      "source": "/:locale(de|en|fr|it|ar)/fachzugang/:path*",
       "headers": [
         {"key": "Content-Security-Policy", "value": "frame-ancestors 'none'"},
         {"key": "X-Content-Type-Options", "value": "nosniff"},

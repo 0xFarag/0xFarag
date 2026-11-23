@@ -17,7 +17,7 @@ before(async () => {
   context = await browser.newContext({ offline: true });
   page = await context.newPage();
   await page.goto(pathToFileURL(path.join(fixture,'index.html')).href);
-  for (const file of ['adapters.js','compare.js']) {
+  for (const file of ['../i18n/tool-copy.js','adapters.js','compare.js']) {
     await page.addScriptTag({ content: await fs.readFile(path.join(directory,file), 'utf8') });
   }
   await page.evaluate(() => {

@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const directory = 'proof/v1.5.0/';
+  const directory = '/proof/v1.5.0/';
   const receiptDigest = 'ff96a568dc7700d12626ccaf0c269556d5c11bd4c05e27b4cdd55cab2a65c9a9';
   const keyFingerprint = 'f38decf76b93bfc01a132a504195f305e217f6d9ce8a29628b096abc68b40696';
   const domain = 'AuthzLedger:EvidenceBundle:Ed25519:v1\n';
@@ -12,6 +12,17 @@
   const button = document.getElementById('verify');
   const controls = document.getElementById('signature-controls');
   const note = document.getElementById('verification-note');
+
+  const t = (text, params = {}) => window.AuthzI18n?.t(text, params)
+    ?? text.replace(/\{(\w+)\}/g, (match, key) => params[key] ?? match);
+  const messages = new Map();
+  function display(element, source) {
+    messages.set(element, source);
+    element.textContent = t(source);
+  }
+  window.addEventListener('authzlanguage', () => {
+    for (const [element, source] of messages) element.textContent = t(source);
+  });
 
   async function read(file) {
     const response = await fetch(directory + file);
@@ -39,27 +50,42 @@
     ]);
     if (records.some(record => !labels.has(record.status))) throw new Error('unknown retest status');
     const ledger = receipt.execution_ledger;
-    document.getElementById('budget').textContent =
-      'Im Demolauf wurden ' + ledger.dispatched_total + ' von ' + ledger.approved_total + ' freigegebenen Operationen ausgeführt.';
-    select.replaceChildren(...records.map((record, index) => {
+    const options = records.map(record => {
       const option = document.createElement('option');
       option.value = record.finding_id;
-      option.textContent = 'Befund ' + (index + 1) + ' · ' + labels.get(record.status);
       return option;
-    }));
+    });
+    select.replaceChildren(...options);
+    function renderLabels() {
+      document.getElementById('budget').textContent = t(
+        'Im Demolauf wurden {done} von {approved} freigegebenen Operationen ausgeführt.',
+        {done: ledger.dispatched_total, approved: ledger.approved_total}
+      );
+      options.forEach((option, index) => {
+        option.textContent = t('Befund {number} · {status}', {
+          number: index + 1, status: t(labels.get(records[index].status))
+        });
+      });
+    }
+    renderLabels();
+    window.addEventListener('authzlanguage', renderLabels);
 
     function renderFinding() {
       const record = records.find(entry => entry.finding_id === select.value);
       const state = document.getElementById('finding-state');
-      state.textContent = labels.get(record.status);
+      display(state, labels.get(record.status));
       document.getElementById('finding-status-code').textContent = record.status;
       state.closest('.decision').dataset.state = record.status;
-      document.getElementById('finding-note').textContent = record.status === 'fix_verified'
+      display(document.getElementById('finding-note'), record.status === 'fix_verified'
         ? 'Korrektur im Demofall nachgewiesen. Beide SHA-256-Werte verknüpfen den ursprünglichen Befund und seine Nachprüfung.'
-        : 'Dieser Befund wurde ausgelassen. Die ursprüngliche Quelle ist dokumentiert, die Korrektur bleibt offen.';
+        : 'Dieser Befund wurde ausgelassen. Die ursprüngliche Quelle ist dokumentiert, die Korrektur bleibt offen.');
       document.getElementById('finding-id').textContent = record.finding_id;
       document.getElementById('finding-baseline').textContent = record.baseline_finding_digest;
-      document.getElementById('finding-current').textContent = record.current_finding_digest || 'Kein Retest dokumentiert';
+      const current = document.getElementById('finding-current');
+      if (record.current_finding_digest) {
+        messages.delete(current);
+        current.textContent = record.current_finding_digest;
+      } else display(current, 'Kein Retest dokumentiert');
     }
 
     select.disabled = false;
@@ -99,7 +125,7 @@
     controls.disabled = false;
     button.disabled = false;
     controls.addEventListener('change', () => {
-      note.textContent = 'Eingabe geändert. Prüfen Sie die gewählte Variante.';
+      display(note, 'Eingabe geändert. Prüfen Sie die gewählte Variante.');
       delete note.dataset.result;
     });
     button.addEventListener('click', async () => {
@@ -109,11 +135,11 @@
         const modified = document.querySelector('input[name="variant"]:checked').value === 'modified';
         const ok = await checkManifest(modified);
         note.dataset.result = ok ? 'valid' : 'invalid';
-        note.textContent = ok
+        display(note, ok
           ? 'Gültig. Die Ed25519-Signatur passt zum Originalinventar, der Report-Anker zu seinem SHA-256-Eintrag.'
-          : 'Abgelehnt. Die Ed25519-Signatur passt nicht zur veränderten Testkopie.';
+          : 'Abgelehnt. Die Ed25519-Signatur passt nicht zur veränderten Testkopie.');
       } catch {
-        note.textContent = 'Die Signaturprüfung konnte nicht abgeschlossen werden.';
+        display(note, 'Die Signaturprüfung konnte nicht abgeschlossen werden.');
         delete note.dataset.result;
       } finally {
         controls.disabled = false;
@@ -123,12 +149,12 @@
   }
 
   loadFindings().catch(() => {
-    document.getElementById('finding-state').textContent = 'Protokoll nicht verifiziert';
-    document.getElementById('finding-note').textContent = 'Für diese Ansicht ist ein ladbares Originalprotokoll mit übereinstimmendem SHA-256-Wert erforderlich.';
+    display(document.getElementById('finding-state'), 'Protokoll nicht verifiziert');
+    display(document.getElementById('finding-note'), 'Für diese Ansicht ist ein ladbares Originalprotokoll mit übereinstimmendem SHA-256-Wert erforderlich.');
     select.disabled = true;
   });
   loadSignature().catch(() => {
-    note.textContent = 'Prüfung nicht verfügbar. Erforderlich sind die unveränderten Originaldateien, HTTPS oder localhost und ein Browser mit Ed25519-Unterstützung.';
+    display(note, 'Prüfung nicht verfügbar. Erforderlich sind die unveränderten Originaldateien, HTTPS oder localhost und ein Browser mit Ed25519-Unterstützung.');
     button.disabled = true;
     controls.disabled = true;
   });

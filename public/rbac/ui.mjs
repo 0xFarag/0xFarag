@@ -16,15 +16,67 @@ const labels = {
 let original, current, basis, report, lastQuery, busy = false;
 let queries = [];
 
+// Bind interface text only. Original RBAC names, groups, hashes and rule values
+// stay verbatim, including when their spelling coincides with a translated label.
+const bindings = new WeakMap();
+const namedButtons = new WeakMap();
+const t = (source, params = {}) => window.AuthzI18n?.t(source, params) ??
+  source.replace(/\{(\w+)\}/gu, (_, key) => String(params[key]));
+const label = (source, params) => () => t(source, params);
+function setText(item, content) {
+  const render = typeof content === 'function' ? content : null;
+  const text = document.createTextNode(render ? render() : content);
+  item.replaceChildren(text);
+  if (render) bindings.set(text, render);
+}
+window.addEventListener('authzlanguage', () => {
+  const walker = document.createTreeWalker($('main'), NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    const render = bindings.get(node);
+    if (render) node.data = render();
+  }
+  for (const button of $('queries').querySelectorAll('button')) {
+    const render = namedButtons.get(button);
+    if (render) button.setAttribute('aria-label', render());
+  }
+});
+
+function message(source) {
+  // Parameterized messages from the offline model: only the fixed text is translated.
+  const patterns = [
+    [/^(\d+) Bindungen verweisen auf fehlende Rollen\.$/u, '{n} Bindungen verweisen auf fehlende Rollen.', ['n']],
+    [/^(\d+) aggregierte Clusterrollen benötigen einen separaten Nachweis\.$/u, '{n} aggregierte Clusterrollen benötigen einen separaten Nachweis.', ['n']],
+    [/^Die ersten (\d+) von (\d+) Regelverweisen werden angezeigt\.$/u, 'Die ersten {shown} von {total} Regelverweisen werden angezeigt.', ['shown','total']],
+    [/^(.+) · (Rollenbeleg fehlt\.|Clusterrolle aggregiert\.)$/u, '{binding} · {reason}', ['binding','reason']],
+    [/^(.+) muss ein JSON-Objekt sein\.$/u, '{field} muss ein JSON-Objekt sein.', ['field']],
+    [/^(.+) ist ungültig\.$/u, '{field} ist ungültig.', ['field']],
+    [/^Ungültige Anzahl für (.+)\.$/u, 'Ungültige Anzahl für {field}.', ['field']],
+    [/^(.+) benötigt einen konkreten API-Wert\.$/u, '{field} benötigt einen konkreten API-Wert.', ['field']],
+    [/^(.+) enthält nicht unterstützte Felder\.$/u, '{field} enthält nicht unterstützte Felder.', ['field']]
+  ];
+  for (const [pattern, template, keys] of patterns) {
+    const match = pattern.exec(source);
+    if (!match) continue;
+    return () => {
+      const direct = t(source);
+      if (direct !== source) return direct;
+      const params = Object.fromEntries(keys.map((key, i) => [key, ['reason','field'].includes(key) ? t(match[i + 1]) : match[i + 1]]));
+      return t(template, params);
+    };
+  }
+  return label(source);
+}
+
 function el(tag, text) {
   const item = document.createElement(tag);
-  item.textContent = text;
+  setText(item, text);
   return item;
 }
 function dl(container, pairs) {
   const list = el('dl','');
   for (const [label,value] of pairs) {
-    list.append(el('dt',label),el('dd',value));
+    list.append(el('dt',() => t(label)),el('dd',value));
   }
   container.append(list);
 }
@@ -48,19 +100,19 @@ async function snapshot(content, example) {
 function showSnapshot(target, value) {
   const box = $(target);
   box.replaceChildren();
-  dl(box,[['Datei-SHA-256',value.digest],['Rollen und Bindungen',value.model.counts.roles + ' Rollen · ' + value.model.counts.bindings + ' Bindungen']]);
+  dl(box,[['Datei-SHA-256',value.digest],['Rollen und Bindungen',label('{roles} Rollen · {bindings} Bindungen', value.model.counts)]]);
   if (value.model.warnings.length) {
     const warnings = el('ul','');
-    for (const warning of value.model.warnings) warnings.append(el('li',warning));
+    for (const warning of value.model.warnings) warnings.append(el('li',message(warning)));
     box.append(warnings);
   }
 }
 function queryLabel(q) {
   const who = q.kind + ' ' + (q.kind === 'ServiceAccount' ? q.subjectNamespace + '/' : '') + q.name;
-  const attributes = [who, q.verb + ' ' + (q.apiGroup || 'core') + '/' + q.resource + (q.subresource ? '/' + q.subresource : ''), q.namespace || 'clusterweit'];
-  if (q.resourceName) attributes.push('Name ' + q.resourceName);
-  if (q.fieldSelectorName) attributes.push('Namensselektor ' + q.fieldSelectorName);
-  if (q.groups.length) attributes.push('Gruppen ' + q.groups.join(', '));
+  const attributes = [who, q.verb + ' ' + (q.apiGroup || 'core') + '/' + q.resource + (q.subresource ? '/' + q.subresource : ''), q.namespace || t('clusterweit')];
+  if (q.resourceName) attributes.push(t('Name {value}', {value:q.resourceName}));
+  if (q.fieldSelectorName) attributes.push(t('Namensselektor {value}', {value:q.fieldSelectorName}));
+  if (q.groups.length) attributes.push(t('Gruppen {value}', {value:q.groups.join(', ')}));
   return attributes.join(' · ');
 }
 function clearReport() {
@@ -70,7 +122,7 @@ function clearReport() {
   $('retest-status').textContent = '';
 }
 function listChoices() {
-  $('selection').replaceChildren(el('legend','Fragen für diesen Retest'));
+  $('selection').replaceChildren(el('legend',label('Fragen für diesen Retest')));
   if (!basis) return;
   for (const [index,c] of basis.cases.entries()) {
     const label = el('label','');
@@ -78,7 +130,7 @@ function listChoices() {
     input.type = 'checkbox';
     input.value = String(index);
     input.addEventListener('change',clearReport);
-    label.append(input,el('span',(index+1) + '. ' + queryLabel(c.query)));
+    label.append(input,el('span',() => (index+1) + '. ' + queryLabel(c.query)));
     $('selection').append(label);
   }
 }
@@ -93,10 +145,12 @@ function clearBasis() {
 function listQueries() {
   $('queries').replaceChildren();
   for (const [index,q] of queries.entries()) {
-    const li = el('li',queryLabel(q));
-    const remove = el('button','Entfernen');
+    const li = el('li',() => queryLabel(q));
+    const remove = el('button',label('Entfernen'));
     remove.className = 'secondary inline';
-    remove.setAttribute('aria-label','Frage ' + (index+1) + ' entfernen');
+    const name = label('Frage {n} entfernen', {n:index + 1});
+    remove.setAttribute('aria-label', name());
+    namedButtons.set(remove, name);
     remove.onclick = () => {
       if (busy) return;
       queries.splice(index,1);
@@ -108,8 +162,12 @@ function listQueries() {
   }
   $('make').disabled = !queries.length;
 }
+// The optional matrix reads the same validated input and source as the single-query view.
+export function analysisInputs() { return {original, lastQuery}; }
+function notifyInputs() { window.dispatchEvent(new Event('rbacinputs')); }
 function clearQuery() {
   lastQuery = null;
+  notifyInputs();
   $('keep').disabled = true;
   $('query-status').textContent = '';
   $('proofs').replaceChildren();
@@ -132,10 +190,12 @@ function reset() {
   $('source-info').replaceChildren();
 }
 async function openOriginal(file, example) {
+  const next = await snapshot(example ? demo(false) : await bytes(file), example);
   reset();
-  original = await snapshot(example ? demo(false) : await bytes(file), example);
+  original = next;
+  notifyInputs();
   $('clear').hidden = $('workspace').hidden = false;
-  $('source-status').textContent = example ? 'Synthetischer Beispiel-Snapshot geöffnet.' : 'Eigener Snapshot geöffnet.';
+  setText($('source-status'), label(example ? 'Synthetischer Beispiel-Snapshot geöffnet.' : 'Eigener Snapshot geöffnet.'));
   showSnapshot('source-info',original);
   if (example) {
     field('name').value = 'beispiel.nora';
@@ -154,12 +214,12 @@ function runQuery() {
   clearQuery();
   const query = readQuery();
   const result = evaluateAccess(original.model,query);
-  $('query-status').textContent = labels[result.status] + ' · ' + result.matchCount + ' passende Regeln.';
+  setText($('query-status'), () => t('{state} · {n} passende Regeln.', {state:t(labels[result.status]), n:result.matchCount}));
   const output = $('proofs');
-  for (const reason of result.reasons) output.append(el('p',reason));
+  for (const reason of result.reasons) output.append(el('p',message(reason)));
   if (result.matches.length) {
     const list = el('ol','');
-    const more = el('button','Weitere Regelbelege anzeigen');
+    const more = el('button',label('Weitere Regelbelege anzeigen'));
     more.type = 'button';
     more.className = 'secondary';
     let shown = 0;
@@ -169,10 +229,12 @@ function runQuery() {
       for (;shown < end;shown++) {
         const m = result.matches[shown];
         const rule = roles.get(m.roleIndex).rules[m.ruleIndex-1];
-        const entry = el('li',m.bindingKind + ' ' + m.bindingName + ' (Objekt ' + m.bindingIndex + ') · ' +
-          m.roleKind + ' ' + m.roleName + ' (Objekt ' + m.roleIndex + ') · Regel ' + m.ruleIndex);
-        entry.append(el('p','Verben ' + rule.verbs.join(', ') + ' · API-Gruppen ' + rule.apiGroups.map(g=>g || 'core').join(', ') +
-          ' · Ressourcen ' + rule.resources.join(', ') + (rule.resourceNames.length ? ' · Namen ' + rule.resourceNames.join(', ') : '')));
+        const entry = el('li', label('{binding} (Objekt {b}) · {role} (Objekt {r}) · Regel {n}', {
+          binding:m.bindingKind + ' ' + m.bindingName, b:m.bindingIndex, role:m.roleKind + ' ' + m.roleName, r:m.roleIndex, n:m.ruleIndex
+        }));
+        entry.append(el('p',() => t('Verben {verbs} · API-Gruppen {groups} · Ressourcen {resources}', {
+          verbs:rule.verbs.join(', '), groups:rule.apiGroups.map(g => g || 'core').join(', '), resources:rule.resources.join(', ')
+        }) + (rule.resourceNames.length ? ' · ' + t('Namen {names}', {names:rule.resourceNames.join(', ')}) : '')));
         list.append(entry);
       }
       more.hidden = shown >= result.matches.length;
@@ -182,12 +244,13 @@ function runQuery() {
     appendMatches();
   }
   lastQuery = query;
+  notifyInputs();
   $('keep').disabled = false;
 }
 function activateBasis(value) {
   clearBasis();
   basis = value;
-  $('basis-status').textContent = basis.cases.length + ' Fragen an den ursprünglichen Snapshot gebunden.';
+  setText($('basis-status'), label('{n} Fragen an den ursprünglichen Snapshot gebunden.', {n:basis.cases.length}));
   dl($('basis-hash'),[['SHA-256 der Prüfbasis',basis.baseline_sha256]]);
   $('save-basis').hidden = $('retest').hidden = false;
   $('demo-current').hidden = !original.example;
@@ -212,7 +275,7 @@ async function openCurrent(file) {
   $('compare').disabled = true;
   listChoices();
   current = await snapshot(original.example ? demo(true) : await bytes(file), original.example);
-  $('current-status').textContent = original.example ? 'Geänderter Beispiel-Snapshot geöffnet.' : 'Späterer Snapshot geöffnet.';
+  setText($('current-status'), label(original.example ? 'Geänderter Beispiel-Snapshot geöffnet.' : 'Späterer Snapshot geöffnet.'));
   showSnapshot('current-info',current);
   $('compare').disabled = false;
 }
@@ -221,21 +284,23 @@ async function compare() {
   const chosen = Array.from($('selection').querySelectorAll('input:checked'),item=>Number(item.value));
   report = await retestPolicy(basis,original.bytes,current.bytes,chosen);
   const {coverage} = report;
-  $('retest-status').textContent = coverage.retested + ' von ' + coverage.total + ' erneut geprüft · ' + coverage.not_retested +
-    ' not_retested.' + (report.identical_source_bytes ? ' Beide Snapshots haben identische Bytes.' : '');
+  const identical = report.identical_source_bytes;
+  setText($('retest-status'), () => t('{retested} von {total} erneut geprüft · {not_retested} not_retested.', coverage) +
+    (identical ? ' ' + t('Beide Snapshots haben identische Bytes.') : ''));
   const result = $('results');
   dl(result,[['Original-SHA-256',report.original_policy_sha256],['Späterer SHA-256',report.current_policy_sha256],['Basis-SHA-256',report.baseline_sha256]]);
   const list = el('ol','');
   for (const [i,entry] of report.cases.entries()) {
-    const item = el('li', queryLabel(basis.cases[i].query));
-    item.append(el('p',labels[entry.status] + ' · Vorher: ' + labels[entry.before.status] +
-      (entry.after ? ' · Danach: ' + labels[entry.after.status] : '')));
+    const entryQuery = basis.cases[i].query;
+    const item = el('li', () => queryLabel(entryQuery));
+    item.append(el('p',() => t('{state} · Vorher: {before}', {state:t(labels[entry.status]), before:t(labels[entry.before.status])}) +
+      (entry.after ? ' · ' + t('Danach: {after}', {after:t(labels[entry.after.status])}) : '')));
     list.append(item);
   }
   result.append(list);
   $('save-result').hidden = false;
 }
-function download(data,name) {
+export function download(data,name) {
   const url = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)+'\n'],{type:'application/json'}));
   const link = el('a','');
   link.href = url;
@@ -245,14 +310,14 @@ function download(data,name) {
   link.remove();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-async function act(status,fn) {
+export async function act(status,fn) {
   if (busy) return;
   busy = true;
   const focus = document.activeElement;
   $('main').setAttribute('aria-busy','true');
   $('main').inert = true;
   try { await fn(); }
-  catch (error) { $(status).textContent = error.message; }
+  catch (error) { setText($(status), message(error.message)); }
   finally {
     $('main').inert = false;
     $('main').removeAttribute('aria-busy');
@@ -274,8 +339,11 @@ inputButton('original','pick-original','source-status',file=>openOriginal(file,f
 inputButton('current','pick-current','current-status',openCurrent);
 inputButton('basis-file','load-basis','basis-status',restore);
 $('example').onclick = () => act('source-status',()=>openOriginal(null,true));
-$('clear').onclick = () => {reset(); $('source-status').textContent='Lokale Sitzung geleert.'; $('pick-original').focus();};
-$('query-form').oninput = () => { subjectFields(); clearQuery(); };
+$('clear').onclick = () => {reset(); setText($('source-status'), label('Lokale Sitzung geleert.')); $('pick-original').focus();};
+$('query-form').oninput = event => {
+  if (event.target.closest('#matrix-entry')) return;
+  subjectFields(); clearQuery();
+};
 $('query-form').onsubmit = event => {event.preventDefault(); act('query-status',runQuery);};
 $('keep').onclick = () => act('query-status',() => {
   if (!lastQuery) return;
@@ -285,7 +353,7 @@ $('keep').onclick = () => act('query-status',() => {
   clearBasis();
   listQueries();
   $('keep').disabled = true;
-  $('query-status').textContent = 'Frage ' + queries.length + ' übernommen.';
+  setText($('query-status'), label('Frage {n} übernommen.', {n:queries.length}));
 });
 $('make').onclick = () => act('basis-status',async ()=>activateBasis(await makeBaseline(original.digest,queries,original.model)));
 $('save-basis').onclick = () => download(basis,'AuthzLedger-RBAC-Basis.json');

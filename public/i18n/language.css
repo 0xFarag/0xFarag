@@ -1,0 +1,16 @@
+.az-language-bar{position:relative;z-index:25;background:#0c2030;color:#faf7f0;border-block-end:1px solid #314654;font:400 .9375rem/1.35 system-ui,sans-serif}
+.az-language-inner{width:min(100% - 2rem,76rem);margin-inline:auto;display:flex;justify-content:flex-end}
+.az-language{position:relative;padding:0;margin:0;color:inherit;background:transparent;border:0}
+.az-language summary{display:list-item;cursor:pointer;padding:.6rem .4rem;min-height:2.6rem;box-sizing:border-box;color:inherit;font:inherit}
+.az-language summary::marker{color:#dfb772;font-size:.8em}
+.az-language summary span[aria-hidden]{color:#dfb772}
+.az-language ul{position:absolute;inset-inline-end:0;top:100%;margin:0;padding:.3rem;list-style:none;min-width:11rem;background:#102838;border:1px solid #697c86;border-radius:.45rem;box-shadow:0 .4rem 1.6rem #08152242;z-index:2}
+.az-language li{list-style:none;margin:0;padding:0}
+.az-language a{display:block;padding:.65rem .85rem;color:#fff;text-decoration:none;border-radius:.25rem;text-align:start}
+.az-language a[aria-current=true]{color:#ffdf9c;font-weight:700}
+.az-language a:hover,.az-language a:focus-visible{background:#213c50;color:#fff}
+.az-language :focus-visible{outline:2px solid #f5c46e;outline-offset:2px}
+html[dir=rtl] :is(code,pre,kbd,samp,input[type=url],input[type=email]){direction:ltr;unicode-bidi:isolate}
+body>a.skip:focus{z-index:100}
+html[dir=rtl] :is(th,td,caption){text-align:start}
+@media print{.az-language-bar{display:none}}

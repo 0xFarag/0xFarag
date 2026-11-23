@@ -1,0 +1,1208 @@
+{
+  "Ein erforderliches Datenobjekt fehlt.": [
+    "A required data object is missing.",
+    "Un objet de données obligatoire est absent.",
+    "Manca un oggetto dati obbligatorio.",
+    "كائن بيانات إلزامي مفقود."
+  ],
+  "Ungültige Anzahl Einträge für «{field}» (erlaubt {min} bis {max}).": [
+    "Invalid number of entries for “{field}” (allowed range {min} to {max}).",
+    "Nombre d’entrées incorrect pour «{field}» (entre {min} et {max}).",
+    "Numero di voci non valido per «{field}» (da {min} a {max}).",
+    "عدد الإدخالات في «{field}» غير صالح (المدى المسموح من {min} إلى {max})."
+  ],
+  "Ungültiger Text für «{field}».": [
+    "Invalid text for “{field}”.",
+    "Texte invalide pour «{field}».",
+    "Testo non valido per «{field}».",
+    "النص في «{field}» غير صالح."
+  ],
+  "Ungültige ID für «{field}».": [
+    "Invalid ID for “{field}”.",
+    "Identifiant invalide pour «{field}».",
+    "ID non valido per «{field}».",
+    "المعرّف في «{field}» غير صالح."
+  ],
+  "Ungültiger SHA-256-Wert für «{field}».": [
+    "Invalid SHA-256 value for “{field}”.",
+    "Valeur SHA-256 invalide pour «{field}».",
+    "Valore SHA-256 non valido per «{field}».",
+    "قيمة SHA-256 في «{field}» غير صالحة."
+  ],
+  "Mehrdeutige Kennung in «{field}».": [
+    "Duplicate identifier in “{field}”.",
+    "Identifiant en double dans «{field}».",
+    "Identificatore duplicato in «{field}».",
+    "معرّف مكرّر في «{field}»."
+  ],
+  "Der Nenner für «{field}» stimmt nicht.": [
+    "The denominator for “{field}” does not match.",
+    "Le dénominateur pour «{field}» ne correspond pas.",
+    "Il denominatore per «{field}» non corrisponde.",
+    "المقام في «{field}» غير مطابق."
+  ],
+  "Die JSON-Struktur ist zu tief verschachtelt.": [
+    "The JSON structure is nested too deeply.",
+    "La structure JSON comporte trop de niveaux imbriqués.",
+    "La struttura JSON contiene troppi livelli di annidamento.",
+    "يتجاوز تداخل بنية JSON الحد المسموح."
+  ],
+  "Die Datei enthält einen doppelten JSON-Schlüssel.": [
+    "The file contains a duplicate JSON key.",
+    "Le fichier contient une clé JSON en double.",
+    "Il file contiene una chiave JSON duplicata.",
+    "يحتوي الملف على مفتاح JSON مكرّر."
+  ],
+  "Unbekanntes oder widersprüchliches Befundprofil.": [
+    "Unknown or inconsistent finding profile.",
+    "Profil de constat inconnu ou incohérent.",
+    "Profilo del riscontro sconosciuto o incoerente.",
+    "ملف تعريف النتيجة غير معروف أو متناقض."
+  ],
+  "Quellen- oder Kontrollbindung des Befunds ist unvollständig.": [
+    "The finding is missing a required source or control reference.",
+    "Une référence à une source ou à un contrôle manque dans le constat.",
+    "Al riscontro manca un riferimento a una fonte o a un controllo.",
+    "تفتقر النتيجة إلى مرجع إلزامي لمصدر أو لضابط."
+  ],
+  "Nicht unterstützte oder widersprüchliche Scanneraussage.": [
+    "Unsupported or inconsistent scanner assertion.",
+    "Déclaration du scanner non prise en charge ou incohérente.",
+    "Segnalazione dello scanner non supportata o incoerente.",
+    "إفادة الماسح غير مدعومة أو متناقضة."
+  ],
+  "Unbekannter Retest-Status.": [
+    "Unknown retest status.",
+    "Statut de nouveau test inconnu.",
+    "Stato del nuovo test sconosciuto.",
+    "حالة إعادة الاختبار غير معروفة."
+  ],
+  "Ein ausgelassener Fall trägt einen aktuellen Befund-Digest.": [
+    "A skipped case contains a current finding digest.",
+    "Un cas omis contient une empreinte de constat actuelle.",
+    "Un caso omesso contiene l’impronta di un riscontro corrente.",
+    "تحتوي حالة متخطاة على بصمة نتيجة حالية."
+  ],
+  "Unbekanntes Inventar-Quellprofil.": [
+    "Unknown inventory source profile.",
+    "Profil de source d’inventaire inconnu.",
+    "Profilo di origine dell’inventario sconosciuto.",
+    "ملف تعريف مصدر الجرد غير معروف."
+  ],
+  "Quellfamilie und Profil passen nicht zusammen.": [
+    "The source family does not match the profile.",
+    "La famille de sources ne correspond pas au profil.",
+    "La famiglia della fonte non corrisponde al profilo.",
+    "فئة المصدر لا تطابق ملف التعريف."
+  ],
+  "Mehrdeutige Inventargruppe.": [
+    "Duplicate inventory group identifier.",
+    "Identifiant de groupe d’inventaire en double.",
+    "Identificatore di gruppo dell’inventario duplicato.",
+    "معرّف مجموعة الجرد مكرّر."
+  ],
+  "Eine Beobachtung ist keiner passenden Inventargruppe zugeordnet.": [
+    "An observation has no matching inventory group.",
+    "Une observation n’est rattachée à aucun groupe d’inventaire correspondant.",
+    "Un’osservazione non è associata a un gruppo di inventario corrispondente.",
+    "توجد ملاحظة غير مرتبطة بمجموعة جرد مطابقة."
+  ],
+  "Das Inventar enthält verwaiste oder mehrfache Verweise.": [
+    "The inventory contains orphaned or duplicate references.",
+    "L’inventaire contient des références orphelines ou en double.",
+    "L’inventario contiene riferimenti orfani o duplicati.",
+    "يحتوي الجرد على مراجع يتيمة أو مكرّرة."
+  ],
+  "Der Dienst eines Endpunkts fehlt.": [
+    "An endpoint’s service is missing.",
+    "Le service d’un point de terminaison est absent.",
+    "Manca il servizio associato a un endpoint.",
+    "الخدمة المرتبطة بإحدى نقاط النهاية مفقودة."
+  ],
+  "Endpunkt und Dienst widersprechen sich.": [
+    "The endpoint and service are inconsistent.",
+    "Le point de terminaison et le service sont incohérents.",
+    "L’endpoint e il servizio sono incoerenti.",
+    "نقطة النهاية والخدمة غير متوافقتين."
+  ],
+  "Diese Inventarversion wird nicht unterstützt.": [
+    "This inventory version is unsupported.",
+    "Cette version de l’inventaire n’est pas prise en charge.",
+    "Questa versione dell’inventario non è supportata.",
+    "إصدار الجرد هذا غير مدعوم."
+  ],
+  "Die Inventarzähler oder die Anzahl Datensätze sind ungültig.": [
+    "The inventory counters or record count are invalid.",
+    "Les compteurs de l’inventaire ou le nombre d’enregistrements sont invalides.",
+    "I contatori dell’inventario o il numero di record non sono validi.",
+    "عدّادات الجرد أو عدد السجلات غير صالح."
+  ],
+  "Unzulässiges Belegniveau im Quelleninventar.": [
+    "Invalid evidence level in the source inventory.",
+    "Niveau de preuve invalide dans l’inventaire des sources.",
+    "Livello di evidenza non valido nell’inventario delle fonti.",
+    "مستوى الدليل في جرد المصادر غير صالح."
+  ],
+  "Matchergebnis und Belegniveau widersprechen sich.": [
+    "The match result and evidence level are inconsistent.",
+    "Le résultat de correspondance et le niveau de preuve sont incohérents.",
+    "L’esito della corrispondenza e il livello di evidenza sono incoerenti.",
+    "نتيجة المطابقة ومستوى الدليل متناقضان."
+  ],
+  "Ungültiger HTTP-Status.": [
+    "Invalid HTTP status.",
+    "Statut HTTP invalide.",
+    "Stato HTTP non valido.",
+    "حالة HTTP غير صالحة."
+  ],
+  "Ungültige Quellenangabe beim ausgeschlossenen Artefakt.": [
+    "Invalid source reference on the excluded artifact.",
+    "Référence de source invalide pour l’artefact exclu.",
+    "Riferimento alla fonte non valido per l’artefatto escluso.",
+    "مرجع المصدر للأثر المستبعد غير صالح."
+  ],
+  "Ungültiger Verweis für ein vollständig ausgeschlossenes Artefakt.": [
+    "Invalid reference for a fully excluded artifact.",
+    "Référence invalide pour un artefact entièrement exclu.",
+    "Riferimento non valido per un artefatto interamente escluso.",
+    "مرجع الأثر المستبعد بالكامل غير صالح."
+  ],
+  "Das Inventar enthält zu viele Einträge.": [
+    "The inventory contains too many entries.",
+    "L’inventaire contient trop d’entrées.",
+    "L’inventario contiene troppe voci.",
+    "عدد الإدخالات في الجرد كبير جداً."
+  ],
+  "Das Datenobjekt enthält unbekannte oder fehlende Felder.": [
+    "The data object has unknown or missing fields.",
+    "L’objet de données comporte des champs inconnus ou manquants.",
+    "L’oggetto dati presenta campi sconosciuti o mancanti.",
+    "يحتوي كائن البيانات على حقول مجهولة أو تنقصه حقول."
+  ],
+  "Herkunftsangabe oder Signaturstatus des Belegindexes ist ungültig.": [
+    "The provenance or signature status of the evidence index is invalid.",
+    "La provenance ou le statut de signature de l’index de preuves est invalide.",
+    "La provenienza o lo stato della firma dell’indice delle evidenze non è valido.",
+    "بيان مصدر فهرس الأدلة أو حالة توقيعه غير صالح."
+  ],
+  "Der Belegindex darf keine geprüfte Abdeckung, Freigabe oder fachliche Bestätigung ausweisen.": [
+    "The evidence index cannot assert verified coverage, approval or technical confirmation.",
+    "L’index de preuves ne peut attester une couverture vérifiée, une approbation ou une confirmation technique.",
+    "L’indice delle evidenze non può attestare copertura verificata, approvazione o conferma tecnica.",
+    "لا يجوز لفهرس الأدلة إثبات تغطية متحقّق منها أو موافقة أو تأكيد فني."
+  ],
+  "Unbekanntes Werkzeug im Belegindex.": [
+    "Unknown tool in the evidence index.",
+    "Outil inconnu dans l’index de preuves.",
+    "Strumento sconosciuto nell’indice delle evidenze.",
+    "أداة غير معروفة في فهرس الأدلة."
+  ],
+  "Eine Quelldatei ist im selben Quellformat mehrfach aufgeführt.": [
+    "A source file appears more than once in the same source format.",
+    "Un fichier source figure plusieurs fois dans le même format.",
+    "Un file sorgente compare più volte con lo stesso formato.",
+    "ورد الملف المصدر أكثر من مرة بالتنسيق نفسه."
+  ],
+  "Der Belegindex überschreitet 2’500 Beobachtungen.": [
+    "The evidence index exceeds 2,500 observations.",
+    "L’index de preuves dépasse 2 500 observations.",
+    "L’indice delle evidenze supera le 2 500 osservazioni.",
+    "يتجاوز فهرس الأدلة حدّ ٢٥٠٠ ملاحظة."
+  ],
+  "Ungültige Zeile oder Position im Belegindex.": [
+    "Invalid line or position in the evidence index.",
+    "Ligne ou position invalide dans l’index de preuves.",
+    "Riga o posizione non valida nell’indice delle evidenze.",
+    "السطر أو الموضع في فهرس الأدلة غير صالح."
+  ],
+  "Ungültige pseudonyme Asset-ID im Belegindex.": [
+    "Invalid pseudonymous asset ID in the evidence index.",
+    "Identifiant d’actif pseudonyme invalide dans l’index de preuves.",
+    "ID pseudonimo della risorsa non valido nell’indice delle evidenze.",
+    "معرّف الأصل المستعار في فهرس الأدلة غير صالح."
+  ],
+  "Ungültiger Ereignis- oder Alarmzähler.": [
+    "Invalid event or alert counter.",
+    "Compteur d’événements ou d’alertes invalide.",
+    "Contatore di eventi o allarmi non valido.",
+    "عدّاد الأحداث أو التنبيهات غير صالح."
+  ],
+  "Das Zeitfenster erfordert zwei Zeitpunkte mit expliziter Zeitzone.": [
+    "The time window requires two timestamps with explicit time zones.",
+    "La fenêtre temporelle exige deux horodatages avec un fuseau horaire explicite.",
+    "La finestra temporale richiede due istanti con fuso orario esplicito.",
+    "تتطلب الفترة الزمنية طابعين زمنيين بمنطقة زمنية محددة صراحة."
+  ],
+  "Ungültiger Zeitpunkt im SOC-Bericht.": [
+    "Invalid timestamp in the SOC report.",
+    "Horodatage invalide dans le rapport SOC.",
+    "Data e ora non valide nel rapporto SOC.",
+    "الطابع الزمني في تقرير مركز العمليات الأمنية غير صالح."
+  ],
+  "Unbekanntes SOC-Profil oder widersprüchliche Vertrauensangabe.": [
+    "Unknown SOC profile or inconsistent trust assertion.",
+    "Profil SOC inconnu ou déclaration de confiance incohérente.",
+    "Profilo SOC sconosciuto o dichiarazione di attendibilità incoerente.",
+    "ملف تعريف مركز العمليات الأمنية مجهول أو بيان الثقة متناقض."
+  ],
+  "Das SOC-Zeitfenster ist leer oder rückwärts angegeben.": [
+    "The SOC time window is empty or reversed.",
+    "La fenêtre temporelle SOC est vide ou inversée.",
+    "La finestra temporale SOC è vuota o invertita.",
+    "الفترة الزمنية لمركز العمليات الأمنية فارغة أو معكوسة."
+  ],
+  "Unbekannter Status im ursprünglichen Retest.": [
+    "Unknown status in the original retest.",
+    "Statut inconnu dans le nouveau test initial.",
+    "Stato sconosciuto nel test ripetuto originale.",
+    "حالة غير معروفة في إعادة الاختبار الأصلية."
+  ],
+  "Der gebundene Befund fehlt oder widerspricht der Retest-Abdeckung.": [
+    "The linked finding is missing or conflicts with the retest coverage.",
+    "Le constat associé est absent ou contredit la couverture du nouveau test.",
+    "Il riscontro associato manca o è in conflitto con la copertura del nuovo test.",
+    "النتيجة المرتبطة مفقودة أو تتعارض مع تغطية إعادة الاختبار."
+  ],
+  "Ereignismengen und Zähler des Signalfensters widersprechen sich.": [
+    "Event sets and counters in the signal window disagree.",
+    "Les ensembles d’événements et les compteurs de la fenêtre de signaux divergent.",
+    "Gli insiemi di eventi e i contatori della finestra dei segnali non corrispondono.",
+    "تتعارض مجموعات الأحداث مع عدّادات الفترة الزمنية للإشارات."
+  ],
+  "Der SOC-Status widerspricht den dokumentierten Ereignissen und Alarmen.": [
+    "The SOC status conflicts with the documented events and alerts.",
+    "Le statut SOC contredit les événements et alertes documentés.",
+    "Lo stato SOC è in conflitto con gli eventi e gli allarmi documentati.",
+    "تتعارض حالة مركز العمليات الأمنية مع الأحداث والتنبيهات الموثقة."
+  ],
+  "Die angegebene Alarmabdeckung passt nicht zu den Ereignis-IDs.": [
+    "The stated alert coverage does not match the event IDs.",
+    "La couverture d’alertes indiquée ne correspond pas aux identifiants d’événements.",
+    "La copertura degli allarmi dichiarata non corrisponde agli ID degli eventi.",
+    "تغطية التنبيهات المعلنة لا تطابق معرّفات الأحداث."
+  ],
+  "Für die lokale SHA-256-Prüfung ist ein sicherer Browserkontext erforderlich.": [
+    "Local SHA-256 verification requires a secure browser context.",
+    "La vérification locale SHA-256 nécessite un contexte de navigation sécurisé.",
+    "La verifica locale SHA-256 richiede un contesto del browser sicuro.",
+    "يتطلب التحقّق المحلي باستخدام SHA-256 سياقاً آمناً في المتصفح."
+  ],
+  "Wählen Sie 1 bis 20 Dateien mit zusammen höchstens 5 MiB.": [
+    "Select 1 to 20 files totalling up to 5 MiB.",
+    "Choisissez de 1 à 20 fichiers, pour un total maximal de 5 Mio.",
+    "Scegli da 1 a 20 file, per un totale massimo di 5 MiB.",
+    "اختر من ملف واحد إلى ٢٠ ملفاً بحجم إجمالي لا يتجاوز ٥ ميبيبايت."
+  ],
+  "Unbekanntes Schlüsselformat für die Digestprüfung.": [
+    "Unknown key format for digest verification.",
+    "Format de clé inconnu pour la vérification de l’empreinte.",
+    "Formato della chiave sconosciuto per la verifica dell’impronta.",
+    "تنسيق المفتاح غير معروف للتحقق من البصمة."
+  ],
+  "Zahlen ausserhalb des unterstützten Digestprofils.": [
+    "Numbers are outside the supported digest profile.",
+    "Des nombres sortent du profil d’empreinte pris en charge.",
+    "I numeri superano i limiti del profilo di impronta supportato.",
+    "الأعداد خارج الحدود التي يدعمها ملف تعريف البصمة."
+  ],
+  "Der interne Digest stimmt nicht mit dem dokumentierten Inhalt überein.": [
+    "The internal digest does not match the documented content.",
+    "L’empreinte interne ne correspond pas au contenu documenté.",
+    "L’impronta interna non corrisponde al contenuto documentato.",
+    "البصمة الداخلية لا تطابق المحتوى الموثّق."
+  ],
+  "Erwartet werden die unveränderten Dateibytes.": [
+    "Provide the original, unmodified file bytes.",
+    "Fournissez les octets d’origine du fichier, sans modification.",
+    "Fornisci i byte originali del file senza modifiche.",
+    "أدخل بايتات الملف الأصلية كما هي."
+  ],
+  "Die JSON-Datei muss zwischen 1 Byte und 2 MiB gross sein.": [
+    "The JSON file must be between 1 byte and 2 MiB.",
+    "La taille du fichier JSON doit être comprise entre 1 octet et 2 Mio.",
+    "Il file JSON deve avere una dimensione compresa tra 1 byte e 2 MiB.",
+    "يجب أن يتراوح حجم ملف JSON بين بايت واحد و٢ ميبيبايت."
+  ],
+  "Die Datei enthält kein gültiges UTF-8-JSON.": [
+    "The file does not contain valid UTF-8 JSON.",
+    "Le fichier ne contient pas de JSON UTF-8 valide.",
+    "Il file non contiene JSON UTF-8 valido.",
+    "لا يحتوي الملف على JSON صالح بترميز UTF-8."
+  ],
+  "Erwartet wird ein AuthzLedger-Befund B, Retest C, Quelleninventar, Belegindex oder SOC-Signalbericht.": [
+    "Provide an AuthzLedger finding B, retest C, source inventory, evidence index or SOC signal report.",
+    "Fournissez un constat B, un nouveau test C, un inventaire des sources, un index de preuves ou un rapport de signaux SOC AuthzLedger.",
+    "Fornisci un riscontro B, una ripetizione del test C, un inventario delle fonti, un indice delle evidenze o un rapporto dei segnali SOC di AuthzLedger.",
+    "أدخل نتيجة B أو إعادة اختبار C أو جرد مصادر أو فهرس أدلة أو تقرير إشارات مركز العمليات الأمنية من AuthzLedger."
+  ],
+  "Prüfregel": [
+    "Test rule",
+    "Règle de vérification",
+    "Regola di verifica",
+    "قاعدة الفحص"
+  ],
+  "Kontrollen": [
+    "Controls",
+    "Contrôles",
+    "Controlli",
+    "الضوابط"
+  ],
+  "Quellen": [
+    "Sources",
+    "Sources",
+    "Fonti",
+    "المصادر"
+  ],
+  "Scannerquelle": [
+    "Scanner source",
+    "Source du scanner",
+    "Fonte dello scanner",
+    "مصدر الماسح"
+  ],
+  "Scannerexport": [
+    "Scanner export",
+    "Export du scanner",
+    "Esportazione dello scanner",
+    "تصدير الماسح"
+  ],
+  "Ausführung": [
+    "Execution",
+    "Exécution",
+    "Esecuzione",
+    "التنفيذ"
+  ],
+  "Aussagegrenzen": [
+    "Limitations",
+    "Limites d’interprétation",
+    "Limiti interpretativi",
+    "حدود الاستنتاج"
+  ],
+  "Aussagegrenze": [
+    "Limitation",
+    "Limite d’interprétation",
+    "Limite interpretativo",
+    "حدود الاستنتاج"
+  ],
+  "Prüffall": [
+    "Test case",
+    "Cas de test",
+    "Caso di test",
+    "حالة الاختبار"
+  ],
+  "Befund": [
+    "Finding",
+    "Constat",
+    "Riscontro",
+    "النتيجة"
+  ],
+  "Vorgeschriebener Antwortheader fehlt": [
+    "Required response header missing",
+    "En-tête de réponse obligatoire absent",
+    "Intestazione di risposta obbligatoria mancante",
+    "ترويسة استجابة إلزامية مفقودة"
+  ],
+  "Nativer Konfigurationscheck": [
+    "Native configuration check",
+    "Contrôle de configuration natif",
+    "Verifica nativa della configurazione",
+    "فحص الإعدادات الداخلي"
+  ],
+  "Die Projektion meldet einen fehlenden, ausdrücklich geforderten Header.": [
+    "The projection reports that an explicitly required header is missing.",
+    "La projection signale l’absence d’un en-tête explicitement exigé.",
+    "La proiezione segnala l’assenza di un’intestazione espressamente richiesta.",
+    "يفيد السجل المستخلص بأن ترويسة مطلوبة صراحةً مفقودة."
+  ],
+  "Check": [
+    "Check",
+    "Contrôle",
+    "Verifica",
+    "الفحص"
+  ],
+  "Kontrollregel": [
+    "Control rule",
+    "Règle de contrôle",
+    "Regola di controllo",
+    "قاعدة الضبط"
+  ],
+  "Mitschnitt": [
+    "Capture",
+    "Capture",
+    "Acquisizione",
+    "التسجيل"
+  ],
+  "Aussagegrenze der Quelle": [
+    "Source limitation",
+    "Limite d’interprétation de la source",
+    "Limite interpretativo della fonte",
+    "حدود استنتاج المصدر"
+  ],
+  "Scanneraussagen": [
+    "Scanner assertions",
+    "Déclarations du scanner",
+    "Segnalazioni dello scanner",
+    "إفادات الماسح"
+  ],
+  "Regel-ID": [
+    "Rule ID",
+    "Identifiant de règle",
+    "ID regola",
+    "معرّف القاعدة"
+  ],
+  "Die importierte Meldung hat den Status eines unbestätigten Hinweises.": [
+    "The imported alert is an unverified indication.",
+    "L’alerte importée constitue un indice non vérifié.",
+    "La segnalazione importata è un indizio non verificato.",
+    "يُعدّ التنبيه المستورد مؤشراً غير مؤكّد."
+  ],
+  "Quellklassifikation": [
+    "Source classification",
+    "Classification de la source",
+    "Classificazione della fonte",
+    "تصنيف المصدر"
+  ],
+  "Befunde": [
+    "Findings",
+    "Constats",
+    "Riscontri",
+    "النتائج"
+  ],
+  "Konfigurationsbefund": [
+    "Configuration finding",
+    "Constat de configuration",
+    "Riscontro di configurazione",
+    "نتيجة فحص الإعدادات"
+  ],
+  "Baseline-Ausführung": [
+    "Baseline execution",
+    "Exécution de référence",
+    "Esecuzione di riferimento",
+    "التنفيذ المرجعي"
+  ],
+  "Retest-Ausführung": [
+    "Retest execution",
+    "Exécution du nouveau test",
+    "Esecuzione del nuovo test",
+    "تنفيذ إعادة الاختبار"
+  ],
+  "Snapshot": [
+    "Snapshot",
+    "Instantané",
+    "Snapshot",
+    "اللقطة"
+  ],
+  "Retest-Fälle": [
+    "Retest cases",
+    "Cas à retester",
+    "Casi di nuovo test",
+    "حالات إعادة الاختبار"
+  ],
+  "Baseline-Befund": [
+    "Baseline finding",
+    "Constat de référence",
+    "Riscontro di riferimento",
+    "النتيجة المرجعية"
+  ],
+  "Retest-Projektion": [
+    "Retest projection",
+    "Projection du nouveau test",
+    "Proiezione del nuovo test",
+    "سجل إعادة الاختبار المستخلص"
+  ],
+  "Der Fall bleibt im Umfang der Baseline. Ein neuer Befundbeleg fehlt.": [
+    "The case remains in the baseline scope. There is no new finding evidence.",
+    "Le cas reste dans le périmètre de référence. Aucune nouvelle preuve du constat n’est disponible.",
+    "Il caso resta nel perimetro di riferimento. Manca una nuova evidenza del riscontro.",
+    "تبقى الحالة ضمن النطاق المرجعي. لا يوجد دليل جديد على النتيجة."
+  ],
+  "Die Projektion verknüpft den Baseline-Befund mit dem Ergebnis der erneuten Prüfung.": [
+    "The projection links the baseline finding to the retest result.",
+    "La projection relie le constat de référence au résultat du nouveau test.",
+    "La proiezione collega il riscontro di riferimento all’esito del nuovo test.",
+    "يربط السجل المستخلص النتيجة المرجعية بنتيجة إعادة الاختبار."
+  ],
+  "Aktueller Befund": [
+    "Current finding",
+    "Constat actuel",
+    "Riscontro corrente",
+    "النتيجة الحالية"
+  ],
+  "Prüfmethode": [
+    "Verification method",
+    "Méthode de vérification",
+    "Metodo di verifica",
+    "طريقة التحقّق"
+  ],
+  "Quellverweise": [
+    "Source references",
+    "Références aux sources",
+    "Riferimenti alle fonti",
+    "مراجع المصادر"
+  ],
+  "Importierte Beobachtung": [
+    "Imported observation",
+    "Observation importée",
+    "Osservazione importata",
+    "ملاحظة مستوردة"
+  ],
+  "HTTP-Inventar": [
+    "HTTP inventory",
+    "Inventaire HTTP",
+    "Inventario HTTP",
+    "جرد HTTP"
+  ],
+  "Dienstinventar": [
+    "Service inventory",
+    "Inventaire des services",
+    "Inventario dei servizi",
+    "جرد الخدمات"
+  ],
+  "Nmap-Import": [
+    "Nmap import",
+    "Import Nmap",
+    "Importazione Nmap",
+    "استيراد Nmap"
+  ],
+  "Scanner-Import": [
+    "Scanner import",
+    "Import du scanner",
+    "Importazione dello scanner",
+    "استيراد الماسح"
+  ],
+  "Scanner-Ursprung": [
+    "Scanner origin",
+    "Origine du scanner",
+    "Origine dello scanner",
+    "منشأ بيانات الماسح"
+  ],
+  "Importbeobachtung": [
+    "Imported observation",
+    "Observation importée",
+    "Osservazione importata",
+    "ملاحظة مستوردة"
+  ],
+  "Quelldatei": [
+    "Source file",
+    "Fichier source",
+    "File sorgente",
+    "الملف المصدر"
+  ],
+  "Importverweise": [
+    "Import references",
+    "Références d’import",
+    "Riferimenti dell’importazione",
+    "مراجع الاستيراد"
+  ],
+  "Position": [
+    "Position",
+    "Position",
+    "Posizione",
+    "الموضع"
+  ],
+  "Artefaktbelege": [
+    "Artifact evidence",
+    "Preuves liées aux artefacts",
+    "Evidenze degli artefatti",
+    "أدلة الآثار الرقمية"
+  ],
+  "Artefakt-ID": [
+    "Artifact ID",
+    "Identifiant de l’artefact",
+    "ID dell’artefatto",
+    "معرّف الأثر الرقمي"
+  ],
+  "Artefakt": [
+    "Artifact",
+    "Artefact",
+    "Artefatto",
+    "الأثر الرقمي"
+  ],
+  "Quellverweis": [
+    "Source reference",
+    "Référence à la source",
+    "Riferimento alla fonte",
+    "مرجع المصدر"
+  ],
+  "Quell-Digest": [
+    "Source digest",
+    "Empreinte de la source",
+    "Impronta della fonte",
+    "بصمة المصدر"
+  ],
+  "Artefakte": [
+    "Artifacts",
+    "Artefacts",
+    "Artefatti",
+    "الآثار الرقمية"
+  ],
+  "Inventarverweise": [
+    "Inventory references",
+    "Références d’inventaire",
+    "Riferimenti dell’inventario",
+    "مراجع الجرد"
+  ],
+  "Beobachtungs-ID": [
+    "Observation ID",
+    "Identifiant de l’observation",
+    "ID dell’osservazione",
+    "معرّف الملاحظة"
+  ],
+  "Index": [
+    "Index",
+    "Index",
+    "Indice",
+    "الفهرس"
+  ],
+  "Auslassungen": [
+    "Omissions",
+    "Omissions",
+    "Omissioni",
+    "العناصر المتخطاة"
+  ],
+  "Quellbeobachtung": [
+    "Source observation",
+    "Observation de la source",
+    "Osservazione della fonte",
+    "ملاحظة المصدر"
+  ],
+  "Die Quelle enthält eine Beobachtung zu einem Dienst oder Endpunkt.": [
+    "The source records an observation about a service or endpoint.",
+    "La source contient une observation sur un service ou un point de terminaison.",
+    "La fonte contiene un’osservazione su un servizio o un endpoint.",
+    "يتضمن المصدر ملاحظة عن خدمة أو نقطة نهاية."
+  ],
+  "Regel hat zugetroffen": [
+    "Rule matched",
+    "Règle correspondante",
+    "Regola corrispondente",
+    "تطابقت القاعدة"
+  ],
+  "Regel traf nicht zu": [
+    "Rule did not match",
+    "Règle sans correspondance",
+    "Regola senza corrispondenza",
+    "لم تتطابق القاعدة"
+  ],
+  "Das Matchergebnis stammt aus dem Nuclei-Export.": [
+    "The match result comes from the Nuclei export.",
+    "Le résultat de correspondance provient de l’export Nuclei.",
+    "L’esito della corrispondenza proviene dall’esportazione Nuclei.",
+    "نتيجة المطابقة مأخوذة من ملف Nuclei المصدّر."
+  ],
+  "Dienstzustand": [
+    "Service state",
+    "État du service",
+    "Stato del servizio",
+    "حالة الخدمة"
+  ],
+  "Gemeldeter Zustand: {status}.": [
+    "Reported state: {status}.",
+    "État signalé : {status}.",
+    "Stato segnalato: {status}.",
+    "الحالة المبلّغ عنها: {status}."
+  ],
+  "HTTP-Beobachtung": [
+    "HTTP observation",
+    "Observation HTTP",
+    "Osservazione HTTP",
+    "ملاحظة HTTP"
+  ],
+  "Die Quelle meldet HTTP {status}.": [
+    "The source reports HTTP {status}.",
+    "La source signale le statut HTTP {status}.",
+    "La fonte segnala HTTP {status}.",
+    "يفيد المصدر برمز HTTP {status}."
+  ],
+  "Auslassungsgrund": [
+    "Omission reason",
+    "Motif de l’omission",
+    "Motivo dell’omissione",
+    "سبب التجاوز"
+  ],
+  "Artefakttyp": [
+    "Artifact type",
+    "Type d’artefact",
+    "Tipo di artefatto",
+    "نوع الأثر الرقمي"
+  ],
+  "Quellfamilie": [
+    "Source family",
+    "Famille de sources",
+    "Famiglia della fonte",
+    "فئة المصدر"
+  ],
+  "Artefakt-Digest": [
+    "Artifact digest",
+    "Empreinte de l’artefact",
+    "Impronta dell’artefatto",
+    "بصمة الأثر الرقمي"
+  ],
+  "Ausgeschlossenes Artefakt": [
+    "Excluded artifact",
+    "Artefact exclu",
+    "Artefatto escluso",
+    "أثر رقمي مستبعد"
+  ],
+  "Das Quellartefakt wurde aus dem Snapshot-Umfang ausgeschlossen.": [
+    "The source artifact was excluded from the snapshot scope.",
+    "L’artefact source a été exclu du périmètre de l’instantané.",
+    "L’artefatto sorgente è stato escluso dal perimetro dello snapshot.",
+    "استُبعد الأثر الرقمي المصدر من نطاق اللقطة."
+  ],
+  "Ausgelassener Datensatz": [
+    "Omitted record",
+    "Enregistrement omis",
+    "Record omesso",
+    "سجل متخطى"
+  ],
+  "Die Quelle liegt ausserhalb des deklarierten Umfangs.": [
+    "The source is outside the declared scope.",
+    "La source se trouve hors du périmètre déclaré.",
+    "La fonte è al di fuori del perimetro dichiarato.",
+    "يقع المصدر خارج النطاق المعلَن."
+  ],
+  "Auslassungsgrund der Quelle: {reason}.": [
+    "Source omission reason: {reason}.",
+    "Motif d’omission de la source : {reason}.",
+    "Motivo di omissione della fonte: {reason}.",
+    "سبب التجاوز بحسب المصدر: {reason}."
+  ],
+  "Inventareinträge": [
+    "Inventory entries",
+    "Entrées d’inventaire",
+    "Voci dell’inventario",
+    "إدخالات الجرد"
+  ],
+  "Alarm und Telemetrie": [
+    "Alert and telemetry",
+    "Alerte et télémétrie",
+    "Allarme e telemetria",
+    "التنبيه وبيانات الرصد"
+  ],
+  "Telemetrie ohne Alarm": [
+    "Telemetry without an alert",
+    "Télémétrie sans alerte",
+    "Telemetria senza allarme",
+    "بيانات رصد بلا تنبيه"
+  ],
+  "Fremder Geltungsbereich": [
+    "Different scope",
+    "Périmètre différent",
+    "Perimetro diverso",
+    "نطاق مختلف"
+  ],
+  "Fehlende Telemetrie": [
+    "Missing telemetry",
+    "Télémétrie manquante",
+    "Telemetria assente",
+    "بيانات الرصد مفقودة"
+  ],
+  "Cobalt-Strike-Telemetrie (EDR/SIEM)": [
+    "Cobalt Strike telemetry (EDR/SIEM)",
+    "Télémétrie Cobalt Strike (EDR/SIEM)",
+    "Telemetria Cobalt Strike (EDR/SIEM)",
+    "بيانات رصد Cobalt Strike ‏(EDR/SIEM)"
+  ],
+  "Beobachtungen je Datei": [
+    "Observations per file",
+    "Observations par fichier",
+    "Osservazioni per file",
+    "الملاحظات لكل ملف"
+  ],
+  "Der Belegindex verweist auf eine Beobachtung aus {source}.": [
+    "The evidence index references an observation from {source}.",
+    "L’index de preuves renvoie à une observation de {source}.",
+    "L’indice delle evidenze rimanda a un’osservazione di {source}.",
+    "يشير فهرس الأدلة إلى ملاحظة من {source}."
+  ],
+  "Quellposition": [
+    "Source position",
+    "Position dans la source",
+    "Posizione nella fonte",
+    "الموضع في المصدر"
+  ],
+  "SHA-256 der Quelldatei laut Index": [
+    "Source file SHA-256 per index",
+    "SHA-256 du fichier source selon l’index",
+    "SHA-256 del file sorgente secondo l’indice",
+    "بصمة SHA-256 للملف المصدر وفقاً للفهرس"
+  ],
+  "Datensatz-Fingerabdruck laut Index": [
+    "Record fingerprint according to index",
+    "Empreinte de l’enregistrement selon l’index",
+    "Impronta del record secondo l’indice",
+    "بصمة السجل وفقاً للفهرس"
+  ],
+  "Werkzeugübergreifender Belegindex": [
+    "Cross-tool evidence index",
+    "Index de preuves multi-outils",
+    "Indice delle evidenze di più strumenti",
+    "فهرس أدلة من عدة أدوات"
+  ],
+  "Zeile {n}": [
+    "Line {n}",
+    "Ligne {n}",
+    "Riga {n}",
+    "السطر {n}"
+  ],
+  "Datensatz {n}": [
+    "Record {n}",
+    "Enregistrement {n}",
+    "Record {n}",
+    "السجل {n}"
+  ],
+  "Assessment": [
+    "Assessment",
+    "Évaluation",
+    "Valutazione",
+    "التقييم"
+  ],
+  "Scope": [
+    "Scope",
+    "Périmètre",
+    "Perimetro",
+    "النطاق"
+  ],
+  "Quellbefund": [
+    "Source finding",
+    "Constat de la source",
+    "Riscontro della fonte",
+    "نتيجة المصدر"
+  ],
+  "Signalquelle": [
+    "Signal source",
+    "Source du signal",
+    "Fonte del segnale",
+    "مصدر الإشارة"
+  ],
+  "Erkennungsregel": [
+    "Detection rule",
+    "Règle de détection",
+    "Regola di rilevamento",
+    "قاعدة الكشف"
+  ],
+  "Quellsnapshot": [
+    "Source snapshot",
+    "Instantané de la source",
+    "Snapshot della fonte",
+    "لقطة المصدر"
+  ],
+  "Signaldatei": [
+    "Signal file",
+    "Fichier de signaux",
+    "File dei segnali",
+    "ملف الإشارات"
+  ],
+  "Retest-Datei": [
+    "Retest file",
+    "Fichier du nouveau test",
+    "File del nuovo test",
+    "ملف إعادة الاختبار"
+  ],
+  "Retest-Abdeckung": [
+    "Retest coverage",
+    "Couverture du nouveau test",
+    "Copertura del nuovo test",
+    "تغطية إعادة الاختبار"
+  ],
+  "Signalfenster": [
+    "Signal window",
+    "Fenêtre de signaux",
+    "Finestra dei segnali",
+    "الفترة الزمنية للإشارات"
+  ],
+  "Passende Ereignisse": [
+    "Eligible events",
+    "Événements éligibles",
+    "Eventi idonei",
+    "الأحداث المطابقة"
+  ],
+  "Ereignisse mit Alarm": [
+    "Events with alerts",
+    "Événements avec alerte",
+    "Eventi con allarme",
+    "الأحداث المرتبطة بتنبيهات"
+  ],
+  "Passende Ereignisse ohne Alarm": [
+    "Eligible events without alerts",
+    "Événements éligibles sans alerte",
+    "Eventi idonei senza allarme",
+    "الأحداث المطابقة بلا تنبيه"
+  ],
+  "{linked} von {eligible} passenden Ereignissen sind einem Alarm zugeordnet.": [
+    "{linked} of {eligible} eligible events are linked to an alert.",
+    "{linked} événements éligibles sur {eligible} sont associés à une alerte.",
+    "{linked} eventi idonei su {eligible} sono associati a un allarme.",
+    "يرتبط {linked} من أصل {eligible} من الأحداث المطابقة بتنبيه."
+  ],
+  "Ereignisse oder Alarme liegen vor. Die erwartete Zuordnung fehlt.": [
+    "Events or alerts are present. The expected link is missing.",
+    "Des événements ou des alertes sont présents. Le lien attendu est absent.",
+    "Sono presenti eventi o allarmi. Manca il collegamento previsto.",
+    "توجد أحداث أو تنبيهات لكن الارتباط المتوقع مفقود."
+  ],
+  "Das Fenster enthält keine Ereignisse und keine Alarme.": [
+    "The window contains no events or alerts.",
+    "La fenêtre ne contient aucun événement ni alerte.",
+    "La finestra non contiene eventi né allarmi.",
+    "لا تتضمن الفترة أي أحداث أو تنبيهات."
+  ],
+  "Regel": [
+    "Rule",
+    "Règle",
+    "Regola",
+    "القاعدة"
+  ],
+  "Zeitraum": [
+    "Time window",
+    "Période",
+    "Periodo",
+    "الفترة الزمنية"
+  ],
+  "{from} bis {until} (Ende exklusiv)": [
+    "{from} to {until} (end exclusive)",
+    "Du {from} au {until} (fin exclue)",
+    "Da {from} a {until} (fine esclusa)",
+    "من {from} إلى {until} (وقت النهاية غير مشمول)"
+  ],
+  "Ereignisse / Alarme": [
+    "Events / alerts",
+    "Événements / alertes",
+    "Eventi / allarmi",
+    "الأحداث / التنبيهات"
+  ],
+  "Passend / mit Alarm / ausgeschlossen": [
+    "Eligible / linked to an alert / excluded",
+    "Éligibles / liés à une alerte / exclus",
+    "Idonei / associati a un allarme / esclusi",
+    "مطابقة / مرتبطة بتنبيه / مستبعدة"
+  ],
+  "Keine": [
+    "None",
+    "Aucun",
+    "Nessuno",
+    "لا يوجد"
+  ],
+  "Abdeckung im Bericht": [
+    "Coverage in the report",
+    "Couverture indiquée dans le rapport",
+    "Copertura nel rapporto",
+    "التغطية في التقرير"
+  ],
+  "Explizite Zähler und IDs abgeglichen": [
+    "Explicit counts and IDs cross-checked",
+    "Compteurs et identifiants explicites recoupés",
+    "Conteggi e ID espliciti confrontati",
+    "تمت مطابقة العدّادات والمعرّفات الصريحة"
+  ],
+  "Älteres Format. Werte aus den gespeicherten Ereignislisten abgeleitet.": [
+    "Older format. Values derived from the stored event lists.",
+    "Ancien format. Valeurs dérivées des listes d’événements enregistrées.",
+    "Formato precedente. Valori ricavati dagli elenchi di eventi salvati.",
+    "تنسيق أقدم. استُخرجت القيم من قوائم الأحداث المحفوظة."
+  ],
+  "Retest-Status laut Quelle": [
+    "Retest status per source",
+    "Statut du nouveau test selon la source",
+    "Stato del nuovo test secondo la fonte",
+    "حالة إعادة الاختبار وفقاً للمصدر"
+  ],
+  "Ursprünglicher Retest-Umfang": [
+    "Original retest scope",
+    "Périmètre initial du nouveau test",
+    "Perimetro originale del nuovo test",
+    "النطاق الأصلي لإعادة الاختبار"
+  ],
+  "{total} Befunde, davon {skipped} ausgelassen": [
+    "{total} findings, {skipped} skipped",
+    "{total} constats, dont {skipped} omis",
+    "{total} riscontri, di cui {skipped} omessi",
+    "إجمالي النتائج {total}، منها {skipped} متخطاة"
+  ],
+  "Retest-Digest laut Bericht": [
+    "Retest digest per report",
+    "Empreinte du nouveau test selon le rapport",
+    "Impronta del nuovo test secondo il rapporto",
+    "بصمة إعادة الاختبار وفقاً للتقرير"
+  ],
+  "Signal-Digest laut Bericht": [
+    "Signal digest per report",
+    "Empreinte du signal selon le rapport",
+    "Impronta del segnale secondo il rapporto",
+    "بصمة الإشارة وفقاً للتقرير"
+  ],
+  "Quellsnapshot laut Bericht": [
+    "Source snapshot per report",
+    "Instantané source selon le rapport",
+    "Snapshot della fonte secondo il rapporto",
+    "لقطة المصدر وفقاً للتقرير"
+  ],
+  "Belegdaten": [
+    "Evidence data",
+    "Données de preuve",
+    "Dati probatori",
+    "بيانات الأدلة"
+  ],
+  "Synthetische Signaldaten": [
+    "Synthetic signal data",
+    "Données de signaux synthétiques",
+    "Dati sintetici dei segnali",
+    "بيانات إشارات اصطناعية"
+  ],
+  "Vom Betreiber bereitgestellte Signaldaten": [
+    "Operator-provided signal data",
+    "Données de signaux fournies par l’exploitant",
+    "Dati dei segnali forniti dal gestore",
+    "بيانات إشارات قدّمها المشغّل"
+  ],
+  "Unsignierter Bericht. Die Rohdateien und die zugrunde liegenden Ereignisse werden bei diesem Import nicht verifiziert.": [
+    "Unsigned report. This import does not verify the raw files or underlying events.",
+    "Rapport non signé. Cet import ne vérifie ni les fichiers bruts ni les événements sous-jacents.",
+    "Rapporto non firmato. Questa importazione non verifica i file grezzi né gli eventi sottostanti.",
+    "تقرير غير موقّع. لا يتحقق هذا الاستيراد من الملفات الأولية أو الأحداث الأصلية."
+  ],
+  "Fallbezeichnung": [
+    "Case title",
+    "Intitulé du cas",
+    "Titolo del caso",
+    "عنوان الحالة"
+  ],
+  "Befund-Digest": [
+    "Finding digest",
+    "Empreinte du constat",
+    "Impronta del riscontro",
+    "بصمة النتيجة"
+  ],
+  "Datensatz-Fingerabdruck": [
+    "Record fingerprint",
+    "Empreinte de l’enregistrement",
+    "Impronta del record",
+    "بصمة السجل"
+  ],
+  "Quellprofil": [
+    "Source profile",
+    "Profil de la source",
+    "Profilo della fonte",
+    "نوع المصدر"
+  ],
+  "Selektiver Retest": [
+    "Selective retest",
+    "Nouveau test sélectif",
+    "Ripetizione selettiva dei test",
+    "إعادة اختبار انتقائية"
+  ],
+  "Quelleninventar": [
+    "Source inventory",
+    "Inventaire des sources",
+    "Inventario delle fonti",
+    "جرد المصادر"
+  ],
+  "SOC-Signalbericht": [
+    "SOC signal report",
+    "Rapport de signaux SOC",
+    "Rapporto dei segnali SOC",
+    "تقرير إشارات مركز العمليات الأمنية"
+  ],
+  "Nicht erneut geprüft": [
+    "Not retested",
+    "Non retesté",
+    "Non verificato di nuovo",
+    "لم يُعَد اختباره"
+  ],
+  "Fix im Retest bestätigt": [
+    "Fix verified by retest",
+    "Correction vérifiée par un nouveau test",
+    "Correzione verificata da un nuovo test",
+    "تأكد الإصلاح بإعادة الاختبار"
+  ],
+  "Retest ohne eindeutiges Ergebnis": [
+    "Inconclusive retest",
+    "Nouveau test non concluant",
+    "Nuovo test inconcludente",
+    "إعادة اختبار غير حاسمة"
+  ],
+  "Befund besteht weiter": [
+    "Finding persists",
+    "Le constat persiste",
+    "Il problema persiste",
+    "المشكلة ما زالت قائمة"
+  ],
+  "Wieder prüfbar": [
+    "Testability restored",
+    "Vérification à nouveau possible",
+    "Nuovamente verificabile",
+    "أصبح الاختبار ممكناً من جديد"
+  ],
+  "Regression": [
+    "Regression",
+    "Régression",
+    "Regressione",
+    "تراجع"
+  ],
+  "Unverändert": [
+    "Unchanged",
+    "Inchangé",
+    "Invariato",
+    "دون تغيير"
+  ],
+  "Konfigurationsbefund bestätigt": [
+    "Configuration finding confirmed",
+    "Constat de configuration confirmé",
+    "Problema di configurazione confermato",
+    "تأكدت مشكلة الإعدادات"
+  ],
+  "Unbestätigter Scannerhinweis": [
+    "Unverified scanner hint",
+    "Indice du scanner non vérifié",
+    "Segnalazione dello scanner non verificata",
+    "ملاحظة من الماسح لم يتم التحقق منها"
+  ],
+  "Quellhinweis": [
+    "Source hint",
+    "Indice de la source",
+    "Indizio dalla fonte",
+    "ملاحظة من المصدر"
+  ],
+  "Beobachtung": [
+    "Observation",
+    "Observation",
+    "Osservazione",
+    "رصد"
+  ],
+  "Ungeprüfter Importbeleg": [
+    "Unassessed imported evidence",
+    "Preuve importée non examinée",
+    "Evidenza importata non valutata",
+    "دليل مستورد لم يُقيَّم"
+  ],
+  "Ausgelassen": [
+    "Excluded",
+    "Exclu",
+    "Escluso",
+    "مستبعد"
+  ],
+  "Alarm zugeordnet": [
+    "Alert linked",
+    "Alerte corrélée",
+    "Allarme associato",
+    "تنبيه مرتبط"
+  ],
+  "Nur Telemetrie": [
+    "Telemetry only",
+    "Télémétrie seule",
+    "Solo telemetria",
+    "بيانات رصد فقط"
+  ],
+  "Nicht zuordenbar": [
+    "Cannot be correlated",
+    "Corrélation impossible",
+    "Non correlabile",
+    "تعذّر الربط"
+  ],
+  "Keine Signaldaten": [
+    "No signal data",
+    "Aucune donnée de signal",
+    "Dati di segnale assenti",
+    "لا توجد بيانات إشارة"
+  ]
+}

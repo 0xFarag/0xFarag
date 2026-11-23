@@ -1,0 +1,890 @@
+{
+  "Quelle auswählen": [
+    "Select a source",
+    "Sélectionner une source",
+    "Seleziona una fonte",
+    "اختر مصدراً"
+  ],
+  "Eigenen Fall erfassen": [
+    "Create your own case",
+    "Créer un dossier",
+    "Crea un caso",
+    "إنشاء حالة خاصة"
+  ],
+  "Private Fallbezeichnung": [
+    "Private case title",
+    "Intitulé privé du dossier",
+    "Titolo privato del caso",
+    "عنوان الحالة الخاص"
+  ],
+  "Eigene Beobachtung": [
+    "Your observation",
+    "Votre observation",
+    "La tua osservazione",
+    "ملاحظتك"
+  ],
+  "Der Eintrag beginnt als unbestätigter Hinweis. Bezeichnung und Beobachtung bleiben im privaten Fall.": [
+    "The case starts as an unconfirmed observation. Its title and observation stay in the private case.",
+    "Le dossier commence par une observation non confirmée. Le titre et l’observation restent dans le dossier privé.",
+    "Il caso inizia come osservazione non confermata. Titolo e osservazione rimangono nel caso privato.",
+    "تبدأ الحالة كملاحظة غير مؤكدة. يبقى العنوان والملاحظة في الحالة الخاصة."
+  ],
+  "Fall öffnen": [
+    "Open case",
+    "Ouvrir le dossier",
+    "Apri caso",
+    "فتح الحالة"
+  ],
+  "Öffnen Sie einen Belegindex oder erfassen Sie einen eigenen Fall.": [
+    "Open an evidence index or create your own case.",
+    "Ouvrez un index de preuves ou créez votre propre dossier.",
+    "Apri un indice delle prove o crea un caso.",
+    "افتح فهرس أدلة أو أنشئ حالة خاصة بك."
+  ],
+  "Private Fallquelle sichern": [
+    "Save private case source",
+    "Enregistrer la source privée du dossier",
+    "Salva la fonte privata del caso",
+    "حفظ مصدر الحالة الخاص"
+  ],
+  "Entwicklerticket und Kundenbericht": [
+    "Developer ticket and client report",
+    "Ticket de développement et rapport client",
+    "Ticket di sviluppo e rapporto per il cliente",
+    "تذكرة تطوير وتقرير العميل"
+  ],
+  "Das Ticket bezieht sich auf den ausgewählten Fall. Der Kundenbericht umfasst alle Fälle der geöffneten Quelle.": [
+    "The ticket covers the selected case. The client report includes all cases in the open source file.",
+    "Le ticket concerne le dossier sélectionné. Le rapport client couvre tous les dossiers de la source ouverte.",
+    "Il ticket riguarda il caso selezionato. Il rapporto per il cliente include tutti i casi della fonte aperta.",
+    "تخص التذكرة الحالة المحددة. يشمل تقرير العميل جميع حالات المصدر المفتوح."
+  ],
+  "Ausgabesprache": [
+    "Output language",
+    "Langue de sortie",
+    "Lingua di esportazione",
+    "لغة الإخراج"
+  ],
+  "Entwicklerticket erstellen": [
+    "Create developer ticket",
+    "Créer un ticket de développement",
+    "Crea ticket di sviluppo",
+    "إنشاء تذكرة تطوير"
+  ],
+  "Tragen Sie nur Angaben ein, die das Entwicklungsteam erhalten darf. Private Fallnotizen bleiben ausgeschlossen.": [
+    "Enter only information the development team may receive. Private case notes are excluded.",
+    "Saisissez uniquement les informations destinées à l’équipe de développement. Les notes privées sont exclues.",
+    "Inserisci solo informazioni condivisibili con il team di sviluppo. Le note private sono escluse.",
+    "أدخل المعلومات المسموح بمشاركتها مع فريق التطوير فقط. تُستبعد ملاحظات الحالة الخاصة."
+  ],
+  "Freigegebener Tickettitel": [
+    "Shareable ticket title",
+    "Titre du ticket partageable",
+    "Titolo del ticket condivisibile",
+    "عنوان التذكرة المسموح بمشاركته"
+  ],
+  "Zuständige Person oder Team": [
+    "Responsible person or team",
+    "Personne ou équipe responsable",
+    "Persona o team responsabile",
+    "الشخص أو الفريق المسؤول"
+  ],
+  "Frist": [
+    "Due date",
+    "Échéance",
+    "Scadenza",
+    "تاريخ الاستحقاق"
+  ],
+  "Empfohlene Behebung": [
+    "Recommended remediation",
+    "Correction recommandée",
+    "Correzione consigliata",
+    "الإصلاح المقترح"
+  ],
+  "Abnahme- und Retestkriterien": [
+    "Acceptance and retest criteria",
+    "Critères d’acceptation et de contre-test",
+    "Criteri di accettazione e nuova verifica",
+    "معايير القبول وإعادة الاختبار"
+  ],
+  "Ticketformat": [
+    "Ticket format",
+    "Format du ticket",
+    "Formato del ticket",
+    "صيغة التذكرة"
+  ],
+  "Ticketvorschau": [
+    "Ticket preview",
+    "Aperçu du ticket",
+    "Anteprima del ticket",
+    "معاينة التذكرة"
+  ],
+  "Ticket kopieren": [
+    "Copy ticket",
+    "Copier le ticket",
+    "Copia ticket",
+    "نسخ التذكرة"
+  ],
+  "Ticket herunterladen": [
+    "Download ticket",
+    "Télécharger le ticket",
+    "Scarica ticket",
+    "تنزيل التذكرة"
+  ],
+  "Kundenbericht erstellen": [
+    "Create client report",
+    "Créer un rapport client",
+    "Crea rapporto per il cliente",
+    "إنشاء تقرير العميل"
+  ],
+  "Die Managementübersicht ordnet bestätigte, offene und ungeprüfte Fälle ein. Der Belegteil führt jede Einordnung auf ihre Quelle zurück.": [
+    "The executive summary distinguishes confirmed, open and untested cases. The evidence section links each assessment to its source.",
+    "La synthèse distingue les dossiers confirmés, ouverts et non testés. La partie consacrée aux preuves rattache chaque évaluation à sa source.",
+    "Il riepilogo distingue casi confermati, aperti e non verificati. La sezione delle prove collega ogni valutazione alla fonte.",
+    "يلخّص التقرير التنفيذي الحالات المؤكدة والمفتوحة وغير المختبرة. ويربط قسم الأدلة كل تقييم بمصدره."
+  ],
+  "Berichtsvorschau": [
+    "Report preview",
+    "Aperçu du rapport",
+    "Anteprima del rapporto",
+    "معاينة التقرير"
+  ],
+  "HTML-Bericht herunterladen": [
+    "Download HTML report",
+    "Télécharger le rapport HTML",
+    "Scarica rapporto HTML",
+    "تنزيل تقرير HTML"
+  ],
+  "Markdown herunterladen": [
+    "Download Markdown",
+    "Télécharger le fichier Markdown",
+    "Scarica Markdown",
+    "تنزيل ملف Markdown"
+  ],
+  "Bericht kopieren": [
+    "Copy report",
+    "Copier le rapport",
+    "Copia rapporto",
+    "نسخ التقرير"
+  ],
+  "Öffnen Sie den HTML-Bericht lokal und wählen Sie im Druckdialog «Als PDF speichern».": [
+    "Open the HTML report locally and choose “Save as PDF” in the print dialog.",
+    "Ouvrez le rapport HTML localement et choisissez « Enregistrer au format PDF » dans la fenêtre d’impression.",
+    "Apri il rapporto HTML in locale e scegli «Salva come PDF» nella finestra di stampa.",
+    "افتح تقرير HTML محلياً واختر «حفظ بتنسيق PDF» في نافذة الطباعة."
+  ],
+  "Ausgewählter Fall {n}": [
+    "Selected case {n}",
+    "Dossier sélectionné {n}",
+    "Caso selezionato {n}",
+    "الحالة المحددة {n}"
+  ],
+  "Vorschau in die Zwischenablage kopiert.": [
+    "Preview copied to the clipboard.",
+    "Aperçu copié dans le presse-papiers.",
+    "Anteprima copiata negli appunti.",
+    "نُسخت المعاينة إلى الحافظة."
+  ],
+  "Vorschau markiert. Verwenden Sie den Kopierbefehl Ihres Geräts.": [
+    "Preview selected. Use your device’s copy command.",
+    "Aperçu sélectionné. Utilisez la commande de copie de votre appareil.",
+    "Anteprima selezionata. Usa il comando di copia del dispositivo.",
+    "تم تحديد المعاينة. استخدم أمر النسخ على جهازك."
+  ],
+  "Privat erfasster Fall": [
+    "Private case",
+    "Dossier privé",
+    "Caso privato",
+    "حالة خاصة"
+  ],
+  "Manuell erfasster Fall": [
+    "Manually entered case",
+    "Dossier saisi manuellement",
+    "Caso inserito manualmente",
+    "حالة مدخلة يدوياً"
+  ],
+  "Privater Fall in dieser Sitzung geöffnet.": [
+    "Private case opened in this session.",
+    "Dossier privé ouvert dans cette session.",
+    "Caso privato aperto in questa sessione.",
+    "فُتحت الحالة الخاصة في هذه الجلسة."
+  ],
+  "Ungültige Felder im manuellen Fall.": [
+    "Invalid fields in the manual case.",
+    "Champs non valides dans le dossier manuel.",
+    "Campi non validi nel caso manuale.",
+    "حقول غير صالحة في الحالة اليدوية."
+  ],
+  "Ungültige Beobachtung im manuellen Fall.": [
+    "Invalid observation in the manual case.",
+    "Observation non valide dans le dossier manuel.",
+    "Osservazione non valida nel caso manuale.",
+    "الملاحظة في الحالة اليدوية غير صالحة."
+  ],
+  "{visible} von {total} sichtbar": [
+    "{visible} of {total} visible",
+    "{visible} sur {total} visibles",
+    "{visible} di {total} visibili",
+    "يظهر {visible} من {total}"
+  ],
+  "{kind} {index} von {total}": [
+    "{kind} {index} of {total}",
+    "{kind} {index} sur {total}",
+    "{kind} {index} di {total}",
+    "{kind} {index} من {total}"
+  ],
+  "Retest-Fall {id}": [
+    "Retest case {id}",
+    "Dossier de contre-test {id}",
+    "Caso di nuova verifica {id}",
+    "حالة إعادة الاختبار {id}"
+  ],
+  "ZAP-Regel {id}": [
+    "ZAP rule {id}",
+    "Règle ZAP {id}",
+    "Regola ZAP {id}",
+    "قاعدة ZAP‏ {id}"
+  ],
+  "Signalfenster {id}": [
+    "Signal window {id}",
+    "Fenêtre de signal {id}",
+    "Finestra di segnale {id}",
+    "نافذة الإشارة {id}"
+  ],
+  "Zustand": [
+    "State",
+    "État",
+    "Stato",
+    "الحالة"
+  ],
+  "Quelldateien": [
+    "Source files",
+    "Fichiers sources",
+    "File sorgente",
+    "ملفات المصدر"
+  ],
+  "Quelle": [
+    "Source",
+    "Source",
+    "Fonte",
+    "المصدر"
+  ],
+  "Fälle gesamt": [
+    "Total cases",
+    "Total des dossiers",
+    "Casi totali",
+    "إجمالي الحالات"
+  ],
+  "Fix belegt": [
+    "Fix verified",
+    "Correction vérifiée",
+    "Correzione verificata",
+    "تم التحقق من الإصلاح"
+  ],
+  "Nachgeprüft": [
+    "Retested",
+    "Retestés",
+    "Verificati nuovamente",
+    "أُعيد اختبارها"
+  ],
+  "Rückfragen": [
+    "Follow-ups",
+    "Questions à clarifier",
+    "Domande aperte",
+    "الاستفسارات"
+  ],
+  "Mit Alarm": [
+    "With alert",
+    "Avec alerte",
+    "Con avviso",
+    "مع تنبيه"
+  ],
+  "Asset-IDs": [
+    "Asset IDs",
+    "Identifiants d’actifs",
+    "ID delle risorse",
+    "معرّفات الأصول"
+  ],
+  "Belege ohne Host": [
+    "Evidence without a host",
+    "Preuves sans hôte",
+    "Prove senza host",
+    "أدلة بلا مضيف"
+  ],
+  "Kein Hostbezug": [
+    "No host reference",
+    "Sans référence d’hôte",
+    "Nessun riferimento a un host",
+    "لا يوجد ارتباط بمضيف"
+  ],
+  "Mitgeliefertes Beispiel": [
+    "Included example",
+    "Exemple fourni",
+    "Esempio incluso",
+    "مثال مرفق"
+  ],
+  "Belegindex aus dem Beispielbereich": [
+    "Evidence index from the example workspace",
+    "Index de preuves de l’espace d’exemple",
+    "Indice delle prove dall’area degli esempi",
+    "فهرس أدلة من مساحة الأمثلة"
+  ],
+  "Lokale Belegdatei": [
+    "Local evidence file",
+    "Fichier de preuves local",
+    "File di prove locale",
+    "ملف أدلة محلي"
+  ],
+  "Beispieldatei per SHA-256 abgeglichen": [
+    "Example file verified by SHA-256",
+    "Fichier d’exemple vérifié par SHA-256",
+    "File di esempio verificato tramite SHA-256",
+    "تم التحقّق من ملف المثال بواسطة SHA-256"
+  ],
+  "Dateimuster geprüft": [
+    "File structure checked",
+    "Structure du fichier vérifiée",
+    "Struttura del file verificata",
+    "تم التحقّق من بنية الملف"
+  ],
+  "Importbeleg auswählen": [
+    "Select imported evidence",
+    "Choisir une preuve importée",
+    "Seleziona una prova importata",
+    "تحديد دليل مستورد"
+  ],
+  "Signalprobe auswählen": [
+    "Select signal sample",
+    "Choisir un échantillon de signal",
+    "Seleziona un campione di segnale",
+    "تحديد عينة إشارة"
+  ],
+  "Importbelege": [
+    "Imported records",
+    "Preuves importées",
+    "Prove importate",
+    "الأدلة المستوردة"
+  ],
+  "Signalproben": [
+    "Signal samples",
+    "Échantillons de signal",
+    "Campioni di segnale",
+    "عينات الإشارة"
+  ],
+  "Fälle": [
+    "Cases",
+    "Dossiers",
+    "Casi",
+    "الحالات"
+  ],
+  "Fall": [
+    "Case",
+    "Dossier",
+    "Caso",
+    "الحالة"
+  ],
+  "Signalprobe": [
+    "Signal sample",
+    "Échantillon de signal",
+    "Campione di segnale",
+    "عينة الإشارة"
+  ],
+  "Importbeleg": [
+    "Imported record",
+    "Preuve importée",
+    "Prova importata",
+    "دليل مستورد"
+  ],
+  "Beispiel geöffnet. Die übrigen Quellen stehen in der Auswahl.": [
+    "Example opened. Other sources are available in the selector.",
+    "Exemple ouvert. Les autres sources figurent dans la liste.",
+    "Esempio aperto. Le altre fonti sono disponibili nell’elenco.",
+    "فُتح المثال. تتوفر المصادر الأخرى في قائمة الاختيار."
+  ],
+  "Beispiel wird geladen und mit dem erwarteten SHA-256 verglichen.": [
+    "Loading the example and checking its expected SHA-256.",
+    "Chargement de l’exemple et vérification de l’empreinte SHA-256 attendue.",
+    "Caricamento dell’esempio e verifica dell’impronta SHA-256 attesa.",
+    "جارٍ تحميل المثال ومقارنته ببصمة SHA-256 المتوقعة."
+  ],
+  "Belegdatei im Browser geöffnet.": [
+    "Evidence file opened in the browser.",
+    "Fichier de preuves ouvert dans le navigateur.",
+    "File di prove aperto nel browser.",
+    "فُتح ملف الأدلة في المتصفح."
+  ],
+  "1 Datei geöffnet.": [
+    "1 file opened.",
+    "1 fichier ouvert.",
+    "1 file aperto.",
+    "فُتح ملف واحد."
+  ],
+  "{n} Dateien geöffnet.": [
+    "{n} files opened.",
+    "{n} fichiers ouverts.",
+    "{n} file aperti.",
+    "عدد الملفات المفتوحة: {n}."
+  ],
+  "Datei {n}": [
+    "File {n}",
+    "Fichier {n}",
+    "File {n}",
+    "الملف {n}"
+  ],
+  "Öffnen Sie höchstens {n} Dateien auf einmal.": [
+    "Open no more than {n} files at once.",
+    "Ouvrez au maximum {n} fichiers à la fois.",
+    "Apri al massimo {n} file contemporaneamente.",
+    "افتح ما يصل إلى {n} ملفاً في كل مرة."
+  ],
+  "Diese Sitzung enthält bereits {n} eigene Quellen.": [
+    "This session already contains {n} of your own sources.",
+    "Cette session contient déjà {n} de vos sources.",
+    "Questa sessione contiene già {n} delle tue fonti.",
+    "تتضمن هذه الجلسة بالفعل {n} من مصادرك."
+  ],
+  "{n} Beobachtungen": [
+    "{n} observations",
+    "{n} observations",
+    "{n} osservazioni",
+    "{n} ملاحظات"
+  ],
+  "Originalbytes abgeglichen": [
+    "Original bytes matched",
+    "Octets originaux vérifiés",
+    "Byte originali verificati",
+    "تطابقت البايتات الأصلية"
+  ],
+  "Originalbytes ausstehend": [
+    "Original bytes pending",
+    "Vérification des octets originaux en attente",
+    "Verifica dei byte originali in sospeso",
+    "لم تُفحص البايتات الأصلية بعد"
+  ],
+  "SHA-256 stimmt mit {sources} überein.": [
+    "SHA-256 matches {sources}.",
+    "L’empreinte SHA-256 correspond à {sources}.",
+    "L’impronta SHA-256 corrisponde a {sources}.",
+    "تطابق بصمة SHA-256‏ {sources}."
+  ],
+  "{matched} von {total} ausgewählten Dateien passen zu einem registrierten SHA-256.": [
+    "{matched} of {total} selected files match a registered SHA-256.",
+    "{matched} fichiers sélectionnés sur {total} correspondent à une empreinte SHA-256 enregistrée.",
+    "{matched} dei {total} file selezionati corrispondono a un’impronta SHA-256 registrata.",
+    "تطابق {matched} من أصل {total} من الملفات المحددة بصمة SHA-256 مسجلة."
+  ],
+  "Identische Bytes in dieser Auswahl.": [
+    "Identical bytes in this selection.",
+    "Octets identiques dans cette sélection.",
+    "Byte identici in questa selezione.",
+    "البايتات متطابقة في هذا التحديد."
+  ],
+  "SHA-256 der ausgewählten Dateien wird lokal berechnet.": [
+    "Calculating SHA-256 locally for the selected files.",
+    "Calcul local de l’empreinte SHA-256 des fichiers sélectionnés.",
+    "Calcolo locale dell’impronta SHA-256 dei file selezionati.",
+    "جارٍ حساب SHA-256 محلياً للملفات المحددة."
+  ],
+  "Kein registrierter SHA-256 passt.": [
+    "No registered SHA-256 matches.",
+    "Aucune empreinte SHA-256 enregistrée ne correspond.",
+    "Nessuna impronta SHA-256 registrata corrisponde.",
+    "لا توجد بصمة SHA-256 مسجّلة مطابقة."
+  ],
+  "Zulässig sind 1 Byte bis 1 MiB.": [
+    "Files must be between 1 byte and 1 MiB.",
+    "Les fichiers doivent peser entre 1 octet et 1 Mio.",
+    "I file devono avere dimensioni da 1 byte a 1 MiB.",
+    "يجب أن يكون الحجم بين بايت واحد و1 ميبيبايت."
+  ],
+  "Zulässig sind 1 Byte bis 2 MiB.": [
+    "Files must be between 1 byte and 2 MiB.",
+    "Les fichiers doivent peser entre 1 octet et 2 Mio.",
+    "I file devono avere dimensioni da 1 byte a 2 MiB.",
+    "يجب أن يكون الحجم بين بايت واحد و2 ميبيبايت."
+  ],
+  "Die Datei konnte nicht gelesen oder gehasht werden.": [
+    "The file could not be read or hashed.",
+    "Impossible de lire le fichier ou de calculer son empreinte.",
+    "Impossibile leggere il file o calcolarne l’impronta.",
+    "تعذّرت قراءة الملف أو حساب بصمته."
+  ],
+  "Die Beispieldatei konnte nicht geladen werden.": [
+    "The example file could not be loaded.",
+    "Impossible de charger le fichier d’exemple.",
+    "Impossibile caricare il file di esempio.",
+    "تعذّر تحميل ملف المثال."
+  ],
+  "Der SHA-256 des Beispiels weicht vom erwarteten Wert ab.": [
+    "The example SHA-256 differs from the expected value.",
+    "L’empreinte SHA-256 de l’exemple diffère de la valeur attendue.",
+    "L’impronta SHA-256 dell’esempio differisce dal valore previsto.",
+    "تختلف بصمة SHA-256 للمثال عن القيمة المتوقعة."
+  ],
+  "Die gewählte Belegdatei ist in dieser Sitzung nicht verfügbar.": [
+    "The selected evidence file is unavailable in this session.",
+    "Le fichier de preuves sélectionné est indisponible dans cette session.",
+    "Il file di prove selezionato non è disponibile in questa sessione.",
+    "ملف الأدلة المحدد غير متاح في هذه الجلسة."
+  ],
+  "Gezählt werden die Verweise aller aufgeführten Quelldateien, einschliesslich mehrfacher Beobachtungen. Die Abdeckung des Mandats ist unbekannt.": [
+    "References from all listed source files are counted, including repeated observations. Engagement coverage is unknown.",
+    "Les références de tous les fichiers sources sont comptées, y compris les observations répétées. La couverture de la mission est inconnue.",
+    "Vengono contati i riferimenti di tutti i file sorgente, incluse le osservazioni ripetute. La copertura dell’incarico è sconosciuta.",
+    "يُحتسب كل مرجع في ملفات المصدر المدرجة، بما في ذلك الملاحظات المتكررة. تغطية المهمة غير معروفة."
+  ],
+  "{unknown} nicht vergleichbare und {missing} unbelegte Signalproben. Die Ereignisabdeckung steht bei der jeweiligen Probe.": [
+    "{unknown} incomparable signal samples and {missing} without evidence. See each sample for event coverage.",
+    "{unknown} échantillons de signal non comparables et {missing} sans preuve. La couverture des événements figure dans chaque échantillon.",
+    "{unknown} campioni di segnale non confrontabili e {missing} senza prove. La copertura degli eventi è indicata per ogni campione.",
+    "هناك {unknown} عينة إشارة غير قابلة للمقارنة و{missing} بلا دليل. تُعرض تغطية الأحداث لكل عينة."
+  ],
+  "Diese Probe enthält kein passend zugeordnetes Ereignis. Ein Abdeckungsgrad ist nicht bestimmbar.": [
+    "This sample contains no matching event. A coverage rate cannot be determined.",
+    "Cet échantillon ne contient aucun événement correspondant. Le taux de couverture ne peut pas être déterminé.",
+    "Il campione non contiene eventi corrispondenti. Non è possibile determinare il tasso di copertura.",
+    "لا تحتوي العينة على حدث مطابق. يتعذّر تحديد نسبة التغطية."
+  ],
+  "Die Zuordnung gilt für die dokumentierte Regel, die gebundene Quelle und das Zeitfenster dieser Probe.": [
+    "The association applies to the documented rule, the linked source and this sample’s time window.",
+    "L’association concerne la règle documentée, la source liée et la fenêtre temporelle de cet échantillon.",
+    "L’associazione riguarda la regola documentata, la fonte collegata e l’intervallo temporale del campione.",
+    "ينطبق الربط على القاعدة الموثّقة والمصدر المرتبط والفترة الزمنية للعينة."
+  ],
+  "Scope und Kontrollen sind ungeprüft. Ein bestätigter Befund oder eine Aussage zur Behebung erfordert eigene Belege.": [
+    "Scope and controls are untested. Confirming a finding or its remediation requires separate evidence.",
+    "Le périmètre et les contrôles ne sont pas vérifiés. La confirmation d’un constat ou de sa correction nécessite des preuves distinctes.",
+    "Ambito e controlli non sono verificati. Confermare un rilievo o la sua correzione richiede prove specifiche.",
+    "لم يُفحص النطاق والضوابط. يتطلب تأكيد النتيجة أو إصلاحها أدلة منفصلة."
+  ],
+  "Für eine Fix-Bestätigung ist eine eigene Nachprüfung dieses Falls offen.": [
+    "A dedicated retest of this case is still needed to verify the fix.",
+    "Un contre-test spécifique de ce dossier reste nécessaire pour confirmer la correction.",
+    "Per confermare la correzione è ancora necessaria una nuova verifica del caso.",
+    "لا يزال تأكيد الإصلاح يتطلب إعادة اختبار هذه الحالة."
+  ],
+  "Die Kontrolle belegt die Header-Konfiguration. Die Ausnutzbarkeit bleibt offen.": [
+    "The control establishes the header configuration. Exploitability remains undetermined.",
+    "Le contrôle établit la configuration de l’en-tête. L’exploitabilité reste à déterminer.",
+    "Il controllo attesta la configurazione dell’intestazione. La sfruttabilità resta da determinare.",
+    "يثبت الضبط إعداد الترويسة. تظل إمكانية الاستغلال غير محسومة."
+  ],
+  "Für eine fachliche Bestätigung braucht dieser Hinweis einen eigenen Kontrollbeleg.": [
+    "Confirming this observation requires its own control evidence.",
+    "La confirmation de cette observation nécessite une preuve de contrôle spécifique.",
+    "Per confermare questa osservazione occorre una prova di controllo specifica.",
+    "يتطلب تأكيد هذه الملاحظة دليل ضبط خاصاً بها."
+  ],
+  "Der Retest verwendete wiedergegebene Aufzeichnungen. Die Aussage bezieht sich auf den dokumentierten Stand.": [
+    "The retest replayed recorded inputs. The result applies to the documented state.",
+    "Le contre-test a rejoué des données enregistrées. Le résultat concerne l’état documenté.",
+    "La nuova verifica ha riprodotto dati registrati. L’esito si riferisce allo stato documentato.",
+    "أُعيد تشغيل تسجيلات خلال إعادة الاختبار. تنطبق النتيجة على الحالة الموثّقة."
+  ],
+  "Die Aussage beschreibt die Beobachtung der angegebenen Quelle.": [
+    "The statement describes the observation in the cited source.",
+    "L’énoncé décrit l’observation de la source indiquée.",
+    "L’affermazione descrive l’osservazione della fonte indicata.",
+    "يصف البيان ملاحظة المصدر المحدد."
+  ],
+  "Der Datensatz bleibt im Inventar sichtbar. Für die fachliche Bewertung wurde er ausgelassen.": [
+    "The record remains visible in the inventory. It was excluded from the technical assessment.",
+    "L’enregistrement reste visible dans l’inventaire. Il a été exclu de l’évaluation technique.",
+    "Il record rimane visibile nell’inventario. È stato escluso dalla valutazione tecnica.",
+    "يبقى السجل ظاهراً في الجرد. وقد استُبعد من التقييم الفني."
+  ],
+  "Die Einordnung gilt für den dokumentierten Fall und die angegebenen Quellbelege.": [
+    "The assessment applies to the documented case and the cited source evidence.",
+    "L’évaluation concerne le dossier documenté et les preuves sources indiquées.",
+    "La valutazione riguarda il caso documentato e le prove di origine indicate.",
+    "ينطبق التقييم على الحالة الموثّقة وأدلة المصدر المذكورة."
+  ],
+  "Datensatz": [
+    "Record",
+    "Enregistrement",
+    "Record",
+    "السجل"
+  ],
+  "Fall-ID": [
+    "Case ID",
+    "Identifiant du dossier",
+    "ID del caso",
+    "معرّف الحالة"
+  ],
+  "SHA-256 der geöffneten Datei": [
+    "SHA-256 of the open file",
+    "SHA-256 du fichier ouvert",
+    "SHA-256 del file aperto",
+    "بصمة SHA-256 للملف المفتوح"
+  ],
+  "Quelldatei laut Index": [
+    "Source file according to index",
+    "Fichier source selon l’index",
+    "File sorgente secondo l’indice",
+    "ملف المصدر وفقاً للفهرس"
+  ],
+  "Position laut Index": [
+    "Position according to index",
+    "Position selon l’index",
+    "Posizione secondo l’indice",
+    "الموضع وفقاً للفهرس"
+  ],
+  "Datensatz-Fingerabdruck laut Index": [
+    "Record fingerprint according to index",
+    "Empreinte de l’enregistrement selon l’index",
+    "Impronta del record secondo l’indice",
+    "بصمة السجل وفقاً للفهرس"
+  ],
+  "Originalbytes": [
+    "Original bytes",
+    "Octets originaux",
+    "Byte originali",
+    "البايتات الأصلية"
+  ],
+  "SHA-256 in dieser Sitzung abgeglichen": [
+    "SHA-256 matched in this session",
+    "SHA-256 vérifié dans cette session",
+    "SHA-256 verificato in questa sessione",
+    "تم التحقّق من SHA-256 في هذه الجلسة"
+  ],
+  "Abgleich ausstehend": [
+    "Verification pending",
+    "Vérification en attente",
+    "Verifica in sospeso",
+    "المطابقة معلّقة"
+  ],
+  "Scope und Controls": [
+    "Scope and controls",
+    "Périmètre et contrôles",
+    "Ambito e controlli",
+    "النطاق والضوابط"
+  ],
+  "Ungeprüft": [
+    "Untested",
+    "Non vérifié",
+    "Non verificato",
+    "غير مختبَر"
+  ],
+  "Assessment": [
+    "Assessment",
+    "Évaluation",
+    "Valutazione",
+    "التقييم"
+  ],
+  "Ein erfolgreicher Byteabgleich bestätigt die Übereinstimmung der Datei mit dem registrierten SHA-256. Datensatzinhalt, Urheberschaft und Befundstatus erfordern eigene Nachweise.": [
+    "A successful byte check confirms that the file matches its registered SHA-256. Record content, authorship and finding status require separate evidence.",
+    "Une vérification réussie confirme que le fichier correspond à l’empreinte SHA-256 enregistrée. Le contenu, l’auteur et le statut du constat nécessitent des preuves distinctes.",
+    "Una verifica dei byte riuscita conferma che il file corrisponde all’impronta SHA-256 registrata. Contenuto, autore e stato del rilievo richiedono prove distinte.",
+    "تؤكد مطابقة البايتات أن الملف يطابق بصمة SHA-256 المسجلة. يتطلب محتوى السجل ومؤلفه وحالة النتيجة أدلة منفصلة."
+  ],
+  "Die Dateibytes stimmen mit dem hinterlegten Beispiel überein. Die fachliche Aussage stammt aus dieser Projektion.": [
+    "The file bytes match the stored example. The technical assessment comes from this projection.",
+    "Les octets du fichier correspondent à l’exemple enregistré. L’évaluation technique provient de cette projection.",
+    "I byte del file corrispondono all’esempio memorizzato. La valutazione tecnica proviene da questa proiezione.",
+    "تطابق بايتات الملف المثال المخزّن. يستند التقييم الفني إلى هذا العرض."
+  ],
+  "Der Fingerabdruck bezeichnet die hier geöffneten Dateibytes. Herkunft, Signatur und tatsächliche Ausführung benötigen eigene Nachweise.": [
+    "The fingerprint identifies the file bytes opened here. Origin, signature and actual execution require separate evidence.",
+    "L’empreinte identifie les octets du fichier ouvert ici. L’origine, la signature et l’exécution nécessitent des preuves distinctes.",
+    "L’impronta identifica i byte del file aperto qui. Origine, firma ed effettiva esecuzione richiedono prove distinte.",
+    "تحدد البصمة بايتات الملف المفتوح هنا. يتطلب المصدر والتوقيع والتنفيذ الفعلي أدلة منفصلة."
+  ],
+  "Keine passenden Ereignisse für eine Alarmzuordnung": [
+    "No matching events for alert correlation",
+    "Aucun événement correspondant à associer à une alerte",
+    "Nessun evento corrispondente da associare a un avviso",
+    "لا توجد أحداث مطابقة لربطها بتنبيه"
+  ],
+  "{linked} von {eligible} passenden Ereignissen mit zugeordnetem Alarm": [
+    "{linked} of {eligible} matching events linked to an alert",
+    "{linked} événements correspondants sur {eligible} associés à une alerte",
+    "{linked} di {eligible} eventi corrispondenti associati a un avviso",
+    "ارتبط {linked} من أصل {eligible} حدثاً مطابقاً بتنبيه"
+  ],
+  "{excluded} ausgeschlossen": [
+    "{excluded} excluded",
+    "{excluded} exclus",
+    "{excluded} esclusi",
+    "{excluded} مستبعدة"
+  ],
+  "AuthzLedger · Fallübersicht": [
+    "AuthzLedger · Case overview",
+    "AuthzLedger · Vue d’ensemble des cas",
+    "AuthzLedger · Riepilogo dei casi",
+    "AuthzLedger · نظرة عامة على الحالات"
+  ],
+  "Keine Belegquelle geöffnet.": [
+    "No evidence source open.",
+    "Aucune source de preuve ouverte.",
+    "Nessuna fonte di prova aperta.",
+    "لم يُفتح أي مصدر للأدلة."
+  ],
+  "Unsignierte, redigierte Übersicht": [
+    "Unsigned, redacted overview",
+    "Vue d’ensemble expurgée et non signée",
+    "Riepilogo con dati riservati omessi e senza firma",
+    "نظرة عامة منقحة وغير موقّعة"
+  ],
+  "Erstellt am {date}": [
+    "Created on {date}",
+    "Créé le {date}",
+    "Creato il {date}",
+    "أُنشئ في {date}"
+  ],
+  "SHA-256 der Quelle": [
+    "Source SHA-256",
+    "SHA-256 de la source",
+    "SHA-256 della fonte",
+    "بصمة SHA-256 للمصدر"
+  ],
+  "Gesamtumfang": [
+    "Total coverage",
+    "Périmètre total",
+    "Ambito complessivo",
+    "النطاق الكلي"
+  ],
+  "Beispieldaten": [
+    "Sample data",
+    "Données d’exemple",
+    "Dati di esempio",
+    "بيانات نموذجية"
+  ],
+  "Eigene Dateien": [
+    "Your files",
+    "Vos fichiers",
+    "I tuoi file",
+    "ملفاتك"
+  ],
+  "Scope und Kontrollen ungeprüft. Abdeckung unbekannt.": [
+    "Scope and controls untested. Coverage unknown.",
+    "Périmètre et contrôles non vérifiés. Couverture inconnue.",
+    "Ambito e controlli non verificati. Copertura sconosciuta.",
+    "لم يُتحقّق من النطاق والضوابط. التغطية غير معروفة."
+  ],
+  "Nicht vergleichbar": [
+    "Not comparable",
+    "Non comparable",
+    "Non confrontabile",
+    "غير قابل للمقارنة"
+  ],
+  "Ohne Daten": [
+    "No data",
+    "Sans données",
+    "Senza dati",
+    "لا توجد بيانات"
+  ],
+  "Über alle Proben wurden {linked} von {eligible} passenden Ereignisvorkommen einem Alarm zugeordnet. Dieselbe Ereignis-ID kann in mehreren Proben vorkommen.": [
+    "Across all samples, {linked} of {eligible} matching event occurrences were linked to an alert. The same event ID may occur in multiple samples.",
+    "Sur l’ensemble des échantillons, {linked} occurrences d’événement sur {eligible} ont été reliées à une alerte. Un identifiant d’événement peut figurer dans plusieurs échantillons.",
+    "Su tutti i campioni, {linked} occorrenze di eventi su {eligible} corrispondenti sono state associate a un avviso. Lo stesso ID evento può comparire in più campioni.",
+    "رُبطت {linked} من أصل {eligible} حالة حدث مطابقة بتنبيه في جميع العينات. قد يظهر معرّف الحدث نفسه في عدة عينات."
+  ],
+  "Prüfergebnis": [
+    "Test result",
+    "Résultat du contrôle",
+    "Esito della verifica",
+    "نتيجة الاختبار"
+  ],
+  "Ereignisabdeckung je Probe": [
+    "Event coverage per sample",
+    "Couverture des événements par échantillon",
+    "Copertura degli eventi per campione",
+    "تغطية الأحداث لكل عينة"
+  ],
+  "Privater Arbeitsstand mit Fallnotizen zum Download bereitgestellt.": [
+    "Private draft with case notes ready to download.",
+    "Brouillon privé avec les notes de cas prêt au téléchargement.",
+    "Bozza privata con note sui casi pronta per il download.",
+    "المسودة الخاصة بملاحظات الحالات جاهزة للتنزيل."
+  ],
+  "Ungültige Grösse des Arbeitsstands.": [
+    "Invalid draft file size.",
+    "Taille du brouillon non valide.",
+    "Dimensione del file della bozza non valida.",
+    "حجم ملف المسودة غير صالح."
+  ],
+  "Dieser Arbeitsstand gehört nicht zu dieser Belegdatei.": [
+    "This draft belongs to a different evidence file.",
+    "Ce brouillon correspond à un autre fichier de preuves.",
+    "Questa bozza appartiene a un altro file di prove.",
+    "تخص هذه المسودة ملف أدلة آخر."
+  ],
+  "Der Arbeitsstand enthält einen ungültigen Falleintrag.": [
+    "The draft contains an invalid case entry.",
+    "Le brouillon contient une entrée de cas non valide.",
+    "La bozza contiene una voce di caso non valida.",
+    "تتضمّن المسودة إدخال حالة غير صالح."
+  ],
+  "Ein Fall ist im Arbeitsstand mehrfach vorhanden.": [
+    "A case appears more than once in the draft.",
+    "Un cas figure plusieurs fois dans le brouillon.",
+    "Un caso compare più volte nella bozza.",
+    "تظهر إحدى الحالات عدة مرات في المسودة."
+  ],
+  "Der Arbeitsstand kollidiert mit vorhandenen Notizen. Öffnen Sie die Belegdatei in einem neuen Fenster, um beide Stände zu behalten.": [
+    "This draft conflicts with existing notes. Open the evidence file in a new window to keep both versions.",
+    "Ce brouillon entre en conflit avec des notes existantes. Ouvrez le fichier de preuves dans une nouvelle fenêtre pour conserver les deux versions.",
+    "La bozza è in conflitto con le note esistenti. Apri il file di prove in una nuova finestra per conservare entrambe le versioni.",
+    "تتعارض هذه المسودة مع ملاحظات موجودة. افتح ملف الأدلة في نافذة جديدة للاحتفاظ بالنسختين."
+  ],
+  "Arbeitsstand geladen. {n} Einträge zugeordnet.": [
+    "Draft loaded. {n} entries matched.",
+    "Brouillon chargé. {n} entrées associées.",
+    "Bozza caricata. {n} voci associate.",
+    "تم تحميل المسودة ومطابقة {n} إدخالات."
+  ],
+  "Der Arbeitsstand enthält kein gültiges JSON.": [
+    "The draft does not contain valid JSON.",
+    "Le brouillon ne contient pas de JSON valide.",
+    "La bozza non contiene JSON valido.",
+    "لا تتضمّن المسودة بيانات JSON صالحة."
+  ],
+  "Redigierte Übersicht mit allen Fällen dieser Quelle zum Download bereitgestellt.": [
+    "Redacted overview of every case in this source ready to download.",
+    "La vue d’ensemble expurgée de tous les cas de cette source est prête au téléchargement.",
+    "Riepilogo con dati riservati omessi di tutti i casi di questa fonte pronto per il download.",
+    "النظرة العامة المنقحة لجميع حالات هذا المصدر جاهزة للتنزيل."
+  ],
+  "Ungültiges Fälligkeitsdatum.": [
+    "Invalid due date.",
+    "Échéance non valide.",
+    "Data di scadenza non valida.",
+    "تاريخ الاستحقاق غير صالح."
+  ],
+  "Ticketfeld ist ungültig oder zu lang.": [
+    "A ticket field is invalid or too long.",
+    "Un champ du ticket est non valide ou trop long.",
+    "Un campo del ticket non è valido o è troppo lungo.",
+    "أحد حقول التذكرة غير صالح أو طويل جداً."
+  ],
+  "Mitgelieferte Beispiele": [
+    "Included examples",
+    "Exemples fournis",
+    "Esempi inclusi",
+    "أمثلة مرفقة"
+  ],
+  "Mischindex": [
+    "Mixed index",
+    "Index mixte",
+    "Indice misto",
+    "فهرس مختلط"
+  ],
+  "SOC-Signale": [
+    "SOC signals",
+    "Signaux SOC",
+    "Segnali SOC",
+    "إشارات SOC"
+  ],
+  "Demo B": [
+    "Demo B",
+    "Démo B",
+    "Demo B",
+    "النموذج B"
+  ],
+  "Demo C": [
+    "Demo C",
+    "Démo C",
+    "Demo C",
+    "النموذج C"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "Team-Workbench für eigene Fälle": [
+    "Team workbench for your cases",
+    "Workbench d’équipe pour vos dossiers",
+    "Workbench di team per i propri casi",
+    "مساحة عمل الفريق لحالاتكم"
+  ],
+  "Installieren Sie den Teamdienst lokal oder auf einem eigenen Server. Er enthält die Anmeldung, fünf Teamrollen, den Belegimport und die signierte Übergabe. Die Anleitung beschreibt den ersten Admin-Zugang und TLS für den Teamzugriff.": [
+    "Install the team service locally or on your own server. It includes sign-in, five team roles, evidence import and signed handover. The guide covers first administrator sign-in and TLS for team access.",
+    "Installez le service en local ou sur votre serveur. Il comprend la connexion, cinq rôles, l’import de pièces et la remise signée. Le guide explique le premier accès administrateur et la configuration TLS pour l’équipe.",
+    "Installate il servizio in locale o su un vostro server. Include accesso, cinque ruoli, importazione delle evidenze e consegna firmata. La guida spiega il primo accesso amministrativo e la configurazione TLS per il team.",
+    "ثبّتوا خدمة الفريق محلياً أو على خادمكم. تشمل تسجيل الدخول وخمسة أدوار واستيراد الأدلة والتسليم الموقّع. يشرح الدليل إعداد حساب المسؤول الأول وتفعيل TLS لوصول الفريق."
+  ],
+  "Installationsanleitung": [
+    "Installation guide",
+    "Guide d’installation",
+    "Guida all’installazione",
+    "دليل التثبيت"
+  ],
+  "Rollen und Berechtigungen": [
+    "Roles and permissions",
+    "Rôles et autorisations",
+    "Ruoli e autorizzazioni",
+    "الأدوار والصلاحيات"
+  ],
+  "Prüfsummen aller Teampakete": [
+    "Checksums for all team packages",
+    "Sommes de contrôle de tous les paquets d’équipe",
+    "Checksum di tutti i pacchetti del team",
+    "قيم التحقق لجميع حزم الفريق"
+  ],
+  "Windows-Anwendung (x64)": [
+    "Windows application (x64)",
+    "Application Windows (x64)",
+    "Applicazione Windows (x64)",
+    "تطبيق Windows ‏(x64)"
+  ],
+  "Debian-Paket mit Desktop-Eintrag": [
+    "Debian package with desktop entry",
+    "Paquet Debian avec lanceur graphique",
+    "Pacchetto Debian con avvio dal desktop",
+    "حزمة Debian مع مشغّل لسطح المكتب"
+  ],
+  "Arch-Paket": [
+    "Arch package",
+    "Paquet Arch",
+    "Pacchetto Arch",
+    "حزمة Arch"
+  ],
+  "Docker-Image für Linux (amd64)": [
+    "Docker image for Linux (amd64)",
+    "Image Docker pour Linux (amd64)",
+    "Immagine Docker per Linux (amd64)",
+    "صورة Docker لنظام Linux ‏(amd64)"
+  ],
+  "Quellarchiv": [
+    "Source archive",
+    "Archive des sources",
+    "Archivio sorgente",
+    "أرشيف المصدر"
+  ],
+  "OCI-Archiv": [
+    "OCI archive",
+    "Archive OCI",
+    "Archivio OCI",
+    "أرشيف OCI"
+  ],
+  "Installieren Sie die Team-Workbench oder laden Sie die eigenständigen Werkzeuge zur Empfängerprüfung herunter.": [
+    "Install the team workbench or download the standalone verification tools for recipients.",
+    "Installez la workbench d’équipe ou téléchargez les outils autonomes de vérification destinés aux destinataires.",
+    "Installate la workbench di team o scaricate gli strumenti autonomi per la verifica da parte dei destinatari.",
+    "ثبّتوا مساحة عمل الفريق أو نزّلوا أدوات التحقّق المستقلّة للمستلمين."
+  ]
+}

@@ -2,7 +2,21 @@
 'use strict';
 (async () => {
   const el = id => document.getElementById(id);
-  const message = text => { el('status').textContent = text; };
+  const t = (text, params = {}) => window.AuthzI18n?.t(text, params)
+    ?? text.replace(/\{(\w+)\}/g, (match, key) => params[key] ?? match);
+  let notice, availablePlans, planPrice;
+  function render() {
+    if (planPrice) el('price').textContent = t(planPrice);
+    if (!notice) return;
+    const lang = window.AuthzI18n?.lang || 'de';
+    const plans = availablePlans ? new Intl.ListFormat(lang).format(availablePlans) : '';
+    el('status').textContent = t(notice, {plans});
+  }
+  function message(text) {
+    notice = text;
+    render();
+  }
+  window.addEventListener?.('authzlanguage', render);
   const plan = new URL(location.href).searchParams.get('plan');
   const plans = new Map([['solo', ['Solo', 'CHF 1’200 / Jahr']], ['team', ['Team', 'CHF 4’800 / Jahr']]]);
   const isStorefront = ['authzledger.com', 'www.authzledger.com', 'authzledger.vercel.app'].includes(location.hostname);
@@ -44,7 +58,8 @@
     }
     const [name, price] = plans.get(plan);
     el('plan-title').textContent = 'AuthzLedger ' + name;
-    el('price').textContent = price;
+    planPrice = price;
+    render();
     el('price').hidden = false;
   }
   let status;
@@ -59,9 +74,10 @@
     const labels = accessible(status)
       ? [...plans].filter(([key]) => status.checkout?.[key] === true).map(([, value]) => value[0])
       : [];
-    let notice = 'Aktuell erhalten Sie eine persönliche Offerte. Der Online-Abschluss ist noch nicht freigeschaltet.';
-    if (labels.length) notice = status.state === 'test' ? 'Testumgebung für die Tarifauswahl.' : 'Online erhältlich: ' + labels.join(' und ') + '.';
-    message(notice);
+    let availabilityNotice = 'Aktuell erhalten Sie eine persönliche Offerte. Der Online-Abschluss ist noch nicht freigeschaltet.';
+    availablePlans = labels;
+    if (labels.length) availabilityNotice = status.state === 'test' ? 'Testumgebung für die Tarifauswahl.' : 'Online erhältlich: {plans}.';
+    message(availabilityNotice);
     return;
   }
   if (page === 'konto') {
@@ -95,7 +111,7 @@
     try {
       attempt ||= crypto.randomUUID();
       const Stripe = await loadStripe();
-      const stripe = Stripe(status.publishableKey, { locale: 'de' });
+      const stripe = Stripe(status.publishableKey, { locale: window.AuthzI18n?.lang || 'de' });
       checkout = await stripe.createEmbeddedCheckoutPage({
         fetchClientSecret: async () => {
           const result = await jsonRequest('/api/create-checkout', {

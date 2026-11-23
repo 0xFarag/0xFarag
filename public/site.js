@@ -2,7 +2,8 @@
 (function () {
   const legacyLabSections = ['kontrolllabor', 'foederation', 'kandidatenpruefung', 'beweisfilm', 'status'];
   if (legacyLabSections.includes(location.hash.slice(1))) {
-    location.replace('lab.html' + location.hash);
+    const target = '/lab.html' + location.hash;
+    location.replace(window.AuthzI18n?.url(target) ?? target);
     return;
   }
   // Same-page links keep the current document and its menu state.
@@ -38,7 +39,8 @@
   tabs.forEach((tab, index) => {
     tab.addEventListener('click', event => { event.preventDefault(); select(index); });
     tab.addEventListener('keydown', event => {
-      const next = {ArrowRight: (index + 1) % tabs.length, ArrowLeft: (index + tabs.length - 1) % tabs.length,
+      const forward = document.documentElement.dir === 'rtl' ? -1 : 1;
+      const next = {ArrowRight: (index + tabs.length + forward) % tabs.length, ArrowLeft: (index + tabs.length - forward) % tabs.length,
                     Home: 0, End: tabs.length - 1}[event.key];
       if (next === undefined) return;
       event.preventDefault(); select(next); tabs[next].focus();

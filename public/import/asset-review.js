@@ -75,7 +75,10 @@ const AuthzAssets = (() => {
 
   function element(tag, text, className) {
     const node = document.createElement(tag);
-    if (text !== undefined) node.textContent = text;
+    if (text !== undefined) {
+      if (tag === 'code') node.textContent = text;
+      else AuthzToolCopy.write(node, text);
+    }
     if (className) node.className = className;
     return node;
   }
@@ -110,8 +113,8 @@ const AuthzAssets = (() => {
     status.setAttribute('aria-live', 'polite');
     const back = button('Zurück', () => { if (page > 0) page--; update(); });
     const next = button('Weiter', () => { if (page < maxPage) page++; update(); });
-    back.setAttribute('aria-label', pageLabel + ' – vorherige Seite');
-    next.setAttribute('aria-label', pageLabel + ' – nächste Seite');
+    AuthzToolCopy.attr(back, 'aria-label', () => AuthzToolCopy.t('{label} – vorherige Seite', {label:AuthzToolCopy.t(pageLabel)}));
+    AuthzToolCopy.attr(next, 'aria-label', () => AuthzToolCopy.t('{label} – nächste Seite', {label:AuthzToolCopy.t(pageLabel)}));
     if (maxPage) {
       nav.append(status, back, next);
       container.append(nav);
@@ -121,7 +124,7 @@ const AuthzAssets = (() => {
       for (const entry of records.slice(page * pageSize, (page + 1) * pageSize)) {
         show(body.insertRow(), entry);
       }
-      status.textContent = 'Seite ' + (page + 1) + ' von ' + (maxPage + 1);
+      AuthzToolCopy.write(status, 'Seite {page} von {total}', {page:page+1, total:maxPage+1});
       back.disabled = !page;
       next.disabled = page === maxPage;
     }
@@ -158,8 +161,7 @@ const AuthzAssets = (() => {
     }
     const {hosts, unassigned} = groupIndex(index);
     const sharedCount = hosts.filter(host => host.sources.size > 1).length;
-    container.append(element('p', 'Hostkennungen: ' + hosts.length + ' · In mehreren Werkzeugen: ' + sharedCount
-      + ' · Datensätze ohne Hostbezug: ' + unassigned.length + '.'));
+    container.append(element('p', () => AuthzToolCopy.t('Hostkennungen: {hosts} · In mehreren Werkzeugen: {shared} · Datensätze ohne Hostbezug: {unassigned}.', {hosts:hosts.length, shared:sharedCount, unassigned:unassigned.length})));
     const details = element('div');
     function showRefs(title, refs) {
       const heading = element('h3', title);
@@ -167,7 +169,7 @@ const AuthzAssets = (() => {
       details.replaceChildren(heading);
       const body = table(details, title, ['Werkzeug', 'Position', 'SHA-256 der Datei', 'Fingerabdruck des Datensatzes']);
       pagedRows(details, body, refs, (row, ref) => {
-        row.insertCell().textContent = AuthzImport.definitions[ref.source].label;
+        AuthzToolCopy.write(row.insertCell(), AuthzImport.definitions[ref.source].label);
         row.insertCell().textContent = ref.record.locator;
         row.insertCell().append(element('code', ref.fileHash));
         row.insertCell().append(element('code', ref.record.fingerprint));
@@ -178,15 +180,15 @@ const AuthzAssets = (() => {
       const body = table(container, 'Beobachtungen nach gemeldeter Hostkennung', ['Asset-ID', 'Datensätze je Werkzeug', 'Herkunft']);
       pagedRows(container, body, hosts, (row, host) => {
         row.insertCell().append(element('code', host.asset));
-        row.insertCell().textContent = Array.from(host.sources, ([source, count]) =>
-          AuthzImport.definitions[source].label + ' (' + count + ')').join(' · ');
-        const drilldown = button('Belege (' + host.refs.length + ')', () => showRefs('Quellverweise für ' + host.asset, host.refs));
-        drilldown.setAttribute('aria-label', 'Belege für Asset ' + host.asset + ' anzeigen');
+        AuthzToolCopy.write(row.insertCell(), () => Array.from(host.sources, ([source, count]) =>
+          AuthzToolCopy.t(AuthzImport.definitions[source].label) + ' (' + count + ')').join(' · '));
+        const drilldown = button(() => AuthzToolCopy.t('Belege ({count})', {count:host.refs.length}), () => showRefs(() => AuthzToolCopy.t('Quellverweise für {asset}', {asset:host.asset}), host.refs));
+        AuthzToolCopy.attr(drilldown, 'aria-label', () => AuthzToolCopy.t('Belege für Asset {asset} anzeigen', {asset:host.asset}));
         row.insertCell().append(drilldown);
       }, 'Assets');
     }
     if (unassigned.length) {
-      container.append(button('Belege ohne Hostbezug (' + unassigned.length + ')',
+      container.append(button(() => AuthzToolCopy.t('Belege ohne Hostbezug ({count})', {count:unassigned.length}),
         () => showRefs('Datensätze ohne zugeordneten Host', unassigned)));
     }
     container.append(details);
