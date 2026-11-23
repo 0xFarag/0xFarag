@@ -1,5 +1,5 @@
 // ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
-import {MAX_BYTES, parseProjection, statusLabels} from './model.mjs';
+import {MAX_BYTES, originalFileChecks, parseProjection, statusLabels} from './model.mjs';
 import {renderComparison} from './compare-view.mjs';
 
 const demos = new Map([
@@ -52,7 +52,8 @@ function register(model, name) {
     // Open the bundled partial-coverage sample directly. Imported reports retain their original order.
     const partialWindow = known && model.kind === 'blue' ? model.rows.findIndex(row =>
       row.signalCoverage.linked > 0 && row.signalCoverage.linked < row.signalCoverage.eligible) : -1;
-    documents.set(model.digest, {model, name: known?.name || name, known, reviews: new Map(), selected: Math.max(0, partialWindow)});
+    const originals = model.importIndex ? originalFileChecks(model.importIndex.sources) : null;
+    documents.set(model.digest, {model, originals, name: known?.name || name, known, reviews: new Map(), selected: Math.max(0, partialWindow)});
   }
   return documents.get(model.digest);
 }
@@ -62,6 +63,7 @@ function updateComparison() {
 }
 
 function showDocument(doc, key) {
+  active?.originals?.cancel();
   active = doc;
   pickerValue = key;
   $('source').value = key;
@@ -71,10 +73,15 @@ function showDocument(doc, key) {
     $('filter').append(option(status, humanStatus(status)));
   }
   $('summary-title').textContent = doc.model.title;
-  $('origin').textContent = doc.known ? 'Mitgeliefertes Beispiel' : 'Lokale Belegdatei';
+  $('origin').textContent = doc.known ? 'Mitgeliefertes Beispiel' : doc.model.importIndex?.workspace === 'example'
+    ? 'Belegindex aus dem Beispielbereich' : 'Lokale Belegdatei';
   $('identity').textContent = doc.known ? doc.name + ' · Beispieldatei per SHA-256 abgeglichen' : doc.name + ' · Dateimuster geprüft';
-  $('cases-title').textContent = doc.model.kind === 'blue' ? 'Signalprobe auswählen' : 'Fallauswahl';
-  $('cases').setAttribute('aria-label', doc.model.kind === 'blue' ? 'Signalproben' : 'Fälle');
+  const index = doc.model.importIndex;
+  $('import-registry').hidden = !index;
+  $('import-registry').open = false;
+  renderOriginalChecks();
+  $('cases-title').textContent = index ? 'Importbeleg auswählen' : doc.model.kind === 'blue' ? 'Signalprobe auswählen' : 'Fallauswahl';
+  $('cases').setAttribute('aria-label', index ? 'Importbelege' : doc.model.kind === 'blue' ? 'Signalproben' : 'Fälle');
   $('sample-sources').hidden = doc.known?.file !== 'blue-evidence-example.json';
   $('document').hidden = false;
   visibleCount = Math.ceil((doc.selected + 1) / pageSize) * pageSize;
@@ -83,7 +90,49 @@ function showDocument(doc, key) {
   updateComparison();
 }
 
+function renderOriginalChecks() {
+  const sources = active?.model.importIndex?.sources || [];
+  const checks = active?.originals;
+  const last = checks?.last;
+  const outcomes = last?.outcomes || [];
+  $('import-sources').replaceChildren(...sources.map(file => {
+    const li = element('li', file.label + ' · ' + file.count + ' Beobachtungen · ');
+    li.append(element('code', file.sha256), document.createTextNode(checks.has(file.sha256)
+      ? ' · Originalbytes abgeglichen' : ' · Originalbytes ausstehend'));
+    return li;
+  }));
+  const explanations = {unmatched: 'Kein registrierter SHA-256 passt.', size: 'Zulässig sind 1 Byte bis 1 MiB.',
+    unreadable: 'Die Datei konnte nicht gelesen oder gehasht werden.'};
+  $('original-outcomes').replaceChildren(...outcomes.map(result => {
+    const labels = sources.filter(source => source.sha256 === result.sha256).map(source => source.label);
+    const message = result.status === 'matched' ? 'SHA-256 stimmt mit ' + labels.join(', ') + ' überein.' : explanations[result.status];
+    return element('li', 'Datei ' + result.position + ' · ' + message + (result.duplicate ? ' Identische Bytes in dieser Auswahl.' : ''));
+  }));
+  const matches = outcomes.filter(result => result.status === 'matched').length;
+  notice(last?.error || (outcomes.length ? matches + ' von ' + outcomes.length + ' ausgewählten Dateien passen zu einem registrierten SHA-256.' : ''),
+    Boolean(last?.error), 'original-status');
+}
+
+function cancelOriginalChecks() {
+  if (active?.originals) {
+    active.originals.cancel();
+    renderOriginalChecks();
+  }
+}
+
+async function selectOriginals(files) {
+  const doc = active;
+  if (!files.length || !doc?.originals) return;
+  $('original-outcomes').replaceChildren();
+  notice('SHA-256 der ausgewählten Dateien wird lokal berechnet.', false, 'original-status');
+  const result = await doc.originals.verify(files);
+  if (!result || active !== doc) return;
+  renderOriginalChecks();
+  if (searchResults.length) renderCase();
+}
+
 async function selectSource(key) {
+  cancelOriginalChecks();
   const version = ++selectionVersion;
   try {
     const demo = demos.get(key);
@@ -120,6 +169,7 @@ async function importFiles(fileList) {
     notice('Öffnen Sie höchstens ' + sourceLimit + ' Dateien auf einmal.', true);
     return;
   }
+  cancelOriginalChecks();
   const version = ++selectionVersion;
   const errors = [];
   let last;
@@ -157,10 +207,13 @@ async function importFiles(fileList) {
 }
 
 function renderMetrics() {
-  const {coverage, rows, signalCoverage} = active.model;
-  const entries = [[signalCoverage ? 'Signalproben' : 'Fälle gesamt', rows.length]];
-  $('metric-note').hidden = !signalCoverage;
-  if (signalCoverage) {
+  const {coverage, rows, signalCoverage, importIndex} = active.model;
+  const entries = [[importIndex ? 'Importbelege' : signalCoverage ? 'Signalproben' : 'Fälle gesamt', rows.length]];
+  $('metric-note').hidden = !signalCoverage && !importIndex;
+  if (importIndex) {
+    entries.push(['Quelldateien', importIndex.sources.length], ['Asset-IDs', importIndex.assets], ['Belege ohne Host', importIndex.unassigned]);
+    $('metric-note').textContent = 'Gezählt werden die Verweise aller aufgeführten Quelldateien, einschliesslich mehrfacher Beobachtungen. Die Abdeckung des Mandats ist unbekannt.';
+  } else if (signalCoverage) {
     entries.push(['Mit Alarm', signalCoverage.observedWindows], ['Nur Telemetrie', signalCoverage.telemetryOnlyWindows]);
     $('metric-note').textContent = signalCoverage.incomparableWindows + ' nicht vergleichbare und ' +
       signalCoverage.unavailableWindows + ' unbelegte Signalproben. Die Ereignisabdeckung steht bei der jeweiligen Probe.';
@@ -202,7 +255,7 @@ function applyFilter() {
 }
 
 function renderList() {
-  $('count').textContent = searchResults.length + ' von ' + active.model.rows.length + (active.model.kind === 'blue' ? ' Signalproben sichtbar' : ' Fällen sichtbar');
+  $('count').textContent = searchResults.length + ' von ' + active.model.rows.length + (active.model.importIndex ? ' Importbelegen sichtbar' : active.model.kind === 'blue' ? ' Signalproben sichtbar' : ' Fällen sichtbar');
   const displayed = searchResults.slice(0, visibleCount);
   const fragment = document.createDocumentFragment();
   for (const index of displayed) {
@@ -249,6 +302,7 @@ function extent(row) {
     if (!row.signalCoverage.eligible) return 'Diese Probe enthält kein passend zugeordnetes Ereignis. Ein Abdeckungsgrad ist nicht bestimmbar.';
     return 'Die Zuordnung gilt für die dokumentierte Regel, die gebundene Quelle und das Zeitfenster dieser Probe.';
   }
+  if (row.status === 'import_unassessed') return 'Scope und Kontrollen sind ungeprüft. Ein bestätigter Befund oder eine Aussage zur Behebung erfordert eigene Belege.';
   if (row.status === 'not_retested') return 'Für eine Fix-Bestätigung ist eine eigene Nachprüfung dieses Falls offen.';
   if (row.status === 'confirmed') return 'Die Kontrolle belegt die Header-Konfiguration. Die Ausnutzbarkeit bleibt offen.';
   if (row.status === 'not_verified' || row.status === 'hint') return 'Für eine fachliche Bestätigung braucht dieser Hinweis einen eigenen Kontrollbeleg.';
@@ -263,7 +317,7 @@ function extent(row) {
 function renderCase() {
   const model = active.model;
   const row = model.rows[active.selected];
-  $('case-position').textContent = (model.kind === 'blue' ? 'Signalprobe ' : 'Fall ') + (active.selected + 1) + ' von ' + model.rows.length;
+  $('case-position').textContent = (model.importIndex ? 'Importbeleg ' : model.kind === 'blue' ? 'Signalprobe ' : 'Fall ') + (active.selected + 1) + ' von ' + model.rows.length;
   $('case-title').textContent = displayTitle(row);
   $('case-status').textContent = humanStatus(row.status);
   const good = ['confirmed', 'fix_verified', 'soc_observed'];
@@ -275,9 +329,19 @@ function renderCase() {
   if (row.signalCoverage) $('window-coverage').textContent = signalRatio(row.signalCoverage);
   fields('fields', row.details);
   const provenance = [['Datensatz', active.name], ['Quelle', row.source], ['Fall-ID', row.id],
-    ['SHA-256 der geöffneten Datei', model.digest], ['Assessment', model.assessment], ['Scope-Digest', model.scope]];
+    ['SHA-256 der geöffneten Datei', model.digest]];
+  if (row.reference) {
+    provenance.push(['Quelldatei laut Index', row.reference.file_sha256], ['Position laut Index', row.reference.locator],
+      ['Datensatz-Fingerabdruck laut Index', row.reference.fingerprint],
+      ['Originalbytes', active.originals.has(row.reference.file_sha256) ? 'SHA-256 in dieser Sitzung abgeglichen' : 'Abgleich ausstehend'],
+      ['Scope und Controls', 'Ungeprüft']);
+  } else {
+    provenance.push(['Assessment', model.assessment], ['Scope-Digest', model.scope]);
+  }
   fields('provenance', provenance.map(([label, value]) => ({label, value})));
-  $('trust').textContent = active.known
+  $('trust').textContent = model.importIndex
+    ? 'Ein erfolgreicher Byteabgleich bestätigt die Übereinstimmung der Datei mit dem registrierten SHA-256. Datensatzinhalt, Urheberschaft und Befundstatus erfordern eigene Nachweise.'
+    : active.known
     ? 'Die Dateibytes stimmen mit dem hinterlegten Beispiel überein. Die fachliche Aussage stammt aus dieser Projektion.'
     : 'Der Fingerabdruck bezeichnet die hier geöffneten Dateibytes. Herkunft, Signatur und tatsächliche Ausführung benötigen eigene Nachweise.';
   const review = getReview(active, row.id);
@@ -326,8 +390,13 @@ function redactedReview() {
   const {model} = active;
   return {schema: 'authzledger.workbench.review/v1', signed: false, created_at: new Date().toISOString(),
     source_sha256: model.digest, projection: model.kind, total: model.rows.length,
+    ...(model.importIndex ? {import_index: {workspace: model.importIndex.workspace, scope: 'unverified', controls: 'unverified',
+      coverage: 'unknown', findings: 'not_assessed', retest: 'not_assessed', asset_ids: model.importIndex.assets,
+      observations_without_host: model.importIndex.unassigned,
+      sources: model.importIndex.sources.map(({source, sha256, count}) => ({source, sha256, observations: count}))}} : {}),
     ...(model.signalCoverage ? {signal_coverage: model.signalCoverage} : {retest_coverage: model.coverage}),
     cases: model.rows.map((row, i) => ({case_number: i + 1, evidence_status: row.status, review_state: getReview(active, row.id).state,
+      ...(row.reference ? {source_reference: row.reference} : {}),
       ...(row.signalCoverage ? {signal_coverage: row.signalCoverage} : {})}))};
 }
 
@@ -341,7 +410,13 @@ function preparePrint() {
   const review = redactedReview();
   area.append(element('p', 'Unsignierte, redigierte Übersicht · ' + active.model.title),
     element('p', 'Erstellt am ' + new Date(review.created_at).toLocaleString('de-CH', {timeZone: 'Europe/Zurich'}) + ' (Europe/Zurich)'),
-    element('p', 'SHA-256 der Quelle · ' + review.source_sha256), element('p', review.total + (review.signal_coverage ? ' Signalproben' : ' Fälle') + ' im vollständigen Umfang'));
+    element('p', 'SHA-256 der Quelle · ' + review.source_sha256), element('p', review.total + (review.import_index ? ' Importbelege' : review.signal_coverage ? ' Signalproben' : ' Fälle') + ' im vollständigen Umfang'));
+  if (review.import_index) {
+    const info = review.import_index;
+    const workspace = info.workspace === 'example' ? 'Beispieldaten' : 'Eigene Dateien';
+    area.append(element('p', workspace + ' · ' + info.sources.length + ' Quelldateien · ' + info.asset_ids +
+      ' Asset-IDs · ' + info.observations_without_host + ' Belege ohne Hostbezug. Scope und Kontrollen ungeprüft. Abdeckung unbekannt.'));
+  }
   if (review.retest_coverage) {
     area.append(element('p', review.retest_coverage.reviewed + ' nachgeprüft · ' +
       review.cases.filter(r => r.evidence_status === 'fix_verified').length + ' Fix belegt · ' + review.retest_coverage.open + ' ausgelassen'));
@@ -354,7 +429,7 @@ function preparePrint() {
         ' passenden Ereignisvorkommen einem Alarm zugeordnet. Dieselbe Ereignis-ID kann in mehreren Proben vorkommen.'));
   }
   const table = element('table'), head = table.createTHead().insertRow(), body = table.createTBody();
-  const titles = [review.signal_coverage ? 'Signalprobe' : 'Fall', 'Prüfergebnis', 'Bearbeitungsstand'];
+  const titles = [review.import_index ? 'Importbeleg' : review.signal_coverage ? 'Signalprobe' : 'Fall', 'Prüfergebnis', 'Bearbeitungsstand'];
   if (review.signal_coverage) titles.push('Ereignisabdeckung je Probe');
   for (const title of titles) {
     const th = element('th', title); th.scope = 'col'; head.append(th);
@@ -380,8 +455,9 @@ async function loadDraft(file) {
   if (!file || !active) return;
   const doc = active;
   try {
-    // 1024 notes of up to 2000 characters can occupy several MiB in UTF-8 JSON.
-    if (file.size > 16 * 1024 * 1024 || !file.size) throw Error('Ungültige Grösse des Arbeitsstands.');
+    // JSON escaping can use six bytes per character in a 2,000-character note.
+    const maxDraftBytes = doc.model.importIndex ? 32 * 1024 * 1024 : 16 * 1024 * 1024;
+    if (file.size > maxDraftBytes || !file.size) throw Error('Ungültige Grösse des Arbeitsstands.');
     const data = JSON.parse(await file.text());
     if (data?.schema !== notesSchema || data.source_sha256 !== doc.model.digest || !Array.isArray(data.notes) ||
       data.notes.length > doc.model.rows.length) throw Error('Dieser Arbeitsstand gehört nicht zu dieser Belegdatei.');
@@ -412,6 +488,12 @@ async function loadDraft(file) {
 
 $('source').addEventListener('change', () => selectSource($('source').value));
 $('add-file').addEventListener('click', () => $('files').click());
+$('verify-originals').addEventListener('click', () => $('original-files').click());
+$('original-files').addEventListener('change', () => {
+  const files = [...$('original-files').files];
+  $('original-files').value = '';
+  selectOriginals(files);
+});
 $('files').addEventListener('change', () => {const files = [...$('files').files]; $('files').value = ''; importFiles(files);});
 for (const [id, event] of [['search', 'input'], ['filter', 'change']]) {
   $(id).addEventListener(event, () => {visibleCount = pageSize; applyFilter();});

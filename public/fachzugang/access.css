@@ -1,0 +1,19 @@
+/* © Nasser Aldin Farag (0xFarag). All rights reserved. */
+[hidden] { display:none !important; }
+.review, #registration { margin-top:2rem; }
+#registration { border-top:1px solid var(--line); padding-top:1.25rem; }
+#registration h3 { margin:0 0 .5rem; }
+#registration label, .case-row label { display:block; margin:.8rem 0 .3rem; font-weight:600; }
+#fingerprint { display:block; font-size:.93rem; overflow-wrap:anywhere; }
+#registration summary { margin:1rem 0; cursor:pointer; }
+#application { width:100%; box-sizing:border-box; padding:.5rem; resize:vertical; }
+#registration .actions a { margin:0; }
+.case-row { margin:1.1rem 0; padding:1rem; border:1px solid var(--line); border-radius:.3rem; min-width:0; }
+.case-row legend { font-weight:700; padding:0 .25rem; }
+.choices { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr)); gap:.6rem; }
+.choices label { margin:0; font-size:.95rem; }
+.choices select { width:100%; display:block; font:inherit; margin-top:.3rem; padding:.5rem .2rem; }
+.remove { margin-top:.8rem; padding:.35rem .7rem; font-size:.9rem; }
+#result ol { padding-left:2.5rem; }
+#result li { margin:.45rem 0; }
+#review-status:not(:empty) { margin-top:1rem; }

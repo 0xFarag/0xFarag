@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- © Nasser Aldin Farag (0xFarag). All rights reserved. -->
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#071722"><meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <title>Lokale Dateiprüfung · AuthzLedger</title>
+  <meta name="description" content="Dateihashes und Formatmerkmale lokal prüfen und vorhandene VirusTotal-Berichte der passenden Datei zuordnen.">
+  <link rel="icon" href="/assets/authzledger-icon.png"><link rel="stylesheet" href="/konto/kundenbereich.css"><link rel="stylesheet" href="./style.css">
+  <script src="./app.mjs" type="module"></script>
+</head>
+<body>
+<a class="skip" href="#inhalt">Zum Inhalt</a>
+<header><div class="wrap masthead"><a class="brand" href="/"><img src="/assets/authzledger-logo.png" alt="" width="40" height="40">AuthzLedger</a>
+  <nav aria-label="Hauptnavigation"><a href="/import/">Belegimport</a><a href="/workbench/">Workbench</a><a href="/fachzugang/">Fachzugang</a></nav></div></header>
+<main id="inhalt">
+  <div class="intro"><div class="wrap"><h1>Lokale Dateiprüfung</h1><p>Ermitteln Sie Hashwerte und Formatmerkmale einer Datei. Einen vorhandenen VirusTotal-Bericht können Sie über ihren SHA-256 zuordnen. Alle Dateien bleiben in diesem Browserfenster.</p></div></div>
+  <div class="wrap content">
+    <noscript><p>Aktivieren Sie JavaScript für die lokale Dateiprüfung.</p></noscript>
+    <section class="panel" aria-labelledby="file-title">
+      <h2 id="file-title">Datei untersuchen</h2>
+      <p>Bis 16 MiB. AuthzLedger liest die Dateibytes lokal und führt die Datei nicht aus.</p>
+      <div class="actions"><input id="file" type="file" hidden><button id="choose-file" class="primary" type="button" disabled>Datei auswählen</button><button id="clear" class="secondary" type="button" hidden>Sitzung leeren</button></div>
+      <p id="file-status" class="feedback" role="status" aria-live="polite"></p>
+      <div id="summary" hidden>
+        <dl class="metrics"><div><dt>Formatmerkmal</dt><dd id="format"></dd></div><div><dt>Grösse</dt><dd id="size"></dd></div><div><dt>Entropie</dt><dd id="entropy"></dd></div></dl>
+        <dl class="digests"><dt>SHA-256</dt><dd><code id="sha256"></code></dd><dt>SHA-512</dt><dd><code id="sha512"></code></dd></dl>
+        <h3>Statische Hinweise</h3><div id="signals"></div>
+        <p>Die Entropie beschreibt die Verteilung der Bytewerte. Formatmerkmale und Hinweise allein erlauben kein Urteil über Schadsoftware.</p>
+      </div>
+    </section>
+    <div id="sources" hidden>
+      <div class="source-grid">
+        <section class="panel" aria-labelledby="list-title"><h2 id="list-title">Mit Hashliste abgleichen</h2>
+          <p>Eine UTF-8-Textdatei mit einem SHA-256 je Zeile, bis 1 MiB. Leerzeilen und Kommentare mit <code>#</code> sind erlaubt.</p>
+          <input id="list" type="file" accept=".txt,.sha256,text/plain" hidden><button id="choose-list" class="secondary" type="button">Hashliste auswählen</button>
+          <p class="feedback" id="list-status" role="status" aria-live="polite"></p>
+        </section>
+        <section class="panel" aria-labelledby="vt-title"><h2 id="vt-title">VirusTotal-Bericht zuordnen</h2>
+          <p>Öffnen Sie einen vorhandenen JSON-Bericht vom Typ VirusTotal API v3 File Object, bis 2 MiB. Die Zuordnung prüft den Dateihash. Herkunft und Aktualität des Berichts bleiben ungeprüft.</p>
+          <input id="vt" type="file" accept=".json,application/json" hidden><button id="choose-vt" class="secondary" type="button">Bericht auswählen</button>
+          <p class="feedback" id="vt-status" role="status" aria-live="polite"></p><div id="vt-result"></div>
+        </section>
+      </div>
+      <section class="panel" aria-labelledby="export-title"><h2 id="export-title">Dateibeleg sichern</h2>
+        <p>Die unsignierte JSON-Datei enthält Hashwerte, Formatmerkmale und zugeordnete Vergleichsergebnisse. Dateinamen, Originalinhalte und einzelne Einträge der Hashliste bleiben aus dem Export.</p>
+        <button id="export" class="primary" type="button">Dateibeleg als JSON speichern</button></section>
+    </div>
+  </div>
+</main>
+<footer><div class="wrap"><div><strong>AuthzLedger</strong><p>Nasser Aldin Farag (0xFarag) · Schweiz</p><small>© Nasser Aldin Farag (0xFarag). All rights reserved.</small></div><nav aria-label="Weitere Informationen"><a href="/">Produkt</a><a href="/LICENSE.txt">Lizenz</a></nav></div></footer>
+</body></html>

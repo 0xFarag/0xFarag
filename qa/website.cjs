@@ -35,7 +35,7 @@ async function serveFile(request, response) {
 
 async function checkLinks(page, origin) {
   const files = new Map();
-  const htmlPages = ['/index.html', '/lab.html', '/installation.html', '/technik/hkdf/', '/import/', '/downloads/', '/workbench/'];
+  const htmlPages = ['/index.html', '/lab.html', '/installation.html', '/technik/hkdf/', '/import/', '/downloads/', '/workbench/', '/rbac/', '/dateipruefung/', '/fachzugang/'];
   for (const source of htmlPages) {
     const response = await page.goto(origin + source);
     assert.equal(response.status(), 200, source);
@@ -73,6 +73,19 @@ async function verifyDownloads(page, origin) {
       binaries.set(origin + '/downloads/' + release.directory + '/' + asset.name, asset);
     }
   }
+  // The independent offline tools are built from this checkout and have their own checksum.
+  const toolsDir = '/downloads/pruefwerkzeuge/';
+  const toolsName = 'AuthzLedger-Offline-Pruefwerkzeuge.zip';
+  const sumsFile = path.join(root,toolsDir,'SHA256SUMS.txt');
+  const sums = await fs.readFile(sumsFile,'utf8');
+  const match = /^([a-f0-9]{64})  AuthzLedger-Offline-Pruefwerkzeuge\.zip\n$/.exec(sums);
+  assert(match, 'local offline tools checksum names its single ZIP');
+  const publishedSums = await page.request.get(origin + toolsDir + 'SHA256SUMS.txt',{maxRedirects:0});
+  assert.equal(publishedSums.status(),200);
+  assert.equal(await publishedSums.text(),sums);
+  await publishedSums.dispose();
+  const size = (await fs.stat(path.join(root,toolsDir,toolsName))).size;
+  binaries.set(origin + toolsDir + toolsName,{name:toolsName,bytes:size,sha256:match[1]});
   assert.deepEqual([...links].sort(), [...binaries.keys()].sort(), 'each released binary has one first-party download');
   for (const [url, asset] of binaries) {
     const response = await page.request.get(url, {timeout: 90_000, maxRedirects: 0});
