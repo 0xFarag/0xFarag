@@ -1,0 +1,117 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
+name: Recipient Studio on Windows and Debian
+on:
+  workflow_dispatch:
+  push:
+    branches: ['release/recipient-studio-preview-20261123']
+    paths:
+      - '.github/workflows/recipient-studio.yml'
+      - 'packaging/recipient-selfcontained/**'
+permissions:
+  contents: read
+jobs:
+  build-and-check:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: packaging/recipient-selfcontained/windows
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Build self-contained verifier and preserve third-party notices
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          if ((Get-FileHash -Algorithm SHA256 upstream_verifier.py).Hash -ne 'afe47e30606d61f09025fa8b2703d7446b08cc0a3093e4b82eace355bfba5303') { throw 'Different upstream verifier' }
+          py -3.13-64 -m venv .venv
+          $python = (Resolve-Path '.venv\Scripts\python.exe').Path
+          & $python -m pip install --only-binary=:all: -r requirements-build.txt
+          & $python prepare.py
+          & $python build_notices.py
+          & $python -m PyInstaller --onefile --console --clean --noupx --name AuthzLedgerRecipientStudio-x64 --add-data 'THIRD_PARTY_NOTICES.txt:.' verifier.py
+          $exe = (Resolve-Path 'dist\AuthzLedgerRecipientStudio-x64.exe').Path
+          if ((& $exe --version) -ne 'AuthzLedger Offline Recipient Verifier · Studio preview 3') { throw 'Wrong verifier build' }
+          & $exe --studio-smoke
+          $notices = (& $exe --notices | Out-String)
+          foreach ($required in @('CPython','cryptography','OpenSSL','PyInstaller','tk')) { if ($notices -notmatch $required) { throw "Missing attribution for $required" } }
+          Copy-Item THIRD_PARTY_NOTICES.txt,LICENSE.AuthzLedger.txt,NOTICE.AuthzLedger.txt,../INSTALL-Studio.md -Destination dist
+          & $python -m pip freeze | Out-File dist/build-dependencies.txt -Encoding utf8NoBOM
+      - name: Compare official proof with the original and the packaged verifier
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          $python = (Resolve-Path '.venv\Scripts\python.exe').Path
+          $archive = Join-Path $env:RUNNER_TEMP 'authzledger-stable-proof.zip'
+          $env:PATH = "$env:ProgramFiles\Git\usr\bin;$env:PATH"
+          Invoke-WebRequest -Uri 'https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-proof.zip' -OutFile $archive
+          & $python smoke.py --archive $archive --exe 'dist\AuthzLedgerRecipientStudio-x64.exe' --receipt dist/windows-native-checks.json
+          Get-ChildItem dist -File | Sort-Object Name | ForEach-Object { '{0}  {1}' -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name } | Set-Content SHA256SUMS -Encoding utf8NoBOM
+          Copy-Item SHA256SUMS dist
+      - name: Retain verified unsigned candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: AuthzLedger-Recipient-Studio-Preview3-Windows-x64
+          path: packaging/recipient-selfcontained/windows/dist/
+          if-no-files-found: error
+          retention-days: 14
+  debian-desktop:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Build and install the offline recipient with desktop entry
+        shell: bash
+        run: |
+          set -eu
+          curl -fsSL https://github.com/0xFarag/0xFarag/releases/download/recipient-verifier-1.5.0-preview.2/authzledger-verifier_1.5.0-preview1_all.deb -o "$RUNNER_TEMP/base.deb"
+          python3 packaging/recipient-selfcontained/debian/build.py "$RUNNER_TEMP/base.deb" out
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ./out/*.deb xvfb xauth desktop-file-utils
+          desktop-file-validate /usr/share/applications/authzledger-recipient-studio.desktop
+          xvfb-run -a /usr/bin/authzledger-studio --smoke
+          mkdir "$RUNNER_TEMP/evidence-fixture"
+          curl -fsSL https://github.com/0xFarag/0xFarag/releases/download/v1.5.0/authzledger-1.5.0-proof.zip -o "$RUNNER_TEMP/proof.zip"
+          echo "54b21858a89d498ba3b5050ad85f5969068bf79bcf5a07467297b3c3d1d5e817  $RUNNER_TEMP/proof.zip" | sha256sum -c -
+          unzip -q "$RUNNER_TEMP/proof.zip" -d "$RUNNER_TEMP/evidence-fixture"
+          root="$RUNNER_TEMP/evidence-fixture/authzledger-proof"
+          xvfb-run -a /usr/bin/python3 packaging/recipient-selfcontained/debian/studio_smoke.py "$root/C-retest-proof/proof" "$root/trusted-public.pem"
+          cp packaging/recipient-selfcontained/INSTALL-Studio.md out/
+          (cd out && sha256sum -- *.deb INSTALL-Studio.md > SHA256SUMS.txt)
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: AuthzLedger-Recipient-Studio-Preview3-Debian
+          path: out/
+          if-no-files-found: error
+          retention-days: 14
+  publish-preview:
+    if: github.event_name == 'push' && github.repository == '0xFarag/0xFarag' && github.ref == 'refs/heads/release/recipient-studio-preview-20261123'
+    needs: [build-and-check, debian-desktop]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    concurrency:
+      group: publish-recipient-studio-preview-3
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: AuthzLedger-Recipient-Studio-Preview3-Windows-x64
+          path: tested/windows
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: AuthzLedger-Recipient-Studio-Preview3-Debian
+          path: tested/debian
+      - name: Verify tested files and publish a separate preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 packaging/recipient-selfcontained/publish_preview.py tested

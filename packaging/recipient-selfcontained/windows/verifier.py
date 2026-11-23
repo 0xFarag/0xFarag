@@ -1,4 +1,5 @@
-"""Standalone recipient verifier v1.5.0-win.1 for Windows x64."""
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
+"""Offline recipient verifier and native handover viewer."""
 import os
 from pathlib import Path
 import stat
@@ -10,7 +11,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
 import receipt_portable as receipt
 
-VERSION = "AuthzLedger Offline Recipient Verifier 1.5.0-win.1"
+VERSION = "AuthzLedger Offline Recipient Verifier · Studio preview 3"
 
 
 def public_key(pem):
@@ -39,6 +40,8 @@ def verify_signature(message, key, signature):
 
 def reject_reparse_points(path):
     original_path_check(path)
+    if ".." in path.parts:
+        raise ValueError("parent traversal components are not accepted")
     for component in (path, *path.parents):
         try:
             attrs = component.lstat().st_file_attributes
@@ -52,6 +55,12 @@ original_path_check = receipt._no_symlink_components
 
 
 def main(argv):
+    if argv in ([], ["--studio"], ["--studio-smoke"]):
+        from evidence_studio import launch
+        command = [sys.executable]
+        if not getattr(sys, "frozen", False):
+            command.append(str(Path(__file__).resolve()))
+        return launch(command, smoke=argv == ["--studio-smoke"])
     if argv == ["--version"]:
         print(VERSION)
         return 0

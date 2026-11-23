@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Gather installed-license texts plus audited source notices for linked native code."""
 from hashlib import sha256
 from importlib import metadata
@@ -41,9 +42,33 @@ def build():
         chunks.append(f"\n{'=' * 72}\n{label}\n{'=' * 72}\n{text}\n")
     for name in ("LICENSE.AuthzLedger.txt", "NOTICE.AuthzLedger.txt"):
         append(name, (HERE / name).read_text(encoding="utf-8"))
-    append("Windows packaging changes", "Recipient build 1.5.0-win.1 adds an in-process pyca/cryptography backend.\n"
+    append("Windows packaging changes", "Recipient Studio preview 3 uses Tk and an in-process pyca/cryptography backend.\n"
            "Original upstream recipient file is unchanged. Third-party copyrights and license grants apply.")
     append("CPython and its bundled components", Path(sys.base_prefix, "LICENSE.txt").read_text(encoding="utf-8"))
+    for component in ("tcl", "tk"):
+        candidates = sorted(Path(sys.base_prefix, "tcl").glob(component + "[0-9]*/license.terms"))
+        if not candidates:
+            # Some CPython Windows installers remove the Tcl/Tk source licence files.
+            # Bind the upstream fallback to the actual bundled patchlevel and known licence hash.
+            import tkinter
+            root = tkinter.Tk()
+            try:
+                patchlevel = root.tk.call("package", "provide", "Tcl" if component == "tcl" else "Tk")
+            finally:
+                root.destroy()
+            if not re.fullmatch(r"8\.6\.\d+", patchlevel):
+                raise RuntimeError(f"Unreviewed {component} version {patchlevel}")
+            tag = "core-" + patchlevel.replace(".", "-")
+            url = f"https://raw.githubusercontent.com/tcltk/{component}/{tag}/license.terms"
+            expected = {"tk": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+                        "tcl": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"}[component]
+            with urlopen(url, timeout=45) as resp:
+                text = resp.read(32769).replace(b"\r\n", b"\n")
+            if sha256(text).hexdigest() != expected:
+                raise RuntimeError(f"Unreviewed {component} licence")
+            append(f"{component} {patchlevel} · licence", text.decode("utf-8"))
+        for path in candidates:
+            append(f"{component} · {path.parent.name}", path.read_text(encoding="utf-8", errors="replace"))
     for name in DIST_NAMES:
         try:
             dist = metadata.distribution(name)

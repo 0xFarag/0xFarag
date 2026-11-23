@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Compare the recipient executable and original verifier on a pinned proof ZIP."""
 import argparse
 import base64
@@ -53,6 +54,10 @@ def run_cases(executable, bundle, key):
         payload.write_bytes(bytes([original[0] ^ 1]) + original[1:])
         verify("one_byte", proof, key, 1, "hash mismatch")
         payload.write_bytes(original)
+        extra = proof / "unlisted.txt"
+        extra.write_text("not signed")
+        verify("unlisted_file", proof, key, 1, "extra bundle files")
+        extra.unlink()
         signature = proof / "signature.base64"
         raw = bytearray(base64.b64decode(signature.read_bytes()))
         raw[0] ^= 1
@@ -75,7 +80,7 @@ def main():
         proof_root = Path(name, "authzledger-proof")
         results = run_cases(args.exe.resolve(), proof_root / "C-retest-proof" / "proof",
                             proof_root / "trusted-public.pem")
-    args.receipt.write_text(json.dumps({"version": "1.5.0-win.1", "source_proof_sha256": PROOF_SHA,
+    args.receipt.write_text(json.dumps({"version": "recipient-studio-preview3", "source_proof_sha256": PROOF_SHA,
         "binary_sha256": hashlib.sha256(args.exe.read_bytes()).hexdigest(),
         "github_run_id": os.environ.get("GITHUB_RUN_ID"), "commit": os.environ.get("GITHUB_SHA"),
         "tests": results}, indent=2), encoding="utf-8")
