@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0c192c">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Evidence Workbench · AuthzLedger</title>
+  <link rel="icon" href="/assets/authzledger-icon.png" type="image/png">
+  <link rel="stylesheet" href="/workbench/workbench.css">
+  <link rel="stylesheet" href="/workbench/compare.css">
+  <script src="/workbench/app.mjs" type="module"></script>
+</head>
+<body>
+<a class="skip" href="#work">Zum Arbeitsbereich</a>
+<div id="screen">
+  <header class="masthead"><div class="shell bar">
+    <a href="../" class="brand"><img src="/assets/authzledger-logo.png" width="38" height="38" alt=""><span>AuthzLedger</span></a>
+    <a class="home-link" href="../">Zur Produktseite</a>
+  </div></header>
+  <main id="work" tabindex="-1">
+    <section class="hero"><div class="shell hero-content">
+      <div><p class="eyebrow">Evidence Workbench</p><h1>Belege prüfen</h1><p class="lead">Öffnen Sie eine Belegquelle, prüfen Sie einzelne Fälle und dokumentieren Sie Ihren Entscheid für die Übergabe.</p></div>
+      <div class="session"><strong>Lokale Sitzung</strong><span>Dateien und Notizen bleiben beim Prüfen in diesem Browserfenster.</span></div>
+    </div></section>
+    <div class="shell workspace">
+      <noscript><p>Aktivieren Sie JavaScript, um Belegdateien in diesem Browser auszuwerten.</p></noscript>
+      <section class="source-box card" aria-labelledby="source-title">
+        <div class="source-pick"><label id="source-title" for="source">Belegquelle</label><select id="source">
+          <optgroup label="Mitgelieferte Beispiele">
+            <option value="demo-c">Demo C · Selektiver Retest</option>
+            <option value="demo-b">Demo B · Konfigurationsbefund</option>
+            <option value="demo-index">Mischindex · Quelleninventar</option>
+            <option value="demo-blue">SOC-Signale · Alarmabdeckung</option>
+          </optgroup><optgroup label="Eigene Dateien" id="local-options"></optgroup>
+        </select></div>
+        <div class="import-action"><button id="add-file" class="btn primary" type="button">JSON-Dateien öffnen</button><input type="file" id="files" multiple accept=".json,application/json" hidden></div>
+        <p class="source-help">Öffnen Sie den Signalbericht <code>blue-evidence.json</code> aus AuthzLedger Studio oder der CLI direkt hier. Unterstützt werden auch Befund B, Retest C und föderierte Inventare. Maximal 2 MiB pro Datei.</p>
+      </section>
+      <p id="feedback" class="feedback" role="status" aria-live="polite">Das Retest-Beispiel wird geöffnet.</p>
+      <div id="document" hidden>
+        <section class="summary card" aria-labelledby="summary-title">
+          <div class="summary-copy"><span class="small-label" id="origin"></span><h2 id="summary-title"></h2><p id="identity"></p><p id="metric-note" class="fine" hidden></p></div>
+          <dl id="metrics" class="metrics"></dl>
+        </section>
+        <div class="desk">
+          <section class="casebook card" aria-labelledby="cases-title">
+            <div class="list-head"><h2 id="cases-title">Fallauswahl</h2>
+              <label for="search">Suche</label><input id="search" type="search" placeholder="Titel, Quelle oder ID">
+              <label for="filter">Prüfergebnis</label><select id="filter"><option value="">Alle Ergebnisse</option></select>
+            </div>
+            <div id="count" class="list-count" aria-live="polite"></div>
+            <ul id="cases" class="cases" aria-label="Fälle"></ul>
+            <button id="more" type="button" class="btn more" hidden>Weitere Fälle anzeigen</button>
+            <button id="reset-filter" type="button" class="btn more" hidden>Filter zurücksetzen</button>
+          </section>
+          <section class="inspector card" id="inspector" aria-labelledby="case-title">
+            <div class="inspection-head"><div class="meta"><span class="small-label" id="case-position"></span><span id="case-status" class="pill"></span></div><h2 id="case-title"></h2></div>
+            <div role="tablist" aria-label="Falldetails" class="tabs">
+              <button id="tab-decision" aria-selected="true" role="tab" aria-controls="panel-decision" type="button">Entscheid</button>
+              <button id="tab-source" aria-selected="false" role="tab" aria-controls="panel-source" tabindex="-1" type="button">Herkunft</button>
+              <button id="tab-review" aria-selected="false" role="tab" aria-controls="panel-review" tabindex="-1" type="button">Bearbeitung</button>
+            </div>
+            <div id="panel-decision" class="tab-panel" role="tabpanel" aria-labelledby="tab-decision" tabindex="0">
+              <p class="verdict" id="decision"></p><p id="window-coverage" class="signal-ratio" hidden></p><p class="extent" id="extent"></p><details class="technical" id="technical"><summary>Technische Belege anzeigen</summary><dl id="fields" class="fields"></dl></details>
+            </div>
+            <div id="panel-source" class="tab-panel" role="tabpanel" aria-labelledby="tab-source" tabindex="0" hidden>
+              <dl class="fields" id="provenance"></dl><p class="trust-explanation" id="trust"></p>
+              <div id="sample-sources" class="sample-sources" hidden><strong>Eingabedateien für Studio oder CLI</strong>
+                <a href="../proof/mixed-c-result.json" download>Retest-Beleg (JSON)</a><a href="../proof/blue-evidence-signals.json" download>Kontrollsignale (JSON)</a>
+                <a href="../proof/blue-evidence-example.json" download>Erzeugter Signalbericht (JSON)</a>
+                <details><summary>Beispiel mit der lokalen CLI erzeugen</summary><p>Legen Sie beide Eingabedateien in denselben Ordner und führen Sie dort diesen Befehl mit der installierten SOC-Erweiterung aus.</p><code>python -m authzledger assessment blue-evidence mixed-c-result.json blue-evidence-signals.json --out blue-evidence.json</code></details>
+              </div>
+            </div>
+            <div id="panel-review" class="tab-panel" role="tabpanel" aria-labelledby="tab-review" tabindex="0" hidden>
+              <label for="disposition">Bearbeitungsstand</label><select id="disposition"><option value="todo">Offen</option><option value="follow_up">Rückfrage nötig</option><option value="reviewed">Gesichtet</option></select>
+              <label for="note">Private Fallnotiz</label><textarea id="note" maxlength="2000" rows="4" placeholder="Welche Frage oder Entscheidung soll festgehalten werden?"></textarea>
+              <p class="fine">Die Bearbeitung verändert den fachlichen Befund nicht. Sichern Sie Ihre Notizen lokal, bevor Sie dieses Fenster schliessen.</p>
+              <div class="actions"><button id="save-notes" class="btn" type="button">Arbeitsstand sichern</button><button id="load-notes" class="text-btn" type="button">Arbeitsstand laden</button><input id="draft-file" type="file" accept=".json,application/json" hidden></div>
+              <p id="draft-status" class="feedback" role="status"></p>
+            </div>
+          </section>
+        </div>
+        <section id="snapshot-comparison" aria-label="Belegstände vergleichen"></section>
+        <section id="handover" class="handover card" aria-labelledby="handover-title"><div><p class="small-label">Übergabe</p><h2 id="handover-title">Redigierte Fallübersicht</h2><p>Enthält Prüfergebnis, Bearbeitungsstand und Datei-Fingerabdruck. Bei Signalberichten wird auch die Alarmabdeckung je Probe aufgeführt. Dateinamen, Original-IDs und Freitext bleiben privat. Die Übersicht ist unsigniert.</p></div>
+          <div class="actions"><button class="btn primary" id="download" type="button">JSON exportieren</button><button class="btn" id="print" type="button">Drucken / PDF</button></div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer><div class="shell">AuthzLedger · © Nasser Aldin Farag (0xFarag)</div></footer>
+</div>
+<section id="print-report" aria-label="Redigierte Fallübersicht"></section>
+</body>
+</html>

@@ -1,7 +1,7 @@
 name: Verify AuthzLedger public website
 on:
   push:
-    branches: [launch/evidence-site-20261121, launch/evidence-import-20261123, launch/storefront-20261123, authzledger-website]
+    branches: [launch/evidence-site-20261121, launch/evidence-import-20261123, launch/storefront-20261123, launch/evidence-workbench-20261123, authzledger-website]
   workflow_dispatch:
 
 permissions:
@@ -34,6 +34,8 @@ jobs:
         run: node qa/node_modules/playwright/cli.js install chromium
       - name: Check source-bound observation comparisons
         run: node --test qa/import-formats.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
+      - name: Check evidence workbench projections and comparisons
+        run: node --test qa/board-blue.test.mjs qa/board-compare.test.mjs qa/board-model.test.mjs
       - name: Verify billing readiness, checkout and customer journeys
         run: node --test qa/billing-api.cjs qa/customer.cjs qa/customer-browser.cjs
       - name: Test public pages and their evidence

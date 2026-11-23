@@ -10,7 +10,7 @@ const { chromium } = require('playwright');
 const root = path.resolve(__dirname, '../public');
 const mime = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css',
-  '.js': 'text/javascript', '.json': 'application/json', '.vtt': 'text/vtt',
+  '.mjs': 'text/javascript', '.js': 'text/javascript', '.json': 'application/json', '.vtt': 'text/vtt',
   '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp',
   '.mp4': 'video/mp4', '.pdf': 'application/pdf', '.txt': 'text/plain',
 };
@@ -35,7 +35,7 @@ async function serveFile(request, response) {
 
 async function checkLinks(page, origin) {
   const files = new Map();
-  const htmlPages = ['/index.html', '/lab.html', '/installation.html', '/technik/hkdf/', '/import/', '/downloads/'];
+  const htmlPages = ['/index.html', '/lab.html', '/installation.html', '/technik/hkdf/', '/import/', '/downloads/', '/workbench/'];
   for (const source of htmlPages) {
     const response = await page.goto(origin + source);
     assert.equal(response.status(), 200, source);
@@ -132,7 +132,9 @@ async function exercise(browser, origin, width) {
       assert.deepEqual(record.coverage.map(r=>r.status).sort(),['fix_verified','not_retested']);
     }
 
-    for (const target of ['', '/lab.html', '/installation.html', '/downloads/']) {
+    await require('./workbench-browser.cjs')(page, origin, width);
+
+    for (const target of ['', '/lab.html', '/installation.html', '/downloads/', '/workbench/']) {
       await page.goto(origin + target);
       assert(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth), 'horizontal overflow ' + width + ' ' + target);
     }
@@ -163,7 +165,7 @@ async function exercise(browser, origin, width) {
   const origin='http://127.0.0.1:' + server.address().port;
   let browser;
   try {
-    browser = await chromium.launch();
+    browser = await chromium.launch({executablePath: process.env.CHROMIUM_BIN || undefined});
     await exercise(browser,origin,1360);
     await exercise(browser,origin,390);
   } finally {

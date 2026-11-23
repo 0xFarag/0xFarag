@@ -1,0 +1,86 @@
+{
+  "anchor_sha256": "e88fa8b182ad1d7b3477516c1432e24a919d1882a4221bf2cb8e25265cff4bd8",
+  "controls": {
+    "foreign": {
+      "alerts": [
+        {
+          "event": "evt-lab-001",
+          "rule": "lab.handover.validation"
+        }
+      ],
+      "events": [
+        {
+          "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+          "at": "2026-11-20T22:25:50Z",
+          "event": "evt-lab-001",
+          "finding": "finding-ae64d20deb2bf61f37090cb3",
+          "scope": "synthetic-other-scope",
+          "source": "fixture.audit"
+        }
+      ]
+    },
+    "matched": {
+      "alerts": [
+        {
+          "event": "evt-lab-001",
+          "rule": "lab.handover.validation"
+        }
+      ],
+      "events": [
+        {
+          "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+          "at": "2026-11-20T22:25:50Z",
+          "event": "evt-lab-001",
+          "finding": "finding-ae64d20deb2bf61f37090cb3",
+          "scope": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+          "source": "fixture.audit"
+        },
+        {
+          "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+          "at": "2026-11-20T22:25:50Z",
+          "event": "evt-lab-002",
+          "finding": "finding-ae64d20deb2bf61f37090cb3",
+          "scope": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+          "source": "fixture.audit"
+        },
+        {
+          "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+          "at": "2026-11-20T22:25:50Z",
+          "event": "evt-other-scope",
+          "finding": "finding-ae64d20deb2bf61f37090cb3",
+          "scope": "synthetic-other-scope",
+          "source": "fixture.audit"
+        }
+      ]
+    },
+    "no_data": {
+      "alerts": [],
+      "events": []
+    },
+    "telemetry_only": {
+      "alerts": [],
+      "events": [
+        {
+          "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+          "at": "2026-11-20T22:25:50Z",
+          "event": "evt-lab-001",
+          "finding": "finding-ae64d20deb2bf61f37090cb3",
+          "scope": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+          "source": "fixture.audit"
+        }
+      ]
+    }
+  },
+  "dataset": "synthetic-control-signals",
+  "expectation": {
+    "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+    "finding": "finding-ae64d20deb2bf61f37090cb3",
+    "from_utc": "2026-11-20T22:25:41Z",
+    "rule": "lab.handover.validation",
+    "scope": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+    "source": "fixture.audit",
+    "until_utc": "2026-11-20T22:26:03Z"
+  },
+  "rights": "ALL RIGHTS RESERVED. \u00a9 Nasser Aldin Farag (0xFarag).",
+  "schema": "authzledger.website-lab.v1"
+}

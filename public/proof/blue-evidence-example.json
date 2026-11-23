@@ -1,0 +1,92 @@
+{
+  "binding": {
+    "assessment": "assessment-03648880a3ef4bfba227dc6dec08c9f5",
+    "finding": "finding-ae64d20deb2bf61f37090cb3",
+    "rule": "lab.handover.validation",
+    "scope": "d38e33fe7fb9409a5f91293937552cdda10ab46ca20582029171c293e214c5f7",
+    "source": "fixture.audit"
+  },
+  "input_profile": "authzledger.website-lab.v1",
+  "retest_sha256": "e88fa8b182ad1d7b3477516c1432e24a919d1882a4221bf2cb8e25265cff4bd8",
+  "rights": "ALL RIGHTS RESERVED. \u00a9 Nasser Aldin Farag (0xFarag).",
+  "samples": {
+    "foreign": {
+      "alert_count": 1,
+      "alert_coverage": {
+        "eligible_events": 0,
+        "excluded_events": 1,
+        "linked_events": 0,
+        "unlinked_event_ids": []
+      },
+      "alerted_events": [],
+      "event_count": 1,
+      "matching_events": [],
+      "status": "incomparable"
+    },
+    "matched": {
+      "alert_count": 1,
+      "alert_coverage": {
+        "eligible_events": 2,
+        "excluded_events": 1,
+        "linked_events": 1,
+        "unlinked_event_ids": [
+          "evt-lab-002"
+        ]
+      },
+      "alerted_events": [
+        "evt-lab-001"
+      ],
+      "event_count": 3,
+      "matching_events": [
+        "evt-lab-001",
+        "evt-lab-002"
+      ],
+      "status": "observed"
+    },
+    "no_data": {
+      "alert_count": 0,
+      "alert_coverage": {
+        "eligible_events": 0,
+        "excluded_events": 0,
+        "linked_events": 0,
+        "unlinked_event_ids": []
+      },
+      "alerted_events": [],
+      "event_count": 0,
+      "matching_events": [],
+      "status": "unavailable"
+    },
+    "telemetry_only": {
+      "alert_count": 0,
+      "alert_coverage": {
+        "eligible_events": 1,
+        "excluded_events": 0,
+        "linked_events": 0,
+        "unlinked_event_ids": [
+          "evt-lab-001"
+        ]
+      },
+      "alerted_events": [],
+      "event_count": 1,
+      "matching_events": [
+        "evt-lab-001"
+      ],
+      "status": "telemetry_only"
+    }
+  },
+  "schema": "authzledger.blue-evidence.v1",
+  "signals_sha256": "39682685731b1d7dad3dd614c264a237bf4d91cc177698977f5ac0f7ecc01a24",
+  "signed": false,
+  "source_assertions_verified": false,
+  "source_coverage": {
+    "finding-71dd5140505595bd87010086": "not_retested",
+    "finding-ae64d20deb2bf61f37090cb3": "fix_verified"
+  },
+  "source_retest_status": "fix_verified",
+  "source_snapshot_digest": "15158eb8c3c8c429b52d16a6b4f0333214468f9f4768e56b78f890de2a2b1dfb",
+  "synthetic": true,
+  "window": {
+    "from": "2026-11-20T22:25:41Z",
+    "until": "2026-11-20T22:26:03Z"
+  }
+}
