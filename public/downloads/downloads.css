@@ -18,4 +18,8 @@
 }
 
 .download-nav { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:.35rem 1.15rem; }
-@media(max-width:36rem){.download-nav { gap:.3rem .7rem; font-size:.9rem }}
+@media(max-width:36rem) {
+  header nav.wrap { flex-wrap:wrap; gap:.15rem .9rem; padding-block:.5rem; }
+  .download-nav { justify-content:flex-start; gap:.25rem .85rem; font-size:.95rem; }
+  .download-nav a { padding-block:.4rem; }
+}

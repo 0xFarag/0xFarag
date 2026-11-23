@@ -1,3 +1,4 @@
+// © Nasser Aldin Farag (0xFarag). All rights reserved.
 'use strict';
 
 const assert = require('node:assert/strict');
@@ -7,6 +8,7 @@ const http = require('node:http');
 const path = require('node:path');
 
 const { chromium } = require('playwright');
+const {checkFits, routeLinks, verifyHomepagePaths} = require('./homepage-paths.cjs');
 const root = path.resolve(__dirname, '../public');
 const mime = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css',
@@ -105,13 +107,21 @@ async function exercise(browser, origin, width) {
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror',e=>errors.push(String(e)));
+    await verifyHomepagePaths(page, origin, width);
     await page.goto(origin);
     const select = page.locator('#finding-select');
     await page.waitForFunction(()=>!document.getElementById('finding-select').disabled);
     assert.equal(await page.locator('#finding-state').innerText(),'fix_verified');
+    await checkFits(page, select, 'Cockpit finding selector');
+    const sourceDetails = page.locator('#cockpit details').filter({has: page.locator('#finding-baseline')});
+    await sourceDetails.locator('summary').click();
+    await checkFits(page, page.locator('#finding-baseline'), 'Cockpit baseline fingerprint');
     await select.selectOption({index:1});
     assert.equal(await page.locator('#finding-state').innerText(),'not_retested');
     assert.equal(await page.locator('#finding-id').innerText(),'finding-c05b584f5c488a0155a3397e');
+    await page.locator('#cockpit a[href$="#signatur"]').click();
+    await page.waitForURL(url => url.hash === '#signatur');
+    await checkFits(page, page.locator('#signatur #verify'), 'Signature control');
     await page.locator('#verify').click();
     await page.locator('#verification-note[data-result="valid"]').waitFor();
     await page.locator('[name="variant"][value="modified"]').check();
@@ -123,10 +133,10 @@ async function exercise(browser, origin, width) {
     assert(await page.locator('#case-c').isVisible());
     if (width < 500) {
       await page.locator('.mobile-nav summary').click();
-      const lab = page.getByRole('navigation',{name:'Mobile Hauptnavigation'}).getByRole('link',{name:'Lab'});
+      const lab = routeLinks(page.locator('.mobile-nav nav'), '/lab.html');
       assert(await lab.isVisible()); await lab.click();
     } else {
-      await page.locator('.wide-nav').getByRole('link',{name:'Lab'}).click();
+      await routeLinks(page.locator('.wide-nav'), '/lab.html').click();
     }
     assert(new URL(page.url()).pathname.endsWith('/lab.html'));
     const labCases = [

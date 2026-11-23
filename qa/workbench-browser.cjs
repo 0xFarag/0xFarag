@@ -4,17 +4,16 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const path = require('node:path');
+const {routeLinks} = require('./homepage-paths.cjs');
 
 module.exports = async function verifyWorkbench(page, origin, width) {
   await page.goto(origin);
   if (width < 500) {
     await page.locator('.mobile-nav summary').click();
-    await page.getByRole('navigation', {name: 'Mobile Hauptnavigation'})
-      .getByRole('link', {name: 'Workbench', exact: true}).click();
+    await routeLinks(page.locator('.mobile-nav nav'), '/workbench/').click();
   } else {
-    const navigation = page.getByRole('navigation', {name: 'Hauptnavigation', exact: true});
-    assert.equal(await navigation.getByRole('link', {name: 'Workbench'}).getAttribute('href'), 'workbench/');
-    await page.getByRole('link', {name: 'Evidence Workbench öffnen'}).click();
+    assert(await routeLinks(page.locator('.wide-nav'), '/workbench/').isVisible());
+    await routeLinks(page.locator('#werkzeuge'), '/workbench/').first().click();
   }
   await page.locator('#document').waitFor();
   assert.deepEqual(await page.locator('#metrics dd').allTextContents(), ['2', '1', '1', '1']);

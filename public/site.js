@@ -1,9 +1,22 @@
+// © Nasser Aldin Farag (0xFarag). All rights reserved.
 (function () {
   const legacyLabSections = ['kontrolllabor', 'foederation', 'kandidatenpruefung', 'beweisfilm', 'status'];
   if (legacyLabSections.includes(location.hash.slice(1))) {
     location.replace('lab.html' + location.hash);
     return;
   }
+  // Same-page links keep the current document and its menu state.
+  const menu = document.querySelector('.mobile-nav');
+  menu.addEventListener('click', event => {
+    const link = event.target.closest('a');
+    if (link) menu.open = false;
+  });
+  menu.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && menu.open) {
+      menu.open = false;
+      menu.querySelector('summary').focus();
+    }
+  });
   const nav = document.querySelector('.proof-nav');
   const tabs = Array.from(nav.querySelectorAll('a'));
   const panels = tabs.map(tab => document.getElementById(tab.hash.slice(1)));

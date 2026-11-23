@@ -20,7 +20,10 @@ button {cursor:pointer}
 .bar {min-height:64px;justify-content:space-between}
 .brand {gap:.6rem;font-size:1.2rem;font-weight:750;letter-spacing:-.04em;text-decoration:none}
 .brand img {display:block;object-fit:contain}
-.home-link {color:#d6dfea;font-size:.94rem;text-underline-offset:4px}
+.bar {gap:.25rem 1.5rem;flex-wrap:wrap;padding-block:.45rem}
+.bar nav {display:flex;align-items:center;gap:0 1rem;flex-wrap:wrap}
+.bar nav a {padding-block:.6rem;color:#d6dfea;font-size:.95rem;text-decoration:none;text-underline-offset:4px}
+.bar nav a:hover,.bar nav a:focus-visible {color:white;text-decoration:underline}
 .hero {background:linear-gradient(110deg,#101e31 40%,#20374c)}
 .hero-content {display:flex;justify-content:space-between;align-items:center;gap:2rem;padding-block:2.5rem 2.9rem}
 .eyebrow,.small-label {font:650 .8rem/1.45 "IBM Plex Mono","Courier New",monospace;letter-spacing:.085em;text-transform:uppercase}

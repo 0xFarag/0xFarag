@@ -35,7 +35,7 @@
     const records = receipt.transitions;
     const ledger = receipt.execution_ledger;
     document.getElementById('budget').textContent =
-      'Demolauf: ' + ledger.dispatched_total + ' von ' + ledger.approved_total + ' freigegebenen Operationen ausgeführt.';
+      'Im Demolauf wurden ' + ledger.dispatched_total + ' von ' + ledger.approved_total + ' freigegebenen Operationen ausgeführt.';
     select.replaceChildren(...records.map((record, index) => {
       const option = document.createElement('option');
       option.value = record.finding_id;
@@ -45,10 +45,12 @@
 
     function renderFinding() {
       const record = records.find(entry => entry.finding_id === select.value);
-      document.getElementById('finding-state').textContent = record.status;
+      const state = document.getElementById('finding-state');
+      state.textContent = record.status;
+      state.closest('.decision').dataset.state = record.status;
       document.getElementById('finding-note').textContent = record.status === 'fix_verified'
-        ? 'Der Retest ordnet dem ursprünglichen Befund einen neuen Befund-Digest zu.'
-        : 'Für diesen Befund fehlt ein neuer Retest. Er bleibt als offen sichtbar.';
+        ? 'Korrektur im Demofall nachgewiesen. Beide SHA-256-Werte verknüpfen den ursprünglichen Befund und seine Nachprüfung.'
+        : 'Dieser Befund wurde ausgelassen. Die ursprüngliche Quelle ist dokumentiert, die Korrektur bleibt offen.';
       document.getElementById('finding-id').textContent = record.finding_id;
       document.getElementById('finding-baseline').textContent = record.baseline_finding_digest;
       document.getElementById('finding-current').textContent = record.current_finding_digest || 'Kein Retest dokumentiert';
