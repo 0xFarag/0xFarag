@@ -63,6 +63,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--version", action="version", version=f"AuthzLedger {__version__}")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("rbac", help="Evaluate Kubernetes role grants and compare saved evidence offline (Node.js 22+)")
+    file_review = commands.add_parser("file-review", help="Fingerprint a local file and optionally run the installed ClamAV scanner")
+    file_review.add_argument("file", type=Path)
+    file_review.add_argument("--clamav", action="store_true", help="Scan the fingerprinted bytes using local clamscan and installed signatures")
     init = commands.add_parser("init", help="Create owner/other controls and a cross-user contract to adapt to your API")
     init.add_argument("--target", required=True, help="Exact authorized HTTP(S) origin")
     init.add_argument("--out", type=Path, default=Path("authorization.json"))
@@ -110,6 +113,19 @@ def main(argv: list[str] | None = None) -> int:
     add_assessment_commands(commands)
     args = parser.parse_args(argv)
     try:
+        if args.command == "file-review":
+            from .file_review import review_file
+            try:
+                result = review_file(args.file, clamav=args.clamav)
+            except (OSError, ValueError) as exc:
+                message = str(exc) if isinstance(exc, ValueError) else "The selected file could not be read."
+                print(message, file=sys.stderr)
+                return 2
+            print(json.dumps(result, indent=2))
+            status = result["engine"]["status"]
+            if status == "detection_reported":
+                return 1
+            return 0 if status in {"not_requested", "no_detection_reported"} else 2
         handled = execute_assessment_command(args)
         if handled is not None:
             return handled

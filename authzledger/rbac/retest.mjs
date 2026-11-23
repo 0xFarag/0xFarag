@@ -31,7 +31,7 @@ export function readPolicy(bytes) {
   catch { throw Error('Die Richtliniendatei enthält kein gültiges UTF-8-JSON.'); }
   return inspectPolicy(input);
 }
-function normalized(query) {
+export function normalizeQuery(query) {
   demand(query && typeof query === 'object' && !Array.isArray(query), 'Ungültige Prüfanfrage.');
   demand(Object.keys(query).every(k => [...fields,'groups'].includes(k)) && required.every(k=>Object.hasOwn(query,k)),
     'Die Prüfanfrage enthält fehlende oder unbekannte Felder.');
@@ -48,14 +48,24 @@ function normalized(query) {
 }
 async function summarize(model, query) {
   const result = evaluateAccess(model,query);
-  return {status:result.status, match_count:result.matchCount, proof_sha256:await sha256(encoder.encode(canonical(result)))};
+  const roles = new Map(model.roles.map(r => [r.objectIndex,r]));
+  const bindings = new Map(model.bindings.map(b => [b.objectIndex,b]));
+  const sourceBindings = new Map(), sourceRules = new Map();
+  for (const ref of result.matches) {
+    sourceBindings.set(ref.bindingIndex,bindings.get(ref.bindingIndex));
+    const ruleKey = ref.roleIndex + '/' + ref.ruleIndex;
+    sourceRules.set(ruleKey,roles.get(ref.roleIndex).rules[ref.ruleIndex-1]);
+  }
+  const evidence = {result, bindings:[...sourceBindings.entries()], rules:[...sourceRules.entries()]};
+  return {status:result.status, match_count:result.matchCount, proof_complete:result.matches.length === result.matchCount,
+    proof_sha256:await sha256(encoder.encode(canonical(evidence)))};
 }
 export async function makeBaseline(policySha256, queries, model) {
   demand(typeof policySha256 === 'string' && hex.test(policySha256), 'Der ursprüngliche Datei-Hash fehlt.');
   demand(Array.isArray(queries) && queries.length > 0 && queries.length <= CASE_LIMIT, 'Eine Prüfbasis benötigt 1 bis 32 Fragen.');
   const seen = new Set(), cases = [];
   for (const raw of queries) {
-    const query = normalized(raw);
+    const query = normalizeQuery(raw);
     const id = await sha256(encoder.encode(canonical(query)));
     demand(!seen.has(id), 'Die Prüfbasis enthält eine doppelte Frage.');
     seen.add(id);
@@ -84,6 +94,7 @@ export async function retestPolicy(baseline, baselinePolicyBytes, currentPolicyB
     if (after) {
       if ([c.outcome.status,after.status].includes('indeterminate')) status = 'indeterminate';
       else if (c.outcome.status !== after.status) status = 'snapshot_decision_changed';
+      else if (!c.outcome.proof_complete || !after.proof_complete) status = 'indeterminate';
       else if (c.outcome.proof_sha256 !== after.proof_sha256) status = 'snapshot_evidence_changed';
       else status = 'snapshot_result_repeated';
     }

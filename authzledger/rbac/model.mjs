@@ -150,7 +150,25 @@ const knownClusterResources = new Map([
   [group, ['clusterroles','clusterrolebindings']],
   ['apiextensions.k8s.io', ['customresourcedefinitions']], ['storage.k8s.io', ['storageclasses','volumeattachments','csidrivers','csinodes']],
   ['apiregistration.k8s.io', ['apiservices']], ['networking.k8s.io', ['ingressclasses']],
-  ['scheduling.k8s.io', ['priorityclasses']], ['certificates.k8s.io', ['certificatesigningrequests']]
+  ['scheduling.k8s.io', ['priorityclasses']], ['certificates.k8s.io', ['certificatesigningrequests']],
+  ['admissionregistration.k8s.io', ['validatingwebhookconfigurations','mutatingwebhookconfigurations',
+    'validatingadmissionpolicies','validatingadmissionpolicybindings','mutatingadmissionpolicies','mutatingadmissionpolicybindings']],
+  ['authorization.k8s.io', ['subjectaccessreviews','selfsubjectaccessreviews','selfsubjectrulesreviews']],
+  ['authentication.k8s.io', ['tokenreviews','selfsubjectreviews']], ['node.k8s.io', ['runtimeclasses']],
+  ['flowcontrol.apiserver.k8s.io', ['flowschemas','prioritylevelconfigurations']]
+]);
+
+// No API discovery or CRD definitions are present in a pure RBAC snapshot.
+// Use an exact (group, resource) allowlist for namespace-bound positive evidence.
+const knownNamespacedResources = new Map([
+  ['', ['pods','configmaps','secrets','services','serviceaccounts','persistentvolumeclaims','endpoints',
+    'events','limitranges','resourcequotas','replicationcontrollers','podtemplates']],
+  ['apps', ['deployments','replicasets','statefulsets','daemonsets','controllerrevisions']],
+  ['batch', ['jobs','cronjobs']], [group, ['roles','rolebindings']],
+  ['networking.k8s.io', ['ingresses','networkpolicies']], ['discovery.k8s.io', ['endpointslices']],
+  ['policy', ['poddisruptionbudgets']], ['autoscaling', ['horizontalpodautoscalers']],
+  ['events.k8s.io', ['events']], ['coordination.k8s.io', ['leases']], ['storage.k8s.io', ['csistoragecapacities']],
+  ['authorization.k8s.io', ['localsubjectaccessreviews']]
 ]);
 
 function requestAttributes(raw) {
@@ -196,6 +214,8 @@ export function evaluateAccess(model, input) {
   const request = requestAttributes(input);
   const matches = [], reasons = [];
   let count = 0;
+  let missingResourceScope = false;
+  const namespacedResource = knownNamespacedResources.get(request.apiGroup)?.includes(request.resource) === true;
   if (model.partial) reasons.push('Der Snapshot enthält eine nicht vollständig exportierte Liste.');
   for (const binding of model.bindings) {
     if (binding.kind === 'RoleBinding' && binding.namespace !== request.namespace) continue;
@@ -208,11 +228,16 @@ export function evaluateAccess(model, input) {
     }
     role.rules.forEach((rule, i) => {
       if (!ruleMatches(rule, request)) return;
+      if (binding.kind === 'RoleBinding' && !namespacedResource) {
+        missingResourceScope = true;
+        return;
+      }
       count++;
       if (matches.length < maxProofs) matches.push({bindingKind: binding.kind, bindingName: binding.name, namespace: binding.namespace,
         roleKind: role.kind, roleName: role.name, ruleIndex: i + 1, bindingIndex: binding.objectIndex, roleIndex: role.objectIndex});
     });
   }
+  if (missingResourceScope) reasons.push('Eine namensraumgebundene Regel passt. Für diese API-Gruppe und Ressource fehlt ein Nachweis des Namespace-Geltungsbereichs.');
   if (count > matches.length) reasons.push('Die ersten ' + maxProofs + ' von ' + count + ' Regelverweisen werden angezeigt.');
   return {status: count ? 'granted_in_snapshot' : reasons.length ? 'indeterminate' : 'no_grant_in_snapshot',
     matches, reasons, matchCount: count};

@@ -24,7 +24,7 @@ jobs:
       - name: Check offline import, source binding and evidence retention
         run: |
           python -m pip install 'reportlab==4.4.9'
-          python -m unittest -v tests.test_federation_offline tests.test_federation_entrypoints tests.test_federation_retention tests.test_federation_index tests.test_federation_index_entrypoints tests.test_blue_evidence tests.test_federation_scanners tests.test_tool_evidence_roundtrip tests.test_rbac_command
+          python -m unittest -v tests.test_federation_offline tests.test_federation_entrypoints tests.test_federation_retention tests.test_federation_index tests.test_federation_index_entrypoints tests.test_blue_evidence tests.test_federation_scanners tests.test_tool_evidence_roundtrip tests.test_rbac_command tests.test_file_review
           python review/1.6/test_adapter_support.py --checkout .
           python -m authzledger rbac --help
       - name: Verify the three offline Studio views in Chromium
@@ -34,3 +34,28 @@ jobs:
           node tests/browser_federation_offline.cjs
           node tests/browser_federation_index.cjs
           node tests/browser_blue_evidence.cjs
+
+  antivirus:
+    name: Local ClamAV with two harmless samples
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Extract the distribution scanner without installing services
+        shell: bash
+        run: |
+          set -euo pipefail
+          packages="$RUNNER_TEMP/av-download"
+          runtime="$RUNNER_TEMP/av-runtime"
+          mkdir -p "$packages/partial" "$runtime"
+          sudo apt-get -qq update
+          sudo apt-get -q --download-only --no-install-recommends --reinstall -y -o "Dir::Cache::archives=$packages" install clamav
+          for archive in "$packages"/*.deb; do
+            dpkg-deb -x "$archive" "$runtime"
+          done
+          LD_LIBRARY_PATH="$runtime/usr/lib/$(gcc -print-multiarch)" python tests/clamav_smoke.py "$runtime/usr/bin/clamscan"

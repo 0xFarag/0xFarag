@@ -1,7 +1,7 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
 import {open} from 'node:fs/promises';
 import {evaluateAccess} from './model.mjs';
-import {CASE_LIMIT, POLICY_BYTES, makeBaseline, readPolicy, retestPolicy, sha256} from './retest.mjs';
+import {CASE_LIMIT, POLICY_BYTES, makeBaseline, normalizeQuery, readPolicy, retestPolicy, sha256} from './retest.mjs';
 
 const usage = 'AuthzLedger RBAC · Node.js 22+\n  node cli.mjs check POLICY.json REQUEST.json\n  node cli.mjs baseline POLICY.json REQUESTS.json\n  node cli.mjs retest BASIS.json ORIGINAL.json CURRENT.json [1,3 | none]\nJSON-Ausgabe auf stdout. Fallnummern beginnen bei 1. Ohne Auswahl werden alle Fälle erneut geprüft.';
 async function fileBytes(file) {
@@ -30,9 +30,10 @@ async function main(args) {
   let output;
   if (['check','baseline'].includes(command) && paths.length === 2) {
     const bytes = await fileBytes(paths[0]), model = readPolicy(bytes), input = await jsonFile(paths[1]), digest = await sha256(bytes);
+    const query = command === 'check' ? normalizeQuery(input) : null;
     output = command === 'baseline' ? await makeBaseline(digest,input,model)
       : {schema:'authzledger.rbac-check.v1',rights:'© Nasser Aldin Farag (0xFarag). All rights reserved.',signature:'unsigned',
-         policy_sha256:digest, request:input, result:evaluateAccess(model,input), warnings:model.warnings};
+         policy_sha256:digest, request:query, result:evaluateAccess(model,query), warnings:model.warnings};
   } else if (command === 'retest' && [3,4].includes(paths.length)) {
     let selection;
     if (paths.length === 4) {
