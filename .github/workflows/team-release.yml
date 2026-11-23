@@ -9,6 +9,8 @@ on:
       - 'packaging/team/**'
       - 'scripts/build-team-release.py'
       - 'qa/team*'
+      - 'qa/test_team*.py'
+      - '.github/team-release-request.json'
       - '.github/workflows/team-release.yml'
       - 'LICENSE'
       - 'NOTICE.txt'
@@ -26,19 +28,36 @@ jobs:
   source:
     if: github.repository == '0xFarag/0xFarag' && (github.ref == 'refs/heads/authzledger-website' || github.ref == 'refs/tags/team-1.5.0.1')
     runs-on: ubuntu-24.04
+    outputs:
+      publish: ${{ steps.intent.outputs.publish }}
+      release_sha: ${{ steps.intent.outputs.release_sha }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
-      - name: Require the release tag to point at reviewed website history
+      - name: Bind publication to a reviewed tag or one explicit source commit
+        id: intent
+        shell: bash
         run: |
           test "$(cat packaging/team/VERSION)" = '1.5.0.1'
           git merge-base --is-ancestor "$GITHUB_SHA" origin/authzledger-website
+          release_sha="$(git rev-parse HEAD)"
+          publish=false
+          request=.github/team-release-request.json
           if [[ "$GITHUB_REF_TYPE" == tag ]]; then
-            test "$(git rev-parse "$GITHUB_REF^{}")" = "$(git rev-parse HEAD)"
+            test "$(git rev-parse "$GITHUB_REF^{}")" = "$release_sha"
+            publish=true
+          elif [[ -f "$request" ]] && [[ "$(git diff --name-only HEAD^ HEAD)" == "$request" ]]; then
+            jq -e 'type == "object" and (keys == ["source_commit","tag"]) and .tag == "team-1.5.0.1" and (.source_commit | type == "string" and test("^[a-f0-9]{40}$"))' "$request" >/dev/null
+            requested_sha="$(jq -er .source_commit "$request")"
+            test "$requested_sha" = "$(git rev-parse HEAD^)"
+            release_sha="$requested_sha"
+            publish=true
           fi
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+          echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
@@ -47,6 +66,11 @@ jobs:
           python -m pip install --only-binary=:all: -r team/requirements.txt
           python -m unittest discover -s qa -p 'test_team*.py' -v
           PYTHONPATH=. python packaging/team/launcher.py --self-test
+      - name: Exercise the Team workspace in Chromium
+        run: |
+          npm install --prefix qa --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          node qa/node_modules/playwright/cli.js install --with-deps chromium
+          node --test qa/team-ui.cjs
 
   linux:
     needs: source
@@ -55,7 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ needs.source.outputs.release_sha }}
           persist-credentials: false
       - name: Create and verify source and Debian packages
         run: |
@@ -122,7 +146,7 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ needs.source.outputs.release_sha }}
           persist-credentials: false
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
@@ -141,16 +165,49 @@ jobs:
           compression-level: 0
           retention-days: 14
 
+  site-check:
+    needs: source
+    if: needs.source.outputs.publish == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    permissions:
+      actions: read
+    steps:
+      - name: Wait for the matching website verification run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ needs.source.outputs.release_sha }}
+        shell: bash
+        run: |
+          for attempt in {1..90}; do
+            state=
+            for revision in "$RELEASE_SHA" "$GITHUB_SHA"; do
+              response="$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/site-browser.yml/runs?head_sha=$revision&branch=authzledger-website&event=push&per_page=10")"
+              state="$(jq -r '(.workflow_runs | sort_by(.run_number, .run_attempt) | last) as $r | if $r == null then "" elif $r.status == "completed" then $r.conclusion else "pending" end' <<<"$response")"
+              if [[ -n "$state" ]]; then break; fi
+            done
+            case "$state" in
+              success) exit 0 ;;
+              ''|pending) sleep 20 ;;
+              *) echo "Website CI failed for $revision: $state" >&2; exit 1 ;;
+            esac
+          done
+          echo 'Timed out waiting for matching website CI.' >&2
+          exit 1
+
   publish:
-    if: github.ref == 'refs/tags/team-1.5.0.1'
-    needs: [linux, windows]
+    if: needs.source.outputs.publish == 'true'
+    needs: [source, linux, windows, site-check]
+    concurrency:
+      group: publish-authzledger-team-1.5.0.1
+      cancel-in-progress: false
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ needs.source.outputs.release_sha }}
           persist-credentials: false
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
@@ -160,23 +217,74 @@ jobs:
       - name: Verify the complete inventory and create the dedicated release
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ needs.source.outputs.release_sha }}
+        shell: bash
         run: |
           python3 scripts/build-team-release.py verify --output release
           (cd release && sha256sum --check --strict SHA256SUMS)
           tag=team-1.5.0.1
           title='AuthzLedger Team 1.5.0.1'
-          commit="$(git rev-parse HEAD)"
+          commit="$RELEASE_SHA"
           marker="Build commit: $commit"
-          if gh release view "$tag" --json body,isDraft > "$RUNNER_TEMP/release-state.json" 2>/dev/null; then
-            jq -e --arg marker "$marker" '.body | contains($marker)' "$RUNNER_TEMP/release-state.json"
-            if jq -e '.isDraft == false' "$RUNNER_TEMP/release-state.json"; then
-              gh release view "$tag" --json assets --jq '.assets[].name' | sort > "$RUNNER_TEMP/published"
-              find release -type f -printf '%f\n' | sort | diff - "$RUNNER_TEMP/published"
+          manifest_sha="$(sha256sum release/SHA256SUMS | cut -d' ' -f1)"
+          manifest_marker="SHA256SUMS: $manifest_sha"
+          test "$commit" = "$(git rev-parse HEAD)"
+
+          # Create an immutable lightweight tag only if it does not exist.
+          # If the tag is already present, resolve its commit and require an exact match.
+          ref_path="repos/$GITHUB_REPOSITORY/git/ref/tags/$tag"
+          if ! gh api "$ref_path" > "$RUNNER_TEMP/tag.json" 2>/dev/null; then
+            gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/tags/$tag" -f sha="$commit" >/dev/null
+            gh api "$ref_path" > "$RUNNER_TEMP/tag.json"
+          fi
+          ref_type="$(jq -er .object.type "$RUNNER_TEMP/tag.json")"
+          ref_sha="$(jq -er .object.sha "$RUNNER_TEMP/tag.json")"
+          if [[ "$ref_type" == tag ]]; then
+            gh api "repos/$GITHUB_REPOSITORY/git/tags/$ref_sha" > "$RUNNER_TEMP/annotated.json"
+            ref_type="$(jq -er .object.type "$RUNNER_TEMP/annotated.json")"
+            ref_sha="$(jq -er .object.sha "$RUNNER_TEMP/annotated.json")"
+          fi
+          test "$ref_type" = commit && test "$ref_sha" = "$commit"
+
+          if gh release view "$tag" --json body,isDraft,assets > "$RUNNER_TEMP/prior.json" 2>/dev/null; then
+            jq -er .body "$RUNNER_TEMP/prior.json" > "$RUNNER_TEMP/notes"
+            grep -Fqx "$marker" "$RUNNER_TEMP/notes"
+            mkdir "$RUNNER_TEMP/prior"
+            if jq -e '.assets | length > 0' "$RUNNER_TEMP/prior.json" >/dev/null; then
+              gh release download "$tag" --dir "$RUNNER_TEMP/prior"
+            fi
+            if jq -e '.isDraft == false' "$RUNNER_TEMP/prior.json" >/dev/null; then
+              (cd release && find . -maxdepth 1 -type f -printf '%f\n' | sort) > "$RUNNER_TEMP/expected"
+              (cd "$RUNNER_TEMP/prior" && find . -maxdepth 1 -type f -printf '%f\n' | sort) | diff - "$RUNNER_TEMP/expected"
+              prior_sha="$(sha256sum "$RUNNER_TEMP/prior/SHA256SUMS" | cut -d' ' -f1)"
+              grep -Fqx "SHA256SUMS: $prior_sha" "$RUNNER_TEMP/notes"
+              # Recompute the manifest from the actual published files before accepting a retry.
+              cp "$RUNNER_TEMP/prior/SHA256SUMS" "$RUNNER_TEMP/published-checksums"
+              python3 scripts/build-team-release.py verify --output "$RUNNER_TEMP/prior"
+              cmp "$RUNNER_TEMP/prior/SHA256SUMS" "$RUNNER_TEMP/published-checksums"
               exit 0
             fi
+            grep -Fqx "$manifest_marker" "$RUNNER_TEMP/notes"
+            for prior in "$RUNNER_TEMP"/prior/*; do
+              [[ -e "$prior" ]] || continue
+              name="$(basename "$prior")"
+              test -f "release/$name"
+              cmp "$prior" "release/$name"
+            done
           else
-            { cat packaging/team/README.md; echo; echo "$marker"; } > "$RUNNER_TEMP/release.md"
-            gh release create "$tag" --draft --verify-tag --target "$commit" --title "$title" --notes-file "$RUNNER_TEMP/release.md"
+            { cat packaging/team/README.md; echo; echo "$marker"; echo "$manifest_marker"; } > "$RUNNER_TEMP/notes"
+            gh release create "$tag" --draft --verify-tag --target "$commit" --title "$title" --notes-file "$RUNNER_TEMP/notes"
+            mkdir "$RUNNER_TEMP/prior"
           fi
-          gh release upload "$tag" release/* --clobber
+          for asset in release/*; do
+            if [[ ! -f "$RUNNER_TEMP/prior/$(basename "$asset")" ]]; then
+              gh release upload "$tag" "$asset"
+            fi
+          done
+          mkdir "$RUNNER_TEMP/upload-check"
+          gh release download "$tag" --dir "$RUNNER_TEMP/upload-check"
+          cmp release/SHA256SUMS "$RUNNER_TEMP/upload-check/SHA256SUMS"
+          (cd "$RUNNER_TEMP/upload-check" && sha256sum --check --strict SHA256SUMS)
+          python3 scripts/build-team-release.py verify --output "$RUNNER_TEMP/upload-check"
+          cmp release/SHA256SUMS "$RUNNER_TEMP/upload-check/SHA256SUMS"
           gh release edit "$tag" --draft=false --latest=false

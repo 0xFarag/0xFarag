@@ -26,3 +26,8 @@ install_file('public/assets/authzledger-logo.png', 'usr/share/icons/hicolor/256x
 install_file('LICENSE','usr/share/licenses/authzledger-team/LICENSE')
 install_file('NOTICE.txt','usr/share/licenses/authzledger-team/NOTICE.txt')
 install_file('packaging/team/README.md','usr/share/doc/authzledger-team/README.md')
+for name in ['LICENSE', 'NOTICE.txt']:
+    install_file(name, 'usr/lib/authzledger-team/legal/' + name)
+    install_file(name, 'usr/share/doc/authzledger-team/' + name)
+install_file('packaging/team/THIRD-PARTY.md', 'usr/lib/authzledger-team/legal/THIRD-PARTY.md')
+install_file('packaging/team/THIRD-PARTY.md', 'usr/share/doc/authzledger-team/THIRD-PARTY.md')

@@ -90,9 +90,14 @@ def windows(output):
         directory = Path(tmp)
         src = directory / 'src'
         stage(src)
+        legal = directory / 'legal'
+        legal.mkdir()
+        for source in [src / 'LICENSE', src / 'NOTICE.txt', src / 'packaging/team/THIRD-PARTY.md']:
+            shutil.copyfile(source, legal / source.name)
+        subprocess.run([sys.executable, str(src / 'packaging/team/collect_notices.py'), str(legal / 'third-party'), '--windows'], check=True)
         subprocess.run([sys.executable, '-m', 'PyInstaller', '--clean', '--noconfirm', '--onefile', '--windowed',
             '--name', FILES[0][:-4], '--icon', str(src / 'packaging/team/authzledger-team.ico'),
-            '--paths', str(src), '--add-data', f'{src / "team/static"};team/static',
+            '--paths', str(src), '--add-data', f'{src / "team/static"};team/static', '--add-data', f'{legal};legal',
             '--workpath', str(directory / 'work'), '--specpath', str(directory / 'spec'),
             '--distpath', str(output), str(src / 'packaging/team/launcher.py')], check=True)
     for flag in ['--self-test', '--gui-self-test']:

@@ -6,6 +6,8 @@ Team ist ein separat versionierter Arbeitsbereich für die gemeinsame defensive 
 
 Die Release-Seite führt für jede Datei einen SHA-256-Wert in `SHA256SUMS`. Unter Linux können Sie alle heruntergeladenen Pakete mit `sha256sum --ignore-missing -c SHA256SUMS` prüfen. Unter Windows berechnet `Get-FileHash .\AuthzLedger-Team-1.5.0.1-Windows-x64.exe -Algorithm SHA256` die Prüfsumme. Diese Prüfsummen dienen dem Abgleich mit der Veröffentlichung. Der Windows-Build enthält keine kommerzielle Authenticode-Signatur.
 
+Die mitgelieferten Drittanbieterhinweise stehen unter `THIRD-PARTY.md`. Im Windows- und Linux-Startfenster öffnet «Lizenz und Drittanbieterhinweise» die für das jeweilige Paket bereitgestellten Texte.
+
 ## Windows x64
 
 Starten Sie `AuthzLedger-Team-1.5.0.1-Windows-x64.exe`. Das Desktopfenster führt beim ersten Start durch die Einrichtung des Administratorkontos. Anschliessend öffnet es den Arbeitsbereich in Ihrem Standardbrowser. Solange das Fenster geöffnet bleibt, läuft der Dienst auf einer privaten Loopback-Adresse. Schliessen Sie das Fenster, um ihn zu beenden.

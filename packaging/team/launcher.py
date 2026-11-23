@@ -37,6 +37,7 @@ def self_test():
 
 LANGUAGES = {'de': 'Deutsch', 'en': 'English', 'fr': 'Français', 'it': 'Italiano', 'ar': 'العربية'}
 DESKTOP_TEXT = {
+    "licence": ["Lizenz und Drittanbieterhinweise", "Licence and third-party notices", "Licence et avis de tiers", "Licenza e avvisi di terzi", "الرخصة وإشعارات الأطراف الثالثة"],
     "tagline": [
         "Privater Arbeitsbereich auf diesem Gerät",
         "Private workspace on this device",
@@ -116,6 +117,41 @@ DESKTOP_TEXT = {
     ]
 }
 
+def legal_files():
+    installed = Path(__file__).resolve().parent / 'legal'
+    if installed.is_dir():
+        return {p.relative_to(installed).as_posix(): p for p in sorted(installed.rglob('*')) if p.is_file()}
+    source_root = Path(__file__).resolve().parents[2]
+    return {p.name: p for p in (source_root / 'LICENSE', source_root / 'NOTICE.txt',
+                                source_root / 'packaging/team/THIRD-PARTY.md') if p.is_file()}
+
+
+def show_notices(root, files, title):
+    import tkinter as tk
+    from tkinter import ttk
+    view = tk.Toplevel(root)
+    view.title('AuthzLedger Team · ' + title)
+    view.geometry('760x500')
+    frame = ttk.Frame(view, padding=12)
+    frame.pack(expand=True, fill='both')
+    pick = ttk.Combobox(frame, state='readonly', values=list(files), width=70)
+    pick.pack(fill='x', pady=(0, 8))
+    body = tk.Text(frame, wrap='word', width=85, height=22)
+    body.pack(side='left', fill='both', expand=True)
+    scroll = ttk.Scrollbar(frame, orient='vertical', command=body.yview)
+    scroll.pack(side='right', fill='y')
+    body.configure(yscrollcommand=scroll.set)
+
+    def read_file(_event=None):
+        body.configure(state='normal')
+        body.delete('1.0', 'end')
+        body.insert('end', files[pick.get()].read_text(encoding='utf-8', errors='replace'))
+        body.configure(state='disabled')
+    pick.bind('<<ComboboxSelected>>', read_file)
+    pick.current(0)
+    read_file()
+
+
 def launch(directory, test_window=False):
     import tkinter as tk
     from tkinter import messagebox, simpledialog, ttk
@@ -192,10 +228,17 @@ def launch(directory, test_window=False):
     address.insert(0, url)
     address.configure(state='readonly')
     address.pack(anchor='w',pady=(10, 0))
+    notices = legal_files()
+    if notices:
+        ttk.Button(panel, text=tr('licence'), command=lambda: show_notices(root, notices, tr('licence'))).pack(anchor='w', pady=(10, 0))
     errors = []
     if test_window:
         def check_window():
             try:
+                if not {'LICENSE','NOTICE.txt','THIRD-PARTY.md'} <= notices.keys():
+                    raise RuntimeError('Packaged license or third-party notices are missing')
+                if getattr(sys, 'frozen', False) and 'third-party/INVENTORY.json' not in notices:
+                    raise RuntimeError('Packaged dependency license inventory is missing')
                 if not root.winfo_ismapped():
                     raise RuntimeError('The desktop window did not open')
                 with urllib.request.urlopen(url, timeout=10) as response:
