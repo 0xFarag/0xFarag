@@ -2,14 +2,15 @@
   "schema": "authzledger.adapter-support/v1",
   "baseline_commit": "03aea857e35358ddeb13d2a861b633e60c1ca873",
   "projection_format": "authzledger.demo-d.projection/v1",
-  "coverage": "Three offline federation readers in the patch. Other 1.5 import entry points use different contracts.",
+  "coverage": "Demo D covers Nmap XML, ffuf JSON and Nuclei JSONL. Its fixtures and golden projection cover these three profiles. Other readers are tested separately.",
   "reader_identity": "Matrix profile revision plus reader_source_sha256. At runtime the receipt carries logical source name and raw SHA-256; the envelope carries the projection format. No producer-version gate.",
   "reader_source": "authzledger/federation_offline.py",
-  "reader_source_sha256": "106b62b82bf57b48ef70d91dcfc2e54326a7e8248543af24a184a40006083cdd",
+  "reader_source_sha256": "dcde10c30db49fa8a84ded5f3fd057fd215bf41b507ddda6ea463ba58cb6df99",
+  "available_reader_profiles": ["feroxbuster", "ffuf", "gobuster", "nessus", "nikto", "nmap", "nuclei"],
   "shared_limits": {
     "input_bytes_total": 2097152, "input_bytes_per_source": 2097152,
     "records_per_source": 1000, "scope_services_min": 1, "scope_services_max": 32,
-    "scope_service_chars_max": 100, "distinct_profiles_max": 3,
+    "scope_service_chars_max": 100, "distinct_profiles_max": 7,
     "service_api_input_pairs_max": 12, "http_target_chars_max": 8192, "identifier_chars_max": 96
   },
   "shared_semantics": {

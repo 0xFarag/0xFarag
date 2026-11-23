@@ -1,4 +1,7 @@
 include LICENSE NOTICE.txt README.md INSTALL.md CHANGELOG.md SECURITY.md CONTRIBUTING.md docs/release-target-1.6.md
+include docs/tool-evidence.md docs/blue-evidence.md
+recursive-include fixtures/offline-tools *.xml *.nessus *.txt *.json *.jsonl
+recursive-include authzledger/rbac *.mjs
 recursive-include authzledger/web *.html *.css *.js *.json
 include authzledger/brand_logo.png
 recursive-include authzledger/fonts *.ttf *.txt

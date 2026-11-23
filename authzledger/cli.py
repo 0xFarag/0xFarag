@@ -55,9 +55,14 @@ def print_summary(report: dict) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    arguments = sys.argv[1:] if argv is None else argv
+    if arguments[:1] == ["rbac"]:
+        from .rbac_cli import run as run_rbac
+        return run_rbac(arguments[1:])
     parser = argparse.ArgumentParser(prog="authzledger", description="Turn API authorization findings into repeatable checks.")
     parser.add_argument("--version", action="version", version=f"AuthzLedger {__version__}")
     commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("rbac", help="Evaluate Kubernetes role grants and compare saved evidence offline (Node.js 22+)")
     init = commands.add_parser("init", help="Create owner/other controls and a cross-user contract to adapt to your API")
     init.add_argument("--target", required=True, help="Exact authorized HTTP(S) origin")
     init.add_argument("--out", type=Path, default=Path("authorization.json"))

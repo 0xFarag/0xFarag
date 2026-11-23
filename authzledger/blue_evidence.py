@@ -134,3 +134,37 @@ def correlate_retest(anchor_bytes: bytes, signal_bytes: bytes) -> dict:
         "window": {"from": expected["from_utc"], "until": expected["until_utc"]},
         "source_retest_status": coverage[context["finding"]], "source_coverage": coverage, "samples": samples,
     }
+
+
+def summarize_telemetry(raw: bytes) -> dict:
+    """Summarize operator-normalized defensive observations in a saved export."""
+    if type(raw) is not bytes or not 0 < len(raw) <= MAX_BYTES:
+        raise ValueError("Choose one JSON export up to 512 KiB.")
+    report = parse_json(raw)
+    if (set(report) != {"schema", "source", "events"}
+            or report["schema"] != "authzledger.defensive-telemetry.v1" or report["source"] != "cobalt-strike"):
+        raise ValueError("Expected the AuthzLedger normalized defensive telemetry profile.")
+    totals = dict.fromkeys(("detection", "containment", "review"), 0)
+    events = []
+    seen = set()
+    for index, event in enumerate(_rows(report["events"])):
+        if not isinstance(event, dict) or set(event) != {"record_id", "asset", "observed_at", "event_type"}:
+            raise ValueError("Each event requires only record_id, asset, observed_at and event_type.")
+        record, asset, at, kind = (event[key] for key in ("record_id", "asset", "observed_at", "event_type"))
+        for field in (record, asset):
+            if not isinstance(field, str) or not 0 < len(field) <= 255 or any(not c.isprintable() or c.isspace() for c in field):
+                raise ValueError("Invalid telemetry identifier.")
+        if record in seen:
+            raise ValueError("The source contains a duplicate record ID.")
+        if (not isinstance(at, str) or not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{3})?Z", at)
+                or not isinstance(kind, str) or kind not in totals):
+            raise ValueError("Invalid telemetry timestamp or event type.")
+        _instant(at)
+        seen.add(record)
+        totals[kind] += 1
+        events.append({"locator": f"/events/{index}", "type": kind, "at": at,
+                       "asset_digest": sha256(("asset:" + asset).encode()).hexdigest(),
+                       "record_digest": sha256(("record:" + record).encode()).hexdigest()})
+    return {"schema": "authzledger.telemetry-summary.v1", "rights": RIGHTS, "signed": False,
+            "source": report["source"], "source_assertions_verified": False,
+            "source_sha256": sha256(raw).hexdigest(), "counts": totals, "events": events}

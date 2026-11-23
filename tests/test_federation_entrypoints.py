@@ -103,6 +103,25 @@ class FederationEntrypointTests(unittest.TestCase):
         self.assertEqual(len(artifacts), 1)
         self.assertNotIn('private-case-path', json.dumps(artifacts))
 
+    def test_saved_scanner_and_normalized_telemetry_routes(self):
+        directory = Path(__file__).resolve().parents[1] / "fixtures" / "offline-tools"
+        files = {"nikto": "nikto.xml", "nessus": "nessus.nessus", "gobuster": "gobuster.txt",
+                 "feroxbuster": "feroxbuster.jsonl"}
+        sources = {profile: base64.b64encode((directory / name).read_bytes()).decode()
+                   for profile, name in files.items()}
+        status, projection = self.request({"allowed_services": ["tcp://192.0.2.10:443"], "sources": sources})
+        self.assertEqual(status, 200, projection)
+        self.assertEqual(len(projection["graph"]["observations"]), 4)
+        self.assertFalse(projection["graph"]["findings"])
+        raw = (directory / "telemetry.json").read_bytes()
+        body = {"source_b64": base64.b64encode(raw).decode()}
+        self.assertNotEqual(self.request(body, False, "telemetry-summary")[0], 200)
+        status, summary = self.request(body, operation="telemetry-summary")
+        self.assertEqual(status, 200, summary)
+        self.assertEqual(summary["source_sha256"], hashlib.sha256(raw).hexdigest())
+        self.assertFalse(summary["signed"])
+        self.assertEqual(self.request({"source_b64": "???"}, operation="telemetry-summary")[0], 400)
+
     def test_foreign_paths_and_unexpected_browser_fields_rejected(self):
         for sources in ({'shell': 'x'}, {'ffuf': '*not-base64*'}, {}, {'ffuf': {'path': '/tmp/private'}}):
             with self.subTest(sources=sources):

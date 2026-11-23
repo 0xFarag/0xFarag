@@ -1,4 +1,4 @@
-"""Read-only, bounded federation view of three local export profiles.
+"""Read-only, bounded federation view of local export profiles.
 
 The input scope selects literal TCP services solely for the view. This API has
 no transport, resolver, command launcher, workspace writer or proof evaluator.
@@ -19,7 +19,9 @@ from .model import _path
 MAX_TOTAL_BYTES = 2 * 1024 * 1024
 MAX_SOURCE_BYTES = MAX_TOTAL_BYTES
 PROJECTION_FORMAT = 'authzledger.demo-d.projection/v1'
-SOURCE_NAMES = {'nmap': 'nmap.xml', 'ffuf': 'ffuf.json', 'nuclei': 'nuclei.jsonl'}
+SOURCE_NAMES = {'nmap': 'nmap.xml', 'ffuf': 'ffuf.json', 'nuclei': 'nuclei.jsonl',
+                'nikto': 'nikto.xml', 'nessus': 'nessus.xml', 'gobuster': 'gobuster.txt',
+                'feroxbuster': 'feroxbuster.jsonl'}
 PORT_STATES = {'open', 'closed', 'filtered', 'unfiltered', 'open|filtered', 'closed|filtered', 'unknown'}
 SEVERITIES = {'info', 'low', 'medium', 'high', 'critical', 'unknown'}
 IDENTIFIER = re.compile(r'[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}')
@@ -262,7 +264,7 @@ def _nuclei_entries(raw):
 
 
 def project_federation(allowed_services, sources):
-    """Project bytes from up to three source families into one offline view.
+    """Project bytes from supported source families into one offline view.
 
     Supply a list of canonical tcp://IP:port services and (profile, bytes)
     pairs. Repeat submissions of the same bytes are idempotent. A second
@@ -292,7 +294,10 @@ def project_federation(allowed_services, sources):
     services, endpoints = {}, {}
     observations, receipts = [], []
     finding_records = {}
-    parsers = {'nmap': _nmap_entries, 'ffuf': _ffuf_entries, 'nuclei': _nuclei_entries}
+    from .federation_scanners import feroxbuster_entries, gobuster_entries, nessus_entries, nikto_entries
+    parsers = {'nmap': _nmap_entries, 'ffuf': _ffuf_entries, 'nuclei': _nuclei_entries,
+               'nikto': nikto_entries, 'nessus': nessus_entries, 'gobuster': gobuster_entries,
+               'feroxbuster': feroxbuster_entries}
     for profile, parse in parsers.items():
         if profile not in inputs:
             continue

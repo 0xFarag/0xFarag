@@ -29,4 +29,4 @@ Issues = "https://github.com/0xFarag/0xFarag/issues"
 packages = ["authzledger"]
 
 [tool.setuptools.package-data]
-authzledger = ["brand_logo.png", "web/*.html", "web/*.css", "web/*.js", "web/*.json", "fonts/*.ttf", "fonts/*.txt"]
+authzledger = ["brand_logo.png", "rbac/*.mjs", "web/*.html", "web/*.css", "web/*.js", "web/*.json", "fonts/*.ttf", "fonts/*.txt"]

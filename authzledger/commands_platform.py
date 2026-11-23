@@ -13,16 +13,20 @@ def add_commands(actions):
     blue.add_argument("anchor", type=Path)
     blue.add_argument("signals", type=Path)
     blue.add_argument("--out", type=Path, help="New JSON file; stdout when omitted")
+    telemetry = actions.add_parser("telemetry-summary", help="Summarize saved, normalized defensive event records offline")
+    telemetry.add_argument("source", type=Path)
+    telemetry.add_argument("--out", type=Path, help="New JSON file; stdout when omitted")
     index = actions.add_parser("federation-index", help="Inspect surface provenance from a frozen assessment snapshot offline")
     index.add_argument("snapshot", type=Path, help="Frozen platform snapshot JSON from assessment freeze")
     index.add_argument("--out", type=Path, help="New index JSON file; stdout when omitted")
     preview = actions.add_parser("federation-preview", help="Compare local tool exports in one offline inventory projection")
     retain = actions.add_parser("federation-retain", help="Retain a reviewed federation receipt on an existing assessment")
+    from .federation_offline import SOURCE_NAMES
     for command in (preview, retain):
         command.add_argument("--scope-service", dest="allowed_services", action="append", required=True,
                              help="Exact TCP service with a literal IP and port, e.g. tcp://192.0.2.10:443 (repeatable)")
-        for profile, label in (("nmap", "Nmap XML"), ("ffuf", "ffuf JSON"), ("nuclei", "Nuclei JSONL")):
-            command.add_argument("--" + profile, type=Path, action="append", metavar="FILE", help=label + " export (one file)")
+        for profile, filename in SOURCE_NAMES.items():
+            command.add_argument("--" + profile, type=Path, action="append", metavar="FILE", help="Saved " + filename + " export (one file)")
         command.add_argument("--out", type=Path, help="New JSON file; stdout when omitted")
     retain.add_argument("assessment_id")
     retain.add_argument("--store", required=True, type=Path, help="Existing assessment store")
@@ -93,11 +97,11 @@ def add_commands(actions):
 
 
 def _federation_sources(args):
-    from .federation_offline import MAX_TOTAL_BYTES
+    from .federation_offline import MAX_TOTAL_BYTES, SOURCE_NAMES
     from .model import ContractError
     sources = []
     remaining = MAX_TOTAL_BYTES
-    for profile in ("nmap", "ffuf", "nuclei"):
+    for profile in SOURCE_NAMES:
         paths = getattr(args, profile)
         if paths is None:
             continue
@@ -114,20 +118,21 @@ def _federation_sources(args):
 
 def execute_command(args):
     action = args.assessment_action
-    if action not in _ACTIONS and action not in {"blue-evidence", "federation-index", "federation-preview", "federation-retain"}:
+    if action not in _ACTIONS and action not in {"blue-evidence", "telemetry-summary", "federation-index", "federation-preview", "federation-retain"}:
         return None
     from .commands_assessment import _read, _write
     if args.out is not None and args.out.exists():
         raise ValueError("Output already exists")
-    if action == "blue-evidence":
-        from .blue_evidence import MAX_BYTES, correlate_retest
+    if action in {"blue-evidence", "telemetry-summary"}:
+        from .blue_evidence import MAX_BYTES, correlate_retest, summarize_telemetry
         inputs = []
-        for path in (args.anchor, args.signals):
+        paths = (args.source,) if action == "telemetry-summary" else (args.anchor, args.signals)
+        for path in paths:
             if not path.is_file():
                 raise ValueError("Choose a regular local JSON file.")
             with path.open("rb") as stream:
                 inputs.append(stream.read(MAX_BYTES + 1))
-        result = correlate_retest(*inputs)
+        result = summarize_telemetry(inputs[0]) if action == "telemetry-summary" else correlate_retest(*inputs)
     elif action == "federation-index":
         from .federation_index import build_surface_index
         result = build_surface_index(_read(args.snapshot))

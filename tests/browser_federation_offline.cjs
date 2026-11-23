@@ -95,6 +95,16 @@ async function run() {
     await page.waitForFunction(() => document.getElementById('p-federation-status').textContent.includes('Retained federation receipt'));
     assert(await page.locator('#p-federation-retain').isDisabled());
     assert.equal(await page.evaluate(() => platform.record.artifacts.filter(a => a.kind === 'federation-receipt').length), 1);
+    const profileFiles = {nikto: 'nikto.xml', nessus: 'nessus.nessus', gobuster: 'gobuster.txt', feroxbuster: 'feroxbuster.jsonl'};
+    for (const [profile, name] of Object.entries(profileFiles)) {
+      await page.locator('#p-fed-' + profile).setInputFiles(path.resolve(__dirname, '../fixtures/offline-tools', name));
+    }
+    await press('#p-federation-preview');
+    await page.waitForFunction(() => !document.getElementById('p-federation-consent').disabled);
+    assert.match(await page.locator('#p-federation-status').innerText(), /4 sources · 1 asset · 1 endpoint · 4 observations · 1 excluded record/);
+    await page.locator('#p-federation-consent').check();
+    await press('#p-federation-retain');
+    await page.waitForFunction(() => platform.record.artifacts.filter(a => a.kind === 'federation-receipt').length === 2);
     assert.deepEqual(errors, []); assert.deepEqual(foreign, []);
     if (process.env.AUTHZ_FEDERATION_PROJECTION_OUT) await fs.writeFile(process.env.AUTHZ_FEDERATION_PROJECTION_OUT, output, {flag: 'wx'});
     console.log(JSON.stringify({scenario: 'Studio offline federation', sources: projection.receipts.length,

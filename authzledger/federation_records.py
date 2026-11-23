@@ -18,11 +18,19 @@ from .scope import _address_allowed
 KIND = 'federation-receipt'
 _DIGEST = re.compile(r'[a-f0-9]{64}')
 _LOCATORS = {
+    'nikto': re.compile(r'scan:([1-9][0-9]{0,6})/details:([1-9][0-9]{0,6})/item:([1-9][0-9]{0,6})'),
+    'nessus': re.compile(r'report:([1-9][0-9]{0,6})/host:([1-9][0-9]{0,6})/item:([1-9][0-9]{0,6})'),
+    'feroxbuster': re.compile(r'line:([1-9][0-9]{0,6})'),
+    'gobuster': re.compile(r'line:([1-9][0-9]{0,6})'),
     'ffuf': re.compile(r'/results/(0|[1-9][0-9]{0,6})'),
     'nuclei': re.compile(r'line:([1-9][0-9]{0,6})'),
     'nmap': re.compile(r'/nmaprun/host\[([1-9][0-9]{0,6})\]/ports/port\[([1-9][0-9]{0,6})\]'),
 }
 _DISPOSITIONS = {
+    'feroxbuster': {'accepted', 'out_of_scope', 'unresolved_scope', 'unsupported_target', 'source_metadata', 'unsupported_request_context'},
+    'nikto': {'accepted', 'out_of_scope', 'unresolved_scope'},
+    'nessus': {'accepted', 'out_of_scope', 'unresolved_scope', 'unsupported_protocol', 'unsupported_target'},
+    'gobuster': {'accepted', 'out_of_scope', 'unresolved_scope', 'unsupported_target'},
     'ffuf': {'accepted', 'out_of_scope', 'unresolved_scope', 'unsupported_target', 'unsupported_request_context'},
     'nmap': {'accepted', 'out_of_scope', 'unresolved_scope', 'unsupported_protocol'},
     'nuclei': {'accepted', 'out_of_scope', 'unresolved_scope', 'unsupported_protocol',
@@ -73,7 +81,7 @@ def check_assessment_scope(scope, services):
 def _details(profile, fields):
     result = dict(fields)
     names = {'nmap': ('reason', 'name'), 'ffuf': (), 'nuclei': ('template_id', 'matcher')}
-    for name in names[profile]:
+    for name in names.get(profile, ()):
         result[name + '_digest'] = _opaque(name, result.pop(name))
     return result
 
@@ -104,8 +112,19 @@ def _source_rows(projection):
 
 
 def _check_details(profile, data):
-    if profile == 'ffuf':
+    if profile == 'nikto':
+        _shape(data, ['item_id'])
+        _require(isinstance(data['item_id'], str) and re.fullmatch(r'[0-9]{1,12}', data['item_id']))
+    elif profile == 'nessus':
+        _shape(data, ['plugin_id', 'source_severity'])
+        _require(_bounded_int(data['plugin_id'], 1, 999999999) and _bounded_int(data['source_severity'], 0, 4))
+    elif profile == 'gobuster':
+        _shape(data, ['status', 'length'])
+        _require(_bounded_int(data['status'], 100, 599) and
+                 (data['length'] is None or _bounded_int(data['length'], 0, 2**53-1)))
+    elif profile in {'ffuf', 'feroxbuster'}:
         _shape(data, ['status', 'length', 'method'])
+        _require(profile != 'feroxbuster' or data['method'] is not None)
         _require(_bounded_int(data['status'], 100, 599) and _choice(data['method'], {None, 'GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'})
                  and (data['length'] is None or _bounded_int(data['length'], 0, 2**53-1)))
     elif profile == 'nmap':
@@ -150,7 +169,7 @@ def _catalog(sources, allowed):
                 omitted += 1
                 continue
             names = ['locator', 'disposition', 'service', 'asserted']
-            if profile != 'nmap':
+            if profile in {'ffuf', 'nuclei', 'gobuster', 'feroxbuster'}:
                 names += ['scheme', 'path_digest']
             _shape(row, names)
             _require(isinstance(row['service'], str) and row['service'] in allowed,
@@ -158,7 +177,7 @@ def _catalog(sources, allowed):
             _check_details(profile, row['asserted'])
             service_set.add(row['service'])
             accepted += 1
-            if profile != 'nmap':
+            if profile in {'ffuf', 'nuclei', 'gobuster', 'feroxbuster'}:
                 _hash(row['path_digest'])
                 _require(_choice(row['scheme'], {'http', 'https'}))
                 ref = {k: row[k] for k in ('service', 'scheme', 'path_digest')}
