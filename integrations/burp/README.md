@@ -4,7 +4,7 @@ Die Java-Erweiterung exportiert die in **Proxy → HTTP history** markierten HTT
 
 ## Installation und Export
 
-1. In Burp unter **Extensions → Installed → Add** den Typ **Java** wählen und die Release-Datei `AuthzLedger-Burp-Export-1.5.0.4.jar` laden. Ein lokaler Build heisst `authzledger-burp-export.jar`. Der Name in der Liste lautet **AuthzLedger Evidence Export**. Der Burp-Java-Prozess braucht Java 21 oder neuer und eine Montoya-API mit den Funktionen von 2025.3.
+1. In Burp unter **Extensions → Installed → Add** den Typ **Java** wählen und die Release-Datei `AuthzLedger-Burp-Export-1.5.0.5.jar` laden. Ein lokaler Build heisst `authzledger-burp-export.jar`. Der Name in der Liste lautet **AuthzLedger Evidence Export**. Der Burp-Java-Prozess braucht Java 21 oder neuer und eine Montoya-API mit den Funktionen von 2025.3.
 2. Im Burp-Projekt den Ziel-Scope des autorisierten Mandats konfigurieren. Eine oder mehrere vollständige Zeilen in **Proxy → HTTP history** markieren. Der Rechtsklick öffnet **Extensions → AuthzLedger Evidence Export → Export selected evidence to AuthzLedger…**. Abhängig von der Burp-Version kann das Menü direkt unter **Extensions** erscheinen.
 3. Einen neuen Dateinamen in einem geschützten Mandatsordner wählen und die Verarbeitung der Originaldaten bestätigen. Der Export arbeitet im Hintergrund. Eine Meldung zeigt den Abschluss oder den ersten Fehler mit Zeilennummer an.
 4. Im AuthzLedger-Team-Cockpit das Mandat wählen, beim Quellenimport **Burp Suite XML** einstellen und die XML-Datei öffnen. In der lokalen Stable-Workbench entspricht das Format dem Importprofil `burp-xml`.

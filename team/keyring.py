@@ -203,8 +203,9 @@ def _register(db, directory, key, generation, timestamp):
 
 def _initial(db, directory, pin, timestamp):
     primary = directory / SLOTS[0]
-    if os.path.lexists(directory / (SLOTS[0] + ".pub")) and not os.path.lexists(directory / BOOTSTRAP):
-        raise KeyStoreError("Installation signing history is missing; restore the matching backup")
+    if os.path.lexists(directory / (SLOTS[0] + ".pub")):
+        if not os.path.lexists(directory / BOOTSTRAP) or not os.path.lexists(primary):
+            raise KeyStoreError("Installation signing history is missing; restore the matching backup")
     if os.path.lexists(directory / (SLOTS[1] + ".pub")) or (not pin and os.path.lexists(directory / SLOTS[1])):
         raise KeyStoreError("Private signing slot exists without an installation trust anchor")
     if pin or os.path.lexists(primary):
@@ -234,6 +235,8 @@ def signer(db, data_dir, *, rotate=True):
     if not db.in_transaction:
         db.execute("BEGIN IMMEDIATE")
     try:
+        # Standalone Python callers can pass a new database as in the original signer API.
+        init_db(db)
         directory = _directory(data_dir)
         rows, pin = _history(db, directory)
         timestamp = unix_time()

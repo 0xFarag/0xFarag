@@ -33,8 +33,9 @@ class SigningHistory(unittest.TestCase):
         self.addCleanup(self.db.close)
         self.db.execute("PRAGMA journal_mode=WAL")
         evidence.init_db(self.db)
-        self.clock = patch.object(keyring, "unix_time", return_value=START).start()
-        self.addCleanup(patch.stopall)
+        clock_patch = patch.object(keyring, "unix_time", return_value=START)
+        self.clock = clock_patch.start()
+        self.addCleanup(clock_patch.stop)
         self.case = self.api("POST", ["cases"], {"title": "Evidence", "scope": "example.test"})["case"]
 
     def connect(self):
@@ -83,6 +84,29 @@ class SigningHistory(unittest.TestCase):
             self.assertTrue(self.api("POST", ["verify"], body)["valid"])
             self.assertFalse(self.api("POST", ["verify"], body, team="stranger")["valid"])
         self.assertFalse((self.root / keyring.SLOTS[1]).exists())
+
+    def test_standalone_signer_accepts_an_uninitialized_database(self):
+        with tempfile.TemporaryDirectory() as directory, closing(sqlite3.connect(":memory:")) as db, db:
+            key, descriptor = evidence.signer(db, directory)
+            self.assertEqual(keyring.key_descriptor(key.public_key()), descriptor)
+
+    def test_storage_failure_preserves_last_committed_key(self):
+        first = self.deliver()
+        keyring.prune_committed(self.db, self.root)
+        self.clock.return_value += keyring.PERIOD
+        save = keyring._store
+        def fail_before_publication(directory, name, raw):
+            if name.endswith(".pub"):
+                raise OSError("storage failure")
+            save(directory, name, raw)
+        with patch.object(keyring, "_store", side_effect=fail_before_publication):
+            with self.assertRaises(evidence.WorkflowError):
+                self.deliver()
+        self.assertEqual(self.api("GET", ["trust-key"])["fingerprint"], first["manifest"]["fingerprint"])
+        self.assertTrue(self.api("POST", ["verify"], {"package": first})["valid"])
+        retry = self.deliver()
+        self.assertNotEqual(retry["manifest"]["fingerprint"], first["manifest"]["fingerprint"])
+        self.assertTrue(self.api("POST", ["verify"], {"package": retry})["valid"])
 
     def test_legacy_pin_and_preexisting_handover(self):
         legacy = Ed25519PrivateKey.generate()
