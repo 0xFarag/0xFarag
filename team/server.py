@@ -142,7 +142,6 @@ def initialize(data_dir):
         db.execute('PRAGMA journal_mode=WAL')
         db.executescript(SCHEMA)
         evidence.init_db(db)
-        review_records.init_db(db)
 
 def needs_bootstrap(data_dir):
     initialize(data_dir)

@@ -11,3 +11,8 @@ main{min-height:65vh;padding-block:1.3rem 2rem}h1,h2,h3,p{margin:0 0 .65rem}h1{f
 #control-reviews dl{margin-block:.5rem}
 #control-reviews dt{font-weight:650}
 #control-reviews dd{margin-inline:0;overflow-wrap:anywhere}
+
+.evidence-index dl { margin: .6rem 0; }
+.evidence-index dt { font-weight: 650; }
+.evidence-index dd { margin: 0 0 .45rem; }
+.evidence-index code { unicode-bidi: isolate; overflow-wrap: anywhere; }

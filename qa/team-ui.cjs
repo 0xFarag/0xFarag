@@ -82,6 +82,15 @@ test('team GUI connects to the real server, reviews records and controls, signs 
   assert.equal(review.revisions[1].evidence.record,1);
   assert.equal(review.revisions[1].control_evidence.record,2);
   assert(!recordBytes.includes('PRIVATE-INPUT'));
+  const findingIndex = page.locator('#findings .evidence-index');
+  await findingIndex.locator('summary').click();
+  const slimDownload = page.waitForEvent('download'); await findingIndex.getByRole('button').click();
+  const slimBytes = await readFile(await (await slimDownload).path()), slim = JSON.parse(slimBytes);
+  assert.equal(slim.signed,false);
+  assert.equal(slim.schema,'authzledger.evidence-index/v1');
+  assert.deepEqual(slim.evidence_index.observations.map(x=>[x.role,x.record]),[['evidence',1],['control',2]]);
+  assert.deepEqual(slim.evidence_index.experiments[0].revisions.map(x=>x.sha256),review.revisions.map(x=>x.sha256));
+  assert(!slimBytes.includes('The saved observation'));
   await upload('retest.har',har('2025-02-01T00:00:00Z',403),2);
   await page.locator('#retest-tool summary').click();
   await set('retest-status','fix_verified'); await fill('retest-observed','denied');
@@ -96,9 +105,24 @@ test('team GUI connects to the real server, reviews records and controls, signs 
   const packageBytes = await readFile(await (await signed).path());
   const pkg = JSON.parse(packageBytes);
   assert.equal(pkg.report.language,'ar'); assert.equal(pkg.report.counts.fix_verified,1); assert(!packageBytes.includes('PRIVATE-INPUT'));
+  assert.deepEqual(pkg.report.appendix[0].evidence_index,slim.evidence_index);
+  assert(!packageBytes.includes('The saved observation'));
   await page.locator('#verify-file').setInputFiles({name:'signed.json',mimeType:'application/json',buffer:packageBytes});
   await submit('verify-form'); await page.locator('#verified-report').waitFor();
   assert.equal(await page.locator('#verified-report').getAttribute('dir'),'rtl');
+  const signedIndex = page.locator('#verified-report .evidence-index');
+  await page.locator('#verified-report > details > summary').click();
+  await signedIndex.locator('summary').click();
+  const attachReview = async bytes => signedIndex.locator('input[type=file]').setInputFiles({
+    name:'plan.json',mimeType:'application/json',buffer:bytes
+  });
+  const matchMessage = 'تطابق جميع المراجعات التسليم الموقّع.';
+  await attachReview(recordBytes);
+  await signedIndex.getByText(matchMessage,{exact:true}).waitFor();
+  const changedReview = structuredClone(review);
+  changedReview.revisions[1].observed += ' edited';
+  await attachReview(Buffer.from(JSON.stringify(changedReview)));
+  await signedIndex.getByText('خطة المراجعة المحددة لا تطابق هذا التسليم.',{exact:true}).waitFor();
   for (const fmt of ['html','pdf']) {
     await set('output-format',fmt);
     const nextDownload = page.waitForEvent('download');

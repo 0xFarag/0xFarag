@@ -11,12 +11,15 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 
+from .documents import INDEX_CAPTIONS
+
 RIGHTS = '© Nasser Aldin Farag (0xFarag). All rights reserved.'
 ASSETS = Path(__file__).resolve().parent / 'static' / 'pdf'
 FONT = 'AuthzReportSans'
 FONT_LOCK = Lock()
 LOCALES = ('de', 'en', 'fr', 'it', 'ar')
 CAPTIONS = {
+    **INDEX_CAPTIONS,
     'case': ('Fall-ID', 'Case ID', 'Dossier', 'ID caso', 'معرّف الحالة'),
     'team': ('Team-ID', 'Team ID', 'Équipe', 'ID team', 'معرّف الفريق'),
     'issued': ('Erstellt am', 'Issued at', 'Date du rapport', 'Data di emissione', 'تاريخ الإصدار'),
@@ -168,8 +171,13 @@ def render_pdf(report, manifest):
         layout.text(f"{item['status']} / {item['retest']}", 9, MUTED, technical=True)
         layout.pair(cap['finding'], item['id'])
         layout.pair(cap['original'], item['finding_sha256'])
-        for field in ('evidence', 'control', 'retest_evidence', 'retest_control'):
-            ref = item.get(field)
+        evidence_index = item.get('evidence_index')
+        if evidence_index is None:
+            baseline = [(field, item.get(field)) for field in ('evidence', 'control')]
+        else:
+            layout.section(cap['evidence_index'])
+            baseline = [(ref['role'], ref) for ref in evidence_index['observations']]
+        for field, ref in baseline + [(field, item.get(field)) for field in ('retest_evidence', 'retest_control')]:
             if ref is None:
                 continue
             layout.ensure(70)
@@ -177,8 +185,23 @@ def render_pdf(report, manifest):
             layout.pair(cap['record'], f"{ref['format']}  #{ref['record']}")
             layout.pair(cap['file'], ref['sha256'])
             layout.pair(cap['fingerprint'], ref['fingerprint'])
-            if ref.get('asset_id'):
-                layout.pair(cap['asset'], ref['asset_id'])
+            # The signed index deliberately omits asset IDs. Retain the source
+            # reference's asset binding in reports that also have the index.
+            source = item.get(field)
+            if source and source.get('asset_id'):
+                layout.pair(cap['asset'], source['asset_id'])
+        if evidence_index is not None:
+            if not evidence_index['experiments']:
+                layout.text(cap['no_experiment'])
+            for plan in evidence_index['experiments']:
+                layout.ensure(85)
+                layout.pair(cap['experiment'], plan['plan_id'])
+                for revision in plan['revisions']:
+                    layout.ensure(100)
+                    layout.pair(cap['revision'], revision['id'])
+                    layout.pair(cap['revision_digest'], revision['sha256'])
+                    if revision['parent_sha256'] is not None:
+                        layout.pair(cap['parent_digest'], revision['parent_sha256'])
         layout.y -= 8
     if manifest['sources']:
         layout.section(cap['sources'])

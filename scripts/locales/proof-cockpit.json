@@ -244,5 +244,53 @@
     "Format du document",
     "Formato del documento",
     "تنسيق المستند"
+  ],
+  "Signierter Belegindex": [
+    "Signed evidence index",
+    "Index signé des preuves",
+    "Indice firmato dei riscontri",
+    "فهرس الأدلة الموقّع"
+  ],
+  "Kein Experiment mit diesem Befund verknüpft.": [
+    "No experiment is linked to this finding.",
+    "Aucune expérience n’est liée à ce constat.",
+    "Nessun esperimento è collegato a questo riscontro.",
+    "لا توجد تجربة مرتبطة بهذه النتيجة."
+  ],
+  "Experimentrevisionen": [
+    "Experiment revisions",
+    "Révisions de l’expérience",
+    "Revisioni dell’esperimento",
+    "مراجعات التجربة"
+  ],
+  "Plan-ID": [
+    "Plan ID",
+    "Identifiant du plan",
+    "ID del piano",
+    "معرّف الخطة"
+  ],
+  "Revisions-ID": [
+    "Revision ID",
+    "Identifiant de la révision",
+    "ID della revisione",
+    "معرّف المراجعة"
+  ],
+  "Revisionsdigest": [
+    "Revision digest",
+    "Empreinte de la révision",
+    "Impronta della revisione",
+    "بصمة المراجعة"
+  ],
+  "Digest der Vorrevision": [
+    "Previous revision digest",
+    "Empreinte de la révision précédente",
+    "Impronta della revisione precedente",
+    "بصمة المراجعة السابقة"
+  ],
+  "Diese Übergabe enthält keinen signierten Belegindex.": [
+    "This handover contains no signed evidence index.",
+    "Cette remise ne contient aucun index signé des preuves.",
+    "Questa consegna non contiene un indice firmato dei riscontri.",
+    "لا يتضمّن هذا التسليم فهرس أدلة موقّعاً."
   ]
 }

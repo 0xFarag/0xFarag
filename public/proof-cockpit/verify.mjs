@@ -44,7 +44,49 @@ export async function sha256(bytes) {
   const value = await crypto.subtle.digest('SHA-256', bytes);
   return Array.from(new Uint8Array(value), n => n.toString(16).padStart(2,'0')).join('');
 }
+const evidenceIndexSchema = 'authzledger.evidence-index/v1';
+const identifier = value => typeof value === 'string' && /^[0-9a-f]{32}$/.test(value);
+const observationFields = ['format','sha256','record','fingerprint'];
+
+function hasFields(value, fields) {
+  return value && typeof value === 'object' && !Array.isArray(value) &&
+    Object.keys(value).length === fields.length && fields.every(field => Object.hasOwn(value,field));
+}
+
+function checkEvidenceIndex(row, seenRevisions, seenDigests) {
+  const index = row.evidence_index;
+  requireValue(hasFields(index,['observations','experiments']) && Array.isArray(index.observations));
+  requireValue((row.status === 'confirmed') === (row.control !== null));
+  const roles = row.status === 'confirmed' ? ['evidence','control'] : ['evidence'];
+  requireValue(index.observations.length === roles.length);
+  for (const [position,role] of roles.entries()) {
+    const item = index.observations[position];
+    const source = row[role];
+    requireValue(hasFields(item,['role',...observationFields]) && item.role === role &&
+      observationFields.every(field => item[field] === source[field]));
+  }
+  requireValue(Array.isArray(index.experiments) && index.experiments.length <= 256);
+  for (const experiment of index.experiments) {
+    requireValue(hasFields(experiment,['plan_id','revisions']) && identifier(experiment.plan_id));
+    const revisions = experiment.revisions;
+    requireValue(Array.isArray(revisions) && integer(revisions.length,1,256) &&
+      revisions[0].id === experiment.plan_id && seenRevisions.size + revisions.length <= 256);
+    let previous = null;
+    for (const revision of revisions) {
+      requireValue(hasFields(revision,['id','sha256','parent_sha256']) && identifier(revision.id) &&
+        digest(revision.sha256) && revision.parent_sha256 === previous &&
+        !seenRevisions.has(revision.id) && !seenDigests.has(revision.sha256));
+      seenRevisions.add(revision.id);
+      seenDigests.add(revision.sha256);
+      previous = revision.sha256;
+    }
+  }
+}
+
 function checkReport(manifest, report) {
+  const hasIndex = Object.hasOwn(report,'evidence_index_schema');
+  requireValue(!hasIndex || report.evidence_index_schema === evidenceIndexSchema);
+  const seenRevisions = new Set(), seenDigests = new Set();
   requireValue(Array.isArray(manifest.sources) && manifest.sources.length <= 32);
   requireValue(Array.isArray(manifest.retests) && manifest.retests.length <= 384);
   requireValue(Array.isArray(report.appendix) && report.appendix.length <= 128 && digest(report.scope_sha256));
@@ -76,6 +118,8 @@ function checkReport(manifest, report) {
     requireValue(['hint','confirmed'].includes(row.status) && retestStates.includes(row.retest));
     for (const ref of [row.evidence,row.control,row.retest_evidence,row.retest_control]) checkRef(ref);
     requireValue(row.evidence && (row.status === 'hint' || controls(row.evidence,row.control)));
+    requireValue(Object.hasOwn(row,'evidence_index') === hasIndex);
+    if (hasIndex) checkEvidenceIndex(row,seenRevisions,seenDigests);
     const test = latest.get(row.id);
     requireValue(row.retest === (test?.status ?? 'not_retested'));
     if (row.retest === 'not_retested') requireValue(row.retest_evidence === null && row.retest_control === null);

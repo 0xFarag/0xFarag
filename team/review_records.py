@@ -30,6 +30,40 @@ def read_record(serialized):
     return document
 
 
+def handover_experiments(db, team, case, findings):
+    """Publish only commitments to the revisions of experiments linked to findings."""
+    rows = db.execute(
+        'SELECT id, parent_id, document FROM case_control_reviews '
+        'WHERE team_id=? AND case_id=? ORDER BY rowid', (team, case))
+    by_plan = {}
+    linked = {}
+    for identifier, parent_id, serialized in rows:
+        row = read_record(serialized)
+        plan_id = row['plan_id']
+        chain = by_plan.setdefault(plan_id, [])
+        previous = chain[-1] if chain else None
+        valid_parent = (row['kind'] == 'review' and previous is not None
+                        and parent_id == previous['id'] and row['parent_sha256'] == previous['sha256'])
+        valid_root = (row['kind'] == 'plan' and not chain and identifier == plan_id
+                      and parent_id is None and row['parent_sha256'] is None)
+        evidence.require(row['id'] == identifier and row['parent_id'] == parent_id
+                         and row['team_id'] == team and row['case_id'] == case and (valid_root or valid_parent),
+                         'Stored experiment lineage differs', 409)
+        finding = row['finding']
+        if plan_id in linked:
+            evidence.require(finding == linked[plan_id], 'Stored experiment finding differs', 409)
+        if finding is not None:
+            evidence.require(finding['id'] in findings and finding['sha256'] == findings[finding['id']],
+                             'Stored experiment references a different finding', 409)
+            linked[plan_id] = finding
+        chain.append({key: row[key] for key in ('id', 'sha256', 'parent_sha256')})
+
+    result = {}
+    for plan_id, finding in linked.items():
+        result.setdefault(finding['id'], []).append({'plan_id': plan_id, 'revisions': by_plan[plan_id]})
+    return result
+
+
 def finding_reference(db, team, case, asset, identifier):
     if identifier is None:
         return None

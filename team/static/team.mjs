@@ -1,6 +1,7 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
 import {languages, messages} from './texts.mjs';
 import {createReviewPanel} from './review-record.mjs';
+import {indexPanel} from './evidence-index.mjs';
 
 const $ = id => document.getElementById(id);
 const roles = ['admin','lead_pentester','pentester','reviewer','read_only'];
@@ -20,11 +21,14 @@ let authenticating = false;
 const reviewPanel = createReviewPanel($('control-reviews'), {
   download, onError:explain, reload:() => selectCase(detail.case.id,false),
   async post(payload,requestId) {
-    const team = teamEpoch, id = detail.case.id;
-    const result = await request(casePath()+'/control-reviews','POST',{...payload,request_id:requestId});
-    if (team === teamEpoch && detail?.case.id === id) {
-      const existing = detail.control_reviews || [];
-      detail.control_reviews = [...existing.filter(row=>row.id !== result.record.id),result.record];
+    const team = teamEpoch, selected = caseEpoch, path = casePath();
+    const result = await request(path+'/control-reviews','POST',{...payload,request_id:requestId});
+    if (!scoped(team,selected)) return result;
+    // A newly linked revision also changes the minimal index on its finding.
+    const updated = await request(path);
+    if (scoped(team,selected)) {
+      detail = updated;
+      listItems('findings',updated.findings.map(finding => renderRecord(finding,'finding')));
     }
     return result;
   }
@@ -291,6 +295,12 @@ function renderRecord(item, kind) {
     const line = node('small'); line.className = 'user-text';
     line.append(labelled('span',key),document.createTextNode(' · ' + value)); li.append(line);
   }
+  if (kind === 'finding' && item.evidence_index) {
+    const slim = {schema:detail.evidence_index_schema, signed:false, team_id:membership.id,
+      case_id:detail.case.id, finding_id:item.id, finding_sha256:item.finding_sha256,
+      evidence_index:item.evidence_index, rights:'© Nasser Aldin Farag (0xFarag). All rights reserved.'};
+    li.append(indexPanel(item.evidence_index,locale,() => download(slim,'authzledger-index-' + item.id + '.json')));
+  }
   return li;
 }
 function renderCase(fresh) {
@@ -528,7 +538,10 @@ function showVerifiedReport(report) {
   for (const item of report.appendix) {
     const li = node('li');
     li.append(node('strong',item.status_label + ' · ' + item.retest_label));
-    for (const evidence of [item.evidence,item.control,item.retest_evidence,item.retest_control]) if (evidence) {
+    const references = [item.retest_evidence,item.retest_control];
+    if (item.evidence_index) li.append(indexPanel(item.evidence_index,out.lang));
+    else references.unshift(item.evidence,item.control);
+    for (const evidence of references) if (evidence) {
       li.append(node('p',evidence.format + ' · #' + evidence.record + ' · SHA-256 ' + evidence.sha256));
     }
     list.append(li);

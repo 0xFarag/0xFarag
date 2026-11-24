@@ -28,11 +28,23 @@ REF_LABELS = {
 }
 
 
+INDEX_LOCALES = ("de", "en", "fr", "it", "ar")
+INDEX_CAPTIONS = {
+    "evidence_index": ("Minimaler Belegindex", "Minimal evidence index", "Index minimal des preuves", "Indice minimo delle prove", "الفهرس الأدنى للأدلة"),
+    "experiment": ("Prüfplan-ID", "Review plan ID", "Identifiant du plan", "ID del piano", "معرّف خطة المراجعة"),
+    "revision": ("Revisions-ID", "Revision ID", "Identifiant de révision", "ID revisione", "معرّف المراجعة"),
+    "revision_digest": ("Revisionsprüfsumme", "Revision digest", "Empreinte de la révision", "Impronta della revisione", "بصمة المراجعة"),
+    "parent_digest": ("Vorgängerprüfsumme", "Parent revision digest", "Empreinte de la révision précédente", "Impronta della revisione precedente", "بصمة المراجعة السابقة"),
+    "no_experiment": ("Kein verknüpfter Prüfplan.", "No linked review plan.", "Aucun plan associé.", "Nessun piano collegato.", "لا توجد خطة مراجعة مرتبطة."),
+}
+
+
 def render_html(report, manifest):
     """A standalone, script-free customer report containing the signed projection only."""
     esc = lambda value: escape(str(value), quote=True)
     lang = report["language"]
     names = REF_LABELS[lang]
+    captions = {k: values[INDEX_LOCALES.index(lang)] for k, values in INDEX_CAPTIONS.items()}
     parts = [
         '<!doctype html>', f'<html lang="{esc(lang)}" dir="{esc(report["direction"])}"><head>',
         '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
@@ -51,15 +63,33 @@ def render_html(report, manifest):
         parts.extend([f'<article><h3><bdi>{esc(item["id"])}</bdi></h3>',
                       f'<p>{esc(item["status_label"])} · {esc(item["retest_label"])}<br>',
                       f'<code dir="ltr">{esc(item["status"])} / {esc(item["retest"])}</code></p>',
-                      f'<p>SHA-256 <code dir="ltr">{esc(item["finding_sha256"])}</code></p><dl>'])
-        for label, field in zip(names, ("evidence", "control", "retest_evidence", "retest_control")):
-            source = item[field]
+                      f'<p>SHA-256 <code dir="ltr">{esc(item["finding_sha256"])}</code></p>'])
+        index = item.get("evidence_index")
+        if index is not None:
+            parts.append(f'<h4>{esc(captions["evidence_index"])}</h4>')
+            baseline = [(names[0] if ref["role"] == "evidence" else names[1], ref)
+                        for ref in index["observations"]]
+        else:
+            baseline = [(names[0], item["evidence"]), (names[1], item["control"])]
+        parts.append('<dl>')
+        for label, source in baseline + [(names[2], item["retest_evidence"]), (names[3], item["retest_control"])]:
             if source:
                 parts.extend([f'<dt>{esc(label)}</dt>',
                               f'<dd><bdi>{esc(source["format"])} #{esc(source["record"])}</bdi><br>',
                               f'SHA-256 <code dir="ltr">{esc(source["sha256"])}</code><br>',
                               f'<code dir="ltr">{esc(source["fingerprint"])}</code></dd>'])
-        parts.append('</dl></article>')
+        parts.append('</dl>')
+        if index is not None:
+            if not index["experiments"]:
+                parts.append(f'<p>{esc(captions["no_experiment"])}</p>')
+            for plan in index["experiments"]:
+                parts.append(f'<dl><dt>{esc(captions["experiment"])}</dt><dd><code dir="ltr">{esc(plan["plan_id"])}</code></dd>')
+                for revision in plan["revisions"]:
+                    for field, label in (("id", "revision"), ("sha256", "revision_digest"), ("parent_sha256", "parent_digest")):
+                        if revision[field] is not None:
+                            parts.append(f'<dt>{esc(captions[label])}</dt><dd><code dir="ltr">{esc(revision[field])}</code></dd>')
+                parts.append('</dl>')
+        parts.append('</article>')
     parts.append(f'<h2>{esc(names[5])}</h2><ul>')
     for source in manifest["sources"]:
         parts.append(f'<li><bdi>{esc(source["format"])} · {esc(source["id"])}</bdi><br>SHA-256 <code dir="ltr">{esc(source["sha256"])}</code></li>')

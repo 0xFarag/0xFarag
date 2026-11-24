@@ -26,6 +26,37 @@ function element(tag, text) {
 function pair(dl, name, value) {
   dl.append(element('dt',t(name)),element('dd',value));
 }
+function appendSource(target, label, ref) {
+  const section = element('details'), source = element('dl');
+  section.append(element('summary',t(label) + ' · '+ref.format.toUpperCase()+' #'+ref.record),source);
+  pair(source,'SHA-256 der Quelldatei',ref.sha256);
+  pair(source,'Datensatz-Fingerabdruck',ref.fingerprint);
+  target.append(section);
+}
+
+function renderIndex(target, index) {
+  const group = element('section');
+  group.append(element('h4',t('Signierter Belegindex')));
+  for (const observation of index.observations) {
+    appendSource(group,observation.role === 'evidence' ? 'Beobachtung' : 'Kontrolle',observation);
+  }
+  if (!index.experiments.length) group.append(element('p',t('Kein Experiment mit diesem Befund verknüpft.')));
+  for (const experiment of index.experiments) {
+    const section = element('details'), records = element('ol');
+    section.append(element('summary',t('Experimentrevisionen')+' ('+experiment.revisions.length+')'),records);
+    for (const revision of experiment.revisions) {
+      const item = element('li'), record = element('dl');
+      pair(record,revision.parent_sha256 === null ? 'Plan-ID' : 'Revisions-ID',revision.id);
+      pair(record,'Revisionsdigest',revision.sha256);
+      if (revision.parent_sha256 !== null) pair(record,'Digest der Vorrevision',revision.parent_sha256);
+      item.append(record);
+      records.append(item);
+    }
+    group.append(section);
+  }
+  target.append(group);
+}
+
 function renderCase() {
   const target = el('case');
   target.replaceChildren();
@@ -35,15 +66,15 @@ function renderCase() {
   pair(detail,'Befund-ID',row.id);
   pair(detail,'Befunddigest',row.finding_sha256);
   target.append(detail);
-  for (const [field,label] of [['evidence','Beobachtung'],['control','Kontrolle'],['retest_evidence','Retest-Beobachtung'],['retest_control','Retest-Kontrolle']]) {
-    const ref = row[field];
-    if (!ref) continue;
-    const section = element('details'), source = element('dl');
-    section.append(element('summary',t(label) + ' · '+ref.format.toUpperCase()+' #'+ref.record),source);
-    pair(source,'SHA-256 der Quelldatei',ref.sha256);
-    pair(source,'Datensatz-Fingerabdruck',ref.fingerprint);
-    target.append(section);
+  if (row.evidence_index) {
+    renderIndex(target,row.evidence_index);
+  } else {
+    target.append(element('p',t('Diese Übergabe enthält keinen signierten Belegindex.')));
+    appendSource(target,'Beobachtung',row.evidence);
+    if (row.control) appendSource(target,'Kontrolle',row.control);
   }
+  if (row.retest_evidence) appendSource(target,'Retest-Beobachtung',row.retest_evidence);
+  if (row.retest_control) appendSource(target,'Retest-Kontrolle',row.retest_control);
 }
 function messages() {
   el('status').textContent = status ? t(labels[status]) : '';

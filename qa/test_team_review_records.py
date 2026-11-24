@@ -2,6 +2,12 @@
 """Case-bound append-only control review plans using captured files."""
 import base64
 import json
+import io
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+from zipfile import ZipFile
 import sqlite3
 import unittest
 import uuid
@@ -88,6 +94,51 @@ class ControlReviews(unittest.TestCase):
             route('read_only','POST',self.assessment(plan))
         review = route('reviewer','POST',self.assessment(plan))['record']
         self.assertEqual(route('read_only','GET',{})['records'],[plan,review])
+
+    @unittest.skipUnless(shutil.which("node"), "The public recipient verifier requires Node.js")
+    def test_public_cockpit_reads_fresh_native_deliveries(self):
+        source = self.import_file()
+        plan = self.post(self.plan_input)
+        finding = evidence.add_finding(self.db, self.team, 'member', self.case, {
+            'title': 'Review', 'asset': 'example.test', 'expected': 'Restricted', 'observed': 'Visible',
+            'status': 'confirmed', 'evidence_id': source['id'], 'record': 1,
+            'control_evidence_id': source['id'], 'control_record': 2,
+            'control_expected': 'Available', 'control_observed': 'Available',
+        })['finding']
+        revision = self.post({**self.assessment(plan, source), 'finding_id': finding['id']})
+        payload = {'deliveries': []}
+        with tempfile.TemporaryDirectory() as data_dir:
+            def get(method, path, body):
+                return evidence.handle(self.db, self.team, 'reviewer', method, path, body, data_dir=data_dir)
+
+            payload['trust'] = get('GET', ['trust-key'], {})
+            for fmt, language in [('json', 'de'), ('html', 'fr'), ('pdf', 'ar')]:
+                delivery = get('POST', ['cases', self.case['id'], 'handover'], {'format': fmt, 'language': language})
+                if fmt == 'json':
+                    payload['deliveries'].append({'proof': delivery['package']})
+                    continue
+                with ZipFile(io.BytesIO(base64.b64decode(delivery['archive_b64']))) as archive:
+                    document = archive.read('report.' + fmt)
+                    payload['deliveries'].append({'proof': json.loads(archive.read('proof.json')),
+                                                  'bytes': base64.b64encode(document).decode('ascii')})
+
+        verifier = """
+            import {readFileSync} from 'node:fs';
+            import {verifyDelivery} from './public/proof-cockpit/verify.mjs';
+            const {trust, deliveries} = JSON.parse(readFileSync(0, 'utf8'));
+            const checked = [];
+            for (const {proof, bytes} of deliveries) {
+                const result = await verifyDelivery(proof, trust, bytes ? Buffer.from(bytes, 'base64') : undefined);
+                const row = result.rows[0];
+                checked.push([result.format || 'json', row.retest, row.evidence_index.experiments[0].revisions.at(-1).sha256]);
+            }
+            console.log(JSON.stringify(checked));
+        """
+        result = subprocess.run(['node', '--input-type=module', '-e', verifier], input=json.dumps(payload),
+                                text=True, capture_output=True, cwd=Path(__file__).resolve().parents[1], timeout=30)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout),
+                         [[fmt, 'not_retested', revision['sha256']] for fmt in ('json', 'html', 'pdf')])
 
     def test_asset_case_and_team_boundaries(self):
         plan = self.post(self.plan_input)

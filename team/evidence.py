@@ -16,11 +16,13 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 
+from . import review_records
 from .documents import RIGHTS, MAX_ARCHIVE, SUPPORTED, build_archive, verify_archive, verify_document
-from .evidence_formats import FORMATS, MAX_FILE, canonical, host, parse_records, read_json, sha
+from .evidence_formats import FORMATS, MAX_FILE, MAX_ROWS, canonical, host, parse_records, read_json, sha
 
 LANGS = ("de", "en", "fr", "it", "ar")
 SCHEMA = "authzledger.team-handover.v1"
+EVIDENCE_INDEX_SCHEMA = "authzledger.evidence-index/v1"
 SIGNING_CONTEXT = (SCHEMA + "\n").encode("ascii")
 MAX_IMPORTS = 32
 MAX_FINDINGS = 128
@@ -60,6 +62,7 @@ def init_db(db):
     db.execute("""CREATE TABLE IF NOT EXISTS evidence_bytes (
         team_id TEXT NOT NULL, case_id TEXT NOT NULL, import_id TEXT NOT NULL, attachment BLOB NOT NULL,
         PRIMARY KEY(team_id,case_id,import_id), FOREIGN KEY(team_id,case_id) REFERENCES evidence_cases(team_id,id))""")
+    review_records.init_db(db)
 
 
 def items(db, team, case, kind):
@@ -272,11 +275,148 @@ def public_ref(value):
     return {k:value[k] for k in ("format","sha256","record","fingerprint","asset_id")}
 
 
+def minimal_observations(primary, control):
+    result = []
+    for role, reference in (("evidence", primary), ("control", control)):
+        if reference is not None:
+            result.append({"role": role, **{k: reference[k] for k in ("format", "sha256", "record", "fingerprint")}})
+    return result
+
+
+def finding_indices(db, team, case_id, findings):
+    hashes = {finding["id"]: finding["finding_sha256"] for finding in findings}
+    experiments = review_records.handover_experiments(db, team, case_id, hashes)
+    indices = {}
+    for finding in findings:
+        control = finding["control"]["reference"] if finding["control"] else None
+        indices[finding["id"]] = {
+            "observations": minimal_observations(finding["evidence"], control),
+            "experiments": experiments.get(finding["id"], []),
+        }
+    return indices
+
+
+def checked_index_sources(manifest):
+    entries = manifest["sources"]
+    if not isinstance(entries, list) or len(entries) > MAX_IMPORTS:
+        raise ValueError("Invalid source inventory")
+    sources = {}
+    for source in entries:
+        identity = (source["format"], source["sha256"])
+        if (identity in sources or source["format"] not in FORMATS or not re.fullmatch("[0-9a-f]{64}", source["sha256"])
+                or type(source["records"]) is not int or not 0 <= source["records"] <= MAX_ROWS
+                or type(source["bytes"]) is not int or not 1 <= source["bytes"] <= MAX_FILE):
+            raise ValueError("Invalid indexed source")
+        sources[identity] = source["records"]
+    return sources
+
+
+def check_index_reference(observation, sources):
+    if observation is None:
+        return
+    limit = sources.get((observation["format"], observation["sha256"]), 0)
+    asset = observation["asset_id"]
+    if (type(observation["record"]) is not int or not 1 <= observation["record"] <= limit
+            or not re.fullmatch("[0-9a-f]{64}", observation["fingerprint"])
+            or (asset is not None and not re.fullmatch("[0-9a-f]{64}", asset))):
+        raise ValueError("Invalid indexed source record")
+
+
+def check_index_coverage(report, manifest):
+    if not re.fullmatch("[0-9a-f]{64}", report["scope_sha256"]):
+        raise ValueError("Invalid scope digest")
+    rows = report["appendix"]
+    baselines = {row["id"]: row["finding_sha256"] for row in rows}
+    states = ("not_retested", "fix_verified", "persists", "inconclusive")
+    latest = {}
+    history = manifest["retests"]
+    if not isinstance(history, list) or len(history) > MAX_RETESTS:
+        raise ValueError("Invalid retest inventory")
+    for test in history:
+        if (test["status"] not in states or not re.fullmatch("[0-9a-f]{64}", test["sha256"])
+                or not re.fullmatch("[0-9a-f]{64}", test["baseline_sha256"])
+                or baselines.get(test["finding_id"]) != test["baseline_sha256"]):
+            raise ValueError("Invalid retest baseline")
+        latest[test["finding_id"]] = test["status"]
+    counts = dict.fromkeys(("hint", "confirmed", *states), 0)
+    counts["findings"] = len(rows)
+    for row in rows:
+        status = row["retest"]
+        primary, control = row["retest_evidence"], row["retest_control"]
+        if (status != latest.get(row["id"], "not_retested") or (primary is None) != (status == "not_retested")
+                or (status == "not_retested" and control is not None)):
+            raise ValueError("Inconsistent retest coverage")
+        if status in ("fix_verified", "persists"):
+            if (row["status"] != "confirmed" or control is None
+                    or primary["asset_id"] != row["evidence"]["asset_id"] or primary["asset_id"] != control["asset_id"]
+                    or primary["fingerprint"] == control["fingerprint"]):
+                raise ValueError("Invalid retest control")
+            for current in (primary, control):
+                for original in (row["evidence"], row["control"]):
+                    if current["sha256"] == original["sha256"] or current["fingerprint"] == original["fingerprint"]:
+                        raise ValueError("Repeated retest evidence")
+        counts[row["status"]] += 1
+        counts[status] += 1
+    if any(type(report["counts"][k]) is not int or report["counts"][k] != count for k, count in counts.items()):
+        raise ValueError("Inconsistent retest counts")
+
+
+def check_evidence_indices(report, manifest):
+    """Check source record coordinates and the public experiment chains after signature verification."""
+    rows = report["appendix"]
+    if not isinstance(rows, list) or len(rows) > MAX_FINDINGS:
+        raise ValueError("Invalid finding inventory")
+    if "evidence_index_schema" not in report:
+        if any("evidence_index" in row for row in rows):
+            raise ValueError("Evidence index schema missing")
+        return  # Original v1 handovers did not include an index.
+    if report["evidence_index_schema"] != EVIDENCE_INDEX_SCHEMA:
+        raise ValueError("Unknown evidence index schema")
+    sources = checked_index_sources(manifest)
+    revision_ids, revision_hashes = set(), set()
+    finding_ids = set()
+    for row in rows:
+        if (row["id"] in finding_ids or not re.fullmatch("[0-9a-f]{32}", row["id"])
+                or not re.fullmatch("[0-9a-f]{64}", row["finding_sha256"])):
+            raise ValueError("Invalid finding identifier")
+        finding_ids.add(row["id"])
+        index = row["evidence_index"]
+        expected = minimal_observations(row["evidence"], row["control"])
+        if (set(index) != {"observations", "experiments"} or not isinstance(index["experiments"], list)
+                or canonical(index["observations"]) != canonical(expected)
+                or row["evidence"] is None or row["status"] not in ("confirmed", "hint")
+                or (row["status"] == "confirmed") != (row["control"] is not None)):
+            raise ValueError("Invalid observation index")
+        if row["control"] and (row["evidence"]["asset_id"] is None or
+                               row["evidence"]["asset_id"] != row["control"]["asset_id"] or
+                               row["evidence"]["fingerprint"] == row["control"]["fingerprint"]):
+            raise ValueError("Invalid indexed control")
+        for key in ("evidence", "control", "retest_evidence", "retest_control"):
+            check_index_reference(row[key], sources)
+        for experiment in index["experiments"]:
+            revisions = experiment["revisions"]
+            if (set(experiment) != {"plan_id", "revisions"} or not isinstance(revisions, list) or not revisions
+                    or experiment["plan_id"] != revisions[0]["id"] or len(revision_ids) + len(revisions) > 256):
+                raise ValueError("Invalid experiment inventory")
+            previous = None
+            for revision in revisions:
+                identifier, checksum = revision["id"], revision["sha256"]
+                if (set(revision) != {"id", "sha256", "parent_sha256"} or revision["parent_sha256"] != previous
+                        or not re.fullmatch("[0-9a-f]{32}", identifier) or identifier in revision_ids
+                        or not re.fullmatch("[0-9a-f]{64}", checksum) or checksum in revision_hashes):
+                    raise ValueError("Invalid experiment revision")
+                revision_ids.add(identifier)
+                revision_hashes.add(checksum)
+                previous = checksum
+    check_index_coverage(report, manifest)
+
+
 def make_package(db,team,user,case,language,data_dir):
     require(language in LANGS,"Unknown report language")
     lang = LANGS.index(language)
     source = items(db,team,case["id"],"imports")
     findings = items(db,team,case["id"],"findings")
+    indices = finding_indices(db, team, case["id"], findings)
     retests = items(db,team,case["id"],"retests")
     latest = {test["finding_id"]:test for test in retests}
     counts = dict.fromkeys(("hint","confirmed","not_retested","fix_verified","persists","inconclusive"),0)
@@ -287,11 +427,13 @@ def make_package(db,team,user,case,language,data_dir):
         counts[finding["status"]] += 1
         counts[after] += 1
         appendix.append({"id":finding["id"],"finding_sha256":finding["finding_sha256"],"status":finding["status"],
+                         "evidence_index":indices[finding["id"]],
                          "status_label":_REPORT[finding["status"]][lang],"evidence":public_ref(finding["evidence"]),
                          "control":public_ref(finding["control"]["reference"]) if finding["control"] else None,
                          "retest":after,"retest_label":_REPORT[after][lang],"retest_evidence":public_ref(test["evidence"]) if test else None,
                          "retest_control":public_ref(test["control"]["reference"]) if test and test["control"] else None})
     report = {"rights":RIGHTS,"language":language,"direction":"rtl" if language=="ar" else "ltr","title":_REPORT["heading"][lang],
+              "evidence_index_schema":EVIDENCE_INDEX_SCHEMA,
               "summary_heading":_REPORT["summary"][lang],"scope_sha256":sha(canonical([case["scope"],case["assets"]])),
               "counts":{"findings":len(findings),**counts},"labels":{k:_REPORT[k][lang] for k in ("findings",*counts)},
               "appendix_heading":_REPORT["appendix"][lang],"appendix":appendix,"limitations":_REPORT["limit"][lang]}
@@ -301,6 +443,10 @@ def make_package(db,team,user,case,language,data_dir):
                 "sources":[{k:item[k] for k in ("id","format","sha256","bytes","records")} for item in source],
                 "retests":[{"id":test["id"],"finding_id":test["finding_id"],"baseline_sha256":test["baseline_sha256"],
                             "status":test["status"],"sha256":sha(canonical(test))} for test in retests]}
+    try:
+        check_evidence_indices(report, manifest)
+    except (ValueError, KeyError, TypeError) as error:
+        raise WorkflowError(409, "Stored evidence index is inconsistent") from error
     signature = key.sign(SIGNING_CONTEXT + canonical(manifest))
     return {"manifest":manifest,"report":report,"signature":base64.b64encode(signature).decode("ascii")}
 
@@ -318,6 +464,7 @@ def verify_package(package, trusted_key, team=None):
             raise ValueError
         key = Ed25519PublicKey.from_public_bytes(raw)
         key.verify(base64.b64decode(package["signature"],validate=True), SIGNING_CONTEXT + canonical(manifest))
+        check_evidence_indices(report, manifest)
         return {"valid":True,"reason":"verified","fingerprint":fingerprint}
     except (InvalidSignature,ValueError,TypeError,KeyError,UnicodeError,RecursionError,AttributeError):
         return {"valid":False,"reason":"invalid_or_untrusted","fingerprint":None}
@@ -349,7 +496,11 @@ def handle(db, team_id, user_id, method, segments, body, *, data_dir):
     require(row,"Unknown case",404)
     case = json.loads(row[0])
     if len(parts)==2 and method=="GET":
-        return {"case":case, **{kind:items(db,team_id,case["id"],kind) for kind in ("imports","findings","retests")}}
+        inventory = {kind:items(db,team_id,case["id"],kind) for kind in ("imports","findings","retests")}
+        indices = finding_indices(db, team_id, case["id"], inventory["findings"])
+        for finding in inventory["findings"]:
+            finding["evidence_index"] = indices[finding["id"]]
+        return {"case":case, "evidence_index_schema":EVIDENCE_INDEX_SCHEMA, **inventory}
     if len(parts)==5 and method=="GET" and parts[2]=="imports" and parts[4]=="attachment":
         row = db.execute("SELECT attachment FROM evidence_bytes WHERE team_id=? AND case_id=? AND import_id=?",
                          (team_id,case["id"],parts[3])).fetchone()

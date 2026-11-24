@@ -86,7 +86,7 @@ Vor der Freigabe für ein echtes Team prüft der Betreiber folgende Punkte an de
 
 ## Experiment und manueller Prüfnachweis
 
-Im Fall kann ein Teammitglied mit Schreibrecht vor der Befunderfassung eine Hypothese, das erwartete Verhalten und die geplante Kontrolle zu einem Asset im Scope festhalten. Jede weitere Beurteilung verweist auf die vorherige Revision. Eine belegte Bestätigung oder Widerlegung benötigt zwei unterschiedliche Beobachtungen desselben Assets. Unklare Ergebnisse bleiben als solche sichtbar. Der JSON-Export enthält die Revisionen und ihre Belegreferenzen. Für eine signierte Kundenübergabe dient die separate Übergabefunktion im Fall.
+Im Fall kann ein Teammitglied mit Schreibrecht vor der Befunderfassung eine Hypothese, das erwartete Verhalten und die geplante Kontrolle zu einem Asset im Scope festhalten. Jede weitere Beurteilung verweist auf die vorherige Revision. Eine belegte Bestätigung oder Widerlegung benötigt zwei unterschiedliche Beobachtungen desselben Assets. Unklare Ergebnisse bleiben als solche sichtbar. Der interne JSON-Export des Prüfplans enthält die vollständigen Revisionen einschliesslich Freitexten. Er ist als unsigniert gekennzeichnet. Für eine signierte Kundenübergabe dient die separate Übergabefunktion im Fall.
 
 ## Signierte Kundenübergabe in drei Formaten
 
@@ -103,3 +103,11 @@ Mit dem Quellpaket kann der Empfänger die Verifikation auch rein lokal durchfü
 python -m team.evidence verify uebergabe.zip --trusted-key vertrauensschluessel.json
 python -m team.evidence verify proof.json --document report.pdf --trusted-key vertrauensschluessel.json
 ```
+
+## Minimaler Belegindex und Abgleich der Experimentrevisionen
+
+Im Fall unter **Befunde → Minimaler Belegindex** kann jede leseberechtigte Rolle die ursprüngliche Beobachtung und die zugehörige Kontrolle nachschlagen. Pro Beobachtung stehen Format, Nummer des Datensatzes, SHA-256 der Quelldatei und Fingerabdruck des Datensatzes bereit. Ein Hinweis ohne Kontrolle enthält nur seine vorhandene Beobachtung. Der Index kann bereits vor dem Retest als unsignierte JSON-Datei gespeichert werden.
+
+Hat der Fall einen mit diesem Befund verknüpften Prüfplan, enthält der Index dessen ID und die geordnete Liste der Revisionen mit ID, SHA-256 und Vorgängerprüfsumme. Die erste Revision ist der Plan. Ohne Verknüpfung bleibt diese Liste leer. Prüfnotizen, Zugangsdaten, HTTP-Inhalte und Benutzerkennungen sind im Index nicht enthalten.
+
+Bei der signierten Übergabe erscheint derselbe Belegindex im JSON-Bericht und im HTML- oder PDF-Anhang. Unter **Übergabe prüfen** lässt sich nach erfolgreicher Signaturprüfung der Index eines Befunds öffnen. Wer den vollständigen, zum Übergabezeitpunkt exportierten Prüfplan separat und berechtigt erhalten hat, kann dort die Original-JSON des Plans auswählen. Der Browser berechnet die Prüfsumme jeder Revision und gleicht die gesamte Kette mit der signierten Übergabe ab. Die ausgewählte Plandatei bleibt im Browser. Fehlende, veränderte oder später hinzugekommene Revisionen ergeben keine Übereinstimmung. Frühere gültige Übergaben lassen sich weiterhin prüfen und zeigen die damals enthaltenen Informationen.

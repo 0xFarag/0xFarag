@@ -3,6 +3,7 @@
 
 const assert = require('node:assert/strict');
 const cockpitFixture = require('./fixtures/team-proof-cockpit.json');
+const indexedFixture = require('./fixtures/team-index-cockpit.json');
 
 async function verifySignedCockpit(page, hero) {
   const file = (name, value) => ({name, mimeType:'application/json', buffer:Buffer.from(JSON.stringify(value))});
@@ -12,10 +13,26 @@ async function verifySignedCockpit(page, hero) {
   await page.locator('#proof-result:visible').waitFor();
   assert.equal(await page.locator('#proof-rows option').count(),2);
   assert.match(await page.locator('#proof-counts').innerText(),/Nicht nachgeprüft/);
+  assert.match(await page.locator('#proof-case').innerText(),/keinen signierten Belegindex/);
   await page.locator('#proof-original').setInputFiles({name:'original.har',mimeType:'application/json',buffer:Buffer.from(cockpitFixture.original)});
   await page.locator('#proof-match').filter({hasText:'entspricht einer signierten Quelle'}).waitFor();
   await page.locator('#proof-clear').click();
   assert(await page.locator('#proof-result').isHidden());
+  await page.locator('#proof-package').setInputFiles(file('indexed.json',indexedFixture.package));
+  await page.locator('#proof-key').setInputFiles(file('trust.json',indexedFixture.trustedKey));
+  await hero.locator('#beweis-cockpit button').click();
+  await page.locator('#proof-result:visible').waitFor();
+  const rows = indexedFixture.package.report.appendix;
+  const reviewed = rows.findIndex(row => row.evidence_index.experiments.length);
+  await page.locator('#proof-rows').selectOption(String(reviewed));
+  const entry = page.locator('#proof-case');
+  await entry.getByRole('heading',{name:'Signierter Belegindex'}).waitFor();
+  await entry.getByText('Experimentrevisionen (2)',{exact:true}).click();
+  const latestRevision = rows[reviewed].evidence_index.experiments[0].revisions[1];
+  await entry.getByText(latestRevision.sha256,{exact:true}).waitFor();
+  await page.locator('#proof-rows').selectOption(String(rows.findIndex(row => row.status === 'hint')));
+  await entry.getByText('Kein Experiment mit diesem Befund verknüpft.',{exact:true}).waitFor();
+  await page.locator('#proof-clear').click();
   const altered = structuredClone(cockpitFixture.proof.handover);
   altered.report.counts.not_retested = 0;
   await page.locator('#proof-package').setInputFiles(file('tampered.json',altered));
