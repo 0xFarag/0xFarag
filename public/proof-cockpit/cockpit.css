@@ -14,6 +14,8 @@
 .proof-fields input,.proof-inspect input {padding:.35rem;border:1px solid #5b7480;border-radius:.25rem;overflow:hidden;text-overflow:ellipsis}
 .proof-fields input::file-selector-button,.proof-inspect input::file-selector-button {padding:.45rem .6rem;margin-inline-end:.5rem;border:0;border-radius:.15rem;background:#e4edef;color:#102b32;cursor:pointer}
 .proof-fields input {margin:0 0 .45rem;color:#e1eeef;color-scheme:dark}
+#proof-key-hint {border-inline-start:2px solid #c8a66b;padding-inline-start:.75rem;margin-block:0 .5rem;color:#e4e4d9;font-size:.88rem}
+#proof-key-hint code {display:block;margin-block:.25rem;overflow-wrap:anywhere;text-align:start;color:#fff}
 .proof-fields details {margin:.2rem 0 .6rem}.proof-fields summary {cursor:pointer;text-decoration:underline;text-underline-offset:.22rem;color:#badee0}
 .proof-fields details label {margin:.45rem 0}
 .proof-verify,.proof-result-heading button {border-radius:.2rem;min-height:44px;font:650 .96rem/1.25 system-ui,sans-serif;cursor:pointer;padding:.7rem 1rem}

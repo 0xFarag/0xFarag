@@ -4,19 +4,17 @@ import argparse
 import base64
 import hmac
 import json
-import os
 from pathlib import Path
 import re
-import tempfile
 import uuid
 from datetime import datetime, timezone
 from xml.etree.ElementTree import ParseError
 
 from cryptography.exceptions import InvalidSignature
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
-from . import review_records
+from . import keyring, review_records
+from .keyring import key_descriptor  # Existing public Python API.
 from .documents import RIGHTS, MAX_ARCHIVE, SUPPORTED, build_archive, verify_archive, verify_document
 from .evidence_formats import FORMATS, MAX_FILE, MAX_ROWS, canonical, host, parse_records, read_json, sha
 
@@ -63,6 +61,7 @@ def init_db(db):
         team_id TEXT NOT NULL, case_id TEXT NOT NULL, import_id TEXT NOT NULL, attachment BLOB NOT NULL,
         PRIMARY KEY(team_id,case_id,import_id), FOREIGN KEY(team_id,case_id) REFERENCES evidence_cases(team_id,id))""")
     review_records.init_db(db)
+    keyring.init_db(db)
 
 
 def items(db, team, case, kind):
@@ -156,6 +155,21 @@ def checked_observations(db, team, case_id, asset, body, with_control):
     return evidence, {"reference":control,"expected":expected,"observed":observed}
 
 
+def source_endpoint(db, team, case_id, ref):
+    """Earlier indexed imports can derive their endpoint from the retained original."""
+    if ref.get("endpoint_key"):
+        return ref["endpoint_key"]
+    source = db.execute("SELECT attachment FROM evidence_bytes WHERE team_id=? AND case_id=? AND import_id=?",
+                        (team, case_id, ref["import_id"])).fetchone()
+    require(source and sha(source[0]) == ref["sha256"], "Stored source cannot be verified", 409)
+    try:
+        row = parse_records(ref["format"], source[0])[ref["record"] - 1]
+    except (ValueError, TypeError, KeyError, AttributeError, IndexError, OverflowError, ParseError, RecursionError):
+        raise WorkflowError(400, "Source record has no comparable HTTP target") from None
+    require(row["fingerprint"] == ref["fingerprint"], "Stored source observation differs", 409)
+    return row.get("endpoint_key")
+
+
 def add_finding(db,team,user,case,body):
     case_id = case["id"]
     capacity(db,team,case_id,"findings",MAX_FINDINGS)
@@ -170,6 +184,17 @@ def add_finding(db,team,user,case,body):
     ref, control = checked_observations(db,team,case_id,asset,body,status == "confirmed")
     finding = {"id":uuid.uuid4().hex, "title":title, "asset":asset, "expected":expected, "observed":observed, "status":status,
                "evidence":ref, "control":control,"basis":"passive_human_review","created_at":now(),"created_by":user}
+    if "zap_lead" in body:
+        lead = body["zap_lead"]
+        require(status == "confirmed" and isinstance(lead, dict) and set(lead) == {"import_id", "record"},
+                "A linked ZAP lead requires a confirmed finding and a source record")
+        alert = reference(db, team, case_id, {"evidence_id": lead["import_id"], "record": lead["record"]})
+        require(alert["format"] == "zap" and alert["kind"] == "scanner_alert" and alert["asset_id"] == ref["asset_id"],
+                "ZAP lead must identify the same scoped asset")
+        endpoint = source_endpoint(db, team, case_id, alert)
+        require(endpoint and endpoint == source_endpoint(db, team, case_id, ref),
+                "ZAP instance and observation must share the same HTTP method and target")
+        finding["scanner_lead"] = public_ref(alert)
     finding["finding_sha256"] = sha(canonical(finding))
     store(db,team,case_id,"findings",finding)
     return {"finding":finding}
@@ -228,45 +253,18 @@ _REPORT = {
 }
 
 
-def key_descriptor(public_key):
-    raw = public_key.public_bytes(serialization.Encoding.Raw,serialization.PublicFormat.Raw)
-    return {"algorithm":"Ed25519","public_key":base64.b64encode(raw).decode("ascii"),"fingerprint":sha(raw)}
-
-
-def signer(db, data_dir):
-    directory = Path(data_dir)
-    directory.mkdir(parents=True,exist_ok=True,mode=0o700)
-    path = directory / "evidence-signing.key"
-    db.execute("CREATE TABLE IF NOT EXISTS evidence_signer (id INTEGER PRIMARY KEY CHECK(id=1), fingerprint TEXT NOT NULL)")
-    pinned = db.execute("SELECT fingerprint FROM evidence_signer WHERE id=1").fetchone()
-    if not path.exists():
-        require(not pinned,"Installation signing key is missing; restore the original",503)
-        raw = Ed25519PrivateKey.generate().private_bytes(serialization.Encoding.Raw,serialization.PrivateFormat.Raw,serialization.NoEncryption())
-        fd, temporary = tempfile.mkstemp(dir=directory, prefix=".signing-")
-        try:
-            with os.fdopen(fd,"wb") as stream:
-                stream.write(raw)
-                stream.flush()
-                os.fsync(stream.fileno())
-            try:
-                os.link(temporary,path)
-            except FileExistsError:
-                pass
-        finally:
-            os.unlink(temporary)
-    require(not path.is_symlink() and path.is_file(),"Invalid signing key path",503)
-    if os.name != "nt":
-        require(path.stat().st_mode & 0o077 == 0,"Signing key file permissions must be owner-only",503)
+def signer(db, data_dir, *, rotate=True):
     try:
-        key = Ed25519PrivateKey.from_private_bytes(path.read_bytes())
-    except (OSError,ValueError):
-        raise WorkflowError(503,"Cannot load installation signing key") from None
-    descriptor = key_descriptor(key.public_key())
-    if pinned:
-        require(hmac.compare_digest(pinned[0], descriptor["fingerprint"]),"Signing key differs from the installation trust anchor",503)
-    else:
-        db.execute("INSERT INTO evidence_signer VALUES(1,?)",(descriptor["fingerprint"],))
-    return key,descriptor
+        return keyring.signer(db, data_dir, rotate=rotate)
+    except keyring.KeyStoreError as error:
+        raise WorkflowError(error.status, error.message) from error
+
+
+def key_history(db, data_dir):
+    try:
+        return keyring.history(db, data_dir)
+    except keyring.KeyStoreError as error:
+        raise WorkflowError(error.status, error.message) from error
 
 
 def public_ref(value):
@@ -367,7 +365,7 @@ def check_evidence_indices(report, manifest):
     if not isinstance(rows, list) or len(rows) > MAX_FINDINGS:
         raise ValueError("Invalid finding inventory")
     if "evidence_index_schema" not in report:
-        if any("evidence_index" in row for row in rows):
+        if any("evidence_index" in row or "scanner_lead" in row for row in rows):
             raise ValueError("Evidence index schema missing")
         return  # Original v1 handovers did not include an index.
     if report["evidence_index_schema"] != EVIDENCE_INDEX_SCHEMA:
@@ -380,6 +378,14 @@ def check_evidence_indices(report, manifest):
                 or not re.fullmatch("[0-9a-f]{64}", row["finding_sha256"])):
             raise ValueError("Invalid finding identifier")
         finding_ids.add(row["id"])
+        if "scanner_lead" in row:
+            lead = row["scanner_lead"]
+            if (not isinstance(lead, dict) or set(lead) != {"format", "sha256", "record", "fingerprint", "asset_id"}
+                    or lead["format"] != "zap" or row["status"] != "confirmed" or not row["evidence"]
+                    or row["evidence"]["format"] not in ("har", "burp") or not row["control"]
+                    or row["control"]["format"] not in ("har", "burp") or lead["asset_id"] != row["evidence"]["asset_id"]):
+                raise ValueError("Invalid linked scanner lead")
+            check_index_reference(lead, sources)
         index = row["evidence_index"]
         expected = minimal_observations(row["evidence"], row["control"])
         if (set(index) != {"observations", "experiments"} or not isinstance(index["experiments"], list)
@@ -411,7 +417,7 @@ def check_evidence_indices(report, manifest):
     check_index_coverage(report, manifest)
 
 
-def make_package(db,team,user,case,language,data_dir):
+def make_package(db,team,user,case,language,data_dir, *, signing=None):
     require(language in LANGS,"Unknown report language")
     lang = LANGS.index(language)
     source = items(db,team,case["id"],"imports")
@@ -432,12 +438,14 @@ def make_package(db,team,user,case,language,data_dir):
                          "control":public_ref(finding["control"]["reference"]) if finding["control"] else None,
                          "retest":after,"retest_label":_REPORT[after][lang],"retest_evidence":public_ref(test["evidence"]) if test else None,
                          "retest_control":public_ref(test["control"]["reference"]) if test and test["control"] else None})
+        if "scanner_lead" in finding:
+            appendix[-1]["scanner_lead"] = public_ref(finding["scanner_lead"])
     report = {"rights":RIGHTS,"language":language,"direction":"rtl" if language=="ar" else "ltr","title":_REPORT["heading"][lang],
               "evidence_index_schema":EVIDENCE_INDEX_SCHEMA,
               "summary_heading":_REPORT["summary"][lang],"scope_sha256":sha(canonical([case["scope"],case["assets"]])),
               "counts":{"findings":len(findings),**counts},"labels":{k:_REPORT[k][lang] for k in ("findings",*counts)},
               "appendix_heading":_REPORT["appendix"][lang],"appendix":appendix,"limitations":_REPORT["limit"][lang]}
-    key,descriptor = signer(db,data_dir)
+    key,descriptor = signing or signer(db,data_dir)
     manifest = {"rights":RIGHTS,"schema":SCHEMA,"algorithm":"Ed25519","fingerprint":descriptor["fingerprint"],"case_id":case["id"],"team_id":team,
                 "created_at":now(),"report_sha256":sha(canonical(report)),
                 "sources":[{k:item[k] for k in ("id","format","sha256","bytes","records")} for item in source],
@@ -456,6 +464,8 @@ def verify_package(package, trusted_key, team=None):
         if not isinstance(package,dict) or set(package) != {"manifest","report","signature"}:
             raise ValueError
         manifest,report = package["manifest"],package["report"]
+        if callable(trusted_key):
+            trusted_key = trusted_key(manifest["fingerprint"])
         raw = base64.b64decode(trusted_key["public_key"],validate=True)
         fingerprint = sha(raw)
         if (trusted_key["algorithm"] != "Ed25519" or not hmac.compare_digest(trusted_key["fingerprint"],fingerprint)
@@ -474,9 +484,11 @@ def handle(db, team_id, user_id, method, segments, body, *, data_dir):
     """Called inside the authenticated server transaction, after role checks."""
     parts = list(segments)
     if method == "GET" and parts == ["trust-key"]:
-        return signer(db,data_dir)[1]
+        return signer(db,data_dir,rotate=False)[1]
+    if method == "GET" and parts == ["trust-keys"]:
+        return key_history(db, data_dir)
     if method == "POST" and parts == ["verify"]:
-        key = signer(db,data_dir)[1]
+        trusted_keys = {entry["fingerprint"]: entry for entry in key_history(db, data_dir)["keys"]}
         if "archive_b64" in body:
             raw = body["archive_b64"]
             require(isinstance(raw,str) and 0 < len(raw) <= 4 * ((MAX_ARCHIVE + 2) // 3), "Invalid archive size")
@@ -484,8 +496,8 @@ def handle(db, team_id, user_id, method, segments, body, *, data_dir):
                 data = base64.b64decode(raw,validate=True)
             except ValueError:
                 raise WorkflowError(400, "Invalid Base64 archive") from None
-            return verify_archive(data,key,team_id)
-        return verify_package(body.get("package"),key,team_id)
+            return verify_archive(data,trusted_keys.get,team_id)
+        return verify_package(body.get("package"),trusted_keys.get,team_id)
     if parts == ["cases"] and method == "POST":
         return create_case(db,team_id,user_id,body)
     if parts == ["cases"] and method == "GET":
@@ -516,10 +528,11 @@ def handle(db, team_id, user_id, method, segments, body, *, data_dir):
     if parts[2] == "handover":
         fmt = body.get("format","json")
         require(fmt in ("json", *SUPPORTED), "Unknown document format")
-        package = make_package(db,team_id,user_id,case,body.get("language","de"),data_dir)
+        signing = signer(db, data_dir)
+        package = make_package(db,team_id,user_id,case,body.get("language","de"),data_dir,signing=signing)
         if fmt == "json":
             return {"package":package}
-        archive = build_archive(package,fmt,signer(db,data_dir)[0])
+        archive = build_archive(package,fmt,signing[0])
         return {"format":fmt,"archive_b64":base64.b64encode(archive).decode("ascii")}
     raise WorkflowError(404,"Unknown route")
 

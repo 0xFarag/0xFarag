@@ -73,6 +73,7 @@ function renderCase() {
     appendSource(target,'Beobachtung',row.evidence);
     if (row.control) appendSource(target,'Kontrolle',row.control);
   }
+  if (row.scanner_lead) appendSource(target,'Verknüpfter ZAP-Hinweis',row.scanner_lead);
   if (row.retest_evidence) appendSource(target,'Retest-Beobachtung',row.retest_evidence);
   if (row.retest_control) appendSource(target,'Retest-Kontrolle',row.retest_control);
 }
@@ -109,8 +110,30 @@ function invalidate() {
   el('original').value = ''; form.querySelector('button').disabled = false;
   render();
 }
+function clearKeyHint() {
+  el('key-hint').hidden = true;
+  el('claimed-fingerprint').textContent = '';
+}
+async function showKeyHint() {
+  clearKeyHint();
+  const input = el('package'), file = input.files[0];
+  if (!file) return;
+  try {
+    const limit = 8 * 1024 * 1024;
+    const proof = readJson(await bytes(file,limit),limit);
+    const manifest = proof?.manifest ?? proof?.handover?.manifest;
+    if (input.files[0] !== file || manifest?.schema !== 'authzledger.team-handover.v1'
+        || manifest.algorithm !== 'Ed25519' || typeof manifest.fingerprint !== 'string'
+        || !/^[a-f0-9]{64}$/.test(manifest.fingerprint)) return;
+    el('claimed-fingerprint').textContent = manifest.fingerprint;
+    el('key-hint').hidden = false;
+  } catch {
+    // The submission path reports diagnostic errors and performs signature verification.
+  }
+}
 for (const id of ['package','key','document']) el(id).addEventListener('change',invalidate);
-el('clear').addEventListener('click',()=>{form.reset(); invalidate(); el('package').focus();});
+el('package').addEventListener('change',showKeyHint);
+el('clear').addEventListener('click',()=>{form.reset(); clearKeyHint(); invalidate(); el('package').focus();});
 el('rows').addEventListener('change',()=>{ selected = el('rows').selectedIndex; renderCase(); });
 async function bytes(file, limit) {
   if (!file || !file.size || file.size > limit) throw new Error('size');

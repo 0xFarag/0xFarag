@@ -13,7 +13,7 @@ FROM ${PYTHON_BASE} AS runtime
 LABEL org.opencontainers.image.title="AuthzLedger Team" \
     org.opencontainers.image.url="https://authzledger.com" \
     org.opencontainers.image.source="https://github.com/0xFarag/0xFarag" \
-    org.opencontainers.image.version="1.5.0.3" \
+    org.opencontainers.image.version="1.5.0.4" \
     org.opencontainers.image.authors="Nasser Aldin Farag (0xFarag)" \
     org.opencontainers.image.licenses="LicenseRef-AuthzLedger" \
     org.authzledger.copyright="© Nasser Aldin Farag (0xFarag). All rights reserved."
@@ -21,7 +21,8 @@ ENV PATH="/opt/authzledger-venv/bin:${PATH}" PYTHONDONTWRITEBYTECODE=1 PYTHONUNB
 WORKDIR /opt/authzledger
 COPY --from=dependencies /opt/authzledger-venv /opt/authzledger-venv
 COPY --from=dependencies /build/notices /usr/share/doc/authzledger-team/third-party
-COPY LICENSE NOTICE.txt packaging/team/README.md packaging/team/THIRD-PARTY.md docs/Team-Login-RBAC.md /usr/share/doc/authzledger-team/
+COPY LICENSE NOTICE.txt packaging/team/README.md packaging/team/THIRD-PARTY.md docs/Team-Login-RBAC.md docs/Key-Rotation.md docs/ZAP-API-Scan-Import.md /usr/share/doc/authzledger-team/
+COPY integrations/burp/README.md /usr/share/doc/authzledger-team/Burp-Export.md
 COPY team/ team/
 RUN mkdir -p /data && chown 10001:10001 /data && chmod 0700 /data
 USER 10001:10001

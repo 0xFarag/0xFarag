@@ -118,6 +118,13 @@ function checkReport(manifest, report) {
     requireValue(['hint','confirmed'].includes(row.status) && retestStates.includes(row.retest));
     for (const ref of [row.evidence,row.control,row.retest_evidence,row.retest_control]) checkRef(ref);
     requireValue(row.evidence && (row.status === 'hint' || controls(row.evidence,row.control)));
+    if (Object.hasOwn(row,'scanner_lead')) {
+      const lead = row.scanner_lead;
+      requireValue(hasIndex && lead && Object.keys(lead).sort().join(',') === 'asset_id,fingerprint,format,record,sha256');
+      checkRef(lead);
+      requireValue(row.status === 'confirmed' && lead.format === 'zap' && lead.asset_id === row.evidence.asset_id &&
+        ['burp','har'].includes(row.evidence.format) && ['burp','har'].includes(row.control?.format));
+    }
     requireValue(Object.hasOwn(row,'evidence_index') === hasIndex);
     if (hasIndex) checkEvidenceIndex(row,seenRevisions,seenDigests);
     const test = latest.get(row.id);

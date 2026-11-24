@@ -18,7 +18,8 @@ NAME = 'authzledger-team'
 STEM = NAME + '-' + VERSION
 FILES = [f'AuthzLedger-Team-{VERSION}-Windows-x64.exe', f'{NAME}_{VERSION}-1_all.deb',
          STEM + '-1-any.pkg.tar.zst', 'PKGBUILD', STEM + '.tar.gz',
-         STEM + '-linux-amd64.docker.tar.gz', STEM + '-linux-amd64.oci.tar']
+         STEM + '-linux-amd64.docker.tar.gz', STEM + '-linux-amd64.oci.tar',
+         f'AuthzLedger-Burp-Export-{VERSION}.jar']
 
 
 def digest(path):
@@ -28,7 +29,8 @@ def digest(path):
 
 def members():
     fixed = [ROOT / name for name in ['LICENSE', 'NOTICE.txt', 'public/assets/authzledger-logo.png', 'team/requirements.txt',
-             'scripts/build-team-release.py', 'docs/Team-Login-RBAC.md']]
+             'scripts/build-team-release.py', 'docs/Team-Login-RBAC.md', 'docs/Key-Rotation.md', 'docs/ZAP-API-Scan-Import.md',
+             'integrations/burp/README.md']]
     scripts = list((ROOT / 'team').glob('*.py'))
     web = [p for p in (ROOT / 'team/static').rglob('*') if p.suffix.lower() in
            {'.html', '.js', '.mjs', '.css', '.json', '.png', '.svg', '.ico', '.woff', '.woff2', '.ttf'}]
@@ -104,12 +106,14 @@ def windows(output):
         version_file = directory / 'windows-version.txt'
         template = (src / 'packaging/team/windows-version.txt.in').read_text(encoding='utf-8')
         version_file.write_text(template.replace('@PARTS@', str(parts)).replace('@VERSION@', VERSION), encoding='utf-8')
+        guides = src / 'docs'
+        shutil.copyfile(src / 'integrations/burp/README.md', guides / 'Burp-Export.md')
         shutil.copyfile(src / 'team/static/pdf/FONT-LICENSE.txt', legal / 'FONT-LICENSE.txt')
         subprocess.run([sys.executable, '-m', 'PyInstaller', '--clean', '--noconfirm', '--onefile', '--windowed',
             '--name', FILES[0][:-4], '--icon', str(src / 'packaging/team/authzledger-team.ico'),
             '--version-file', str(version_file), '--collect-submodules', 'reportlab.pdfbase',
             '--paths', str(src), '--add-data', f'{src / "team/static"};team/static', '--add-data', f'{legal};legal',
-            '--workpath', str(directory / 'work'), '--specpath', str(directory / 'spec'),
+            '--add-data', f'{guides};docs', '--workpath', str(directory / 'work'), '--specpath', str(directory / 'spec'),
             '--distpath', str(output), str(src / 'packaging/team/launcher.py')], check=True)
     for flag in ['--self-test', '--gui-self-test']:
         subprocess.run([str(output / FILES[0]), flag], check=True, timeout=90)

@@ -4,10 +4,14 @@ name: AuthzLedger Team packages
 on:
   push:
     branches: [authzledger-website]
-    tags: [team-1.5.0.3]
+    tags: [team-1.5.0.4]
     paths:
       - 'team/**'
       - 'packaging/team/**'
+      - 'integrations/burp/**'
+      - 'docs/Team-Login-RBAC.md'
+      - 'docs/Key-Rotation.md'
+      - 'docs/ZAP-API-Scan-Import.md'
       - 'scripts/build-team-release.py'
       - 'qa/team*'
       - 'qa/test_team*.py'
@@ -27,7 +31,7 @@ concurrency:
 
 jobs:
   source:
-    if: github.repository == '0xFarag/0xFarag' && (github.ref == 'refs/heads/authzledger-website' || github.ref == 'refs/tags/team-1.5.0.3')
+    if: github.repository == '0xFarag/0xFarag' && (github.ref == 'refs/heads/authzledger-website' || github.ref == 'refs/tags/team-1.5.0.4')
     runs-on: ubuntu-24.04
     outputs:
       publish: ${{ steps.intent.outputs.publish }}
@@ -42,7 +46,7 @@ jobs:
         id: intent
         shell: bash
         run: |
-          test "$(cat packaging/team/VERSION)" = '1.5.0.3'
+          test "$(cat packaging/team/VERSION)" = '1.5.0.4'
           git merge-base --is-ancestor "$GITHUB_SHA" origin/authzledger-website
           release_sha="$(git rev-parse HEAD)"
           publish=false
@@ -51,7 +55,7 @@ jobs:
             test "$(git rev-parse "$GITHUB_REF^{}")" = "$release_sha"
             publish=true
           elif [[ -f "$request" ]] && [[ "$(git diff --name-only HEAD^ HEAD)" == "$request" ]]; then
-            jq -e 'type == "object" and (keys == ["source_commit","tag"]) and .tag == "team-1.5.0.3" and (.source_commit | type == "string" and test("^[a-f0-9]{40}$"))' "$request" >/dev/null
+            jq -e 'type == "object" and (keys == ["source_commit","tag"]) and .tag == "team-1.5.0.4" and (.source_commit | type == "string" and test("^[a-f0-9]{40}$"))' "$request" >/dev/null
             requested_sha="$(jq -er .source_commit "$request")"
             test "$requested_sha" = "$(git rev-parse HEAD^)"
             release_sha="$requested_sha"
@@ -73,6 +77,39 @@ jobs:
           node qa/node_modules/playwright/cli.js install chromium
           node --test qa/team-ui.cjs
 
+  burp-export:
+    needs: source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ needs.source.outputs.release_sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Test the export and its Team import, then package the extension
+        shell: bash
+        run: |
+          export JAVA_HOME="${JAVA_HOME_21_X64:?Hosted runner JDK 21 required}"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          javac -version | grep -E '^javac 21([.]|$)'
+          python -m pip install --only-binary=:all: -r team/requirements.txt
+          python integrations/burp/build.py
+          jar=integrations/burp/build/authzledger-burp-export.jar
+          unzip -tq "$jar"
+          unzip -p "$jar" META-INF/NOTICE.txt | grep -Fx '© Nasser Aldin Farag (0xFarag). All rights reserved.'
+          mkdir release
+          cp "$jar" "release/AuthzLedger-Burp-Export-$(cat packaging/team/VERSION).jar"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: team-burp-export
+          path: release/*.jar
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+
   linux:
     needs: source
     runs-on: ubuntu-24.04
@@ -89,19 +126,19 @@ jobs:
           python3 scripts/build-team-release.py deb --output release
           python3 scripts/build-team-release.py source --output "$RUNNER_TEMP/repeat"
           python3 scripts/build-team-release.py deb --output "$RUNNER_TEMP/repeat"
-          cmp release/authzledger-team-1.5.0.3.tar.gz "$RUNNER_TEMP/repeat/authzledger-team-1.5.0.3.tar.gz"
-          cmp release/authzledger-team_1.5.0.3-1_all.deb "$RUNNER_TEMP/repeat/authzledger-team_1.5.0.3-1_all.deb"
+          cmp release/authzledger-team-1.5.0.4.tar.gz "$RUNNER_TEMP/repeat/authzledger-team-1.5.0.4.tar.gz"
+          cmp release/authzledger-team_1.5.0.4-1_all.deb "$RUNNER_TEMP/repeat/authzledger-team_1.5.0.4-1_all.deb"
           sudo apt-get update -qq
           sudo apt-get install -y ./release/*.deb skopeo xvfb xauth
           authzledger-team --help
           authzledger-team-desktop --self-test
           xvfb-run -a authzledger-team-desktop --gui-self-test
           grep -Fx '© Nasser Aldin Farag (0xFarag). All rights reserved.' /usr/share/doc/authzledger-team/copyright
-          test -s /usr/share/doc/authzledger-team/Team-Login-RBAC.md
+          for guide in Team-Login-RBAC Key-Rotation ZAP-API-Scan-Import Burp-Export; do test -s "/usr/share/doc/authzledger-team/$guide.md"; done
       - name: Build and install the native Arch package
         run: |
           mkdir "$RUNNER_TEMP/arch-build"
-          cp release/{PKGBUILD,authzledger-team-1.5.0.3.tar.gz} "$RUNNER_TEMP/arch-build/"
+          cp release/{PKGBUILD,authzledger-team-1.5.0.4.tar.gz} "$RUNNER_TEMP/arch-build/"
           docker run --rm --volume "$RUNNER_TEMP/arch-build:/work" \
             archlinux:base-devel@sha256:fa2d4ce3310ddd90a4208e5168be8ad367da5129af1245f38fd2d803bcbe3239 bash -euc '
               pacman -Syu --noconfirm --needed python python-cryptography python-reportlab tk
@@ -109,20 +146,20 @@ jobs:
               chown -R packagebuilder:packagebuilder /work
               cd /work
               su packagebuilder -c "makepkg --cleanbuild --noconfirm"
-              pacman -U --noconfirm ./authzledger-team-1.5.0.3-1-any.pkg.tar.zst
+              pacman -U --noconfirm ./authzledger-team-1.5.0.4-1-any.pkg.tar.zst
               authzledger-team --help
               authzledger-team-desktop --self-test
             '
           cp "$RUNNER_TEMP/arch-build/"*.pkg.tar.zst release/
       - name: Build and smoke-test the Docker and OCI archives
         run: |
-          image=authzledger-team:1.5.0.3
-          name=authzledger-team-1.5.0.3-linux-amd64
+          image=authzledger-team:1.5.0.4
+          name=authzledger-team-1.5.0.4-linux-amd64
           ctx="$RUNNER_TEMP/team-context"
           python3 scripts/build-team-release.py context --output "$ctx"
           docker build --platform linux/amd64 -f "$ctx/packaging/team/Dockerfile" -t "$image" "$ctx"
           docker image inspect -f '{{index .Config.Labels "org.opencontainers.image.licenses"}}' "$image" | grep -Fx 'LicenseRef-AuthzLedger'
-          docker image inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "$image" | grep -Fx '1.5.0.3'
+          docker image inspect -f '{{index .Config.Labels "org.opencontainers.image.version"}}' "$image" | grep -Fx '1.5.0.4'
           docker image inspect -f '{{index .Config.Labels "org.authzledger.copyright"}}' "$image" | grep -Fx '© Nasser Aldin Farag (0xFarag). All rights reserved.'
           docker run --rm --entrypoint sh "$image" -ec 'test -s /usr/share/doc/authzledger-team/third-party/INVENTORY.json && test -s /usr/share/doc/authzledger-team/README.md'
           docker image inspect -f '{{.Config.User}}' "$image" | grep -x 10001:10001
@@ -133,7 +170,7 @@ jobs:
           docker run --rm -v "$volume:/data" --entrypoint python "$image" -c "from team.server import bootstrap; import secrets; bootstrap('/data','test-admin',secrets.token_urlsafe(32))"
           docker run --rm -v "$volume:/data" --entrypoint python "$image" -c "from team.server import needs_bootstrap; assert not needs_bootstrap('/data')"
           docker save "$image" | gzip -n > "release/$name.docker.tar.gz"
-          skopeo --insecure-policy copy "docker-daemon:$image" "oci-archive:release/$name.oci.tar:team-1.5.0.3"
+          skopeo --insecure-policy copy "docker-daemon:$image" "oci-archive:release/$name.oci.tar:team-1.5.0.4"
           docker image rm "$image"
           docker load -i "release/$name.docker.tar.gz"
           docker run --rm -e PYTHONPATH=/opt/authzledger -v "$PWD/packaging/team/launcher.py:/tmp/launcher.py:ro" --entrypoint python "$image" /tmp/launcher.py --self-test
@@ -165,12 +202,14 @@ jobs:
         run: |
           python -m pip install --only-binary=:all: -r team/requirements.txt -r packaging/team/windows-build.txt
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m unittest qa.test_team_rotation qa.test_team_rotation_routes -v
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
           $env:SOURCE_DATE_EPOCH = git show -s --format=%ct HEAD
           $env:PYTHONHASHSEED = '0'
           python scripts/build-team-release.py windows --output release
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
-          $exe = Get-Item release/AuthzLedger-Team-1.5.0.3-Windows-x64.exe
-          if ($exe.VersionInfo.LegalCopyright -cne '© Nasser Aldin Farag (0xFarag). All rights reserved.' -or $exe.VersionInfo.ProductVersion -ne '1.5.0.3') { throw 'Unexpected Windows product metadata.' }
+          $exe = Get-Item release/AuthzLedger-Team-1.5.0.4-Windows-x64.exe
+          if ($exe.VersionInfo.LegalCopyright -cne '© Nasser Aldin Farag (0xFarag). All rights reserved.' -or $exe.VersionInfo.ProductVersion -ne '1.5.0.4') { throw 'Unexpected Windows product metadata.' }
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: team-windows
@@ -211,9 +250,9 @@ jobs:
 
   publish:
     if: needs.source.outputs.publish == 'true'
-    needs: [source, linux, windows, site-check]
+    needs: [source, burp-export, linux, windows, site-check]
     concurrency:
-      group: publish-authzledger-team-1.5.0.3
+      group: publish-authzledger-team-1.5.0.4
       cancel-in-progress: false
     runs-on: ubuntu-24.04
     permissions:
@@ -236,8 +275,8 @@ jobs:
         run: |
           python3 scripts/build-team-release.py verify --output release
           (cd release && sha256sum --check --strict SHA256SUMS)
-          tag=team-1.5.0.3
-          title='AuthzLedger Team 1.5.0.3'
+          tag=team-1.5.0.4
+          title='AuthzLedger Team 1.5.0.4'
           commit="$RELEASE_SHA"
           marker="Build commit: $commit"
           manifest_sha="$(sha256sum release/SHA256SUMS | cut -d' ' -f1)"

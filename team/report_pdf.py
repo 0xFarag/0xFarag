@@ -177,7 +177,7 @@ def render_pdf(report, manifest):
         else:
             layout.section(cap['evidence_index'])
             baseline = [(ref['role'], ref) for ref in evidence_index['observations']]
-        for field, ref in baseline + [(field, item.get(field)) for field in ('retest_evidence', 'retest_control')]:
+        for field, ref in baseline + [(field, item.get(field)) for field in ('scanner_lead', 'retest_evidence', 'retest_control')]:
             if ref is None:
                 continue
             layout.ensure(70)

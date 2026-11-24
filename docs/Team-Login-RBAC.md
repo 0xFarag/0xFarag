@@ -72,7 +72,7 @@ Die Datenbank lehnt Änderungen und Löschungen erfasster Auditereignisse über 
 
 ## Sicherung, Wiederherstellung und Abnahme
 
-Der Datenbestand liegt in `team.sqlite3`. SQLite verwendet den WAL-Modus. Eine isolierte Kopie der geöffneten Hauptdatei kann bestätigte Änderungen auslassen. Den Dienst für eine konsistente Sicherung geordnet beenden und das gesamte Datenverzeichnis kopieren oder eine geeignete SQLite-Online-Sicherung verwenden. Der private Ed25519-Schlüssel der Installation liegt in `evidence-signing.key`. Sein Fingerabdruck wird in der Datenbank gebunden. Passende Datenbank und Schlüssel zusammen sichern. Einen verlorenen gebundenen Schlüssel aus einer geprüften Sicherung wiederherstellen. Die TLS-Schlüssel liegen an den vom Betreiber angegebenen Pfaden und benötigen eine eigene geschützte Sicherung. Den Zugriff auf Sicherungen mindestens so streng wie auf den Dienst selbst begrenzen. Die Wiederherstellung zuerst mit einer getrennten Testkopie durchführen.
+Den Team-Dienst geordnet beenden und das gesamte Datenverzeichnis zusammen sichern. Dazu gehören die SQLite-Datenbank mit ihren WAL-Dateien, der jeweils aktive private Schlüssel in `evidence-signing.key` oder `evidence-signing-next.key` und die zugehörige öffentliche `.pub`-Datei. Eine einzelne Kopie der laufenden Datenbank kann bestätigte Änderungen oder den passenden Schlüsselstand auslassen. Die Sicherung auf die Dienstverantwortlichen beschränken. Unter Windows benötigt die Wiederherstellung das zugehörige Dienstkonto und dessen DPAPI-Profil. Die TLS-Schlüssel liegen an den vom Betreiber angegebenen Pfaden und benötigen eine eigene geschützte Sicherung. Die Wiederherstellung zuerst mit einer isolierten Kopie prüfen.
 
 Vor der Freigabe für ein echtes Team prüft der Betreiber folgende Punkte an der vorgesehenen Installation.
 
@@ -95,7 +95,9 @@ Im Fall wählt ein Admin, Lead Pentester oder Reviewer unter **Signierte Überga
 - `report.html` oder `report.pdf` ist der lesbare Kundenbericht. Seine SHA-256-Prüfsumme bindet jedes Byte.
 - `proof.json` enthält die signierte JSON-Übergabe und eine separate Ed25519-Signatur für Format, Dateilänge, Prüfsumme, Übergabe, Fall, Team und Scope. Die PDF-Signatur wird über diese Begleitdatei geprüft.
 
-Zur Prüfung in der Team-GUI die unveränderte ZIP-Datei im Abschnitt **Übergabe prüfen** auswählen. Jede Teamrolle kann die Verifikation gegen den Vertrauensschlüssel ihrer Installation durchführen. Die Oberfläche zeigt die geprüfte Dateiprüfsumme und den verifizierten Bericht an. Beim Versand beide Dateien zusammen übergeben und den öffentlichen Schlüssel oder seinen Fingerabdruck über einen unabhängigen Kanal bestätigen. Eine Änderung am Bericht erfordert eine neue signierte Ausgabe.
+Für die Prüfung in der Team-GUI unter **Signatur prüfen** die JSON- oder ZIP-Übergabe auswählen. Jede leseberechtigte Teamrolle kann die Signatur prüfen. Der Server ordnet ihr den gespeicherten Schlüssel anhand des signierten Fingerabdrucks zu. Nach erfolgreicher Prüfung zeigt die Oberfläche den verwendeten Fingerabdruck, den Bericht und bei ZIP-Dateien die Prüfsumme des Dokuments an.
+
+Unter **Öffentliche Signierschlüssel** stehen der aktive und die früheren Schlüssel der Installation zur Auswahl. Die Liste zeigt, ab wann der nächste automatische Wechsel fällig ist. Die nächste signierte Übergabe ab diesem Zeitpunkt löst ihn aus. Für die Offline-Prüfung eines älteren Berichts den öffentlichen Schlüssel mit dem passenden Fingerabdruck auswählen und seine JSON-Datei separat speichern. Dem Empfänger den vollständigen SHA-256-Fingerabdruck über einen unabhängigen, bereits bekannten Kanal bestätigen. Bei HTML oder PDF den Bericht und seinen Signaturnachweis zusammen im ZIP übergeben.
 
 Mit dem Quellpaket kann der Empfänger die Verifikation auch rein lokal durchführen. Der Befehl gibt bei Erfolg Exitcode 0 und einen JSON-Beleg mit `valid: true` aus.
 

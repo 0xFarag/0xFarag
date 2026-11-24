@@ -70,5 +70,17 @@
     "Installez la workbench d’équipe ou téléchargez les outils autonomes de vérification destinés aux destinataires.",
     "Installate la workbench di team o scaricate gli strumenti autonomi per la verifica da parte dei destinatari.",
     "ثبّتوا مساحة عمل الفريق أو نزّلوا أدوات التحقّق المستقلّة للمستلمين."
+  ],
+  "Burp-Erweiterung für den Belegexport (JAR)": [
+    "Burp extension for exporting evidence (JAR)",
+    "Extension Burp pour l’export des preuves (JAR)",
+    "Estensione Burp per esportare le evidenze (JAR)",
+    "إضافة Burp لتصدير الأدلة (JAR)"
+  ],
+  "Burp-Erweiterung installieren": [
+    "Install the Burp extension",
+    "Installer l’extension Burp",
+    "Installare l’estensione Burp",
+    "تثبيت إضافة Burp"
   ]
 }

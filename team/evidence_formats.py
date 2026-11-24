@@ -99,13 +99,20 @@ def parse_records(fmt, raw):
                   "fingerprint": sha(value if isinstance(value, bytes) else canonical(value))}
         if type(status) is int and 100 <= status <= 599:
             record["status_code"] = status
-        if kind == "http_exchange" and resolved and isinstance(method, str) and re.fullmatch(r"[A-Za-z]{1,16}", method):
+        if kind in ("scanner_alert", "http_exchange") and resolved and isinstance(method, str) and re.fullmatch(r"[A-Za-z]{1,16}", method):
             url = urlsplit(asset)
             if url.scheme.lower() in ("http", "https"):
                 default_port = 443 if url.scheme.lower() == "https" else 80
-                record["request_key"] = sha(canonical([method.upper(),url.scheme.lower(),resolved,
-                                                      url.port or default_port,url.path or "/",url.query,payload]))
+                # A scanner instance has no equivalent body representation across exports.
+                # Keep the full method and target, including the query, as provenance only.
+                endpoint = [method.upper(), url.scheme.lower(), resolved,
+                            url.port if url.port is not None else default_port, url.path or "/", url.query]
+                record["endpoint_key"] = sha(canonical(endpoint))
+                if kind == "http_exchange":
+                    record["request_key"] = sha(canonical([method.upper(),url.scheme.lower(),resolved,
+                                                          url.port or default_port,url.path or "/",url.query,payload]))
         rows.append(record)
+        return record
 
     if fmt in ("burp", "nmap"):
         doc = xml_document(text)
@@ -171,10 +178,26 @@ def parse_records(fmt, raw):
         elif fmt == "zap":
             for site in sequence(data["site"]):
                 for alert in sequence(site["alerts"]):
-                    if not isinstance(alert.get("pluginid"), (str,int)):
-                        raise ValueError("invalid ZAP alert")
-                    for entry in sequence(alert["instances"]):
-                        add("scanner_alert", entry["uri"], [alert["pluginid"],entry])
+                    rule = alert["pluginid"]
+                    if type(rule) not in (int, str) or not re.fullmatch(r"[0-9]{1,10}", str(rule)):
+                        raise ValueError("invalid ZAP rule ID")
+                    instances = sequence(alert["instances"])
+                    if not instances:
+                        raise ValueError("ZAP alert is missing its instances")
+                    metadata = {"rule_id": str(rule)}
+                    alert_ref = alert.get("alertRef")
+                    if isinstance(alert_ref, str) and re.fullmatch(r"[0-9]{1,10}(?:-[0-9]{1,10})?", alert_ref):
+                        metadata["alert_ref"] = alert_ref
+                    for key, maximum in (("riskcode", 3), ("confidence", 4)):
+                        value = alert.get(key)
+                        if type(value) in (str, int) and str(value) in {str(i) for i in range(maximum + 1)}:
+                            metadata[key] = int(value)
+                    for entry in instances:
+                        uri = entry["uri"]
+                        if not host(uri) or urlsplit(uri).scheme.lower() not in ("http", "https"):
+                            raise ValueError("invalid ZAP instance URI")
+                        row = add("scanner_alert", uri, [rule, entry], method=entry.get("method"))
+                        row.update(metadata)
         elif fmt == "openapi":
             if not isinstance(data.get("info"), dict) or not re.fullmatch(r"3\.[012]\.\d+", data["openapi"]):
                 raise ValueError("unsupported OpenAPI document")
@@ -191,6 +214,6 @@ def parse_records(fmt, raw):
                     servers = sequence(operation.get("servers",item.get("servers",data.get("servers",[]))))
                     url = servers[0].get("url") if len(servers) == 1 else None
                     add("declared_operation", url if url and "://" in url else None, [path,method,servers,operation])
-    if not rows:
+    if not rows and fmt != "zap":
         raise ValueError("source contains no supported records")
     return rows

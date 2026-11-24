@@ -15,17 +15,26 @@ from team.server import bootstrap, make_server, needs_bootstrap
 
 def self_test():
     """Exercise the packaged app, SQLite, the bundled web UI and cryptography."""
-    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+    from contextlib import closing
+    from team.evidence import signer
+    from team.server import connect
     from team.report_pdf import smoke_pdf
     document = smoke_pdf()
     if not document.startswith(b'%PDF-') or b'%%EOF' not in document[-32:]:
         raise RuntimeError('Packaged PDF renderer did not produce a complete document')
-    key = Ed25519PrivateKey.generate()
-    key.public_key().verify(key.sign(b'AuthzLedger packaging self-test'), b'AuthzLedger packaging self-test')
     with tempfile.TemporaryDirectory() as temp:
         location = Path(temp)
         assert needs_bootstrap(location)
         bootstrap(location, 'packaging-admin', secrets.token_urlsafe(32))
+        message = b'AuthzLedger packaging self-test'
+        with closing(connect(location)) as db, db:
+            key, first = signer(db, location)
+            signature = key.sign(message)
+        with closing(connect(location)) as db, db:
+            reopened, current = signer(db, location)
+            reopened.public_key().verify(signature, message)
+            if current != first:
+                raise ValueError('Packaged workspace did not retain its signing key')
         server = make_server(location, host='127.0.0.1', port=0)
         worker = threading.Thread(target=server.serve_forever, daemon=True)
         worker.start()
@@ -42,6 +51,7 @@ def self_test():
 
 LANGUAGES = {'de': 'Deutsch', 'en': 'English', 'fr': 'Français', 'it': 'Italiano', 'ar': 'العربية'}
 DESKTOP_TEXT = {
+    "guides": ["Anleitungen", "Guides", "Guides", "Guide", "الأدلة"],
     "licence": ["Lizenz und Drittanbieterhinweise", "Licence and third-party notices", "Licence et avis de tiers", "Licenza e avvisi di terzi", "الرخصة وإشعارات الأطراف الثالثة"],
     "tagline": [
         "Privater Arbeitsbereich auf diesem Gerät",
@@ -131,7 +141,25 @@ def legal_files():
                                 source_root / 'packaging/team/THIRD-PARTY.md') if p.is_file()}
 
 
-def show_notices(root, files, title):
+GUIDES = ('Team-Login-RBAC.md', 'Burp-Export.md', 'ZAP-API-Scan-Import.md', 'Key-Rotation.md')
+
+
+def guide_files():
+    entry = Path(__file__).resolve()
+    if getattr(sys, 'frozen', False):
+        directory = entry.parent / 'docs'
+    elif (entry.parents[2] / 'packaging/team/VERSION').is_file():
+        directory = entry.parents[2] / 'docs'
+    else:
+        directory = Path('/usr/share/doc/authzledger-team')
+    guides = {name: directory / name for name in GUIDES}
+    source_readme = directory.parent / 'integrations/burp/README.md'
+    if not guides['Burp-Export.md'].is_file() and source_readme.is_file():
+        guides['Burp-Export.md'] = source_readme
+    return {name: path for name, path in guides.items() if path.is_file()}
+
+
+def show_documents(root, files, title):
     import tkinter as tk
     from tkinter import ttk
     view = tk.Toplevel(root)
@@ -233,13 +261,20 @@ def launch(directory, test_window=False):
     address.insert(0, url)
     address.configure(state='readonly')
     address.pack(anchor='w',pady=(10, 0))
+    docs_row = ttk.Frame(panel)
+    docs_row.pack(anchor='w', pady=(10, 0))
+    guides = guide_files()
+    if guides:
+        ttk.Button(docs_row, text=tr('guides'), command=lambda: show_documents(root, guides, tr('guides'))).pack(side='left', padx=(0, 8))
     notices = legal_files()
     if notices:
-        ttk.Button(panel, text=tr('licence'), command=lambda: show_notices(root, notices, tr('licence'))).pack(anchor='w', pady=(10, 0))
+        ttk.Button(docs_row, text=tr('licence'), command=lambda: show_documents(root, notices, tr('licence'))).pack(side='left')
     errors = []
     if test_window:
         def check_window():
             try:
+                if set(GUIDES) != guides.keys():
+                    raise RuntimeError('Packaged user guides are missing')
                 if not {'LICENSE','NOTICE.txt','THIRD-PARTY.md'} <= notices.keys():
                     raise RuntimeError('Packaged license or third-party notices are missing')
                 if getattr(sys, 'frozen', False) and 'third-party/INVENTORY.json' not in notices:

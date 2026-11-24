@@ -7,7 +7,11 @@ const indexedFixture = require('./fixtures/team-index-cockpit.json');
 
 async function verifySignedCockpit(page, hero) {
   const file = (name, value) => ({name, mimeType:'application/json', buffer:Buffer.from(JSON.stringify(value))});
+  const keyHint = page.locator('#proof-key-hint');
+  assert(await keyHint.isHidden());
   await page.locator('#proof-package').setInputFiles(file('package.json',cockpitFixture.proof.handover));
+  await keyHint.getByText(cockpitFixture.trustedKey.fingerprint,{exact:true}).waitFor();
+  assert(await page.locator('#proof-result').isHidden());
   await page.locator('#proof-key').setInputFiles(file('trust.json',cockpitFixture.trustedKey));
   await hero.locator('#beweis-cockpit button').click();
   await page.locator('#proof-result:visible').waitFor();
@@ -18,6 +22,11 @@ async function verifySignedCockpit(page, hero) {
   await page.locator('#proof-match').filter({hasText:'entspricht einer signierten Quelle'}).waitFor();
   await page.locator('#proof-clear').click();
   assert(await page.locator('#proof-result').isHidden());
+  assert(await keyHint.isHidden());
+  await page.locator('#proof-package').setInputFiles(file('document-proof.json',cockpitFixture.proof));
+  await keyHint.getByText(cockpitFixture.trustedKey.fingerprint,{exact:true}).waitFor();
+  await page.locator('#proof-package').setInputFiles(file('foreign.json',{manifest:{fingerprint:'untrusted'}}));
+  await keyHint.waitFor({state:'hidden'});
   await page.locator('#proof-package').setInputFiles(file('indexed.json',indexedFixture.package));
   await page.locator('#proof-key').setInputFiles(file('trust.json',indexedFixture.trustedKey));
   await hero.locator('#beweis-cockpit button').click();

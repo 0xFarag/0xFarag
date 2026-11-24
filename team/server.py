@@ -11,6 +11,7 @@ from http.cookies import SimpleCookie, CookieError
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import ipaddress
 import json
+import logging
 import mimetypes
 import os
 from pathlib import Path
@@ -27,7 +28,7 @@ from urllib.parse import urlsplit
 
 if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from team import evidence, review_records
+from team import evidence, keyring, review_records
 
 ROLES = ('admin', 'lead_pentester', 'pentester', 'reviewer', 'read_only')
 WRITERS = frozenset(ROLES[:3])
@@ -118,6 +119,8 @@ def _fields(body, allowed, required=()):
 
 def connect(data_dir):
     db=sqlite3.connect(Path(data_dir)/'team.sqlite3',timeout=15,isolation_level=None)
+    # A committed signer change must survive power loss before removing the retired private key.
+    db.execute('PRAGMA synchronous=FULL')
     db.row_factory=sqlite3.Row
     db.execute('PRAGMA foreign_keys=ON')
     return db
@@ -290,7 +293,7 @@ def _team_route(db,data_dir,tid,user,role,method,parts,body):
         return review_records.handle(db,tid,uid,method,parts,body)
     raw_attachment=cases and len(parts)==5 and parts[2]=='imports' and parts[4]=='attachment'
     if raw_attachment and method=='GET' and role not in WRITERS: raise ApiError(403,'forbidden')
-    permitted=(method=='GET' and ((cases and len(parts) in (1,2)) or parts==['trust-key'] or raw_attachment)) or (method=='POST' and parts==['verify'])
+    permitted=(method=='GET' and ((cases and len(parts) in (1,2)) or parts in (['trust-key'],['trust-keys']) or raw_attachment)) or (method=='POST' and parts==['verify'])
     if not permitted and method=='POST':
         if parts==['cases'] or (cases and len(parts)==3 and parts[-1] in ('imports','finding','retest')):
             if role not in WRITERS: raise ApiError(403,'forbidden')
@@ -365,7 +368,7 @@ def dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local
                     result=_team_route(db,data_dir,tid,user,membership['role'],method,parts[3:],body)
                 else: raise ApiError(404,'not_found')
                 if tid:
-                    action=method.lower()+'.'+(parts[-1] if parts[-1] in ('teams','members','audit','cases','imports','finding','retest','handover','verify','trust-key') else parts[-2])
+                    action=method.lower()+'.'+(parts[-1] if parts[-1] in ('teams','members','audit','cases','imports','finding','retest','handover','verify','trust-key','trust-keys') else parts[-2])
                     if method=='POST' and parts[-1]=='members': resource+='/'+result['id']
                     if method in ('PATCH','POST') and 'members' in parts and 'role' in body:
                         resource+=' role='+body['role']
@@ -375,12 +378,18 @@ def dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local
                         resource+='/'+result['case']['id']
                     _log(db,tid,actor,action,resource)
             db.commit()
-            return result,published_token
         except (ApiError,evidence.WorkflowError) as exc:
             db.rollback()
             if actor:
                 _log(db,tid,actor,action,resource,'denied' if exc.status in (401,403,404) else 'rejected')
             raise
+        if action in ('post.handover','get.trust-key','get.trust-keys'):
+            try:
+                keyring.prune_committed(db,Path(data_dir))
+            except (OSError,sqlite3.Error,keyring.KeyStoreError):
+                # The handover is committed. Cleanup is retried on the next key read or handover.
+                logging.getLogger(__name__).warning('Signing-key cleanup pending')
+        return result,published_token
 
 def _loopback(host):
     if host=='localhost': return True

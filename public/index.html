@@ -37,7 +37,7 @@
       <div class="actions">
         <a class="btn start-primary" href="/workbench/">Workbench öffnen</a>
         <a class="btn ghost" href="/downloads/#team">Team-Workbench installieren</a>
-      </div><div class="proof-quick"><a href="#werkzeuge">Prüfwerkzeug wählen</a><a href="#pilot">Preise und Pilot</a><a href="#investoren">Investor-One-Pager</a>
+      </div><div class="proof-quick"><a href="#werkzeuge">Prüfwerkzeug wählen</a><a href="/downloads/#burp">Burp-Erweiterung herunterladen</a><a href="#pilot">Preise und Pilot</a><a href="#investoren">Investor-One-Pager</a>
       </div>
     </div>
     <form class="proof-box" id="beweis-cockpit" aria-labelledby="proof-title">
@@ -45,6 +45,10 @@
       <div class="proof-fields"><p>Prüfen Sie eine Team-Übergabe mit dem separat bezogenen öffentlichen Schlüssel. Alle Dateien bleiben in Ihrem Browser.</p>
         <label for="proof-package">Signierte Übergabe oder proof.json</label>
         <input id="proof-package" type="file" accept="application/json,.json" required>
+        <div id="proof-key-hint" hidden role="status">
+          <span>Angegebener Schlüssel-Fingerabdruck (ungeprüft)</span><code id="proof-claimed-fingerprint" dir="ltr"></code>
+          <span>Beziehen Sie den passenden öffentlichen Schlüssel über einen unabhängigen Kanal vom Aussteller.</span>
+        </div>
         <label for="proof-key">Vertrauensschlüssel (JSON)</label>
         <input id="proof-key" type="file" accept="application/json,.json" required>
         <details id="proof-document-options"><summary>Signiertes PDF oder HTML prüfen</summary>

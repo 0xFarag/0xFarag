@@ -1,0 +1,26 @@
+{
+  "Angegebener Schlüssel-Fingerabdruck (ungeprüft)": [
+    "Claimed key fingerprint (unverified)",
+    "Empreinte de clé déclarée (non vérifiée)",
+    "Impronta della chiave dichiarata (non verificata)",
+    "بصمة المفتاح المُعلنة (لم يتم التحقق منها)"
+  ],
+  "Beziehen Sie den passenden öffentlichen Schlüssel über einen unabhängigen Kanal vom Aussteller.": [
+    "Obtain the matching public key from the issuer through an independent channel.",
+    "Demandez la clé publique correspondante à l’émetteur par un canal indépendant.",
+    "Richiedete all’emittente la chiave pubblica corrispondente tramite un canale indipendente.",
+    "احصل على المفتاح العام المطابق من الجهة المصدرة عبر قناة مستقلة."
+  ],
+  "Burp-Erweiterung herunterladen": [
+    "Download the Burp extension",
+    "Télécharger l’extension Burp",
+    "Scarica l’estensione Burp",
+    "تنزيل إضافة Burp"
+  ],
+  "Bringen Sie Burp-Aufzeichnungen oder einen ZAP-Bericht und die zugehörigen Kontrollbelege mit. Ihr Reviewer verfolgt einen Befund bis zur Kontrolle, erkennt offene Retests und prüft die Übergabe mit dem beim Signieren verwendeten Schlüssel.": [
+    "Bring Burp captures or a ZAP report and the supporting control evidence. Your reviewer can trace a finding back to its control, identify outstanding retests and verify the handover with the key used to sign it.",
+    "Apportez des captures Burp ou un rapport ZAP avec les pièces justificatives des contrôles. Votre réviseur peut remonter d’un constat à son contrôle, repérer les retests en attente et vérifier la remise avec la clé utilisée pour la signer.",
+    "Portate le acquisizioni Burp o un report ZAP con le relative evidenze di controllo. Il revisore può risalire dal rilievo al controllo, individuare le verifiche ancora aperte e verificare la consegna con la chiave usata per firmarla.",
+    "أحضر سجلات Burp أو تقرير ZAP مع الأدلة الداعمة للضوابط. يستطيع المراجع تتبّع النتيجة إلى الضابط المرتبط بها، ومعرفة ما ينتظر إعادة الاختبار، والتحقق من حزمة التسليم باستخدام المفتاح الذي وُقّعت به."
+  ]
+}

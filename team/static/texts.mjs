@@ -1,6 +1,41 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
 export const languages = ["de", "en", "fr", "it", "ar"];
 export const messages = {
+  "zapRisk": [
+    "ZAP-Risiko",
+    "ZAP risk",
+    "Risque ZAP",
+    "Rischio ZAP",
+    "مخاطر ZAP"
+  ],
+  "zapConfidence": [
+    "ZAP-Konfidenz",
+    "ZAP confidence",
+    "Confiance ZAP",
+    "Confidenza ZAP",
+    "ثقة ZAP"
+  ],
+  "zapLead": [
+    "Verknüpfter ZAP-Hinweis",
+    "Linked ZAP alert",
+    "Alerte ZAP associée",
+    "Segnalazione ZAP collegata",
+    "تنبيه ZAP المرتبط"
+  ],
+  "noZapLink": [
+    "Ohne ZAP-Verknüpfung",
+    "No ZAP link",
+    "Sans lien ZAP",
+    "Nessun collegamento ZAP",
+    "دون ربط بتنبيه ZAP"
+  ],
+  "zapMismatch": [
+    "ZAP-Hinweis und Beobachtung müssen dieselbe HTTP-Methode und Ziel-URL haben.",
+    "The ZAP alert and observation need the same HTTP method and target URL.",
+    "L’alerte ZAP et l’observation doivent partager la même méthode HTTP et la même URL cible.",
+    "La segnalazione ZAP e l’osservazione devono avere lo stesso metodo HTTP e URL di destinazione.",
+    "يجب أن يتطابق تنبيه ZAP والملاحظة في طريقة HTTP وعنوان الهدف."
+  ],
   "duplicate": [
     "Identische Quelle bereits im Fall vorhanden.",
     "This source already exists in the case.",
@@ -366,11 +401,74 @@ export const messages = {
     "التحقق من التوقيع"
   ],
   "verifyHelp": [
-    "Prüfen Sie das Übergabepaket gegen den beim Teamserver hinterlegten Vertrauensschlüssel.",
-    "Verify the handover package against the trusted key held by your team server.",
-    "Vérifiez le paquet de remise avec la clé de confiance conservée sur le serveur d’équipe.",
-    "Verifica il pacchetto di consegna con la chiave attendibile conservata dal server del team.",
-    "تحقّق من حزمة التسليم باستخدام المفتاح الموثوق المحفوظ في خادم الفريق."
+    "Der Teamserver prüft die Signatur mit dem zugehörigen Schlüssel aus seiner eigenen Schlüsselhistorie.",
+    "The team server verifies the signature with the matching key in its own key history.",
+    "Le serveur d’équipe vérifie la signature avec la clé correspondante de son propre historique.",
+    "Il server del team verifica la firma con la chiave corrispondente del proprio registro.",
+    "يتحقق خادم الفريق من التوقيع باستخدام المفتاح المطابق في سجل مفاتيحه."
+  ],
+  "trustUnavailable": [
+    "Die Schlüsselhistorie ist nicht verfügbar. Aktualisieren Sie die Liste, um es erneut zu versuchen.",
+    "Key history is unavailable. Refresh the list to try again.",
+    "L’historique des clés est indisponible. Actualisez la liste pour réessayer.",
+    "Il registro delle chiavi non è disponibile. Aggiorna l’elenco per riprovare.",
+    "سجل المفاتيح غير متاح. حدّث القائمة للمحاولة مجددًا."
+  ],
+  "trustHistory": [
+    "Öffentliche Signierschlüssel",
+    "Public signing keys",
+    "Clés publiques de signature",
+    "Chiavi pubbliche di firma",
+    "مفاتيح التوقيع العامة"
+  ],
+  "trustSelect": [
+    "Schlüssel für den Download",
+    "Key to download",
+    "Clé à télécharger",
+    "Chiave da scaricare",
+    "المفتاح المراد تنزيله"
+  ],
+  "trustRetired": [
+    "Früherer Schlüssel",
+    "Previous key",
+    "Ancienne clé",
+    "Chiave precedente",
+    "مفتاح سابق"
+  ],
+  "trustPolicy": [
+    "Nach {days} Tagen wechselt der Server den Schlüssel bei der nächsten signierten Übergabe.",
+    "After {days} days, the server rotates the key the next time it signs a handover.",
+    "Après {days} jours, le serveur change de clé lors de la prochaine signature d’un livrable.",
+    "Dopo {days} giorni il server cambia chiave alla firma della consegna successiva.",
+    "بعد {days} يومًا يبدّل الخادم المفتاح عند توقيع حزمة التسليم التالية."
+  ],
+  "trustActivated": [
+    "Aktiviert",
+    "Activated",
+    "Activée le",
+    "Attivata il",
+    "تاريخ التفعيل"
+  ],
+  "trustRetiredAt": [
+    "Abgelöst",
+    "Retired",
+    "Remplacée le",
+    "Sostituita il",
+    "تاريخ الاستبدال"
+  ],
+  "trustDue": [
+    "Nächster Wechsel fällig ab",
+    "Rotation due from",
+    "Renouvellement prévu à partir du",
+    "Prossima rotazione a partire dal",
+    "موعد استحقاق التبديل التالي"
+  ],
+  "trustDownloadHelp": [
+    "Für die Offline-Prüfung den öffentlichen Schlüssel separat speichern. Den vollständigen SHA-256-Fingerabdruck über einen unabhängigen Kanal bestätigen.",
+    "For offline verification, save the public key separately. Confirm the full SHA-256 fingerprint through an independent channel.",
+    "Pour la vérification hors ligne, enregistrez la clé publique séparément. Confirmez l’empreinte SHA-256 complète par un canal indépendant.",
+    "Per la verifica offline, salva separatamente la chiave pubblica. Conferma l’intera impronta SHA-256 tramite un canale indipendente.",
+    "احفظ المفتاح العام في ملف منفصل للتحقق دون اتصال. أكّد بصمة SHA-256 الكاملة عبر قناة مستقلة."
   ],
   "package": [
     "Übergabe (JSON oder ZIP)",

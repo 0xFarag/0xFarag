@@ -2,6 +2,7 @@
 import {languages, messages} from './texts.mjs';
 import {createReviewPanel} from './review-record.mjs';
 import {indexPanel} from './evidence-index.mjs';
+import {createZapLead, zapRule} from './zap-lead.mjs';
 
 const $ = id => document.getElementById(id);
 const roles = ['admin','lead_pentester','pentester','reviewer','read_only'];
@@ -14,10 +15,12 @@ let membership;
 let cases = [];
 let detail;
 let trust;
+let trustRequest = 0;
 let teamEpoch = 0;
 let caseEpoch = 0;
 let savedMessage;
 let authenticating = false;
+const zapLead = createZapLead(document,t);
 const reviewPanel = createReviewPanel($('control-reviews'), {
   download, onError:explain, reload:() => selectCase(detail.case.id,false),
   async post(payload,requestId) {
@@ -75,6 +78,7 @@ function translate(lang) {
   for (const el of document.querySelectorAll('[data-aria]')) el.setAttribute('aria-label',t(el.dataset.aria));
   if (savedMessage) notice(savedMessage.key,savedMessage.error,savedMessage.info);
   if (membership) $('account-role').textContent = t(membership.role);
+  if (trust) renderTrust($('trust-select').value);
 }
 const localError = key => Object.assign(new Error(key),{local:true});
 async function request(path, method='GET', data) {
@@ -100,6 +104,8 @@ function explain(error) {
   const key = error.status === 403 ? 'denied' : error.status === 409 ? 'conflict' : 'requestError';
   const known = {'invalid_credentials':'unauth','invalid_password_length':'passwordLength','last_admin':'lastAdmin',
     'existing_account':'existingMember','already_member':'alreadyMember','login_rate_limited':'rateLimited',
+    'ZAP instance and observation must share the same HTTP method and target':'zapMismatch',
+    'ZAP lead must identify the same scoped asset':'zapMismatch',
     'Control expectation and observation do not match':'controlMismatch',
     'A confirmed observation and its control require captured HTTP exchanges':'controlHelp',
     'The control requires a distinct source observation':'controlHelp',
@@ -151,12 +157,13 @@ function download(data, name) {
 }
 function clearPrivate() {
   reviewPanel.clear();
+  zapLead.refresh([],true); zapLead.mode(false);
   for (const form of document.forms) if (form.id !== 'login-form') form.reset();
-  for (const id of ['case-list','imports','findings','retests','member-list','audit-list','asset','retest-finding','verify-result','trust-fingerprint','detail-title','detail-scope']) $(id).replaceChildren();
+  for (const id of ['case-list','imports','findings','retests','member-list','audit-list','asset','retest-finding','verify-result','detail-title','detail-scope']) $(id).replaceChildren();
   for (const id of ['case-detail','view-members','view-audit']) $(id).hidden = true;
   for (const panel of document.querySelectorAll('#workspace details')) panel.open = false;
   $('verified-report').hidden = true; $('verified-report').replaceChildren();
-  detail = null; trust = null; cases = [];
+  detail = null; cases = []; clearTrust();
   for (const {source,record} of refs.values()) { source.replaceChildren(); record.replaceChildren(); }
 }
 function signedOut() {
@@ -220,6 +227,7 @@ function refRequired(key, on) {
   for (const el of r.inputs) { el.disabled = !on; el.required = on; }
 }
 function updateModes() {
+  zapLead.mode($('finding-status').value === 'confirmed');
   refRequired('finding-evidence',true);
   refRequired('finding-control',$('finding-status').value === 'confirmed');
   $('control-help').hidden = $('finding-status').value !== 'confirmed';
@@ -257,7 +265,7 @@ function renderImport(item) {
     disclosure.addEventListener('toggle', () => {
       if (!disclosure.open || list.childElementCount) return;
       for (const row of item.entries) {
-        const entry = node('li',row.kind + (row.status_code ? ' · HTTP ' + row.status_code : '') + ' · ' + row.fingerprint);
+        const entry = node('li',(row.kind === 'scanner_alert' ? zapRule(row,t) : row.kind) + (row.status_code ? ' · HTTP ' + row.status_code : '') + ' · ' + row.fingerprint);
         entry.value = row.record; list.append(entry);
       }
       disclosure.append(list);
@@ -295,6 +303,7 @@ function renderRecord(item, kind) {
     const line = node('small'); line.className = 'user-text';
     line.append(labelled('span',key),document.createTextNode(' · ' + value)); li.append(line);
   }
+  if (item.scanner_lead) li.append(node('small',t('zapLead') + ' · #' + item.scanner_lead.record + ' · ' + item.scanner_lead.sha256));
   if (kind === 'finding' && item.evidence_index) {
     const slim = {schema:detail.evidence_index_schema, signed:false, team_id:membership.id,
       case_id:detail.case.id, finding_id:item.id, finding_sha256:item.finding_sha256,
@@ -315,6 +324,7 @@ function renderCase(fresh) {
   $('import-count').textContent = imports.length; $('finding-count').textContent = findings.length; $('retest-count').textContent = retests.length;
   reviewPanel.render({teamId:membership.id,item,imports,findings,records:detail.control_reviews || [],lang:locale,
     canPlan:writers.has(membership.role),canReview:writers.has(membership.role) || approvers.has(membership.role)});
+  zapLead.refresh(imports,fresh);
   listItems('imports',imports.map(renderImport));
   listItems('findings',findings.map(f => renderRecord(f,'finding')));
   listItems('retests',retests.map(r => renderRecord(r,'retest')));
@@ -346,13 +356,60 @@ async function caseList(selected) {
   if (id && cases.some(item => item.id === id)) await selectCase(id,detail?.case.id !== id);
   else { detail = null; renderCase(false); }
 }
+function clearTrust() {
+  trust = null;
+  for (const id of ['trust-select','trust-policy','trust-fingerprint','trust-dates']) $(id).replaceChildren();
+  $('trust-select').disabled = true; $('download-key').disabled = true;
+}
+function selectedKey() {
+  return trust?.keys.find(key => key.fingerprint === $('trust-select').value);
+}
+function showKey() {
+  const key = selectedKey();
+  $('download-key').disabled = !key;
+  if (!key) return;
+  const fingerprint = node('bdi',key.fingerprint); fingerprint.dir = 'ltr';
+  $('trust-fingerprint').replaceChildren(labelled('span','fingerprint'),document.createTextNode(' · SHA-256 · '),fingerprint);
+  const dates = $('trust-dates'); dates.replaceChildren();
+  const formatter = new Intl.DateTimeFormat(document.documentElement.lang,{
+    dateStyle:'medium',timeStyle:'long',timeZone:'UTC'
+  });
+  for (const [label,stamp] of [['trustActivated',key.activated_at],['trustRetiredAt',key.retired_at],['trustDue',key.rotate_after]]) {
+    if (!stamp) continue;
+    const date = new Date(stamp);
+    const time = node('time',formatter.format(date)); time.dateTime = stamp;
+    const line = node('span');
+    line.append(labelled('span',label),document.createTextNode(' · '),time);
+    dates.append(line);
+  }
+}
+function renderTrust(fingerprint) {
+  const select = $('trust-select');
+  select.replaceChildren(...trust.keys.map(key => {
+    const status = t(key.status === 'active' ? 'active' : 'trustRetired');
+    return option(key.fingerprint,status + ' · ' + key.fingerprint.slice(0,16));
+  }));
+  select.value = trust.keys.some(key => key.fingerprint === fingerprint) ? fingerprint : trust.active_fingerprint;
+  select.disabled = false;
+  const days = new Intl.NumberFormat(locale).format(trust.rotation_days);
+  $('trust-policy').textContent = t('trustPolicy').replace('{days}',days);
+  showKey();
+}
 async function loadTrust() {
-  const epoch = teamEpoch;
-  const data = await request(base() + '/trust-key');
-  if (scoped(epoch)) {
+  const epoch = teamEpoch, serial = ++trustRequest;
+  try {
+    const data = await request(base() + '/trust-keys');
+    if (!scoped(epoch) || serial !== trustRequest) return;
+    // Follow the current signer unless the reviewer explicitly selected an older key.
+    const selected = $('trust-select').value;
+    const historical = selected && selected !== trust?.active_fingerprint ? selected : null;
     trust = data;
-    const label = labelled('span','fingerprint'), value = node('bdi', data.fingerprint);
-    $('trust-fingerprint').replaceChildren(label,document.createTextNode(' · '),value);
+    renderTrust(historical);
+  } catch (error) {
+    if (!scoped(epoch) || serial !== trustRequest) return;
+    clearTrust();
+    if (error.status === 401) throw error;
+    $('trust-policy').replaceChildren(labelled('span','trustUnavailable'));
   }
 }
 async function selectTeam(id) {
@@ -483,7 +540,7 @@ $('import-form').addEventListener('submit',run(() => mutateCase('imports',async 
   return {format,content_b64:encodeFile(buffer)};
 })));
 $('finding-form').addEventListener('submit',run(() => mutateCase('finding',() => ({
-  ...formData('finding-form'),...reference('finding-evidence'),...reference('finding-control',true)}))));
+  ...formData('finding-form'),...reference('finding-evidence'),...reference('finding-control',true),...zapLead.reference()}))));
 $('retest-form').addEventListener('submit',run(() => mutateCase('retest',() => {
   const {finding_id,status,observed} = formData('retest-form');
   return {finding_id,status,...(status === 'not_retested' ? {} : {observed,...reference('retest-evidence'),...reference('retest-control',true)})};
@@ -500,6 +557,7 @@ $('handover-form').addEventListener('submit',run(async () => {
     saveBlob(new Blob([data],{type:'application/zip'}),stem + '-' + result.format + '.zip');
   }
   notice('signed');
+  await loadTrust();
 }));
 $('verify-form').addEventListener('submit',run(async () => {
   const epoch = teamEpoch, file = $('verify-file').files[0];
@@ -521,7 +579,8 @@ $('verify-form').addEventListener('submit',run(async () => {
   const panel = $('verify-result'); panel.dataset.error = String(!result.valid);
   panel.replaceChildren(labelled('strong',result.valid ? 'valid' : 'invalid'));
   if (result.valid && result.fingerprint) {
-    panel.append(document.createTextNode(' · ' + result.fingerprint));
+    const fingerprint = node('bdi',result.fingerprint); fingerprint.dir = 'ltr';
+    panel.append(document.createTextNode(' · '),fingerprint);
     if (result.document_sha256) panel.append(node('p','SHA-256 · ' + result.document_sha256));
     showVerifiedReport(result.report || body.package.report);
   }
@@ -538,6 +597,7 @@ function showVerifiedReport(report) {
   for (const item of report.appendix) {
     const li = node('li');
     li.append(node('strong',item.status_label + ' · ' + item.retest_label));
+    if (item.scanner_lead) li.append(node('p',messages.zapLead[languages.indexOf(out.lang)] + ' · #' + item.scanner_lead.record + ' · ' + item.scanner_lead.sha256));
     const references = [item.retest_evidence,item.retest_control];
     if (item.evidence_index) li.append(indexPanel(item.evidence_index,out.lang));
     else references.unshift(item.evidence,item.control);
@@ -549,7 +609,14 @@ function showVerifiedReport(report) {
   appendix.append(list); out.append(appendix); out.hidden = false;
 }
 $('verify-file').addEventListener('change',() => { $('verify-result').replaceChildren(); $('verified-report').hidden = true; $('verified-report').replaceChildren(); });
-$('download-key').addEventListener('click',() => { if (trust) download(trust,'authzledger-trust-' + trust.fingerprint.slice(0,16) + '.json'); });
+$('trust-select').addEventListener('change',showKey);
+$('trust-reload').addEventListener('click',run(loadTrust));
+$('download-key').addEventListener('click',() => {
+  const key = selectedKey();
+  if (!key) return;
+  const {algorithm,public_key,fingerprint} = key;
+  download({algorithm,public_key,fingerprint},'authzledger-trust-' + fingerprint + '.json');
+});
 $('password-form').addEventListener('submit',run(async () => {
   const result = await request('/api/me','PATCH',formData('password-form'));
   if (result.reauthenticate) { signedOut(); notice('passwordChanged'); }

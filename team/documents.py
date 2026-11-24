@@ -31,6 +31,7 @@ REF_LABELS = {
 INDEX_LOCALES = ("de", "en", "fr", "it", "ar")
 INDEX_CAPTIONS = {
     "evidence_index": ("Minimaler Belegindex", "Minimal evidence index", "Index minimal des preuves", "Indice minimo delle prove", "الفهرس الأدنى للأدلة"),
+    "scanner_lead": ('Verknüpfter ZAP-Hinweis', 'Linked ZAP alert', 'Alerte ZAP associée', 'Segnalazione ZAP collegata', 'تنبيه ZAP المرتبط'),
     "experiment": ("Prüfplan-ID", "Review plan ID", "Identifiant du plan", "ID del piano", "معرّف خطة المراجعة"),
     "revision": ("Revisions-ID", "Revision ID", "Identifiant de révision", "ID revisione", "معرّف المراجعة"),
     "revision_digest": ("Revisionsprüfsumme", "Revision digest", "Empreinte de la révision", "Impronta della revisione", "بصمة المراجعة"),
@@ -71,6 +72,8 @@ def render_html(report, manifest):
                         for ref in index["observations"]]
         else:
             baseline = [(names[0], item["evidence"]), (names[1], item["control"])]
+        if item.get('scanner_lead'):
+            baseline.append((captions['scanner_lead'], item['scanner_lead']))
         parts.append('<dl>')
         for label, source in baseline + [(names[2], item["retest_evidence"]), (names[3], item["retest_control"])]:
             if source:
@@ -135,6 +138,8 @@ def verify_document(proof, document, trusted_key, team=None, expected_format=Non
         if fmt not in SUPPORTED or (expected_format and expected_format != fmt):
             return invalid
         package = proof["handover"]
+        if callable(trusted_key):
+            trusted_key = trusted_key(package["manifest"]["fingerprint"])
         verified = verify_package(package, trusted_key, team)
         if not verified["valid"] or canonical(proof["document"]) != canonical(statement(package, fmt, document)):
             return invalid

@@ -49,6 +49,7 @@
 <label for="observed" data-key="observed"></label><textarea maxlength="2000" id="observed" name="observed" rows="2" dir="auto" required></textarea>
 <label for="finding-status" data-key="status"></label><select id="finding-status" name="status"><option value="hint" data-key="hint"></option><option value="confirmed" data-key="confirmed"></option></select>
 <p class="fine" id="control-help" data-key="controlHelp"></p><div class="ref-fields" id="finding-evidence"></div><div class="ref-fields" id="finding-control"></div>
+<div id="zap-link" hidden><label for="zap-source" data-key="zapLead"></label><select id="zap-source"></select><label for="zap-record" data-key="record"></label><select id="zap-record" disabled></select></div>
 <button class="primary" type="submit" data-key="saveFinding"></button></form></details></section>
 <section class="section"><h3 data-key="retests"></h3><ul class="records" id="retests"></ul><details id="retest-tool"><summary data-key="newRetest"></summary>
 <form id="retest-form"><label for="retest-finding" data-key="finding"></label><select id="retest-finding" name="finding_id" required></select>
@@ -58,7 +59,18 @@
 <button class="primary" type="submit" data-key="saveRetest"></button></form></details></section>
 <section class="section" id="handover-tool"><h3 data-key="handover"></h3><form id="handover-form"><label for="output-language" data-key="outputLanguage"></label><select id="output-language" name="language"><option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="ar">العربية</option></select><label for="output-format" data-key="outputFormat"></label><select id="output-format" name="format"><option value="json">JSON</option><option value="html">HTML + Ed25519 (ZIP)</option><option value="pdf">PDF + Ed25519 (ZIP)</option></select><p class="fine" data-key="documentHelp"></p><button type="submit" class="primary" data-key="signDownload"></button></form></section>
 </div></div>
-<section class="card verify"><h2 data-key="verifyTitle"></h2><p class="fine" data-key="verifyHelp"></p><div id="trust-fingerprint" class="fingerprint"></div><button type="button" class="plain slim" id="download-key" data-key="saveKey"></button><form id="verify-form"><label for="verify-file" data-key="package"></label><input type="file" id="verify-file" accept=".json,.zip,application/json,application/zip" required><button class="secondary" type="submit" data-key="verify"></button></form><p id="verify-result" role="status" aria-live="polite"></p><div id="verified-report" hidden></div></section>
+<section class="card verify">
+<h2 data-key="verifyTitle"></h2><p class="fine" data-key="verifyHelp"></p>
+<form id="verify-form"><label for="verify-file" data-key="package"></label><input type="file" id="verify-file" accept=".json,.zip,application/json,application/zip" required><button class="secondary" type="submit" data-key="verify"></button></form>
+<p id="verify-result" role="status" aria-live="polite"></p><div id="verified-report" hidden></div>
+<section class="section" aria-labelledby="trust-heading">
+<div class="section-heading"><h3 id="trust-heading" data-key="trustHistory"></h3><button type="button" class="secondary slim" id="trust-reload" data-key="refresh"></button></div>
+<p id="trust-policy" class="fine" role="status"></p>
+<label for="trust-select" data-key="trustSelect"></label><select id="trust-select" disabled></select>
+<div id="trust-details" aria-live="polite"><p id="trust-fingerprint" class="fingerprint"></p><p id="trust-dates" class="fine"></p></div>
+<button type="button" class="plain slim" id="download-key" data-key="saveKey" disabled></button>
+<p class="fine" data-key="trustDownloadHelp"></p></section>
+</section>
 </section>
 <section id="view-members" hidden><div class="card"><div class="section-heading"><h2 data-key="members"></h2><button type="button" id="members-reload" class="secondary slim" data-key="refresh"></button></div>
 <ul id="member-list" class="records"></ul>

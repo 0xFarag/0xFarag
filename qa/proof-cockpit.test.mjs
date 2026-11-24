@@ -66,14 +66,22 @@ test('rejects inconsistent indexed statements even if the signing key is trusted
     const row = report.appendix.find(value => value.evidence_index.experiments.length);
     const index = row.evidence_index;
     const chain = index.experiments[0].revisions;
-    edit(report,row,index,chain);
+    edit(report,row,index,chain,envelope.manifest);
     envelope.manifest.fingerprint = trust.fingerprint;
     envelope.manifest.report_sha256 = await sha256(bytes(serialized(report)));
     envelope.signature = sign(null,bytes(envelope.manifest.schema+'\n'+serialized(envelope.manifest)),privateKey).toString('base64');
     return verifyDelivery(envelope,trust);
   }
   assert.equal((await signed(()=>{})).counts.findings,2);
+  const withLead = await signed((report,row,index,chain,manifest) => {
+    const sha = 'a'.repeat(64);
+    manifest.sources.push({id:'b'.repeat(64),format:'zap',sha256:sha,bytes:480,records:1});
+    row.scanner_lead = {format:'zap',sha256:sha,record:1,fingerprint:'c'.repeat(64),asset_id:row.evidence.asset_id};
+  });
+  assert.equal(withLead.rows.find(row => row.scanner_lead).scanner_lead.format,'zap');
   const invalid = [
+    (_,row) => { row.scanner_lead = {...row.evidence}; },
+    (_,row) => { row.scanner_lead = {...row.evidence,format:'zap'}; },
     report => { delete report.evidence_index_schema; },
     report => { report.evidence_index_schema = null; },
     report => { report.evidence_index_schema = 'authzledger.evidence-index/v2'; },
