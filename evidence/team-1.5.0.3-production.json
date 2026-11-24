@@ -1,0 +1,1385 @@
+{
+  "rights": "© Nasser Aldin Farag (0xFarag). All rights reserved.",
+  "completed_utc": "2026-11-24T10:35:16.510906+00:00",
+  "package_commit": "06a79cfa79578c51ecc45563fd8c6af98528e74b",
+  "website_commit": "95924fe47645109a9e1909ef4e2aa4189893fa1f",
+  "release": "https://github.com/0xFarag/0xFarag/releases/tag/team-1.5.0.3",
+  "checksums_sha256": "2159f719950ef4deecb2b37e44dd4c53934e72b40fe3f6f82d1c412328601640",
+  "release_assets": [
+    {
+      "name": "authzledger-team-1.5.0.3-1-any.pkg.tar.zst",
+      "size": 115998,
+      "digest": "sha256:591be57725a5e294eed8630e619218f40e866378a689cef607c74385747f0f6b",
+      "browser_download_url": "https://github.com/0xFarag/0xFarag/releases/download/team-1.5.0.3/authzledger-team-1.5.0.3-1-any.pkg.tar.zst"
+    },
+    {
+      "name": "authzledger-team-1.5.0.3-linux-amd64.docker.tar.gz",
+      "size": 59418567,
+      "digest": "sha256:c28dad032375156c40dc40e2298361efdfc5bac1d8352b965b5705a872b1fc68",
+      "browser_download_url": "https://github.com/0xFarag/0xFarag/releases/download/team-1.5.0.3/authzledger-team-1.5.0.3-linux-amd64.docker.tar.gz"
+    },
+    {
+      "name": "authzledger-team-1.5.0.3-linux-amd64.oci.tar",
+      "size": 62940672,
+      "digest": "sha256:43c3d618fe26327a979a95236f11fb1683ea27b80ee4623238ac9b0b884a3bc4",
+      "browser_download_url": "https://github.com/0xFarag/0xFarag/releases/download/team-1.5.0.3/authzledger-team-1.5.0.3-linux-amd64.oci.tar"
+    },
+    {
+      "name": "AuthzLedger-Team-1.5.0.3-Windows-x64.exe",
+      "size": 26074455,
+      "digest": "sha256:e3c7d3a71574c55d87fedd5af98e59897d713321d51885edeee5a4d941c08acc",
+      "browser_download_url": "https://github.com/0xFarag/0xFarag/releases/download/team-1.5.0.3/AuthzLedger-Team-1.5.0.3-Windows-x64.exe"
+    },
+    {
+      "name": "authzledger-team-1.5.0.3.tar.gz",
+      "size": 143339,
+      "digest": "sha256:3bcc4fb42640bd8e9039a0233ca09d7373d73c7f7309eb63dec2e2edce67de96",
+      "browser_download_url": "https://github.com/0xFarag/0xFarag/releases/download/team-1.5.0.3/authzledger-team-1.5.0.3.tar.gz"
+    },
+    {
+      "name": "authzledger-team_1.5.0.3-1_all.deb",
+      "size": 95308,
+      "digest": "sha256:c03841766c16456937ff88169751b0d738fb9308ad1a40fda5f04c47aa44b362",
+      "browser_download_url": "https://github.com/0xFarag/0xFarag/releases/download/team-1.5.0.3/authzledger-team_1.5.0.3-1_all.deb"
+    },
+    {
+      "name": "PKGBUILD",
+      "size": 615,
+      "digest": "sha256:f883ad4bddc16961d9606ba85a8bf78b6c8e2c8e4ac9f40db74ecfeb5d78663a",
+      "browser_download_url": "https://github.com/0xFarag/0xFarag/releases/download/team-1.5.0.3/PKGBUILD"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 718,
+      "digest": "sha256:2159f719950ef4deecb2b37e44dd4c53934e72b40fe3f6f82d1c412328601640",
+      "browser_download_url": "https://github.com/0xFarag/0xFarag/releases/download/team-1.5.0.3/SHA256SUMS"
+    }
+  ],
+  "website_files": [
+    {
+      "path": "LICENSE.txt",
+      "url": "https://authzledger.com/LICENSE.txt",
+      "bytes": 1711,
+      "sha256": "8abe9b67269ef1e8a8f634152ebbe09f70aa5a2b0aecb3f9685f10c1b7ced3ef"
+    },
+    {
+      "path": "NOTICE.txt",
+      "url": "https://authzledger.com/NOTICE.txt",
+      "bytes": 1596,
+      "sha256": "a21be8fd77c5166de170626a94c93a8e3153d5d841f85ed8a167033d09addf54"
+    },
+    {
+      "path": "abos/index.html",
+      "url": "https://authzledger.com/abos/",
+      "bytes": 7536,
+      "sha256": "3cb5436083d78114c9718c968257f30998fd3190bd0592e3dc9ae428612f2819"
+    },
+    {
+      "path": "ar/abos/index.html",
+      "url": "https://authzledger.com/ar/abos/",
+      "bytes": 8607,
+      "sha256": "e3fa96c89abb6ed2adf226c95e3d3021bd9fdfaf5f77cc2071b0e7066a0a5b1c"
+    },
+    {
+      "path": "ar/dateipruefung/index.html",
+      "url": "https://authzledger.com/ar/dateipruefung/",
+      "bytes": 8127,
+      "sha256": "d4a1bcec69d7314f5a5e1b07605e2b6775d3ba979517b9d7618f4d980c12042c"
+    },
+    {
+      "path": "ar/downloads/index.html",
+      "url": "https://authzledger.com/ar/downloads/",
+      "bytes": 11319,
+      "sha256": "aa437239da658ba9c3f0939f45d7184790b106da184444e3de5d2e731233c0b5"
+    },
+    {
+      "path": "ar/fachzugang/index.html",
+      "url": "https://authzledger.com/ar/fachzugang/",
+      "bytes": 7857,
+      "sha256": "5300cf00a33a68370cc704a02b2851cc45127fde31e4df1f2cb8de3ed66b211c"
+    },
+    {
+      "path": "ar/import/index.html",
+      "url": "https://authzledger.com/ar/import/",
+      "bytes": 8554,
+      "sha256": "cbb1cdc88c752f13507974e28c9e837292f313e90a1192a449b5afefc5031afc"
+    },
+    {
+      "path": "ar/index.html",
+      "url": "https://authzledger.com/ar/",
+      "bytes": 21267,
+      "sha256": "1c8c27cb6948d3fe557fb14af8b9a34945332b599729c719ecc258549ca1275c"
+    },
+    {
+      "path": "ar/installation.html",
+      "url": "https://authzledger.com/ar/installation.html",
+      "bytes": 20808,
+      "sha256": "23f959644329c0b7a4006d5db715900c0c9b9c519f99a84daac63d1c2fc57c25"
+    },
+    {
+      "path": "ar/kasse/abschluss/index.html",
+      "url": "https://authzledger.com/ar/kasse/abschluss/",
+      "bytes": 4756,
+      "sha256": "0225e23237f4fd481e1fdfb1faf3fb2a702f02c0a8d6283458e68df92640a0b6"
+    },
+    {
+      "path": "ar/kasse/index.html",
+      "url": "https://authzledger.com/ar/kasse/",
+      "bytes": 5848,
+      "sha256": "f5cf1e9edd8ea0ae58111498f6bce4336bc580b50f68731e3826b65430c936d0"
+    },
+    {
+      "path": "ar/konto/index.html",
+      "url": "https://authzledger.com/ar/konto/",
+      "bytes": 5595,
+      "sha256": "58e77e36e15047a0e0acb34093eea4bdb5617daf1dbdd853ef8b4484a6a17989"
+    },
+    {
+      "path": "ar/lab/referenz.html",
+      "url": "https://authzledger.com/ar/lab/referenz.html",
+      "bytes": 19063,
+      "sha256": "5cf14191cf69074f26f995a0138e7cec07491b22229d1c6df5785a5c40f0c34e"
+    },
+    {
+      "path": "ar/lab.html",
+      "url": "https://authzledger.com/ar/lab.html",
+      "bytes": 14909,
+      "sha256": "210a9a6271276f54698da8de13bcd18d110669ba4e8035bc36bc1a85ea3a05e2"
+    },
+    {
+      "path": "ar/rbac/index.html",
+      "url": "https://authzledger.com/ar/rbac/",
+      "bytes": 12252,
+      "sha256": "205fca649e03d128baddb2229d5a8b5ec65d89f7c310fbb3af9c43cff6726a2f"
+    },
+    {
+      "path": "ar/technik/hkdf/index.html",
+      "url": "https://authzledger.com/ar/technik/hkdf/",
+      "bytes": 12224,
+      "sha256": "810e7bee8840da7011db7ba874dff03cf77d1f065f9565f2ffebac1a05637851"
+    },
+    {
+      "path": "ar/workbench/index.html",
+      "url": "https://authzledger.com/ar/workbench/",
+      "bytes": 18552,
+      "sha256": "90ae43b26020aaa1b700cad5fad095f3c42ddde41fb489c510cb88ba3a8d047d"
+    },
+    {
+      "path": "assets/0xfarag-original.png",
+      "url": "https://authzledger.com/assets/0xfarag-original.png",
+      "bytes": 444437,
+      "sha256": "815c7713f48eb136d6a4701bc2f2126d50f9b8b591b61cdb8f94bc81a37bdee4"
+    },
+    {
+      "path": "assets/authzledger-icon.png",
+      "url": "https://authzledger.com/assets/authzledger-icon.png",
+      "bytes": 600,
+      "sha256": "7d769a4fb44fe1bcf265310a91d5f691f393b3585e3692ea8277b968d620f4b8"
+    },
+    {
+      "path": "assets/authzledger-logo.png",
+      "url": "https://authzledger.com/assets/authzledger-logo.png",
+      "bytes": 3872,
+      "sha256": "e8d8718d1d1176beb4ac176991377874b0f1b7dfa7011e0a1173bb0fe8487258"
+    },
+    {
+      "path": "assets/authzledger-social.png",
+      "url": "https://authzledger.com/assets/authzledger-social.png",
+      "bytes": 24532,
+      "sha256": "9e27d46b8abc8137e484638effd038cfc90c9000d905b44c1e7c8af5c0d65375"
+    },
+    {
+      "path": "assets/authzledger-touch.png",
+      "url": "https://authzledger.com/assets/authzledger-touch.png",
+      "bytes": 1951,
+      "sha256": "0c0a965de3719a1082d8624e349f38cedf7a289035e2bde3155c97e04ff3fa4d"
+    },
+    {
+      "path": "assets/report-a.webp",
+      "url": "https://authzledger.com/assets/report-a.webp",
+      "bytes": 73548,
+      "sha256": "b95df2f10c375edf593b13d462b238b61e4a416eb49f709601425dce9c4f75c0"
+    },
+    {
+      "path": "assets/report-b.webp",
+      "url": "https://authzledger.com/assets/report-b.webp",
+      "bytes": 78218,
+      "sha256": "87e78b052b70c33e67ef9f36aac6a7ce21aa2a5806e86eee56ee0f816cfd3ec9"
+    },
+    {
+      "path": "assets/report-c.webp",
+      "url": "https://authzledger.com/assets/report-c.webp",
+      "bytes": 77542,
+      "sha256": "7e0c7226e45e61791c2b80b3ebba6e64952c07b55edad37686df5e1d8ef31cc3"
+    },
+    {
+      "path": "cockpit.js",
+      "url": "https://authzledger.com/cockpit.js",
+      "bytes": 7384,
+      "sha256": "e7571032e4e46aaa0cb47bd014ea32457cde5e62bfa31c694cd09659dd3958d5"
+    },
+    {
+      "path": "control-lab.js",
+      "url": "https://authzledger.com/control-lab.js",
+      "bytes": 3627,
+      "sha256": "a1013119bc43e28ec226148c07eba9543bbd295fcf21c204a58ce905475edda7"
+    },
+    {
+      "path": "dateipruefung/app.mjs",
+      "url": "https://authzledger.com/dateipruefung/app.mjs",
+      "bytes": 8949,
+      "sha256": "e99a9e9ececf87454ae53e78136dc32a318995228917765fefa04fb57d8a4728"
+    },
+    {
+      "path": "dateipruefung/index.html",
+      "url": "https://authzledger.com/dateipruefung/",
+      "bytes": 7414,
+      "sha256": "6981f15940c9fea1a3ef8088f9963099bbdda8b269eccc64a7f91c03856f43b6"
+    },
+    {
+      "path": "dateipruefung/model.mjs",
+      "url": "https://authzledger.com/dateipruefung/model.mjs",
+      "bytes": 8530,
+      "sha256": "44d391192ba320ca0115709afa6ed73172ad56097bebf1a100bad8b60bd46528"
+    },
+    {
+      "path": "dateipruefung/style.css",
+      "url": "https://authzledger.com/dateipruefung/style.css",
+      "bytes": 1271,
+      "sha256": "07fe56883a55ba50015c78539d63b0def000a01ad9a626e093d08e5d38e83149"
+    },
+    {
+      "path": "de/abos/index.html",
+      "url": "https://authzledger.com/de/abos/",
+      "bytes": 7560,
+      "sha256": "a5e564323ef08380ced68ddebc02758f3d6315998aaffa2b628360de648efe44"
+    },
+    {
+      "path": "de/dateipruefung/index.html",
+      "url": "https://authzledger.com/de/dateipruefung/",
+      "bytes": 7429,
+      "sha256": "fc46f70d50029a1b67c7508cd9a70116d3e3fe694e1fe5fde9a81bda56418278"
+    },
+    {
+      "path": "de/downloads/index.html",
+      "url": "https://authzledger.com/de/downloads/",
+      "bytes": 10438,
+      "sha256": "e60cd3f0b2d8d013b26014e72395f296b7a074a46c60c833d454daf58428cfac"
+    },
+    {
+      "path": "de/fachzugang/index.html",
+      "url": "https://authzledger.com/de/fachzugang/",
+      "bytes": 7297,
+      "sha256": "02b8a69a6673ed33747de64669676d6e53cf4ead00752c265071a0d2c52ea3b6"
+    },
+    {
+      "path": "de/import/index.html",
+      "url": "https://authzledger.com/de/import/",
+      "bytes": 7779,
+      "sha256": "1d4da1df9f10a6c52a2e9445af93da9002a81479284acbd1af0aa42441e39768"
+    },
+    {
+      "path": "de/index.html",
+      "url": "https://authzledger.com/de/",
+      "bytes": 18988,
+      "sha256": "d7fac9dd393430f4d0c4c1c1ccde02ba8e73404a8985128b3acfc72908f5c68f"
+    },
+    {
+      "path": "de/installation.html",
+      "url": "https://authzledger.com/de/installation.html",
+      "bytes": 18987,
+      "sha256": "295f05e46ed4b869766d10bb1191c0fd5042c68204e2d603ef8b5ab3c9620d29"
+    },
+    {
+      "path": "de/kasse/abschluss/index.html",
+      "url": "https://authzledger.com/de/kasse/abschluss/",
+      "bytes": 4530,
+      "sha256": "dfd5353c83bcc1de997b0de2e5aa67f8c7fe54dafe78d0b74f1ec4cf5d9256ba"
+    },
+    {
+      "path": "de/kasse/index.html",
+      "url": "https://authzledger.com/de/kasse/",
+      "bytes": 5534,
+      "sha256": "13cc22a7dbc2c4497bb2ce46847a833d0f1851451e381fc3187a113576399299"
+    },
+    {
+      "path": "de/konto/index.html",
+      "url": "https://authzledger.com/de/konto/",
+      "bytes": 5230,
+      "sha256": "3422bfd71e588595bc7796f07227eb353b781ed84f47142fc230a0f0416984d9"
+    },
+    {
+      "path": "de/lab/referenz.html",
+      "url": "https://authzledger.com/de/lab/referenz.html",
+      "bytes": 17296,
+      "sha256": "6811d4252b509faf2772bc28203041a2f468f0ef8bbd512a07335375e26e47c9"
+    },
+    {
+      "path": "de/lab.html",
+      "url": "https://authzledger.com/de/lab.html",
+      "bytes": 13302,
+      "sha256": "b227cf5ac4fdcc5eb4f93943af76c53579fb8b5d1c143926863366e3db1b211c"
+    },
+    {
+      "path": "de/rbac/index.html",
+      "url": "https://authzledger.com/de/rbac/",
+      "bytes": 11322,
+      "sha256": "033e81223893a27d5cdf29ec85194694c8d91c17e8f2133d41e764c60e6e70b8"
+    },
+    {
+      "path": "de/technik/hkdf/index.html",
+      "url": "https://authzledger.com/de/technik/hkdf/",
+      "bytes": 11076,
+      "sha256": "c5703c12215760777bf1041b9138005e6a12b0518729b1227ac25a407a430e0e"
+    },
+    {
+      "path": "de/workbench/index.html",
+      "url": "https://authzledger.com/de/workbench/",
+      "bytes": 16904,
+      "sha256": "f1b58ab4603b3cefdc517d61398447ef0bfd6a94657fc4008b683a5c0200d226"
+    },
+    {
+      "path": "downloads/downloads.css",
+      "url": "https://authzledger.com/downloads/downloads.css",
+      "bytes": 1616,
+      "sha256": "0c7482d2c06f4a4a1f1a99a89d64d8c8834af07e6b01b82bb5fd678f113faf85"
+    },
+    {
+      "path": "downloads/empfaengerpruefer/SHA256SUMS.txt",
+      "url": "https://authzledger.com/downloads/empfaengerpruefer/SHA256SUMS.txt",
+      "bytes": 1011,
+      "sha256": "1f40dbf6d9628da30dce782132d3fe584d35682e6e2f33a433c4d119735cd0ec"
+    },
+    {
+      "path": "downloads/empfaengerpruefer/verification.json",
+      "url": "https://authzledger.com/downloads/empfaengerpruefer/verification.json",
+      "bytes": 5250,
+      "sha256": "be230e3a90d00f45ab9422fa601e85e79a9c8d167039249455e4810d15f26cf0"
+    },
+    {
+      "path": "downloads/index.html",
+      "url": "https://authzledger.com/downloads/",
+      "bytes": 10408,
+      "sha256": "fec1d194cb8aa2faf217abe687625a960499e8ab67948997c85e248635f82896"
+    },
+    {
+      "path": "downloads/pruefwerkzeuge/AuthzLedger-Offline-Pruefwerkzeuge.zip",
+      "url": "https://authzledger.com/downloads/pruefwerkzeuge/AuthzLedger-Offline-Pruefwerkzeuge.zip",
+      "bytes": 43132,
+      "sha256": "9096ef4e7817989dd5d4aa4e4f769596a751d1ad334b90af64b0d71d1f270ce6"
+    },
+    {
+      "path": "downloads/pruefwerkzeuge/SHA256SUMS.txt",
+      "url": "https://authzledger.com/downloads/pruefwerkzeuge/SHA256SUMS.txt",
+      "bytes": 105,
+      "sha256": "20af6f9b0ed39a59c5c1cb1c3f790421125e17acd2966fb4ce7635ff6d869f8d"
+    },
+    {
+      "path": "downloads/recipient-studio-preview-3/AuthzLedger-Recipient-Studio-Preview3-Windows-x64.zip",
+      "url": "https://authzledger.com/downloads/recipient-studio-preview-3/AuthzLedger-Recipient-Studio-Preview3-Windows-x64.zip",
+      "bytes": 16597707,
+      "sha256": "c08d9250dfa55c50a24d823f5dab2dfeccfbbe59a1a7db28abe1939404908b99"
+    },
+    {
+      "path": "downloads/recipient-studio-preview-3/INSTALL-Studio.md",
+      "url": "https://authzledger.com/downloads/recipient-studio-preview-3/INSTALL-Studio.md",
+      "bytes": 2012,
+      "sha256": "471675a4b0f91beb7ed6e3756ec3e54b72d6e54d05ba1055ccede75237ad6203"
+    },
+    {
+      "path": "downloads/recipient-studio-preview-3/SHA256SUMS.txt",
+      "url": "https://authzledger.com/downloads/recipient-studio-preview-3/SHA256SUMS.txt",
+      "bytes": 314,
+      "sha256": "16e02469b22008c787ee5ea4f7ad7135d3d0b88af327aed04f7ba812682d564c"
+    },
+    {
+      "path": "downloads/recipient-studio-preview-3/authzledger-verifier_1.5.0-preview3_all.deb",
+      "url": "https://authzledger.com/downloads/recipient-studio-preview-3/authzledger-verifier_1.5.0-preview3_all.deb",
+      "bytes": 9540,
+      "sha256": "f819dd789bd2f3884fb84ec13c1f86fd95f2f57a82ab0a6d77ceaa92f9faa541"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/AuthzLedger-Arch-Pruefer-PKGBUILD.tar.gz",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/AuthzLedger-Arch-Pruefer-PKGBUILD.tar.gz",
+      "bytes": 7329,
+      "sha256": "fbd02941c3c33e773db72f8f3e7a3bc501da52feb4c7fa5967cf1eca541db06e"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/AuthzLedger-Windows-x64-Pruefer-Preview.zip",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/AuthzLedger-Windows-x64-Pruefer-Preview.zip",
+      "bytes": 1804399,
+      "sha256": "80cde53853674baae0097776acd6eeef925073eeb4ae41be1f6c46c375216aa9"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/AuthzLedger-Windows-x64-SelfContained.zip",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/AuthzLedger-Windows-x64-SelfContained.zip",
+      "bytes": 12263328,
+      "sha256": "ff76b615f2aeff1ab2659adec14835fb1b4872b0fa01af11e40acdc732a5985f"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/DOCKER_IMAGE_ID.txt",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/DOCKER_IMAGE_ID.txt",
+      "bytes": 72,
+      "sha256": "f465402c979f2603d965d1c7f420a003b5edd1ef463632ff6e679b5e4db058d1"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/LICENSE.AuthzLedger.txt",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/LICENSE.AuthzLedger.txt",
+      "bytes": 1726,
+      "sha256": "a29abff6cb7662bfaa515ce8f9c4d1f25c07e634aa66a1a83ab5b965b56cf9b9"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/NOTICE.AuthzLedger.txt",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/NOTICE.AuthzLedger.txt",
+      "bytes": 1611,
+      "sha256": "a92cb04d0bd7854fea0e122ffdbfad0b41e0fef68874f63e2439bcc15d835816"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/README.md",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/README.md",
+      "bytes": 1761,
+      "sha256": "ce78ddb6aeecc0844760000fb2d2da746ffc27e0e968b149f4a4e54e16af5787"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/SHA256SUMS.txt",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/SHA256SUMS.txt",
+      "bytes": 1352,
+      "sha256": "c759d8251f3ba5ed5d57506eac913727fb84a84989ebec5b1515338f648771e5"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/authzledger-recipient-verifier-1.5.0.post1-linux-amd64.docker.tar.gz",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/authzledger-recipient-verifier-1.5.0.post1-linux-amd64.docker.tar.gz",
+      "bytes": 43071429,
+      "sha256": "e85800e70755866d6fcc3cb2fee9041b12c2a163973e3cfcac1e2ed239c71553"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/authzledger-verifier-1.5.0pre1-1-any.pkg.tar.zst",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/authzledger-verifier-1.5.0pre1-1-any.pkg.tar.zst",
+      "bytes": 9600,
+      "sha256": "4d9051bf028a748054a981e38fe0ad31863e7c96e46ed796cc2ff3c9199c1d8e"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/authzledger-verifier_1.5.0-preview1_all.deb",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/authzledger-verifier_1.5.0-preview1_all.deb",
+      "bytes": 6908,
+      "sha256": "d6d6541ddd03069d0f3cfb7554944f6f17ebb38ceef4c567aa63d2eec2ae632a"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/authzledger_recipient_verifier-1.5.0.post1-py3-none-any.whl",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/authzledger_recipient_verifier-1.5.0.post1-py3-none-any.whl",
+      "bytes": 10376,
+      "sha256": "676bc9954204a3bcb5962730066139164190ceecfd60e9118319ecfb16ed5a83"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/authzledger_recipient_verifier-1.5.0.post1.tar.gz",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/authzledger_recipient_verifier-1.5.0.post1.tar.gz",
+      "bytes": 8764,
+      "sha256": "70e07191098b41a6a64d0b2763fa978e7afa501cd657706fd2385c649a9b26f2"
+    },
+    {
+      "path": "downloads/recipient-verifier-preview-2/verification.json",
+      "url": "https://authzledger.com/downloads/recipient-verifier-preview-2/verification.json",
+      "bytes": 5250,
+      "sha256": "be230e3a90d00f45ab9422fa601e85e79a9c8d167039249455e4810d15f26cf0"
+    },
+    {
+      "path": "en/abos/index.html",
+      "url": "https://authzledger.com/en/abos/",
+      "bytes": 7381,
+      "sha256": "6504e34488c1a7c011327770c24909d46568ddad5f6994bc5bd25506eaf2c556"
+    },
+    {
+      "path": "en/dateipruefung/index.html",
+      "url": "https://authzledger.com/en/dateipruefung/",
+      "bytes": 7297,
+      "sha256": "2113aafc2ac1a4326c84bd7651d2df91275bc375e5e0088dc69733891f0d6adf"
+    },
+    {
+      "path": "en/downloads/index.html",
+      "url": "https://authzledger.com/en/downloads/",
+      "bytes": 10196,
+      "sha256": "4d7e3e13bf3d88048159c8fde08341cfd998a3b6f399a351a8f7fc4c527eb843"
+    },
+    {
+      "path": "en/fachzugang/index.html",
+      "url": "https://authzledger.com/en/fachzugang/",
+      "bytes": 7031,
+      "sha256": "eec4ad0677c52177a123837b3637d3aaebc24fcc98dd20929f488ba8a53f4512"
+    },
+    {
+      "path": "en/import/index.html",
+      "url": "https://authzledger.com/en/import/",
+      "bytes": 7563,
+      "sha256": "bdac08cc352e763fe1d9ce9221502d6aab438a8a4e73c680b920c0e87b9579d7"
+    },
+    {
+      "path": "en/index.html",
+      "url": "https://authzledger.com/en/",
+      "bytes": 18313,
+      "sha256": "d863f5d5d77225ccc38b66ed946b9439fe38c26ca32cf67ea9efd3b79876bc85"
+    },
+    {
+      "path": "en/installation.html",
+      "url": "https://authzledger.com/en/installation.html",
+      "bytes": 18178,
+      "sha256": "7a197e972b161d2033fd9ba2b4e62e27b73771f1882bc52792f5c8d9283e0df0"
+    },
+    {
+      "path": "en/kasse/abschluss/index.html",
+      "url": "https://authzledger.com/en/kasse/abschluss/",
+      "bytes": 4505,
+      "sha256": "e61ec63296c9c05d32a5ef024b3121a417525f30043c8527a06f58732ea09c68"
+    },
+    {
+      "path": "en/kasse/index.html",
+      "url": "https://authzledger.com/en/kasse/",
+      "bytes": 5449,
+      "sha256": "86fd510f7df4fef7442fddffe84633c68f45a6f7c512b5df549ab4ba2b078eb4"
+    },
+    {
+      "path": "en/konto/index.html",
+      "url": "https://authzledger.com/en/konto/",
+      "bytes": 5143,
+      "sha256": "127136398b5e42c6ba8d397cab5b839b1783be11f44a41e1ffd6120f23fd53a6"
+    },
+    {
+      "path": "en/lab/referenz.html",
+      "url": "https://authzledger.com/en/lab/referenz.html",
+      "bytes": 16781,
+      "sha256": "28da269f0f108d091c5dd78b77a5253a571c26ee1d775aa6466234fe4cef7d8c"
+    },
+    {
+      "path": "en/lab.html",
+      "url": "https://authzledger.com/en/lab.html",
+      "bytes": 12848,
+      "sha256": "b57957ac9f6bf0e6fcc78865bc4b19d77fd68a81de54606e6814cac1c56c0944"
+    },
+    {
+      "path": "en/rbac/index.html",
+      "url": "https://authzledger.com/en/rbac/",
+      "bytes": 11079,
+      "sha256": "d30a4e49c196ab737448e87990342d9d0411eea77ee14b827c6e512849292b9f"
+    },
+    {
+      "path": "en/technik/hkdf/index.html",
+      "url": "https://authzledger.com/en/technik/hkdf/",
+      "bytes": 10517,
+      "sha256": "b1af281faec6d820bb4b0fee95977df457d21ae7d1898e82deb1fa66a368a283"
+    },
+    {
+      "path": "en/workbench/index.html",
+      "url": "https://authzledger.com/en/workbench/",
+      "bytes": 16602,
+      "sha256": "f247ca597f687f4fbf6b8aa43429385130363fadbae33d63ac03c0a2fcacbe0f"
+    },
+    {
+      "path": "fachzugang/access.css",
+      "url": "https://authzledger.com/fachzugang/access.css",
+      "bytes": 1206,
+      "sha256": "0d1f74691f38714d912546ac8dd81d37716c8d54a37321fa7cb37257177432ce"
+    },
+    {
+      "path": "fachzugang/app.mjs",
+      "url": "https://authzledger.com/fachzugang/app.mjs",
+      "bytes": 7892,
+      "sha256": "e4e14564cb8f1f5c8f3cb2a1a76bba36984b27f45ac1cf8f5ec073ff8a13f9dc"
+    },
+    {
+      "path": "fachzugang/device.mjs",
+      "url": "https://authzledger.com/fachzugang/device.mjs",
+      "bytes": 2492,
+      "sha256": "3339b60405da0d4a4b711de44df678eaab50f6783f357603816f728e491720b6"
+    },
+    {
+      "path": "fachzugang/index.html",
+      "url": "https://authzledger.com/fachzugang/",
+      "bytes": 7273,
+      "sha256": "78c458a5a76e8ec7f6357dac69726885bd27731a0adaa89618450ced7d8c5e9e"
+    },
+    {
+      "path": "farag.css",
+      "url": "https://authzledger.com/farag.css",
+      "bytes": 2785,
+      "sha256": "781247c434dccef207e6c87b20d5aa8aff3fd6468c604c2cbbe6e76d089b9770"
+    },
+    {
+      "path": "fr/abos/index.html",
+      "url": "https://authzledger.com/fr/abos/",
+      "bytes": 7698,
+      "sha256": "ceb8e1430bf76c9465a0fa0e7d8254cb3079dec0e9e9fda4844da1632cb664b9"
+    },
+    {
+      "path": "fr/dateipruefung/index.html",
+      "url": "https://authzledger.com/fr/dateipruefung/",
+      "bytes": 7798,
+      "sha256": "17e06850303433bc7baa4dab9288673e36c1553147888d3c1d1c5accbfda37ae"
+    },
+    {
+      "path": "fr/downloads/index.html",
+      "url": "https://authzledger.com/fr/downloads/",
+      "bytes": 10594,
+      "sha256": "a3772e29cfe8d5567ed34aa4fd0df67e42cddf68656c416d1beeb383b1b34262"
+    },
+    {
+      "path": "fr/fachzugang/index.html",
+      "url": "https://authzledger.com/fr/fachzugang/",
+      "bytes": 7427,
+      "sha256": "bd7f81fddb78e8c6ce86bf4369e4d72d129187c0580b55d4d7ad9b67d7eeb244"
+    },
+    {
+      "path": "fr/import/index.html",
+      "url": "https://authzledger.com/fr/import/",
+      "bytes": 8015,
+      "sha256": "5464c800977811b9e0bbd2dc626f929cde9861a49be465f22617be5aa46483f7"
+    },
+    {
+      "path": "fr/index.html",
+      "url": "https://authzledger.com/fr/",
+      "bytes": 19306,
+      "sha256": "97cdf97d9c4e478f19e31d88ae0bcdc37962ff5d0acd6af5542f2d5d5e8dfbd3"
+    },
+    {
+      "path": "fr/installation.html",
+      "url": "https://authzledger.com/fr/installation.html",
+      "bytes": 19106,
+      "sha256": "cd12f88c9a63978a1208793f626542da1ec95cc4bb2a8db1ce13925b083a7650"
+    },
+    {
+      "path": "fr/kasse/abschluss/index.html",
+      "url": "https://authzledger.com/fr/kasse/abschluss/",
+      "bytes": 4605,
+      "sha256": "1afb9af6c441b39b8b6c92a0d40bb065f5ca95dd58d17fe0b61811c95c498f33"
+    },
+    {
+      "path": "fr/kasse/index.html",
+      "url": "https://authzledger.com/fr/kasse/",
+      "bytes": 5675,
+      "sha256": "6d3125f7e3a0072e6f26a7f45bba4905a206608cd3eea403d52642a438075123"
+    },
+    {
+      "path": "fr/konto/index.html",
+      "url": "https://authzledger.com/fr/konto/",
+      "bytes": 5320,
+      "sha256": "ce41080de3f6c319ebe97eb6127a9559377c3b4730a6fe245a7b3d954dd4b271"
+    },
+    {
+      "path": "fr/lab/referenz.html",
+      "url": "https://authzledger.com/fr/lab/referenz.html",
+      "bytes": 17578,
+      "sha256": "82cfbfd13632a4fef478eb68b1fdfb1e6db523f80076bb7d96e8a48e41abadd4"
+    },
+    {
+      "path": "fr/lab.html",
+      "url": "https://authzledger.com/fr/lab.html",
+      "bytes": 13562,
+      "sha256": "6ace8a3f87bc4dd26b1d44976170be4e04bc2d17ecdb740bb00eddac2e25a7a5"
+    },
+    {
+      "path": "fr/rbac/index.html",
+      "url": "https://authzledger.com/fr/rbac/",
+      "bytes": 11685,
+      "sha256": "663eebcbf432ae0dd69553e5af58a462507d4f5627f129f267eb449b6fb2641d"
+    },
+    {
+      "path": "fr/technik/hkdf/index.html",
+      "url": "https://authzledger.com/fr/technik/hkdf/",
+      "bytes": 11156,
+      "sha256": "a08a2605869b26e7fcddb0003f4710199a030ba9f6fbab85e44de62c918d9e0f"
+    },
+    {
+      "path": "fr/workbench/index.html",
+      "url": "https://authzledger.com/fr/workbench/",
+      "bytes": 17403,
+      "sha256": "58beee371bb0e1dae8e328e9d8a54e77cb0277006dfa0ece2e616f3af08372b4"
+    },
+    {
+      "path": "i18n/catalog.js",
+      "url": "https://authzledger.com/i18n/catalog.js",
+      "bytes": 428396,
+      "sha256": "05439af092980cf6cf5dc2bb129dd6fa0441787be5aaefb631b13cc4e1a5398c"
+    },
+    {
+      "path": "i18n/language.css",
+      "url": "https://authzledger.com/i18n/language.css",
+      "bytes": 1534,
+      "sha256": "bac39272cdd478c7fbd8b3012cca3ab4b950e4aecaa22c9302d7fa535414b649"
+    },
+    {
+      "path": "i18n/language.js",
+      "url": "https://authzledger.com/i18n/language.js",
+      "bytes": 6346,
+      "sha256": "9ff895fcd9c45187aef6f3d55193da76bc7c7ac4319377698eea1695e9b096e8"
+    },
+    {
+      "path": "i18n/tool-copy.js",
+      "url": "https://authzledger.com/i18n/tool-copy.js",
+      "bytes": 1561,
+      "sha256": "e6a135edb652630dd221829cf2f1c11394dd4c9748d9b049089ca42d6c93833c"
+    },
+    {
+      "path": "import/adapters.js",
+      "url": "https://authzledger.com/import/adapters.js",
+      "bytes": 30900,
+      "sha256": "9573c1547ddcc57eb105ab5051aac76119eff0bc744ac3e6a92fb28a6d7b16d1"
+    },
+    {
+      "path": "import/app.js",
+      "url": "https://authzledger.com/import/app.js",
+      "bytes": 7709,
+      "sha256": "ba583fcfd0391974c680a7083b011663f8167e0e64b3c7b911273b909564af53"
+    },
+    {
+      "path": "import/asset-review.js",
+      "url": "https://authzledger.com/import/asset-review.js",
+      "bytes": 9350,
+      "sha256": "3547a45bde8753447552af4c07bd03c28d85926d0918e009e46d6b85cb1919b0"
+    },
+    {
+      "path": "import/compare.js",
+      "url": "https://authzledger.com/import/compare.js",
+      "bytes": 9226,
+      "sha256": "29f6bb58636189bc63677473e272dbc0a4a6752e37d1ae4907051cecbea24c69"
+    },
+    {
+      "path": "import/index.html",
+      "url": "https://authzledger.com/import/",
+      "bytes": 7764,
+      "sha256": "acd6656768b86e32f9949e66f32779a45dcffc1d4d640b357304f7dfe8f75a61"
+    },
+    {
+      "path": "import/styles.css",
+      "url": "https://authzledger.com/import/styles.css",
+      "bytes": 3745,
+      "sha256": "bba1553a1e97a924be68fe5aee9eb2ca2f65120d1f8e3b39015517e71ce4df92"
+    },
+    {
+      "path": "index.html",
+      "url": "https://authzledger.com/",
+      "bytes": 18889,
+      "sha256": "d83b34bc63d6c2eb263e0f50d1fd70f7dd75a1e17eeb207baebcaa4e8378f5e5"
+    },
+    {
+      "path": "install.css",
+      "url": "https://authzledger.com/install.css",
+      "bytes": 2641,
+      "sha256": "0fce76eb269dc7e9cf0771fee11ede07605cbd677f5ff4cd59eff6eea9cd8521"
+    },
+    {
+      "path": "installation.html",
+      "url": "https://authzledger.com/installation.html",
+      "bytes": 18975,
+      "sha256": "570032ff28f3aca14bcf81118c712133b768791ff4062331c71f47307e51b723"
+    },
+    {
+      "path": "investor-one-pager.md",
+      "url": "https://authzledger.com/investor-one-pager.md",
+      "bytes": 2690,
+      "sha256": "7fef1d1765c7bcb57389f212dc05119fe55519b03273c1a726a28821e4faaf66"
+    },
+    {
+      "path": "investor-one-pager.pdf",
+      "url": "https://authzledger.com/investor-one-pager.pdf",
+      "bytes": 4841,
+      "sha256": "10ac8a7eb7fc30045a746bbc834d90b9102aa561af066a7d318c15509f6853da"
+    },
+    {
+      "path": "it/abos/index.html",
+      "url": "https://authzledger.com/it/abos/",
+      "bytes": 7641,
+      "sha256": "17b95c5653ac7f3844c152e92be2ab06dafe50cbec1ae1536d6ebbed2eaf0d7d"
+    },
+    {
+      "path": "it/dateipruefung/index.html",
+      "url": "https://authzledger.com/it/dateipruefung/",
+      "bytes": 7558,
+      "sha256": "276aacf35913eb123dccba8c73b12ef16c6754e4a7c177244ac4b3cdfbd14f19"
+    },
+    {
+      "path": "it/downloads/index.html",
+      "url": "https://authzledger.com/it/downloads/",
+      "bytes": 10435,
+      "sha256": "fea60e02f7cccd78e0d3638c51471d895b99222df74d3365eeaeb3477d2f0f3a"
+    },
+    {
+      "path": "it/fachzugang/index.html",
+      "url": "https://authzledger.com/it/fachzugang/",
+      "bytes": 7320,
+      "sha256": "faa4bd677ad3b495a29df776097c939ebf52a1f4bdb02512bd3275c589047a8e"
+    },
+    {
+      "path": "it/import/index.html",
+      "url": "https://authzledger.com/it/import/",
+      "bytes": 7909,
+      "sha256": "b7d3cf5556e9c158cdbb8d1bfd02628141c4b185ed6b9baaaa292fc57444d20c"
+    },
+    {
+      "path": "it/index.html",
+      "url": "https://authzledger.com/it/",
+      "bytes": 19039,
+      "sha256": "c942f01ca1004a642cdd79ad9b232a41f238cfab2de353377762d678fb309bb1"
+    },
+    {
+      "path": "it/installation.html",
+      "url": "https://authzledger.com/it/installation.html",
+      "bytes": 18693,
+      "sha256": "df8f180cf2473aa02747bce8b135d29069352376b038d7906bb940d3b905817f"
+    },
+    {
+      "path": "it/kasse/abschluss/index.html",
+      "url": "https://authzledger.com/it/kasse/abschluss/",
+      "bytes": 4554,
+      "sha256": "961bdf94e08beb8ce920a6da1f4c11c97bc5f00b8514fa8a1082555f1ac10352"
+    },
+    {
+      "path": "it/kasse/index.html",
+      "url": "https://authzledger.com/it/kasse/",
+      "bytes": 5627,
+      "sha256": "d349d987ae2641ee944a18053cb74a1fb986b0bb4a287b97ce2c60c8c45faf29"
+    },
+    {
+      "path": "it/konto/index.html",
+      "url": "https://authzledger.com/it/konto/",
+      "bytes": 5252,
+      "sha256": "9716b0604f80ac01e6023357b69a581ca659a58da348aa04e1099f214cded06e"
+    },
+    {
+      "path": "it/lab/referenz.html",
+      "url": "https://authzledger.com/it/lab/referenz.html",
+      "bytes": 17284,
+      "sha256": "3566874e040a9b2664f1512e574508d385bf3e1b78921d223492788ef7ac103a"
+    },
+    {
+      "path": "it/lab.html",
+      "url": "https://authzledger.com/it/lab.html",
+      "bytes": 13355,
+      "sha256": "4a3a25de375f9480fb3438ec37f2826f7145997f25d95cac7224320ee143ef5e"
+    },
+    {
+      "path": "it/rbac/index.html",
+      "url": "https://authzledger.com/it/rbac/",
+      "bytes": 11443,
+      "sha256": "c6d458d8ced336f78e5640feb1f466866e053476e27cca0432e5453d9bff1435"
+    },
+    {
+      "path": "it/technik/hkdf/index.html",
+      "url": "https://authzledger.com/it/technik/hkdf/",
+      "bytes": 10833,
+      "sha256": "b72257ffa67234fae679ef686bae6a4f7c417bb9985a97ceaf4ef89662989ee2"
+    },
+    {
+      "path": "it/workbench/index.html",
+      "url": "https://authzledger.com/it/workbench/",
+      "bytes": 17086,
+      "sha256": "f634a83797ab7fbac6d6f5d4f19a7b04dd3cf0efbfdb06642d686b12d5bbbf12"
+    },
+    {
+      "path": "kasse/abschluss/index.html",
+      "url": "https://authzledger.com/kasse/abschluss/",
+      "bytes": 4509,
+      "sha256": "9c8d704758a22dbb84d89606591ddf3c7dd60df2a7a4c1045adb770c5521bce6"
+    },
+    {
+      "path": "kasse/index.html",
+      "url": "https://authzledger.com/kasse/",
+      "bytes": 5507,
+      "sha256": "7e00062c57cbfd3851c339e61d52adadf6682238866a2db0ea8d0e2ceb5501da"
+    },
+    {
+      "path": "konto/index.html",
+      "url": "https://authzledger.com/konto/",
+      "bytes": 5203,
+      "sha256": "18a53a1ec339a5e0db2d035557e58415e4396012fab437b04574bd8c9bcecc19"
+    },
+    {
+      "path": "konto/kundenbereich.css",
+      "url": "https://authzledger.com/konto/kundenbereich.css",
+      "bytes": 5504,
+      "sha256": "bcea218f7d2e6d87ff80a0ebd4490311305847daa7e495b9dc0c3f8d4f6c872b"
+    },
+    {
+      "path": "konto/kundenbereich.js",
+      "url": "https://authzledger.com/konto/kundenbereich.js",
+      "bytes": 6333,
+      "sha256": "d5f389657251dedec0d4a1a7d3f09e9c9ffc37c3ab0fb254f47fcf4ead6e48ee"
+    },
+    {
+      "path": "lab/referenz.html",
+      "url": "https://authzledger.com/lab/referenz.html",
+      "bytes": 17236,
+      "sha256": "10eaedf911a1e8117edeae00c1344b2b7d1a197a79768a53156b01a54fb21ace"
+    },
+    {
+      "path": "lab.html",
+      "url": "https://authzledger.com/lab.html",
+      "bytes": 13254,
+      "sha256": "f2beb69dce244a2ef5d1f3c4dedf178510dd019218182b6d6d04fc8e673e2c11"
+    },
+    {
+      "path": "media/beweisfilm-1-6.de.vtt",
+      "url": "https://authzledger.com/media/beweisfilm-1-6.de.vtt",
+      "bytes": 460,
+      "sha256": "78088281f062ca172a1196e293b9b26bca4fe55ab56ee687dc53daaec59e7fee"
+    },
+    {
+      "path": "media/beweisfilm-1-6.mp4",
+      "url": "https://authzledger.com/media/beweisfilm-1-6.mp4",
+      "bytes": 8577481,
+      "sha256": "a074faf7c38c07997f3f94407bf5283d49c9035a8cd49a11b3ae706cb6600142"
+    },
+    {
+      "path": "media/beweisfilm-1-6.webp",
+      "url": "https://authzledger.com/media/beweisfilm-1-6.webp",
+      "bytes": 36546,
+      "sha256": "7c7ada547b365293db05f39b33fb742b56745bba4974bbca50ad18f1afbfd2f9"
+    },
+    {
+      "path": "media/flagship/AuthzLedger-Intro-56s.de.vtt",
+      "url": "https://authzledger.com/media/flagship/AuthzLedger-Intro-56s.de.vtt",
+      "bytes": 1179,
+      "sha256": "c62fa49a28816ed2dfbe81ae7e8337fcbf2390397d0b80eb59d0c4f5a5cba2ec"
+    },
+    {
+      "path": "media/flagship/AuthzLedger-Intro-56s.en.vtt",
+      "url": "https://authzledger.com/media/flagship/AuthzLedger-Intro-56s.en.vtt",
+      "bytes": 1086,
+      "sha256": "c041440516428d40adb4877e57b4dcb97c79aca11b02b9dade02cedc8d6b9233"
+    },
+    {
+      "path": "media/flagship/AuthzLedger-Intro-56s.mp4",
+      "url": "https://authzledger.com/media/flagship/AuthzLedger-Intro-56s.mp4",
+      "bytes": 5989981,
+      "sha256": "c70e3f1929ab036a89fabc41d4986b919ba73c3690e4154463494d71a954cd5d"
+    },
+    {
+      "path": "media/flagship/AuthzLedger-Intro-Poster.jpg",
+      "url": "https://authzledger.com/media/flagship/AuthzLedger-Intro-Poster.jpg",
+      "bytes": 178787,
+      "sha256": "78ebac103d16cda834f39c1974c4914c6dfc1290549d0e56af4af0f4ee2f069b"
+    },
+    {
+      "path": "media/flagship/Short-A-Control.de.vtt",
+      "url": "https://authzledger.com/media/flagship/Short-A-Control.de.vtt",
+      "bytes": 525,
+      "sha256": "6134b11a1b80dc5c75ee43fa144fb91287dc725663143ea49d3848400f383a6d"
+    },
+    {
+      "path": "media/flagship/Short-A-Control.en.vtt",
+      "url": "https://authzledger.com/media/flagship/Short-A-Control.en.vtt",
+      "bytes": 506,
+      "sha256": "7a97cf254527836be507b07ea25496b44ee2713d7224b1d04d96cee656f4efa1"
+    },
+    {
+      "path": "media/flagship/Short-A-Control.mp4",
+      "url": "https://authzledger.com/media/flagship/Short-A-Control.mp4",
+      "bytes": 1402355,
+      "sha256": "e507e7c9678371d57b55f54566ad867cff18a102f6779690c879f46c7de99a81"
+    },
+    {
+      "path": "media/flagship/Short-B-Signal.de.vtt",
+      "url": "https://authzledger.com/media/flagship/Short-B-Signal.de.vtt",
+      "bytes": 555,
+      "sha256": "7426874b056bfec2a162fdf4caa9c993f1bcfc6ca05d2fae22b1577ed2b84c76"
+    },
+    {
+      "path": "media/flagship/Short-B-Signal.en.vtt",
+      "url": "https://authzledger.com/media/flagship/Short-B-Signal.en.vtt",
+      "bytes": 507,
+      "sha256": "128b4a46da1bcf3c0f71343e3c5e01c61638604581ed1dfb4528f64b4f41149f"
+    },
+    {
+      "path": "media/flagship/Short-B-Signal.mp4",
+      "url": "https://authzledger.com/media/flagship/Short-B-Signal.mp4",
+      "bytes": 1400252,
+      "sha256": "347d66b46f7bed7f2be800cfa318513e6aee0425075d9dcbbf8dd530f4338060"
+    },
+    {
+      "path": "media/flagship/Short-C-Retest.de.vtt",
+      "url": "https://authzledger.com/media/flagship/Short-C-Retest.de.vtt",
+      "bytes": 518,
+      "sha256": "f21020a72b314862375c2ea2235cc24f25e936a19c52051380c454e696d8baaf"
+    },
+    {
+      "path": "media/flagship/Short-C-Retest.en.vtt",
+      "url": "https://authzledger.com/media/flagship/Short-C-Retest.en.vtt",
+      "bytes": 477,
+      "sha256": "643557931d1a1221d6a68648f62e150765d6eb6f0b3ebce21799bad93c83a20a"
+    },
+    {
+      "path": "media/flagship/Short-C-Retest.mp4",
+      "url": "https://authzledger.com/media/flagship/Short-C-Retest.mp4",
+      "bytes": 1362542,
+      "sha256": "66f5e8a7b6ee9f6e77858d533fd9fd233783c3faf4684ed73d2c811ec58ebbbb"
+    },
+    {
+      "path": "media/hero-poster.jpg",
+      "url": "https://authzledger.com/media/hero-poster.jpg",
+      "bytes": 272258,
+      "sha256": "d5aaf7dfa5d428741a1fa1d7b480178e1a597b9bf9067a03225aea2dcf3cf3d9"
+    },
+    {
+      "path": "media/hero.de.vtt",
+      "url": "https://authzledger.com/media/hero.de.vtt",
+      "bytes": 1046,
+      "sha256": "9659805a28641f041d9a38c7edd24611becf887c8fabf928402fed718b0cc1d6"
+    },
+    {
+      "path": "media/hero.en.vtt",
+      "url": "https://authzledger.com/media/hero.en.vtt",
+      "bytes": 960,
+      "sha256": "7111601aed6b97d79ef9b6fc3f3dce603f42969b153d4a220873d908adfaa9e1"
+    },
+    {
+      "path": "media/hero.mp4",
+      "url": "https://authzledger.com/media/hero.mp4",
+      "bytes": 6797054,
+      "sha256": "7d7bb55244fe98eab6786d12aba14ad838343e6fef55bfe8f6da8ea677774e46"
+    },
+    {
+      "path": "media/short-a.de.vtt",
+      "url": "https://authzledger.com/media/short-a.de.vtt",
+      "bytes": 608,
+      "sha256": "5e0291d5d02c46f1d21d5a7f83c5d62bf53b6315c8a88710ac67d0015b003598"
+    },
+    {
+      "path": "media/short-a.en.vtt",
+      "url": "https://authzledger.com/media/short-a.en.vtt",
+      "bytes": 537,
+      "sha256": "80fc78fb55b98dbdb5d378d76ed112d9181f8b6d3bb522b20532deaecef12e50"
+    },
+    {
+      "path": "media/short-a.mp4",
+      "url": "https://authzledger.com/media/short-a.mp4",
+      "bytes": 2369477,
+      "sha256": "bc83af463af86e06cf4a6bf7977fc853b9e1e165e63a7704820c6611b6ca98b2"
+    },
+    {
+      "path": "media/short-b.de.vtt",
+      "url": "https://authzledger.com/media/short-b.de.vtt",
+      "bytes": 573,
+      "sha256": "2eef10bc5feb015eb8777fd9be7df0dc5aead9f8dc13484953fd1f1f40aa6432"
+    },
+    {
+      "path": "media/short-b.en.vtt",
+      "url": "https://authzledger.com/media/short-b.en.vtt",
+      "bytes": 528,
+      "sha256": "22fa6fa09ae279589bed1a0ed1f31df36c2ccf9b70ae2b9a1c1f87f8ae27c93b"
+    },
+    {
+      "path": "media/short-b.mp4",
+      "url": "https://authzledger.com/media/short-b.mp4",
+      "bytes": 2420459,
+      "sha256": "00f190bb6f881d841bbafa36c0c7d65c0504379819f0e21545d31751d39dd4b2"
+    },
+    {
+      "path": "media/short-c.de.vtt",
+      "url": "https://authzledger.com/media/short-c.de.vtt",
+      "bytes": 594,
+      "sha256": "111f28632dd40a1b2b2ee37d0da04262f57ba872a6f68a4217b26163e4145c3d"
+    },
+    {
+      "path": "media/short-c.en.vtt",
+      "url": "https://authzledger.com/media/short-c.en.vtt",
+      "bytes": 543,
+      "sha256": "5c808756fa2970678fca3d1857c0e6bfabc80be12ad6c770fe12e8c257e472eb"
+    },
+    {
+      "path": "media/short-c.mp4",
+      "url": "https://authzledger.com/media/short-c.mp4",
+      "bytes": 2475822,
+      "sha256": "0f429e918127834e9869f5f6086b18a71a5cd3aa2c83d017f02d7e75c723d0e5"
+    },
+    {
+      "path": "pilotangebot.md",
+      "url": "https://authzledger.com/pilotangebot.md",
+      "bytes": 3381,
+      "sha256": "1c7f33a862a210ab963969333bbf8cbb3790eb5e09e773e1f76d01263aaacbf6"
+    },
+    {
+      "path": "pilotangebot.pdf",
+      "url": "https://authzledger.com/pilotangebot.pdf",
+      "bytes": 5871,
+      "sha256": "721c943975cf25d5d7eb5df131094a517d5b806db484f0c09ce185b7a16937c6"
+    },
+    {
+      "path": "proof/blue-evidence-example.json",
+      "url": "https://authzledger.com/proof/blue-evidence-example.json",
+      "bytes": 2540,
+      "sha256": "fee007d0005cab05c797d00cd6c5157d2f4a1611679e22c1ebcc89f731ac12c6"
+    },
+    {
+      "path": "proof/blue-evidence-signals.json",
+      "url": "https://authzledger.com/proof/blue-evidence-signals.json",
+      "bytes": 2773,
+      "sha256": "39682685731b1d7dad3dd614c264a237bf4d91cc177698977f5ac0f7ecc01a24"
+    },
+    {
+      "path": "proof/control-lab.json",
+      "url": "https://authzledger.com/proof/control-lab.json",
+      "bytes": 2116,
+      "sha256": "b1ded54df6a1b0d31bbe431c602c31f228a372dc5ce0c40bfd1a59ac3f61946f"
+    },
+    {
+      "path": "proof/demo-d.json",
+      "url": "https://authzledger.com/proof/demo-d.json",
+      "bytes": 2966,
+      "sha256": "11836dffb6bf31450033bb36bebb2b4a38bf2f4b0d2a30484fb903f91fdf3758"
+    },
+    {
+      "path": "proof/historischer-review-f8f840f.json",
+      "url": "https://authzledger.com/proof/historischer-review-f8f840f.json",
+      "bytes": 1035,
+      "sha256": "82a67bd464c56824c011a627660b9d3303555e7d4aa32c3fa17915573583628c"
+    },
+    {
+      "path": "proof/mixed-b-result.json",
+      "url": "https://authzledger.com/proof/mixed-b-result.json",
+      "bytes": 2566,
+      "sha256": "81d604114d57d05e3a8c34117ecb0810e2bd5c7b326d1e539d3bd47540786632"
+    },
+    {
+      "path": "proof/mixed-bc-readback.json",
+      "url": "https://authzledger.com/proof/mixed-bc-readback.json",
+      "bytes": 2964,
+      "sha256": "c4daa469a6881f21a40ac4cc67d24710b4ed8b1419b9ddd68fc638e2eb813d09"
+    },
+    {
+      "path": "proof/mixed-c-result.json",
+      "url": "https://authzledger.com/proof/mixed-c-result.json",
+      "bytes": 3502,
+      "sha256": "e88fa8b182ad1d7b3477516c1432e24a919d1882a4221bf2cb8e25265cff4bd8"
+    },
+    {
+      "path": "proof/mixed-index-film.json",
+      "url": "https://authzledger.com/proof/mixed-index-film.json",
+      "bytes": 547,
+      "sha256": "bf2feedb10befbe8b636402b37e93cab77bb09074c6ddf9cec5f599fc580ae61"
+    },
+    {
+      "path": "proof/mixed-index.json",
+      "url": "https://authzledger.com/proof/mixed-index.json",
+      "bytes": 6516,
+      "sha256": "a04266ba908014fcd7a12a09545f62f8b38dce9d07ad077b124ea9089895e1e2"
+    },
+    {
+      "path": "proof/v1.5.0/manifest.json",
+      "url": "https://authzledger.com/proof/v1.5.0/manifest.json",
+      "bytes": 1046,
+      "sha256": "372ba48542527f218e5c07f9dc3fd7ecbc6e76b4dc9dffc67a91afb443095c90"
+    },
+    {
+      "path": "proof/v1.5.0/receipt.json",
+      "url": "https://authzledger.com/proof/v1.5.0/receipt.json",
+      "bytes": 3884,
+      "sha256": "ff96a568dc7700d12626ccaf0c269556d5c11bd4c05e27b4cdd55cab2a65c9a9"
+    },
+    {
+      "path": "proof/v1.5.0/report.json",
+      "url": "https://authzledger.com/proof/v1.5.0/report.json",
+      "bytes": 450,
+      "sha256": "f3423ee553f3817c10a9e57b183a9205aad28bd623164fe5e343b27a581dc536"
+    },
+    {
+      "path": "proof/v1.5.0/signature.base64",
+      "url": "https://authzledger.com/proof/v1.5.0/signature.base64",
+      "bytes": 89,
+      "sha256": "c3097c34af4b76acd2a3483f608120ffc760da2e00b547e51eef6f50e5540bba"
+    },
+    {
+      "path": "proof/v1.5.0/trusted-public.pem",
+      "url": "https://authzledger.com/proof/v1.5.0/trusted-public.pem",
+      "bytes": 113,
+      "sha256": "bbd04e1d94834dd1a19c915e9b1a0fe696a277573cbdf9e7de7ea2e885fcdb6e"
+    },
+    {
+      "path": "proof/v1.5.0/verification.json",
+      "url": "https://authzledger.com/proof/v1.5.0/verification.json",
+      "bytes": 11302,
+      "sha256": "4cb0d557238a9c46194241c78540dace69643e597e4d8b68200ff72097cd47e0"
+    },
+    {
+      "path": "proof-cockpit/cockpit.css",
+      "url": "https://authzledger.com/proof-cockpit/cockpit.css",
+      "bytes": 3711,
+      "sha256": "c7f0e40fdd6acc598f55f8256243b41cae96e1a4688ac3b0f7f8a22698f91e88"
+    },
+    {
+      "path": "proof-cockpit/cockpit.mjs",
+      "url": "https://authzledger.com/proof-cockpit/cockpit.mjs",
+      "bytes": 7787,
+      "sha256": "a24990afcd0a70fd204c0f3de23a676fbb3b4df18d9d56dccb4022017ee57329"
+    },
+    {
+      "path": "proof-cockpit/verify.mjs",
+      "url": "https://authzledger.com/proof-cockpit/verify.mjs",
+      "bytes": 10334,
+      "sha256": "30986033201f8ea16e17c0b485df41fe7b8032b5ab2c3b29b86b99cb00b9c984"
+    },
+    {
+      "path": "rbac/README.md",
+      "url": "https://authzledger.com/rbac/README.md",
+      "bytes": 5470,
+      "sha256": "e2ea9e6250ad8557b003edec2ef771c39a21477c1d839201d4ca891804680183"
+    },
+    {
+      "path": "rbac/cli.mjs",
+      "url": "https://authzledger.com/rbac/cli.mjs",
+      "bytes": 2880,
+      "sha256": "a9958b98fa4f6b04afcd624a286af660f1ed219904feac22a0f9d8698cb0af57"
+    },
+    {
+      "path": "rbac/index.html",
+      "url": "https://authzledger.com/rbac/",
+      "bytes": 11307,
+      "sha256": "a9d0a173ba041823c010818670dfed800713f94f3012177757fe1be082069e7d"
+    },
+    {
+      "path": "rbac/matrix-languages.mjs",
+      "url": "https://authzledger.com/rbac/matrix-languages.mjs",
+      "bytes": 11739,
+      "sha256": "bf1607b0fea55cbbe179f7cac0741d7d2bc738956aa8092002d4c74876ad2f22"
+    },
+    {
+      "path": "rbac/matrix-ui.mjs",
+      "url": "https://authzledger.com/rbac/matrix-ui.mjs",
+      "bytes": 9874,
+      "sha256": "6c466fe4ea5f2da001a88368b2bb072299b9268b950a81301d025f8a5975d69c"
+    },
+    {
+      "path": "rbac/matrix.mjs",
+      "url": "https://authzledger.com/rbac/matrix.mjs",
+      "bytes": 2882,
+      "sha256": "4aef59f5e963e012ea6fb48afea7882f6347d68b4f639c25f18731b4615c5d0e"
+    },
+    {
+      "path": "rbac/model.mjs",
+      "url": "https://authzledger.com/rbac/model.mjs",
+      "bytes": 14463,
+      "sha256": "1709915f3700f65390e3e43149ba4a93148f73b735252c790202de8c0305bf56"
+    },
+    {
+      "path": "rbac/retest.mjs",
+      "url": "https://authzledger.com/rbac/retest.mjs",
+      "bytes": 6358,
+      "sha256": "dd6139cc81efb83ef9e3353b65f45c97f7026734f0c0fd24310ebc7c48290a7a"
+    },
+    {
+      "path": "rbac/style.css",
+      "url": "https://authzledger.com/rbac/style.css",
+      "bytes": 2749,
+      "sha256": "320abf51bf7ca35a332551e31e64448f34ca12e7fec81445e9eac137acdde6e6"
+    },
+    {
+      "path": "rbac/ui.mjs",
+      "url": "https://authzledger.com/rbac/ui.mjs",
+      "bytes": 16165,
+      "sha256": "0fb2f4efee228bdb6476ad63aebd141828c02b7217395cef43e476f9028e0df3"
+    },
+    {
+      "path": "site.js",
+      "url": "https://authzledger.com/site.js",
+      "bytes": 2547,
+      "sha256": "81cc934f1692adc5c5efe3201c77747687851957b815a22c948e5af681c2a6c9"
+    },
+    {
+      "path": "startseite.css",
+      "url": "https://authzledger.com/startseite.css",
+      "bytes": 8291,
+      "sha256": "aa30919df968b857aa435b97f73b7bf59e009cdc4b96fa9f1b6eb72e7140734e"
+    },
+    {
+      "path": "style.css",
+      "url": "https://authzledger.com/style.css",
+      "bytes": 18841,
+      "sha256": "d3ec1d9b3ba28889a4cfe8e37278f1af487971147a18f0190370b6d750699cda"
+    },
+    {
+      "path": "technik/hkdf/hkdf_demo.py",
+      "url": "https://authzledger.com/technik/hkdf/hkdf_demo.py",
+      "bytes": 2901,
+      "sha256": "da031970e707df2262708c52e13df77cea7625dd44e469fdf8cbf344579a3efb"
+    },
+    {
+      "path": "technik/hkdf/index.html",
+      "url": "https://authzledger.com/technik/hkdf/",
+      "bytes": 11064,
+      "sha256": "140d65c9a29a892648c3f1e32a5b9bc796997d2f6f67714cc89b56690bb41463"
+    },
+    {
+      "path": "workbench/app.mjs",
+      "url": "https://authzledger.com/workbench/app.mjs",
+      "bytes": 31969,
+      "sha256": "3c9a3bf684b5f33caa869c84ef70ac69c617fe8495f653cb29c2818f44e86a02"
+    },
+    {
+      "path": "workbench/compare-example.mjs",
+      "url": "https://authzledger.com/workbench/compare-example.mjs",
+      "bytes": 1737,
+      "sha256": "478df15b4dfbbc535401d6f7b6ec121317d78c6c3d260fcdb7bedf631bf2ecd7"
+    },
+    {
+      "path": "workbench/compare-view.mjs",
+      "url": "https://authzledger.com/workbench/compare-view.mjs",
+      "bytes": 11477,
+      "sha256": "17a0a662f37b8ee553592b169953509e2458e8af79248df06b3041e364068d61"
+    },
+    {
+      "path": "workbench/compare.css",
+      "url": "https://authzledger.com/workbench/compare.css",
+      "bytes": 3075,
+      "sha256": "7f3d0fbbe7ecc7c53f8184eb512ed115ca8831ee800beed53518b340c932cb51"
+    },
+    {
+      "path": "workbench/compare.mjs",
+      "url": "https://authzledger.com/workbench/compare.mjs",
+      "bytes": 5210,
+      "sha256": "d2ba0c8d5431d5c007187954444c13cd829aaa0546d9cf7f2e7b5a539f684ad7"
+    },
+    {
+      "path": "workbench/delivery.mjs",
+      "url": "https://authzledger.com/workbench/delivery.mjs",
+      "bytes": 4726,
+      "sha256": "be0e3849bbcfdf1ff7d56d92cf381417e630a2bac3fd88589cb5c25741205c80"
+    },
+    {
+      "path": "workbench/exports.mjs",
+      "url": "https://authzledger.com/workbench/exports.mjs",
+      "bytes": 18778,
+      "sha256": "b95592d9e2097dc0e214d01ffd78061d2eb0b5a986429f3a4db9ca9bccd58fd7"
+    },
+    {
+      "path": "workbench/index.html",
+      "url": "https://authzledger.com/workbench/",
+      "bytes": 16889,
+      "sha256": "df016adc1bb9426c7dd0df1ecb96b2ea6d39d6e6b8c0b428acb8bb4259eec5ca"
+    },
+    {
+      "path": "workbench/language.mjs",
+      "url": "https://authzledger.com/workbench/language.mjs",
+      "bytes": 2384,
+      "sha256": "2eed31efc56c1aef06dabfadd5bcd08db672cdb5cb9bf1524ceb1d0170e2d0db"
+    },
+    {
+      "path": "workbench/model-language.mjs",
+      "url": "https://authzledger.com/workbench/model-language.mjs",
+      "bytes": 2708,
+      "sha256": "3addf4cf56cceaf7607321ffb1d8e8e945bcb6df46f1b7f511093ced1c21607f"
+    },
+    {
+      "path": "workbench/model.mjs",
+      "url": "https://authzledger.com/workbench/model.mjs",
+      "bytes": 32701,
+      "sha256": "aa795c8561c44144c638769c2fa20a6423118d1335e85bea550445f8d1cf3bed"
+    },
+    {
+      "path": "workbench/workbench.css",
+      "url": "https://authzledger.com/workbench/workbench.css",
+      "bytes": 11573,
+      "sha256": "7f864a1cf83aa07e589e9d5edbd1bcc72da755d5e6d8567269abac7ba9bbb8ac"
+    }
+  ],
+  "billing_state": "offline",
+  "checkout": {
+    "solo": false,
+    "team": false
+  }
+}
