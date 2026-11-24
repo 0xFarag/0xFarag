@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- © Nasser Aldin Farag (0xFarag). All rights reserved. -->
 <html lang="de-CH">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -55,9 +56,9 @@
 <p class="fine" id="retest-help" data-key="retestHelp"></p><div id="retest-description"><label for="retest-observed" data-key="observed"></label><textarea maxlength="2000" id="retest-observed" rows="2" name="observed" dir="auto"></textarea></div>
 <div class="ref-fields" id="retest-evidence"></div><div class="ref-fields" id="retest-control"></div>
 <button class="primary" type="submit" data-key="saveRetest"></button></form></details></section>
-<section class="section" id="handover-tool"><h3 data-key="handover"></h3><form id="handover-form"><label for="output-language" data-key="outputLanguage"></label><select id="output-language" name="language"><option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="ar">العربية</option></select><button type="submit" class="primary" data-key="signDownload"></button></form></section>
+<section class="section" id="handover-tool"><h3 data-key="handover"></h3><form id="handover-form"><label for="output-language" data-key="outputLanguage"></label><select id="output-language" name="language"><option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="ar">العربية</option></select><label for="output-format" data-key="outputFormat"></label><select id="output-format" name="format"><option value="json">JSON</option><option value="html">HTML + Ed25519 (ZIP)</option><option value="pdf">PDF + Ed25519 (ZIP)</option></select><p class="fine" data-key="documentHelp"></p><button type="submit" class="primary" data-key="signDownload"></button></form></section>
 </div></div>
-<section class="card verify"><h2 data-key="verifyTitle"></h2><p class="fine" data-key="verifyHelp"></p><div id="trust-fingerprint" class="fingerprint"></div><button type="button" class="plain slim" id="download-key" data-key="saveKey"></button><form id="verify-form"><label for="verify-file" data-key="package"></label><input type="file" id="verify-file" accept=".json,application/json" required><button class="secondary" type="submit" data-key="verify"></button></form><p id="verify-result" role="status" aria-live="polite"></p><div id="verified-report" hidden></div></section>
+<section class="card verify"><h2 data-key="verifyTitle"></h2><p class="fine" data-key="verifyHelp"></p><div id="trust-fingerprint" class="fingerprint"></div><button type="button" class="plain slim" id="download-key" data-key="saveKey"></button><form id="verify-form"><label for="verify-file" data-key="package"></label><input type="file" id="verify-file" accept=".json,.zip,application/json,application/zip" required><button class="secondary" type="submit" data-key="verify"></button></form><p id="verify-result" role="status" aria-live="polite"></p><div id="verified-report" hidden></div></section>
 </section>
 <section id="view-members" hidden><div class="card"><div class="section-heading"><h2 data-key="members"></h2><button type="button" id="members-reload" class="secondary slim" data-key="refresh"></button></div>
 <ul id="member-list" class="records"></ul>
@@ -70,5 +71,5 @@
 <details class="section"><summary data-key="newTeam"></summary><form id="team-form"><label for="team-name" data-key="teamName"></label><input id="team-name" name="name" dir="auto" required><button type="submit" class="primary" data-key="create"></button></form></details></div></section>
 <section id="view-audit" class="card" hidden><div class="section-heading"><h2 data-key="audit"></h2><button type="button" id="audit-reload" class="secondary slim" data-key="refresh"></button></div><div class="table-wrap"><table><thead><tr><th data-key="time"></th><th data-key="actor"></th><th data-key="action"></th><th data-key="resource"></th><th data-key="result"></th></tr></thead><tbody id="audit-list"></tbody></table></div></section>
 </section>
-</main><footer>AuthzLedger <span>·</span> 0xFarag</footer>
+</main><footer>© Nasser Aldin Farag (0xFarag). All rights reserved.</footer>
 </body></html>

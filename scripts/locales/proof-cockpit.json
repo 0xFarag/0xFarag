@@ -1,0 +1,248 @@
+{
+  "Prüfen Sie eine Team-Übergabe mit dem separat bezogenen öffentlichen Schlüssel. Alle Dateien bleiben in Ihrem Browser.": [
+    "Verify a Team handover with a public key obtained separately. All files stay in your browser.",
+    "Vérifiez une remise Team avec la clé publique obtenue séparément. Tous les fichiers restent dans votre navigateur.",
+    "Verificate una consegna Team con la chiave pubblica ottenuta separatamente. Tutti i file restano nel browser.",
+    "تحقّقوا من تسليم الفريق باستخدام مفتاح عام حصلتم عليه بصورة مستقلة. تبقى جميع الملفات في متصفحكم."
+  ],
+  "Signierte Übergabe oder proof.json": [
+    "Signed handover or proof.json",
+    "Remise signée ou proof.json",
+    "Consegna firmata o proof.json",
+    "التسليم الموقّع أو ملف proof.json"
+  ],
+  "Vertrauensschlüssel (JSON)": [
+    "Trusted public key (JSON)",
+    "Clé publique de confiance (JSON)",
+    "Chiave pubblica attendibile (JSON)",
+    "المفتاح العام الموثوق (JSON)"
+  ],
+  "Signiertes PDF oder HTML prüfen": [
+    "Verify a signed PDF or HTML document",
+    "Vérifier un document PDF ou HTML signé",
+    "Verifica un documento PDF o HTML firmato",
+    "التحقّق من مستند PDF أو HTML موقّع"
+  ],
+  "Originaldokument aus dem Übergabe-ZIP": [
+    "Original document from the handover ZIP",
+    "Document original de l’archive ZIP",
+    "Documento originale dall’archivio ZIP",
+    "المستند الأصلي من أرشيف التسليم"
+  ],
+  "Aktivieren Sie JavaScript für die lokale Signaturprüfung.": [
+    "Enable JavaScript to verify the signature locally.",
+    "Activez JavaScript pour vérifier la signature localement.",
+    "Attivate JavaScript per verificare la firma in locale.",
+    "فعّلوا JavaScript للتحقّق من التوقيع محلياً."
+  ],
+  "Geprüfte Übergabe": [
+    "Verified handover",
+    "Remise vérifiée",
+    "Consegna verificata",
+    "التسليم المتحقَّق منه"
+  ],
+  "Dateien und Ergebnis entfernen": [
+    "Clear files and result",
+    "Effacer les fichiers et le résultat",
+    "Rimuovi file e risultato",
+    "مسح الملفات والنتيجة"
+  ],
+  "Die Statusangaben stammen aus der signierten Übergabe. Originaldateien lassen sich unten mit ihren Prüfsummen abgleichen.": [
+    "Statuses come from the signed handover. Compare an original file to its recorded checksum below.",
+    "Les statuts proviennent de la remise signée. Comparez ci-dessous un fichier original avec sa somme de contrôle.",
+    "Gli stati provengono dalla consegna firmata. Qui sotto potete confrontare un file originale con il suo checksum.",
+    "الحالات مأخوذة من التسليم الموقّع. يمكنكم مطابقة ملف أصلي مع بصمته المسجّلة أدناه."
+  ],
+  "Befund auswählen": [
+    "Select a finding",
+    "Sélectionner un constat",
+    "Seleziona un riscontro",
+    "اختر نتيجة"
+  ],
+  "Quellnachweis": [
+    "Source evidence",
+    "Référence de la source",
+    "Riferimenti alla fonte",
+    "أدلة المصدر"
+  ],
+  "Originaldatei abgleichen (bis 1 MiB)": [
+    "Match an original file (up to 1 MiB)",
+    "Comparer un original (jusqu’à 1 Mio)",
+    "Confronta un file originale (fino a 1 MiB)",
+    "مطابقة ملف أصلي (حتى 1 ميبيبايت)"
+  ],
+  "Preise und Pilot": [
+    "Pricing and pilot",
+    "Tarifs et pilote",
+    "Prezzi e progetto pilota",
+    "الأسعار والبرنامج التجريبي"
+  ],
+  "Bestätigt": [
+    "Confirmed",
+    "Confirmés",
+    "Confermati",
+    "مؤكدة"
+  ],
+  "Hinweise": [
+    "Leads",
+    "Indices",
+    "Indizi",
+    "المؤشرات"
+  ],
+  "Nicht nachgeprüft": [
+    "Not retested",
+    "Non retestés",
+    "Senza nuova verifica",
+    "لم تُعَد مراجعتها"
+  ],
+  "Besteht weiter": [
+    "Persists",
+    "Persistants",
+    "Persistenti",
+    "لا تزال قائمة"
+  ],
+  "Fix nachgeprüft": [
+    "Fix verified",
+    "Correction vérifiée",
+    "Correzione verificata",
+    "إصلاح متحقَّق منه"
+  ],
+  "Unklar": [
+    "Inconclusive",
+    "Non concluants",
+    "Non conclusivi",
+    "غير حاسمة"
+  ],
+  "Der Schlüssel oder sein Fingerabdruck passt nicht zur Übergabe.": [
+    "The key or its fingerprint does not match this handover.",
+    "La clé ou son empreinte ne correspond pas à cette remise.",
+    "La chiave o la sua impronta non corrisponde alla consegna.",
+    "لا يتطابق المفتاح أو بصمته مع هذا التسليم."
+  ],
+  "Die Kontroll-, Quellen- oder Retest-Verweise im signierten Bericht sind widersprüchlich.": [
+    "The signed report contains inconsistent control, source or retest references.",
+    "Les références aux contrôles, aux sources ou aux nouveaux tests sont incohérentes dans le rapport signé.",
+    "I riferimenti a controlli, fonti o nuove verifiche nel rapporto firmato sono incoerenti.",
+    "يحتوي التقرير الموقّع على مراجع غير متّسقة للضوابط أو المصادر أو إعادة الاختبار."
+  ],
+  "Signatur oder Berichtsdigest ungültig.": [
+    "The signature or report hash is invalid.",
+    "La signature ou l’empreinte du rapport est invalide.",
+    "La firma o l’impronta del rapporto non è valida.",
+    "التوقيع أو بصمة التقرير غير صالح."
+  ],
+  "Das Dokument stimmt nicht mit dem signierten Nachweis überein.": [
+    "The document does not match the signed proof.",
+    "Le document ne correspond pas à la preuve signée.",
+    "Il documento non corrisponde alla prova firmata.",
+    "لا يطابق المستند الدليل الموقّع."
+  ],
+  "Wählen Sie zusätzlich das unveränderte PDF oder HTML aus dem ZIP.": [
+    "Also select the unchanged PDF or HTML from the ZIP.",
+    "Sélectionnez aussi le fichier PDF ou HTML intact de l’archive ZIP.",
+    "Selezionate anche il PDF o l’HTML inalterato dall’archivio ZIP.",
+    "اختاروا أيضاً ملف PDF أو HTML الأصلي دون تعديل من الأرشيف."
+  ],
+  "Erwartet wird eine signierte Team-Übergabe oder die Datei proof.json aus dem Dokumentpaket.": [
+    "Choose a signed Team handover or proof.json from the document package.",
+    "Choisissez une remise Team signée ou le fichier proof.json du paquet documentaire.",
+    "Scegliete una consegna Team firmata o il file proof.json del pacchetto documenti.",
+    "اختاروا تسليم Team موقّعاً أو ملف proof.json من حزمة المستند."
+  ],
+  "Dieser Browser unterstützt die benötigte Ed25519-Prüfung nicht.": [
+    "This browser does not support Ed25519 verification.",
+    "Ce navigateur ne prend pas en charge la vérification Ed25519.",
+    "Questo browser non supporta la verifica Ed25519.",
+    "لا يدعم هذا المتصفح التحقّق باستخدام Ed25519."
+  ],
+  "Die Datei überschreitet die Grössenbegrenzung oder ist leer.": [
+    "The file is empty or exceeds the size limit.",
+    "Le fichier est vide ou dépasse la taille autorisée.",
+    "Il file è vuoto o supera il limite di dimensione.",
+    "الملف فارغ أو يتجاوز الحدّ الأقصى للحجم."
+  ],
+  "Die Datei enthält kein eindeutiges UTF-8-JSON.": [
+    "The file is not valid, unambiguous UTF-8 JSON.",
+    "Le fichier ne contient pas de JSON UTF-8 valide et non ambigu.",
+    "Il file non contiene JSON UTF-8 valido e univoco.",
+    "لا يحتوي الملف على JSON واضح وصالح بترميز UTF-8."
+  ],
+  "Die Datei konnte nicht gelesen werden.": [
+    "The file could not be read.",
+    "Impossible de lire le fichier.",
+    "Impossibile leggere il file.",
+    "تعذّرت قراءة الملف."
+  ],
+  "Signatur und Belegverweise werden geprüft.": [
+    "Checking the signature and evidence references.",
+    "Vérification de la signature et des références en cours.",
+    "Verifica della firma e dei riferimenti in corso.",
+    "جارٍ التحقّق من التوقيع ومراجع الأدلة."
+  ],
+  "Signatur und Belegverweise geprüft.": [
+    "Signature and evidence references verified.",
+    "Signature et références vérifiées.",
+    "Firma e riferimenti verificati.",
+    "تمّ التحقّق من التوقيع ومراجع الأدلة."
+  ],
+  "Die Originaldatei entspricht einer signierten Quelle.": [
+    "The original file matches a signed source.",
+    "Le fichier original correspond à une source signée.",
+    "Il file originale corrisponde a una fonte firmata.",
+    "يطابق الملف الأصلي أحد المصادر الموقّعة."
+  ],
+  "Die Datei stimmt mit keiner Quelle in dieser Übergabe überein.": [
+    "This file does not match any source in this handover.",
+    "Ce fichier ne correspond à aucune source de cette remise.",
+    "Il file non corrisponde ad alcuna fonte nella consegna.",
+    "لا يطابق الملف أياً من مصادر هذا التسليم."
+  ],
+  "Befunddigest": [
+    "Finding hash",
+    "Empreinte du constat",
+    "Impronta del riscontro",
+    "بصمة النتيجة"
+  ],
+  "Retest-Beobachtung": [
+    "Retest observation",
+    "Observation du nouveau test",
+    "Osservazione alla nuova verifica",
+    "ملاحظة إعادة الاختبار"
+  ],
+  "Retest-Kontrolle": [
+    "Retest control",
+    "Contrôle du nouveau test",
+    "Controllo della nuova verifica",
+    "ضابط إعادة الاختبار"
+  ],
+  "SHA-256 der Quelldatei": [
+    "Source file SHA-256",
+    "SHA-256 du fichier source",
+    "SHA-256 del file sorgente",
+    "بصمة SHA-256 لملف المصدر"
+  ],
+  "Keine Befunde in dieser Übergabe.": [
+    "This handover contains no findings.",
+    "Cette remise ne contient aucun constat.",
+    "Questa consegna non contiene riscontri.",
+    "لا يحتوي هذا التسليم على نتائج."
+  ],
+  "Schlüssel-Fingerabdruck": [
+    "Key fingerprint",
+    "Empreinte de la clé",
+    "Impronta della chiave",
+    "بصمة المفتاح"
+  ],
+  "Scope-Digest": [
+    "Scope hash",
+    "Empreinte du périmètre",
+    "Impronta dell’ambito",
+    "بصمة النطاق"
+  ],
+  "Dokumentformat": [
+    "Document format",
+    "Format du document",
+    "Formato del documento",
+    "تنسيق المستند"
+  ]
+}

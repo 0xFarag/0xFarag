@@ -139,6 +139,8 @@ function ticketBody(fields, format) {
   }).join('\n\n');
 }
 
+const rights = '© Nasser Aldin Farag (0xFarag). All rights reserved.';
+
 export function makeTicket(model, caseIndex, options = {}) {
   const {format = 'github', language = 'de'} = options;
   const t = context(model, language);
@@ -163,7 +165,7 @@ export function makeTicket(model, caseIndex, options = {}) {
   }
   fields.push([t('source'), model.digest], ...refs);
   return {
-    text: (github ? '# ' : '') + title + '\n\n' + ticketBody(fields, format) + '\n',
+    text: (github ? '# ' : '') + title + '\n\n' + ticketBody(fields, format) + '\n\n' + rights + '\n',
     mime: (github ? 'text/markdown' : 'text/plain') + ';charset=utf-8',
     filename: 'authzledger-' + format + '-' + model.digest.slice(0,12) + '-' + (caseIndex + 1) + '-' + language + (github ? '.md' : '.txt')
   };
@@ -209,10 +211,10 @@ export function makeCustomerReport(model, options = {}) {
       '<meta name="viewport" content="width=device-width,initial-scale=1"><title>' + html(header) + '</title><style>' + reportCss + '</style></head><body>' +
       '<header><h1>' + html(header) + '</h1>' + render(source) + '</header><main><h2>' + html(t('executive')) + '</h2>' + render(totals) +
       '<p>' + html(t('boundaries')) + '</p><h2>' + html(t('appendix')) + '</h2>' +
-      cases.map(c => '<article><h3>' + html(c.heading) + '</h3>' + render(c.fields) + '</article>').join('') + '</main></body></html>\n';
+      cases.map(c => '<article><h3>' + html(c.heading) + '</h3>' + render(c.fields) + '</article>').join('') + '</main><footer>' + rights + '</footer></body></html>\n';
   } else {
     text = ['# ' + header, render(source), '## ' + t('executive'), render(totals), t('boundaries'), '## ' + t('appendix'),
-      ...cases.map(c => '### ' + c.heading + '\n\n' + render(c.fields))].join('\n\n') + '\n';
+      ...cases.map(c => '### ' + c.heading + '\n\n' + render(c.fields)), rights].join('\n\n') + '\n';
   }
   return {text, mime: (isHtml ? 'text/html' : 'text/markdown') + ';charset=utf-8',
     filename: 'authzledger-report-' + model.digest.slice(0,12) + '-' + language + (isHtml ? '.html' : '.md')};

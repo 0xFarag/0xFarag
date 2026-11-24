@@ -1,4 +1,4 @@
-// ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
+// © Nasser Aldin Farag (0xFarag). All rights reserved.
 export const MAX_BYTES = 2 * 1024 * 1024;
 const MAX_ROWS = 1024;
 const retestLabels = {
@@ -76,7 +76,7 @@ function details(entries) {
 
 // JSON.parse validates the grammar but silently discards duplicate object keys.
 // Inspect keys in the input text so escaped duplicates are caught before projection.
-function checkKeys(text) {
+export function checkKeys(text) {
   const stack = [];
   const tokens = /"(?:[^"\\]|\\.)*"\s*:?|[{}\[\]]/g;
   for (const match of text.matchAll(tokens)) {

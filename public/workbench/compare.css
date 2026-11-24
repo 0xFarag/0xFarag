@@ -1,3 +1,4 @@
+/* © Nasser Aldin Farag (0xFarag). All rights reserved. */
 #snapshot-comparison { min-width:0; color:#182a3c; }
 #snapshot-comparison .cmp-panel { border:1px solid #bfccd4; border-radius:.65rem; background:#fff; overflow:hidden; }
 .cmp-panel>summary { padding:1.05rem 1.3rem; color:#142c41; font-weight:700; cursor:pointer; }

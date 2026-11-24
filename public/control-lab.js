@@ -1,4 +1,4 @@
-// ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
+// © Nasser Aldin Farag (0xFarag). All rights reserved.
 (() => {
   const picker = document.getElementById('signal-case');
   const status = document.getElementById('signal-status');

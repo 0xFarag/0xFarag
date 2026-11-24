@@ -1,0 +1,36 @@
+/* © Nasser Aldin Farag (0xFarag). All rights reserved. */
+.home .hero {background: radial-gradient(ellipse at 90% 35%,#164647 0%,transparent 46%),linear-gradient(120deg,#071722,#102838); }
+.proof-quick {display:flex;flex-wrap:wrap;gap:.5rem 1.1rem;margin-block-start:1.35rem}
+.proof-quick a {color:#d7e7e7;font-size:.91rem;text-underline-offset:.25rem;text-decoration:underline}
+.proof-box {min-width:0;background:#0b202c;border:1px solid #376566;border-block-start:3px solid #43d6cf;border-radius:.5rem;color:#f7faf8;align-self:center;box-shadow:0 .75rem 2.5rem #02101844}
+.proof-box header, .proof-result-heading {display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+.proof-box header {border-bottom:1px solid #35515b;padding:.95rem 1.4rem}
+.proof-box header h2 {font:650 1.35rem/1.25 system-ui,sans-serif;color:#fff;margin:0}
+.proof-box header span {font:500 .85rem/1.2 ui-monospace,monospace;color:#84e6e3}
+.proof-fields {padding:1.05rem 1.4rem 1.3rem;display:grid;gap:.45rem}
+.proof-fields>p:first-child {margin:0 0 .5rem;color:#c5d5d7;font-size:.96rem}
+.proof-fields label,.proof-inspect label {font-weight:650;font-size:.93rem;display:block}
+.proof-fields input,.proof-inspect input,.proof-inspect select {display:block;inline-size:100%;max-inline-size:100%;min-inline-size:0;box-sizing:border-box;font:inherit;font-size:.9rem}
+.proof-fields input,.proof-inspect input {padding:.35rem;border:1px solid #5b7480;border-radius:.25rem;overflow:hidden;text-overflow:ellipsis}
+.proof-fields input::file-selector-button,.proof-inspect input::file-selector-button {padding:.45rem .6rem;margin-inline-end:.5rem;border:0;border-radius:.15rem;background:#e4edef;color:#102b32;cursor:pointer}
+.proof-fields input {margin:0 0 .45rem;color:#e1eeef;color-scheme:dark}
+.proof-fields details {margin:.2rem 0 .6rem}.proof-fields summary {cursor:pointer;text-decoration:underline;text-underline-offset:.22rem;color:#badee0}
+.proof-fields details label {margin:.45rem 0}
+.proof-verify,.proof-result-heading button {border-radius:.2rem;min-height:44px;font:650 .96rem/1.25 system-ui,sans-serif;cursor:pointer;padding:.7rem 1rem}
+.proof-verify {background:#43d6cf;color:#071722;border:0;justify-self:start}
+.proof-fields #proof-status {font-size:.94rem;color:#c8ece9;margin:.25rem 0 0}.proof-fields #proof-status:empty {display:none}
+.proof-fields #proof-status[data-error=true] {color:#ffd2ab}
+.proof-result {background:#f5f7f6;color:#102d35}
+.proof-result[hidden] {display:none}
+.proof-result-heading {margin-block-end:1.4rem}
+.proof-result-heading button {border:1px solid #70838a;background:transparent;color:inherit}
+.proof-counts {display:grid;grid-template-columns:repeat(auto-fit,minmax(8rem,1fr));gap:.6rem}
+.proof-counts div {background:white;border:1px solid #cbd6d7;border-block-start:3px solid #358581;border-radius:.2rem;padding:.7rem}
+.proof-counts span,.proof-counts strong {display:block}.proof-counts strong {font-size:1.6rem;color:#102d35}.proof-counts span {font-size:.86rem}
+.proof-inspect {display:grid;grid-template-columns:1.3fr 1fr;gap:1.3rem;align-items:start;margin-block-start:1.3rem}
+.proof-inspect>div,.proof-inspect>aside {min-width:0;background:white;border:1px solid #bdcdd0;padding:1.1rem}
+.proof-inspect select {padding:.6rem;margin-block:.35rem}
+.proof-inspect dt {font-weight:600;margin-block-start:.55rem}.proof-inspect dd {margin-inline-start:0;overflow-wrap:anywhere;font:.87rem/1.6 ui-monospace,monospace}
+.proof-inspect details {margin:.65rem 0}.proof-inspect summary {cursor:pointer}
+.proof-inspect input {margin-block-start:.4rem}
+@media (max-width:760px) {.proof-inspect {grid-template-columns:1fr}.home .hero-grid {grid-template-columns:1fr}}

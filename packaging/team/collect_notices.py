@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Collect the actual installed distribution's third-party license and notice files."""
 import argparse
 from importlib import metadata
@@ -12,13 +13,13 @@ import sysconfig
 def collect(destination, windows):
     destination.mkdir(parents=True, exist_ok=True)
     inventory = []
-    runtime = ['cryptography', 'cffi', 'pycparser']
+    runtime = ['cryptography', 'cffi', 'pycparser', 'reportlab', 'pillow', 'charset-normalizer']
     build = ['PyInstaller', 'pyinstaller-hooks-contrib', 'altgraph', 'packaging', 'pefile', 'pywin32-ctypes']
     for name in runtime + (build if windows else []):
         try:
             dist = metadata.distribution(name)
         except metadata.PackageNotFoundError:
-            if name == 'cryptography' or (windows and name == 'PyInstaller'):
+            if name in ('cryptography', 'reportlab', 'pillow', 'charset-normalizer') or (windows and name == 'PyInstaller'):
                 raise
             continue
         folder = re.sub(r'[^A-Za-z0-9_.-]', '_', name)
@@ -29,7 +30,8 @@ def collect(destination, windows):
                 continue
             nested = any(part.lower() in ('license', 'licenses', 'licences') for part in parts[:-1])
             named = item.name.lower().startswith(('license', 'licence', 'copying', 'notice', 'copyright'))
-            if not (nested or named):
+            font_terms = name == 'reportlab' and 'fonts' in parts and any(word in item.name.lower() for word in ('license', 'copying'))
+            if not (nested or named or font_terms):
                 continue
             source = Path(dist.locate_file(item))
             if not source.is_file():

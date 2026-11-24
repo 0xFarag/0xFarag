@@ -1,13 +1,29 @@
-FROM python:3.12-slim-bookworm@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HOME=/data
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
+ARG PYTHON_BASE=python:3.12-slim-bookworm@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df
+FROM ${PYTHON_BASE} AS dependencies
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 PYTHONDONTWRITEBYTECODE=1
+COPY team/requirements.txt /build/requirements.txt
+RUN python -m venv --without-pip /opt/authzledger-venv \
+    && python -m pip --python /opt/authzledger-venv/bin/python install \
+        --no-cache-dir --no-compile --only-binary=:all: -r /build/requirements.txt
+COPY packaging/team/collect_notices.py /build/collect_notices.py
+RUN /opt/authzledger-venv/bin/python /build/collect_notices.py /build/notices
+
+FROM ${PYTHON_BASE} AS runtime
+LABEL org.opencontainers.image.title="AuthzLedger Team" \
+    org.opencontainers.image.url="https://authzledger.com" \
+    org.opencontainers.image.source="https://github.com/0xFarag/0xFarag" \
+    org.opencontainers.image.version="1.5.0.2" \
+    org.opencontainers.image.authors="Nasser Aldin Farag (0xFarag)" \
+    org.opencontainers.image.licenses="LicenseRef-AuthzLedger" \
+    org.authzledger.copyright="© Nasser Aldin Farag (0xFarag). All rights reserved."
+ENV PATH="/opt/authzledger-venv/bin:${PATH}" PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HOME=/data
 WORKDIR /opt/authzledger
-COPY team/requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir --only-binary=:all: -r /tmp/requirements.txt && rm /tmp/requirements.txt && mkdir -p /data && chown 10001:10001 /data && chmod 0700 /data
+COPY --from=dependencies /opt/authzledger-venv /opt/authzledger-venv
+COPY --from=dependencies /build/notices /usr/share/doc/authzledger-team/third-party
+COPY LICENSE NOTICE.txt packaging/team/README.md packaging/team/THIRD-PARTY.md docs/Team-Login-RBAC.md /usr/share/doc/authzledger-team/
 COPY team/ team/
-COPY LICENSE NOTICE.txt ./
-COPY packaging/team/THIRD-PARTY.md /usr/share/doc/authzledger-team/THIRD-PARTY.md
-COPY packaging/team/collect_notices.py /tmp/collect_team_notices.py
-RUN cp LICENSE NOTICE.txt /usr/share/doc/authzledger-team/ && python /tmp/collect_team_notices.py /usr/share/doc/authzledger-team/third-party && rm /tmp/collect_team_notices.py
+RUN mkdir -p /data && chown 10001:10001 /data && chmod 0700 /data
 USER 10001:10001
 VOLUME ["/data"]
 EXPOSE 8765

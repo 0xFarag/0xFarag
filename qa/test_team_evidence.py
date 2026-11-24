@@ -1,7 +1,10 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Exercise the same API dispatcher used by the authenticated HTTP server."""
 import base64
 import copy
 import json
+import io
+from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
 import sqlite3
 import subprocess
@@ -9,6 +12,7 @@ import sys
 import tempfile
 import unittest
 
+from team.documents import RIGHTS, verify_archive, verify_document
 from team.evidence import WorkflowError, handle, init_db, verify_package
 from team.evidence_formats import canonical, parse_records, sha
 
@@ -127,6 +131,66 @@ class CaseWorkflow(unittest.TestCase):
         self.assertTrue(json.loads(run.stdout)["valid"])
         (root/"evidence-signing.key").unlink()
         with self.assertRaises(WorkflowError):self.api("GET",["trust-key"])
+
+    def test_exact_document_bytes_are_bound_to_the_signed_handover(self):
+        self.add("finding",self.base)
+        key=self.api("GET",["trust-key"])
+        wrong=copy.deepcopy(key)
+        wrong["public_key"]=base64.b64encode(bytes(32)).decode()
+        for fmt in ("html","pdf"):
+            for lang in ("de","en","fr","it","ar"):
+                with self.subTest(fmt=fmt,lang=lang):
+                    result=self.api("POST",["cases",self.case,"handover"],{"language":lang,"format":fmt})
+                    raw=base64.b64decode(result["archive_b64"],validate=True)
+                    with ZipFile(io.BytesIO(raw)) as archive:
+                        proof=json.loads(archive.read("proof.json"))
+                        document=archive.read("report."+fmt)
+                    self.assertTrue(document.startswith(b"%PDF" if fmt=="pdf" else b"<!doctype html>"))
+                    self.assertEqual(proof["document"]["rights"],RIGHTS)
+                    self.assertEqual(proof["document"]["case_id"],self.case)
+                    self.assertEqual(proof["document"]["sha256"],sha(document))
+                    self.assertEqual(proof["handover"]["report"]["rights"],RIGHTS)
+                    self.assertNotIn(b"PRIVATE-SESSION",raw)
+                    self.assertNotIn(b"/objects/1",raw)
+                    checked=self.api("POST",["verify"],{"archive_b64":result["archive_b64"]})
+                    self.assertTrue(checked["valid"])
+                    self.assertEqual(checked["report"]["counts"]["not_retested"],1)
+                    self.assertEqual(checked["report"]["language"],lang)
+                    self.assertFalse(verify_document(proof,document+b"x",key)["valid"])
+                    self.assertFalse(verify_document(proof,document,wrong)["valid"])
+                    self.assertFalse(verify_document(proof,document,key,"unrelated")["valid"])
+                    altered=copy.deepcopy(proof)
+                    altered["handover"]["report"]["counts"]["fix_verified"]=3
+                    self.assertFalse(verify_document(altered,document,key)["valid"])
+                    altered=copy.deepcopy(proof)
+                    altered["document"]["scope_sha256"]="f"*64
+                    self.assertFalse(verify_document(altered,document,key)["valid"])
+        # Also verify the files independently of the server or a session.
+        root=Path(self.temp.name)
+        for name,data in (("public.json",canonical(key)),("report.pdf",document),("proof.json",canonical(proof)),("delivery.zip",raw)):
+            (root/name).write_bytes(data)
+        cmd=[sys.executable,"-m","team.evidence","verify"]
+        for args in ([str(root/"delivery.zip")],[str(root/"proof.json"),"--document",str(root/"report.pdf")]):
+            output=subprocess.run(cmd+args+["--trusted-key",str(root/"public.json")],capture_output=True,check=True)
+            self.assertTrue(json.loads(output.stdout)["valid"])
+
+    def test_untrusted_archives_are_bounded_and_never_extracted(self):
+        key=self.api("GET",["trust-key"])
+        for names in (("../report.pdf","proof.json"),("proof.json","proof.json"),("proof.json","report.html","extra")):
+            buffer=io.BytesIO()
+            import warnings
+            with warnings.catch_warnings(), ZipFile(buffer,"w") as archive:
+                warnings.simplefilter("ignore",UserWarning)
+                for name in names: archive.writestr(name,b"{}")
+            self.assertFalse(verify_archive(buffer.getvalue(),key)["valid"])
+        with ZipFile(buffer:=io.BytesIO(),"w",compression=ZIP_DEFLATED) as archive:
+            archive.writestr("proof.json",b"{}")
+            archive.writestr("report.pdf",b"A"*10000)
+        self.assertFalse(verify_archive(buffer.getvalue(),key)["valid"])
+        for value in (b"PK",b"X" * (3*1024*1024)):
+            self.assertFalse(verify_archive(value,key)["valid"])
+        with self.assertRaises(WorkflowError):
+            self.api("POST",["cases",self.case,"handover"],{"format":"exe"})
 
     def test_retest_binding_includes_request_body_without_exposing_it(self):
         before=json.loads(har())

@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Case-bound append-only control review plans using captured files."""
 import base64
 import json

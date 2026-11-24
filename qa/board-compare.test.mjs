@@ -1,3 +1,4 @@
+// © Nasser Aldin Farag (0xFarag). All rights reserved.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { compareProjections } from '../public/workbench/compare.mjs';

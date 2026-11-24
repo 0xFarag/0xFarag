@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Passive, team-scoped evidence review, retests and verifiable customer handovers."""
 import argparse
 import base64
@@ -15,6 +16,7 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 
+from .documents import RIGHTS, MAX_ARCHIVE, SUPPORTED, build_archive, verify_archive, verify_document
 from .evidence_formats import FORMATS, MAX_FILE, canonical, host, parse_records, read_json, sha
 
 LANGS = ("de", "en", "fr", "it", "ar")
@@ -289,12 +291,12 @@ def make_package(db,team,user,case,language,data_dir):
                          "control":public_ref(finding["control"]["reference"]) if finding["control"] else None,
                          "retest":after,"retest_label":_REPORT[after][lang],"retest_evidence":public_ref(test["evidence"]) if test else None,
                          "retest_control":public_ref(test["control"]["reference"]) if test and test["control"] else None})
-    report = {"language":language,"direction":"rtl" if language=="ar" else "ltr","title":_REPORT["heading"][lang],
+    report = {"rights":RIGHTS,"language":language,"direction":"rtl" if language=="ar" else "ltr","title":_REPORT["heading"][lang],
               "summary_heading":_REPORT["summary"][lang],"scope_sha256":sha(canonical([case["scope"],case["assets"]])),
               "counts":{"findings":len(findings),**counts},"labels":{k:_REPORT[k][lang] for k in ("findings",*counts)},
               "appendix_heading":_REPORT["appendix"][lang],"appendix":appendix,"limitations":_REPORT["limit"][lang]}
     key,descriptor = signer(db,data_dir)
-    manifest = {"schema":SCHEMA,"algorithm":"Ed25519","fingerprint":descriptor["fingerprint"],"case_id":case["id"],"team_id":team,
+    manifest = {"rights":RIGHTS,"schema":SCHEMA,"algorithm":"Ed25519","fingerprint":descriptor["fingerprint"],"case_id":case["id"],"team_id":team,
                 "created_at":now(),"report_sha256":sha(canonical(report)),
                 "sources":[{k:item[k] for k in ("id","format","sha256","bytes","records")} for item in source],
                 "retests":[{"id":test["id"],"finding_id":test["finding_id"],"baseline_sha256":test["baseline_sha256"],
@@ -327,7 +329,16 @@ def handle(db, team_id, user_id, method, segments, body, *, data_dir):
     if method == "GET" and parts == ["trust-key"]:
         return signer(db,data_dir)[1]
     if method == "POST" and parts == ["verify"]:
-        return verify_package(body.get("package"),signer(db,data_dir)[1],team_id)
+        key = signer(db,data_dir)[1]
+        if "archive_b64" in body:
+            raw = body["archive_b64"]
+            require(isinstance(raw,str) and 0 < len(raw) <= 4 * ((MAX_ARCHIVE + 2) // 3), "Invalid archive size")
+            try:
+                data = base64.b64decode(raw,validate=True)
+            except ValueError:
+                raise WorkflowError(400, "Invalid Base64 archive") from None
+            return verify_archive(data,key,team_id)
+        return verify_package(body.get("package"),key,team_id)
     if parts == ["cases"] and method == "POST":
         return create_case(db,team_id,user_id,body)
     if parts == ["cases"] and method == "GET":
@@ -352,7 +363,13 @@ def handle(db, team_id, user_id, method, segments, body, *, data_dir):
     if parts[2] == "retest":
         return add_retest(db,team_id,user_id,case,body)
     if parts[2] == "handover":
-        return {"package":make_package(db,team_id,user_id,case,body.get("language","de"),data_dir)}
+        fmt = body.get("format","json")
+        require(fmt in ("json", *SUPPORTED), "Unknown document format")
+        package = make_package(db,team_id,user_id,case,body.get("language","de"),data_dir)
+        if fmt == "json":
+            return {"package":package}
+        archive = build_archive(package,fmt,signer(db,data_dir)[0])
+        return {"format":fmt,"archive_b64":base64.b64encode(archive).decode("ascii")}
     raise WorkflowError(404,"Unknown route")
 
 
@@ -362,11 +379,22 @@ def main():
     check = sub.add_parser("verify")
     check.add_argument("package",type=Path)
     check.add_argument("--trusted-key",type=Path,required=True)
+    check.add_argument("--document",type=Path,help="Extracted report.html or report.pdf, with proof.json as the package")
     args = cli.parse_args()
     try:
         if args.package.stat().st_size > 8 * MAX_FILE or args.trusted_key.stat().st_size > 4096:
             raise ValueError
-        result = verify_package(read_json(args.package.read_text(encoding="utf-8")), read_json(args.trusted_key.read_text(encoding="utf-8")))
+        trusted_key = read_json(args.trusted_key.read_text(encoding="utf-8"))
+        data = args.package.read_bytes()
+        if args.document:
+            if args.document.stat().st_size > MAX_ARCHIVE:
+                raise ValueError
+            result = verify_document(read_json(data.decode("utf-8")), args.document.read_bytes(), trusted_key)
+        elif data.startswith(b"PK"):
+            result = verify_archive(data, trusted_key)
+        else:
+            result = verify_package(read_json(data.decode("utf-8")), trusted_key)
+        result.pop("report",None)
     except (OSError,ValueError,RecursionError):
         result = {"valid":False,"reason":"unreadable_input"}
     print(json.dumps(result))

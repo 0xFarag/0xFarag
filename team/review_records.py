@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Immutable, case-scoped plans and manual reviews of already captured evidence."""
 import json
 import re

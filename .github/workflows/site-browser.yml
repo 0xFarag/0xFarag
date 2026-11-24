@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 name: Verify AuthzLedger public website
 on:
   push:
@@ -37,7 +38,7 @@ jobs:
       - name: Check source-bound observation comparisons
         run: node --test qa/import-formats.cjs qa/format-extensions.cjs qa/asset-review.cjs qa/ferox-format.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
       - name: Check evidence workbench projections and comparisons
-        run: node --test qa/board-blue.test.mjs qa/board-compare.test.mjs qa/board-model.test.mjs qa/board-index.test.mjs qa/board-exports.test.mjs
+        run: node --test qa/board-blue.test.mjs qa/board-compare.test.mjs qa/board-model.test.mjs qa/board-index.test.mjs qa/board-exports.test.mjs qa/proof-cockpit.test.mjs
       - name: Verify native policy permissions, retests, file triage and vetted access
         run: node --test qa/rbac-policy.test.mjs qa/rbac-retest.test.mjs qa/rbac-browser.cjs qa/rbac-matrix.test.mjs qa/rbac-matrix-browser.cjs qa/file-triage.test.mjs qa/file-triage-browser.cjs qa/pro-review.cjs qa/pro-access-browser.cjs
       - name: Verify billing readiness, checkout and customer journeys

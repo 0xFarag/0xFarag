@@ -65,7 +65,7 @@ export function makeReviewExport(records, planId) {
   const revisions = lineage(records,planId);
   if (!revisions.length) throw new Error('Unknown review plan');
   const plan = revisions[0], last = revisions.at(-1);
-  return {schema:'authzledger.reproducibility-record/v1',signed:false,basis:'manual_review_of_existing_evidence',
+  return {schema:'authzledger.reproducibility-record/v1',rights:'© Nasser Aldin Farag (0xFarag). All rights reserved.',signed:false,basis:'manual_review_of_existing_evidence',
     team_id:plan.team_id,case_id:plan.case_id,plan_id:plan.id,latest_revision_sha256:last.sha256,revisions};
 }
 

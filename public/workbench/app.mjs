@@ -1,4 +1,4 @@
-// ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
+// © Nasser Aldin Farag (0xFarag). All rights reserved.
 import {MAX_BYTES, originalFileChecks, parseProjection, statusLabels} from './model.mjs';
 import {renderComparison} from './compare-view.mjs';
 import {saveFile, setupDelivery} from './delivery.mjs';
@@ -413,7 +413,7 @@ function signalRatio(signal) {
 
 function redactedReview() {
   const {model} = active;
-  return {schema: 'authzledger.workbench.review/v1', signed: false, created_at: new Date().toISOString(),
+  return {schema: 'authzledger.workbench.review/v1', rights: '© Nasser Aldin Farag (0xFarag). All rights reserved.', signed: false, created_at: new Date().toISOString(),
     source_sha256: model.digest, projection: model.kind, total: model.rows.length,
     ...(model.importIndex ? {import_index: {workspace: model.importIndex.workspace, scope: 'unverified', controls: 'unverified',
       coverage: 'unknown', findings: 'not_assessed', retest: 'not_assessed', asset_ids: model.importIndex.assets,
@@ -427,7 +427,7 @@ function redactedReview() {
 
 function preparePrint() {
   const area = $('print-report');
-  area.replaceChildren(element('h1', tr('AuthzLedger · Fallübersicht')));
+  area.replaceChildren(element('h1', tr('AuthzLedger · Fallübersicht')), element('small', '© Nasser Aldin Farag (0xFarag). All rights reserved.'));
   if (!active) {
     area.append(element('p', tr('Keine Belegquelle geöffnet.')));
     return;

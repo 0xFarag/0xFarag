@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Desktop entry point. Keep the service private to the loopback interface."""
 import argparse
 import locale
@@ -15,6 +16,10 @@ from team.server import bootstrap, make_server, needs_bootstrap
 def self_test():
     """Exercise the packaged app, SQLite, the bundled web UI and cryptography."""
     from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+    from team.report_pdf import smoke_pdf
+    document = smoke_pdf()
+    if not document.startswith(b'%PDF-') or b'%%EOF' not in document[-32:]:
+        raise RuntimeError('Packaged PDF renderer did not produce a complete document')
     key = Ed25519PrivateKey.generate()
     key.public_key().verify(key.sign(b'AuthzLedger packaging self-test'), b'AuthzLedger packaging self-test')
     with tempfile.TemporaryDirectory() as temp:

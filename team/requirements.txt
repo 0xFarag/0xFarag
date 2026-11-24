@@ -1,1 +1,3 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 cryptography==50.0.0
+reportlab==4.4.9

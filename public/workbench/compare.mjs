@@ -1,4 +1,4 @@
-// ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
+// © Nasser Aldin Farag (0xFarag). All rights reserved.
 const sha256 = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 const hasId = value => typeof value === 'string' && value.trim() === value && value.length > 0;
 const contextFields = new Set(['detail:Snapshot', 'detail:Retest-Ausführung']);

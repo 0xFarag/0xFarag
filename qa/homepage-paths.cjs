@@ -2,6 +2,28 @@
 'use strict';
 
 const assert = require('node:assert/strict');
+const cockpitFixture = require('./fixtures/team-proof-cockpit.json');
+
+async function verifySignedCockpit(page, hero) {
+  const file = (name, value) => ({name, mimeType:'application/json', buffer:Buffer.from(JSON.stringify(value))});
+  await page.locator('#proof-package').setInputFiles(file('package.json',cockpitFixture.proof.handover));
+  await page.locator('#proof-key').setInputFiles(file('trust.json',cockpitFixture.trustedKey));
+  await hero.locator('#beweis-cockpit button').click();
+  await page.locator('#proof-result:visible').waitFor();
+  assert.equal(await page.locator('#proof-rows option').count(),2);
+  assert.match(await page.locator('#proof-counts').innerText(),/Nicht nachgeprüft/);
+  await page.locator('#proof-original').setInputFiles({name:'original.har',mimeType:'application/json',buffer:Buffer.from(cockpitFixture.original)});
+  await page.locator('#proof-match').filter({hasText:'entspricht einer signierten Quelle'}).waitFor();
+  await page.locator('#proof-clear').click();
+  assert(await page.locator('#proof-result').isHidden());
+  const altered = structuredClone(cockpitFixture.proof.handover);
+  altered.report.counts.not_retested = 0;
+  await page.locator('#proof-package').setInputFiles(file('tampered.json',altered));
+  await page.locator('#proof-key').setInputFiles(file('trust.json',cockpitFixture.trustedKey));
+  await hero.locator('#beweis-cockpit button').click();
+  await page.locator('#proof-status[data-error=true]').waitFor();
+  assert(await page.locator('#proof-result').isHidden());
+}
 
 function routeLinks(scope, pathname) {
   const relative = pathname.slice(1);
@@ -23,6 +45,7 @@ async function verifyHomepagePaths(page, origin, width) {
   await page.goto(origin);
   const hero = page.locator('section').filter({has: page.getByRole('heading', {level: 1})}).first();
   assert.equal(await hero.locator('#cockpit, #finding-select').count(), 0);
+  await verifySignedCockpit(page, hero);
   for (const destination of ['/workbench/', '/downloads/#team']) {
     const action = routeLinks(hero, destination).first();
     await checkFits(page, action, destination);

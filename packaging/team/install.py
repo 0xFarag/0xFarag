@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Populate the filesystem tree used by Debian and Arch packages."""
 import os
 import shutil
@@ -31,3 +32,10 @@ for name in ['LICENSE', 'NOTICE.txt']:
     install_file(name, 'usr/share/doc/authzledger-team/' + name)
 install_file('packaging/team/THIRD-PARTY.md', 'usr/lib/authzledger-team/legal/THIRD-PARTY.md')
 install_file('packaging/team/THIRD-PARTY.md', 'usr/share/doc/authzledger-team/THIRD-PARTY.md')
+
+install_file('team/static/pdf/FONT-LICENSE.txt', 'usr/lib/authzledger-team/legal/FONT-LICENSE.txt')
+install_file('docs/Team-Login-RBAC.md', 'usr/share/doc/authzledger-team/Team-Login-RBAC.md')
+notice = TARGET / 'usr/share/doc/authzledger-team/copyright'
+notice.write_text('© Nasser Aldin Farag (0xFarag). All rights reserved.\n\n'
+                  + (ROOT / 'LICENSE').read_text(encoding='utf-8')
+                  + '\n' + (ROOT / 'packaging/team/THIRD-PARTY.md').read_text(encoding='utf-8'), encoding='utf-8')

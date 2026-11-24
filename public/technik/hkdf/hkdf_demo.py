@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Offline learning example for AuthzLedger. Run with Python and cryptography.
 
 ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).

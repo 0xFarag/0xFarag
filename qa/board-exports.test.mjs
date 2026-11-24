@@ -1,3 +1,4 @@
+// © Nasser Aldin Farag (0xFarag). All rights reserved.
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import test from 'node:test';

@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Bounded local parsers. Stored rows contain no URLs, bodies, paths or headers."""
 import base64
 import hashlib

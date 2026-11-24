@@ -1,4 +1,4 @@
-// ALL RIGHTS RESERVED. © Nasser Aldin Farag (0xFarag).
+// © Nasser Aldin Farag (0xFarag). All rights reserved.
 import { compareProjections } from './compare.mjs';
 import { statusLabels } from './model.mjs';
 import { exampleSnapshots } from './compare-example.mjs';

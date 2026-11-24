@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 PyInstaller==6.16.0
 pyinstaller-hooks-contrib==2025.9
 altgraph==0.17.5

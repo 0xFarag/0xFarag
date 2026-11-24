@@ -373,11 +373,11 @@ export const messages = {
     "تحقّق من حزمة التسليم باستخدام المفتاح الموثوق المحفوظ في خادم الفريق."
   ],
   "package": [
-    "Übergabepaket (.json)",
-    "Handover package (.json)",
-    "Paquet de remise (.json)",
-    "Pacchetto di consegna (.json)",
-    "حزمة التسليم (.json)"
+    "Übergabe (JSON oder ZIP)",
+    "Handover (JSON or ZIP)",
+    "Livrable (JSON ou ZIP)",
+    "Consegna (JSON o ZIP)",
+    "ملف التسليم (JSON أو ZIP)"
   ],
   "verify": [
     "Signatur prüfen",
@@ -819,5 +819,19 @@ export const messages = {
     "L’observation ne correspond pas au statut choisi du contre-test.",
     "L’osservazione non corrisponde all’esito scelto per la nuova verifica.",
     "لا تتوافق الملاحظة مع نتيجة إعادة الاختبار المحددة."
+  ],
+  "outputFormat": [
+    "Dateiformat",
+    "File format",
+    "Format du fichier",
+    "Formato del file",
+    "تنسيق الملف"
+  ],
+  "documentHelp": [
+    "HTML und PDF werden mit einem signierten Nachweis in einer ZIP-Datei geliefert. Zur Prüfung hier das vollständige ZIP öffnen.",
+    "HTML and PDF are delivered in a ZIP with a signed proof. Open the whole ZIP here to verify it.",
+    "Les formats HTML et PDF sont livrés dans une archive ZIP avec une preuve signée. Ouvrez cette archive ici pour la vérifier.",
+    "I file HTML e PDF sono forniti in un archivio ZIP con una prova firmata. Aprite qui lo ZIP per verificarlo.",
+    "تُسلّم ملفات HTML وPDF داخل أرشيف ZIP مع إثبات موقّع. افتحوا الأرشيف كاملاً هنا للتحقّق منه."
   ]
 };

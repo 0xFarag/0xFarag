@@ -1,3 +1,4 @@
+/* © Nasser Aldin Farag (0xFarag). All rights reserved. */
 :root{--navy:#071722;--teal:#43d6cf;--gold:#c8a66b;--text:#132c3b;--line:#cbdbdf;--muted:#526974;font-family:"Inter","Instrument Sans",system-ui,sans-serif;font-size:16px;color:var(--text);color-scheme:light}
 *{box-sizing:border-box}body{margin:0;line-height:1.6;background:#f9fbfa}.wrap{width:min(69rem,90%);margin:auto}header,footer,.intro{background:var(--navy);color:white}
 header{border-bottom:1px solid #36515c}header nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:4.7rem}a{color:#006861;text-underline-offset:.23em}a:focus-visible,summary:focus-visible{outline:3px solid #288599;outline-offset:4px}header a,footer a{color:white}.wordmark{display:inline-flex;align-items:center;gap:.65rem;font-size:1.35rem;font-weight:750;text-decoration:none}.wordmark img{object-fit:contain}

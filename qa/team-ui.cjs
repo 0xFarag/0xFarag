@@ -1,3 +1,4 @@
+// © Nasser Aldin Farag (0xFarag). All rights reserved.
 // Run with node --test qa/team-ui.cjs after installing the Team and Playwright dependencies.
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -98,6 +99,19 @@ test('team GUI connects to the real server, reviews records and controls, signs 
   await page.locator('#verify-file').setInputFiles({name:'signed.json',mimeType:'application/json',buffer:packageBytes});
   await submit('verify-form'); await page.locator('#verified-report').waitFor();
   assert.equal(await page.locator('#verified-report').getAttribute('dir'),'rtl');
+  for (const fmt of ['html','pdf']) {
+    await set('output-format',fmt);
+    const nextDownload = page.waitForEvent('download');
+    await submit('handover-form');
+    const file = await nextDownload;
+    assert(file.suggestedFilename().endsWith('-'+fmt+'.zip'));
+    const bytes = await readFile(await file.path());
+    await page.locator('#verify-file').setInputFiles({name:file.suggestedFilename(),mimeType:'application/zip',buffer:bytes});
+    await submit('verify-form');
+    await page.locator('#verified-report').waitFor();
+    assert.equal(await page.locator('#verified-report').getAttribute('lang'),'ar');
+    assert.match(await page.locator('#verify-result').innerText(),/SHA-256 · [a-f0-9]{64}/);
+  }
   pkg.report.counts.fix_verified = 100;
   await page.locator('#verify-file').setInputFiles({name:'modified.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(pkg))});
   await submit('verify-form'); await page.waitForFunction(() => document.getElementById('verify-result').dataset.error === 'true');

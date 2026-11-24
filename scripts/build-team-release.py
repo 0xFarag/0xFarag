@@ -1,3 +1,4 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Build native Team application packages from an allowlist of release sources."""
 import argparse
 import gzip
@@ -30,9 +31,11 @@ def members():
              'scripts/build-team-release.py', 'docs/Team-Login-RBAC.md']]
     scripts = list((ROOT / 'team').glob('*.py'))
     web = [p for p in (ROOT / 'team/static').rglob('*') if p.suffix.lower() in
-           {'.html', '.js', '.mjs', '.css', '.json', '.png', '.svg', '.ico', '.woff', '.woff2'}]
+           {'.html', '.js', '.mjs', '.css', '.json', '.png', '.svg', '.ico', '.woff', '.woff2', '.ttf'}]
+    web.append(ROOT / 'team/static/pdf/FONT-LICENSE.txt')
     packaging = [p for p in PACK.iterdir() if p.is_file()]
-    for required in ['team/server.py', 'team/evidence.py', 'team/static/index.html']:
+    for required in ['team/server.py', 'team/evidence.py', 'team/report_pdf.py', 'team/static/index.html',
+                     'team/static/pdf/ReportSans.ttf', 'team/static/pdf/FONT-LICENSE.txt', 'team/static/pdf/arabic-lines.json']:
         if not (ROOT / required).is_file():
             raise SystemExit('Incomplete Team application: ' + required)
     files = sorted(set(fixed + scripts + web + packaging))
@@ -74,7 +77,7 @@ def deb(output, epoch):
         meta.mkdir(mode=0o755)
         (meta / 'control').write_text(f'Package: {NAME}\nVersion: {VERSION}-1\nArchitecture: all\nSection: utils\n'
             'Priority: optional\nMaintainer: Nasser Aldin Farag (0xFarag)\n'
-            'Depends: python3 (>= 3.10), python3-cryptography, python3-tk\nHomepage: https://authzledger.com\n'
+            'Depends: python3 (>= 3.10), python3-cryptography, python3-reportlab, python3-tk\nHomepage: https://authzledger.com\n'
             'Description: Local AuthzLedger Team evidence workspace\n'
             ' Includes a Python service, a graphical launcher and a desktop menu entry.\n', encoding='utf-8')
         for path in sorted(staging.rglob('*'), reverse=True):
@@ -95,8 +98,16 @@ def windows(output):
         for source in [src / 'LICENSE', src / 'NOTICE.txt', src / 'packaging/team/THIRD-PARTY.md']:
             shutil.copyfile(source, legal / source.name)
         subprocess.run([sys.executable, str(src / 'packaging/team/collect_notices.py'), str(legal / 'third-party'), '--windows'], check=True)
+        parts = tuple(int(x) for x in VERSION.split('.'))
+        if len(parts) != 4 or any(n < 0 or n > 65535 for n in parts):
+            raise ValueError('Expected four Windows version components (0 to 65535)')
+        version_file = directory / 'windows-version.txt'
+        template = (src / 'packaging/team/windows-version.txt.in').read_text(encoding='utf-8')
+        version_file.write_text(template.replace('@PARTS@', str(parts)).replace('@VERSION@', VERSION), encoding='utf-8')
+        shutil.copyfile(src / 'team/static/pdf/FONT-LICENSE.txt', legal / 'FONT-LICENSE.txt')
         subprocess.run([sys.executable, '-m', 'PyInstaller', '--clean', '--noconfirm', '--onefile', '--windowed',
             '--name', FILES[0][:-4], '--icon', str(src / 'packaging/team/authzledger-team.ico'),
+            '--version-file', str(version_file), '--collect-submodules', 'reportlab.pdfbase',
             '--paths', str(src), '--add-data', f'{src / "team/static"};team/static', '--add-data', f'{legal};legal',
             '--workpath', str(directory / 'work'), '--specpath', str(directory / 'spec'),
             '--distpath', str(output), str(src / 'packaging/team/launcher.py')], check=True)

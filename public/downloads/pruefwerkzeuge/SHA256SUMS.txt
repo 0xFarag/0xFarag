@@ -1,1 +1,1 @@
-48562955031ca45206605066d2224ceec7799cdbb7e82884ce982b1f676aaaaa  AuthzLedger-Offline-Pruefwerkzeuge.zip
+9096ef4e7817989dd5d4aa4e4f769596a751d1ad334b90af64b0d71d1f270ce6  AuthzLedger-Offline-Pruefwerkzeuge.zip

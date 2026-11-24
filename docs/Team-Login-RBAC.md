@@ -87,3 +87,19 @@ Vor der Freigabe für ein echtes Team prüft der Betreiber folgende Punkte an de
 ## Experiment und manueller Prüfnachweis
 
 Im Fall kann ein Teammitglied mit Schreibrecht vor der Befunderfassung eine Hypothese, das erwartete Verhalten und die geplante Kontrolle zu einem Asset im Scope festhalten. Jede weitere Beurteilung verweist auf die vorherige Revision. Eine belegte Bestätigung oder Widerlegung benötigt zwei unterschiedliche Beobachtungen desselben Assets. Unklare Ergebnisse bleiben als solche sichtbar. Der JSON-Export enthält die Revisionen und ihre Belegreferenzen. Für eine signierte Kundenübergabe dient die separate Übergabefunktion im Fall.
+
+## Signierte Kundenübergabe in drei Formaten
+
+Im Fall wählt ein Admin, Lead Pentester oder Reviewer unter **Signierte Übergabe** die Berichtssprache und das Dateiformat. JSON enthält den signierten Quellen- und Retest-Nachweis. Bei HTML oder PDF entsteht ein ZIP mit zwei Dateien.
+
+- `report.html` oder `report.pdf` ist der lesbare Kundenbericht. Seine SHA-256-Prüfsumme bindet jedes Byte.
+- `proof.json` enthält die signierte JSON-Übergabe und eine separate Ed25519-Signatur für Format, Dateilänge, Prüfsumme, Übergabe, Fall, Team und Scope. Die PDF-Signatur wird über diese Begleitdatei geprüft.
+
+Zur Prüfung in der Team-GUI die unveränderte ZIP-Datei im Abschnitt **Übergabe prüfen** auswählen. Jede Teamrolle kann die Verifikation gegen den Vertrauensschlüssel ihrer Installation durchführen. Die Oberfläche zeigt die geprüfte Dateiprüfsumme und den verifizierten Bericht an. Beim Versand beide Dateien zusammen übergeben und den öffentlichen Schlüssel oder seinen Fingerabdruck über einen unabhängigen Kanal bestätigen. Eine Änderung am Bericht erfordert eine neue signierte Ausgabe.
+
+Mit dem Quellpaket kann der Empfänger die Verifikation auch rein lokal durchführen. Der Befehl gibt bei Erfolg Exitcode 0 und einen JSON-Beleg mit `valid: true` aus.
+
+```sh
+python -m team.evidence verify uebergabe.zip --trusted-key vertrauensschluessel.json
+python -m team.evidence verify proof.json --document report.pdf --trusted-key vertrauensschluessel.json
+```

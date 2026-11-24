@@ -1,3 +1,4 @@
+/* © Nasser Aldin Farag (0xFarag). All rights reserved. */
 .az-language-bar{position:relative;z-index:25;background:#0c2030;color:#faf7f0;border-block-end:1px solid #314654;font:400 .9375rem/1.35 system-ui,sans-serif}
 .az-language-inner{width:min(100% - 2rem,76rem);margin-inline:auto;display:flex;justify-content:flex-end}
 .az-language{position:relative;padding:0;margin:0;color:inherit;background:transparent;border:0}

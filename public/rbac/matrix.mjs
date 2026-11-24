@@ -48,7 +48,7 @@ export function createMatrix(original) {
       after = source;
     },
     export() {
-      return {schema, original_sha256:original.digest, comparison_sha256:after?.digest ?? null,
+      return {schema, rights:'© Nasser Aldin Farag (0xFarag). All rights reserved.', original_sha256:original.digest, comparison_sha256:after?.digest ?? null,
         cases:rows.map(r=>({query:r.query,expected:r.expected,before:observation(r.before,r.expected),after:observation(r.after,r.expected)}))};
     },
     restore(file) {

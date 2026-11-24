@@ -483,22 +483,37 @@ $('handover-form').addEventListener('submit',run(async () => {
   const epoch = teamEpoch, selected = caseEpoch, id = detail.case.id;
   const result = await request(casePath() + '/handover','POST',formData('handover-form'));
   if (!scoped(epoch,selected)) return;
-  download(result.package,'authzledger-handover-' + id + '.json'); notice('signed');
+  const stem = 'authzledger-handover-' + id;
+  if (result.package) download(result.package,stem + '.json');
+  else {
+    const data = Uint8Array.from(atob(result.archive_b64),c => c.charCodeAt(0));
+    saveBlob(new Blob([data],{type:'application/zip'}),stem + '-' + result.format + '.zip');
+  }
+  notice('signed');
 }));
 $('verify-form').addEventListener('submit',run(async () => {
-  const epoch = teamEpoch;
+  const epoch = teamEpoch, file = $('verify-file').files[0];
   $('verified-report').hidden = true; $('verified-report').replaceChildren();
   $('verify-result').replaceChildren();
-  const buffer = await fileBytes($('verify-file').files[0],4 * 1024 * 1024 - 1024);
-  let pkg; try { pkg = JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(buffer)); } catch { throw localError('badJson'); }
+  const buffer = await fileBytes(file,4 * 1024 * 1024 - 1024);
+  const bytes = new Uint8Array(buffer);
+  let body;
+  if (bytes[0] === 0x50 && bytes[1] === 0x4b) {
+    if (bytes.length > 3 * 1024 * 1024 - 4096) throw localError('badFile');
+    body = {archive_b64:encodeFile(buffer)};
+  } else {
+    try { body = {package:JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(buffer))}; }
+    catch { throw localError('badJson'); }
+  }
   if (!scoped(epoch)) return;
-  const result = await request(base() + '/verify','POST',{package:pkg});
-  if (!scoped(epoch)) return;
+  const result = await request(base() + '/verify','POST',body);
+  if (!scoped(epoch) || $('verify-file').files[0] !== file) return;
   const panel = $('verify-result'); panel.dataset.error = String(!result.valid);
   panel.replaceChildren(labelled('strong',result.valid ? 'valid' : 'invalid'));
   if (result.valid && result.fingerprint) {
     panel.append(document.createTextNode(' · ' + result.fingerprint));
-    showVerifiedReport(pkg.report);
+    if (result.document_sha256) panel.append(node('p','SHA-256 · ' + result.document_sha256));
+    showVerifiedReport(result.report || body.package.report);
   }
 }));
 function showVerifiedReport(report) {

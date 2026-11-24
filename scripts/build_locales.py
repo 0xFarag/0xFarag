@@ -2,6 +2,7 @@
 import json
 import re
 import shutil
+from media_rights import tag_release_media
 from html import escape
 from html.parser import HTMLParser
 from pathlib import Path
@@ -158,9 +159,10 @@ def build():
     if OUTPUT.exists():
         shutil.rmtree(OUTPUT)
     shutil.copytree(SOURCE, OUTPUT)
+    tag_release_media(OUTPUT / "media")
     rows = [[key, *catalog[key]] for key in keys]
     config = {'rows': rows, 'routes': list(pages), 'labels': PICK, 'names': NAMES}
-    (OUTPUT / 'i18n' / 'catalog.js').write_text('window.AuthzLocaleData=' + json.dumps(config, ensure_ascii=False, separators=(',', ':')) + ';\n', encoding='utf-8')
+    (OUTPUT / 'i18n' / 'catalog.js').write_text('// © Nasser Aldin Farag (0xFarag). All rights reserved.\nwindow.AuthzLocaleData=' + json.dumps(config, ensure_ascii=False, separators=(',', ':')) + ';\n', encoding='utf-8')
     for route, source in pages.items():
         original = source.read_text(encoding='utf-8')
         for prefix in ['', *LANGS]:
