@@ -159,6 +159,7 @@ def build():
     if OUTPUT.exists():
         shutil.rmtree(OUTPUT)
     shutil.copytree(SOURCE, OUTPUT)
+    shutil.copyfile(ROOT / 'docs' / 'Proof-Studio-Betrieb.md', OUTPUT / 'studio' / 'Proof-Studio-Betrieb.md')
     tag_release_media(OUTPUT / "media")
     rows = [[key, *catalog[key]] for key in keys]
     config = {'rows': rows, 'routes': list(pages), 'labels': PICK, 'names': NAMES}

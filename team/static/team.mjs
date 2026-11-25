@@ -2,6 +2,7 @@
 import {languages, messages} from './texts.mjs';
 import {createReviewPanel} from './review-record.mjs';
 import {indexPanel} from './evidence-index.mjs';
+import {createProofStudio} from './proof-studio.mjs';
 import {createZapLead, zapRule} from './zap-lead.mjs';
 
 const $ = id => document.getElementById(id);
@@ -20,6 +21,7 @@ let teamEpoch = 0;
 let caseEpoch = 0;
 let savedMessage;
 let authenticating = false;
+const proofStudio = createProofStudio($('view-proof'),{request,encodeFile,fileBytes,saveBlob,onUnauthorized:explain});
 const zapLead = createZapLead(document,t);
 const reviewPanel = createReviewPanel($('control-reviews'), {
   download, onError:explain, reload:() => selectCase(detail.case.id,false),
@@ -74,6 +76,7 @@ function translate(lang) {
   document.documentElement.lang = locale === 'de' ? 'de-CH' : locale;
   document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
   $('locale').value = locale;
+  proofStudio.language(locale);
   for (const el of document.querySelectorAll('[data-key]')) el.textContent = t(el.dataset.key);
   for (const el of document.querySelectorAll('[data-aria]')) el.setAttribute('aria-label',t(el.dataset.aria));
   if (savedMessage) notice(savedMessage.key,savedMessage.error,savedMessage.info);
@@ -156,6 +159,7 @@ function download(data, name) {
   saveBlob(new Blob([JSON.stringify(data,null,2) + '\n'],{type:'application/json'}),name);
 }
 function clearPrivate() {
+  proofStudio.clear();
   reviewPanel.clear();
   zapLead.refresh([],true); zapLead.mode(false);
   for (const form of document.forms) if (form.id !== 'login-form') form.reset();
@@ -176,8 +180,9 @@ function signedOut() {
 }
 function showView(view) {
   const allowed = view === 'members' ? membership?.role === 'admin' : view === 'audit' ? approvers.has(membership?.role) : true;
-  if (!allowed) return;
-  for (const name of ['cases','members','audit']) {
+  if (!allowed || view === 'cases' && membership?.legacyCases === false) return;
+  if (view !== 'proof') proofStudio.clearSensitive();
+  for (const name of ['proof','cases','members','audit']) {
     $('view-' + name).hidden = view !== name;
     const btn = document.querySelector('[data-view="' + name + '"]');
     if (view === name) btn.setAttribute('aria-current','page'); else btn.removeAttribute('aria-current');
@@ -423,11 +428,19 @@ async function selectTeam(id) {
     document.querySelector('[data-view="' + view + '"]').hidden = !visible;
   }
   $('new-case').hidden = !writers.has(membership?.role);
-  $('view-cases').hidden = !membership;
+  const legacy = Boolean(membership) && membership.legacyCases !== false && !session.user.username.includes('@');
+  document.querySelector('[data-view=cases]').hidden = !legacy;
+  $('member-user').type = legacy ? 'text' : 'email';
+  $('member-user').maxLength = legacy ? 80 : 254;
+  $('view-cases').hidden = true;
+  $('view-proof').hidden = true;
   $('output-language').value = locale;
   if (!membership) return;
-  showView('cases');
-  await Promise.all([caseList(),loadTrust()]);
+  const existingAlias = legacy && !session.user.username.includes('@');
+  showView(existingAlias ? 'cases' : 'proof');
+  const loads = [proofStudio.bind(membership,locale)];
+  if (legacy) loads.push(caseList(),loadTrust());
+  await Promise.all(loads);
 }
 async function signedIn(result, preferTeam) {
   session = result; translate(session.user.locale); $('login-form').reset();

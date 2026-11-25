@@ -1,7 +1,7 @@
 # AuthzLedger Pilotangebot
 
 **CHF 2’400 einmalig · 30 Tage · zwei benannte Nutzer · ein autorisiertes Mandat**
-Schweiz · 24. November 2026
+Schweiz · 25. November 2026
 
 Ihr Reviewer prüft an einem eigenen Fall, welche Berechtigungsabweichung belegt ist, ob eine Korrektur an derselben Quelle nachgeprüft wurde und welche Fälle offenbleiben. Am Ende verifiziert der Empfänger die signierte Übergabe auf einem freigegebenen Gerät.
 
@@ -27,13 +27,23 @@ Ihr Team benennt zwei Nutzer, einen verantwortlichen Käufer und den Reviewer. V
 
 ## Preis und anschliessende Nutzung
 
-Der Pilot kostet CHF 2’400 einmalig, exklusive allfälliger MWST. Zahlungsmodalitäten, Supportfenster und Fristbeginn stehen in der persönlichen Offerte. Jede weitere Nutzung wird separat vereinbart. Solo kostet CHF 1’200/Jahr und Team CHF 4’800/Jahr. Consultancy wird nach Mandatsumfang offeriert. Bei einem qualifizierten Jahresabschluss innert der vereinbarten 30-Tage-Frist werden einmalig CHF 1’200 angerechnet. Die erste Team-Jahresrechnung beträgt dann CHF 3’600.
+Alle Preise sind netto und exklusive MwSt. Der Pilot gilt für 30 Tage, zwei benannte Nutzer und ein autorisiertes Mandat. Zahlungsmodalitäten, Supportfenster und Fristbeginn stehen in der persönlichen Offerte.
+
+| Angebot | Preis | Leistungsumfang |
+|---|---|---|
+| Pilot | CHF 2’400 einmalig | 30 Tage, zwei Nutzer, ein autorisiertes Mandat |
+| Guided-Zusatz zum Pilot | + CHF 2’400 | Zwei Sitzungen à 90 Minuten und eine Ergebniswerkstatt |
+| Solo | CHF 1’200/Jahr | Eine Person, interne Nutzung |
+| Team | CHF 4’800/Jahr | Bis zu fünf Personen, interne Nutzung |
+| Consultancy | CHF 9’600/Jahr | Bis zu fünf Personen, inklusive autorisierter Kundenmandate |
+
+Bei Abschluss eines Team- oder Consultancy-Jahresvertrags innert 30 Tagen nach dokumentierter Pilotabnahme werden einmalig CHF 1’200 auf die erste Jahresrechnung angerechnet. Damit beträgt sie CHF 3’600 für Team oder CHF 8’400 für Consultancy.
 
 ## Erstgespräch
 
-Für ein 20-minütiges Gespräch genügen ein anonymisierter Anwendungsfall, der gewünschte Übergabetermin und die Rolle des Reviewers. Zugangsdaten und Produktivdaten sind für die Anfrage entbehrlich.
+Für ein 20-minütiges Gespräch genügen ein anonymisierter Anwendungsfall, der gewünschte Übergabetermin und die Rolle des Reviewers. Das Pilotformular speichert die Anfrage lokal im Browser und erstellt einen Angebotsbrief. Über den Versand entscheiden Sie selbst.
 
-[Gespräch mit Nasser Aldin Farag anfragen](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [Preise und Offerte](https://authzledger.com/abos/) · [Teaminstallation](https://authzledger.com/downloads/#team)
+[Gespräch mit Nasser Aldin Farag anfragen](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [Preise und Offerte](https://authzledger.com/abos/) · [Stable 1.5.0](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0)
 
 Nasser Aldin Farag (0xFarag) · Founder & CEO · Schweiz
 

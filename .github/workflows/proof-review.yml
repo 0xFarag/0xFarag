@@ -1,0 +1,179 @@
+# © Nasser Aldin Farag (0xFarag). All rights reserved.
+name: AuthzLedger proof workbench review
+
+on:
+  pull_request:
+    branches: [authzledger-website]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: proof-review-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Passive evidence, access, signing and installed entry point
+        run: |
+          python -m pip install --only-binary=:all: -r team/requirements.txt
+          python -m unittest discover -s qa -p 'test_team*.py' -v
+          python -m unittest discover -s qa -p 'test_proof*.py' -v
+          PYTHONPATH=. python packaging/team/launcher.py --self-test
+      - name: Studio, Desk, pilot and local browser regressions
+        run: |
+          npm install --prefix qa --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 sax@1.6.1
+          node qa/node_modules/playwright/cli.js install --with-deps chromium
+          node scripts/build-downloads.mjs
+          node scripts/build-downloads.mjs --check
+          node scripts/build-locales.mjs
+          node --test qa/desk.cjs qa/pilot.test.mjs qa/desk-browser.cjs qa/desk-pilot-browser.cjs
+          node --test --test-concurrency=1 qa/proof-studio-browser.cjs qa/proof-studio-brand.cjs qa/team-ui.cjs
+          node --test qa/board-*.test.mjs qa/proof-cockpit.test.mjs qa/rbac-*.test.mjs qa/file-triage.test.mjs
+          node --test qa/asset-review.cjs qa/import-formats.cjs qa/import-compare.cjs qa/format-extensions.cjs
+      - name: Compile metadata-only Burp extension and test its local endpoint
+        run: |
+          export JAVA_HOME="${JAVA_HOME_21_X64:?JDK 21 is required}"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          javac -version | grep -E '^javac 21([.]|$)'
+          python integrations/burp-handoff/build.py
+          cd integrations/burp-handoff/build
+          sha256sum --check authzledger-burp-handoff.jar.sha256
+          unzip -tq authzledger-burp-handoff.jar
+          unzip -p authzledger-burp-handoff.jar META-INF/NOTICE.txt | grep -Fx '© Nasser Aldin Farag (0xFarag). All rights reserved.'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: proof-review-burp-${{ github.sha }}
+          path: |
+            integrations/burp-handoff/build/authzledger-burp-handoff.jar
+            integrations/burp-handoff/build/authzledger-burp-handoff.jar.sha256
+            integrations/burp-handoff/README.md
+          if-no-files-found: error
+          retention-days: 7
+
+  linux:
+    needs: review
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Stage review identity, build Debian and verify a second build
+        run: |
+          export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
+          review_version="0.0.0.$((GITHUB_RUN_NUMBER % 65536))"
+          echo "REVIEW_VERSION=$review_version" >> "$GITHUB_ENV"
+          echo "$review_version" > packaging/team/VERSION
+          # The review artifact includes its source archive beside the PKGBUILD.
+          sed -i 's@https://github.com/0xFarag/0xFarag/releases/download/team-${pkgver}/@@' packaging/team/PKGBUILD.in
+          python3 scripts/build-team-release.py source --output review
+          python3 scripts/build-team-release.py deb --output review
+          python3 scripts/build-team-release.py deb --output "$RUNNER_TEMP/repeat"
+          deb="authzledger-team_${review_version}-1_all.deb"
+          cmp "review/$deb" "$RUNNER_TEMP/repeat/$deb"
+          test "$(dpkg-deb -f "review/$deb" Version)" = "${review_version}-1"
+          sudo apt-get update -qq
+          sudo apt-get install -y "./review/$deb" xauth xvfb desktop-file-utils
+          desktop-file-validate /usr/share/applications/authzledger-team.desktop
+          test -s /usr/share/doc/authzledger-team/Proof-Studio-Betrieb.md
+          test -s /usr/lib/authzledger-team/team/static/fonts/Outfit-OFL.txt
+          test -s /usr/lib/authzledger-team/team/static/fonts/Fraunces-OFL.txt
+          authzledger-team-desktop --self-test
+          xvfb-run -a authzledger-team-desktop --gui-self-test
+          grep -Fx '© Nasser Aldin Farag (0xFarag). All rights reserved.' /usr/share/doc/authzledger-team/copyright
+      - name: Build and install Arch from the reviewed source archive
+        run: |
+          mkdir "$RUNNER_TEMP/arch-src"
+          cp review/PKGBUILD review/*.tar.gz "$RUNNER_TEMP/arch-src/"
+          docker run --rm -v "$RUNNER_TEMP/arch-src:/work" \
+            archlinux:base-devel@sha256:fa2d4ce3310ddd90a4208e5168be8ad367da5129af1245f38fd2d803bcbe3239 bash -euc '
+              pacman -Syu --noconfirm --needed python python-cryptography python-reportlab tk
+              useradd --create-home builder
+              chown -R builder:builder /work
+              cd /work
+              su builder -c "makepkg --cleanbuild --noconfirm"
+              pacman -U --noconfirm ./*.pkg.tar.zst
+              authzledger-team-desktop --self-test
+            '
+          cp "$RUNNER_TEMP/arch-src/"*.pkg.tar.zst review/
+      - name: Build and verify a non-root container with read-only root filesystem
+        run: |
+          ctx="$RUNNER_TEMP/proof-context"
+          python3 scripts/build-team-release.py context --output "$ctx"
+          image="authzledger-team:review-$GITHUB_SHA"
+          docker build --label "org.opencontainers.image.version=$REVIEW_VERSION" \
+            --label "org.opencontainers.image.revision=$GITHUB_SHA" -t "$image" -f "$ctx/packaging/team/Dockerfile" "$ctx"
+          test "$(docker image inspect -f '{{.Config.User}}' "$image")" = "10001:10001"
+          test "$(docker image inspect -f '{{index .Config.Labels "org.authzledger.copyright"}}' "$image")" = '© Nasser Aldin Farag (0xFarag). All rights reserved.'
+          volume="proof-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          docker volume create "$volume"
+          trap 'docker volume rm "$volume" >/dev/null' EXIT
+          docker run --rm --network none --read-only --cap-drop ALL -v "$volume:/data" \
+            -v "$PWD/packaging/team/launcher.py:/opt/authzledger/launcher.py:ro" \
+            -e TMPDIR=/data --entrypoint python "$image" /opt/authzledger/launcher.py --self-test
+          docker save "$image" | gzip -n > "review/authzledger-team-review-linux-amd64.docker.tar.gz"
+      - name: Create review receipts and verify checksums
+        run: |
+          cd review
+          cp ../NOTICE.txt .
+          echo "Review build $GITHUB_SHA. Method baseline 1.5.0." > REVIEW.txt
+          sha256sum -- * > ../SHA256SUMS
+          mv ../SHA256SUMS .
+          sha256sum --check SHA256SUMS
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: proof-review-linux-${{ github.sha }}
+          path: review/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
+
+  windows:
+    needs: review
+    runs-on: windows-2022
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Build and run the self-contained executable and GUI
+        shell: pwsh
+        run: |
+          $version = "0.0.0." + ([int]$env:GITHUB_RUN_NUMBER % 65536)
+          Set-Content packaging/team/VERSION $version -Encoding ascii
+          python -m pip install --only-binary=:all: -r team/requirements.txt -r packaging/team/windows-build.txt
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $env:SOURCE_DATE_EPOCH = git show -s --format=%ct HEAD
+          $env:PYTHONHASHSEED = '0'
+          python scripts/build-team-release.py windows --output review
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $exe = Get-Item "review/AuthzLedger-Team-$version-Windows-x64.exe"
+          if ($exe.VersionInfo.LegalCopyright -cne '© Nasser Aldin Farag (0xFarag). All rights reserved.' -or $exe.VersionInfo.ProductVersion -ne $version) { throw 'Invalid Windows product metadata' }
+          Copy-Item NOTICE.txt review/
+          Set-Content review/REVIEW.txt "Review build $env:GITHUB_SHA. Method baseline 1.5.0." -Encoding utf8
+          Get-ChildItem review -File | Sort-Object Name | ForEach-Object {
+            (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() + '  ' + $_.Name
+          } | Set-Content SHA256SUMS -Encoding ascii
+          Move-Item SHA256SUMS review/
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: proof-review-windows-${{ github.sha }}
+          path: review/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7

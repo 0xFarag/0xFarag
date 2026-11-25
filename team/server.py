@@ -28,7 +28,7 @@ from urllib.parse import urlsplit
 
 if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from team import evidence, keyring, review_records
+from team import evidence, keyring, review_records, proof_api
 
 ROLES = ('admin', 'lead_pentester', 'pentester', 'reviewer', 'read_only')
 WRITERS = frozenset(ROLES[:3])
@@ -78,10 +78,34 @@ def _key():
 def _hash(value):
     return hashlib.sha256(value.encode('utf-8')).hexdigest()
 
+def email_identity(value):
+    if not isinstance(value,str) or len(value)>254 or value.count('@')!=1:
+        raise ApiError(400,'invalid_email')
+    local,domain=value.split('@')
+    labels=domain.split('.')
+    if (not 1<=len(local)<=64 or local.startswith('.') or local.endswith('.') or '..' in local
+            or not re.fullmatch(r"[A-Za-z0-9!#$%&'*+/=?^_`{|}~.-]+",local)
+            or len(labels)<2 or any(not re.fullmatch(r'[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?',label)
+                                    for label in labels)):
+        raise ApiError(400,'invalid_email')
+    return value.lower()
+
+
+def _is_email(value):
+    try:
+        email_identity(value)
+        return True
+    except ApiError:
+        return False
+
+
 def _username(value):
+    if _is_email(value):
+        return value.lower()
     if not isinstance(value,str) or not USER_PATTERN.fullmatch(value):
         raise ApiError(400,'invalid_username')
     return value
+
 
 def _password(value):
     if not isinstance(value,str) or not 12 <= len(value) <= 256 or any(0xD800 <= ord(c) <= 0xDFFF for c in value):
@@ -145,6 +169,7 @@ def initialize(data_dir):
         db.execute('PRAGMA journal_mode=WAL')
         db.executescript(SCHEMA)
         evidence.init_db(db)
+        proof_api.init_db(db)
 
 def needs_bootstrap(data_dir):
     initialize(data_dir)
@@ -170,6 +195,9 @@ def bootstrap(data_dir,username,password,team_name='Workspace',locale='de'):
         db.execute('INSERT INTO users VALUES(?,?,?,?)',(uid,username,encoded,locale))
         db.execute('INSERT INTO teams VALUES(?,?)',(tid,name))
         db.execute('INSERT INTO memberships VALUES(?,?,?,1)',(tid,uid,'admin'))
+        if _is_email(username):
+            proof_api.enable_account(db,uid)
+            proof_api.enable_workbench(db,tid)
         _log(db,tid,username,'bootstrap',tid)
         db.commit()
 
@@ -179,17 +207,23 @@ def _teams(db,uid):
         'WHERE m.user_id=? AND m.active=1 ORDER BY t.name,t.id',(uid,))]
 
 def _session_json(db,user,csrf):
+    teams=_teams(db,user['id'])
+    # Omit the optional capability for legacy clients that pre-date proof workspaces.
+    account_restricted=proof_api.proof_account(db,user['id'])
+    for team in teams:
+        if account_restricted or proof_api.proof_only(db,team['id']): team['legacyCases']=False
     return {'user':{'id':user['id'],'username':user['username'],'locale':user['locale']},
-            'teams':_teams(db,user['id']),'csrf':csrf}
+            'teams':teams,'csrf':csrf,'rights':proof_api.RIGHTS}
 
 def _user_events(db,user,action):
     for team in _teams(db,user['id']):
         _log(db,team['id'],user['username'],action,'account')
 
 def _login(db,body,client,now):
-    _fields(body,('username','password'),('username','password'))
-    username, password=body['username'],body['password']
-    if not isinstance(username,str) or not isinstance(password,str) or len(username)>80 or len(password)>256:
+    _fields(body,('username','email','password'),('password',))
+    if ('email' in body)==('username' in body): raise ApiError(400,'invalid_fields')
+    username, password=body.get('username',body.get('email')),body['password']
+    if not isinstance(username,str) or not isinstance(password,str) or len(username)>254 or len(password)>256:
         raise ApiError(401,'invalid_credentials')
     buckets=(('address:'+_hash(client),80),('account:'+_hash(username.lower()),10))
     db.execute('DELETE FROM login_limits WHERE until_at<=?',(now,))
@@ -233,8 +267,10 @@ def _members(db,tid):
         'WHERE m.team_id=? ORDER BY u.username',(tid,))]}
 
 def _add_member(db,tid,body):
-    _fields(body,('username','password','role','locale'),('username','role'))
-    name=_username(body['username'])
+    _fields(body,('username','email','password','role','locale'),('role',))
+    if ('email' in body)==('username' in body): raise ApiError(400,'invalid_fields')
+    name=body.get('username',body.get('email'))
+    name=email_identity(name) if 'email' in body or proof_api.proof_only(db,tid) else _username(name)
     role=_one(body['role'],ROLES,'invalid_role')
     locale=_one(body.get('locale','de'),LOCALES,'invalid_locale')
     user=db.execute('SELECT id FROM users WHERE username=?',(name,)).fetchone()
@@ -247,6 +283,7 @@ def _add_member(db,tid,body):
         if 'password' not in body: raise ApiError(400,'password_required')
         uid=_key()
         db.execute('INSERT INTO users VALUES(?,?,?,?)',(uid,name,_store_password(body['password']),locale))
+        if _is_email(name): proof_api.enable_account(db,uid)
     db.execute('INSERT INTO memberships VALUES(?,?,?,1) ON CONFLICT(team_id,user_id) '
                'DO UPDATE SET role=excluded.role,active=1',(tid,uid,role))
     return {'id':uid}
@@ -266,7 +303,7 @@ def _update_member(db,tid,uid,body):
     if not active and not _teams(db,uid): db.execute('DELETE FROM sessions WHERE user_id=?',(uid,))
     return {'ok':True}
 
-def _team_route(db,data_dir,tid,user,role,method,parts,body):
+def _team_route(db,data_dir,tid,user,role,method,parts,body,session_hash=None,now=None,zap_data=None):
     uid=user['id']
     if not parts and method=='PATCH':
         if role!='admin': raise ApiError(403,'forbidden')
@@ -283,6 +320,8 @@ def _team_route(db,data_dir,tid,user,role,method,parts,body):
         if role not in REVIEWERS: raise ApiError(403,'forbidden')
         return {'events':[dict(row) for row in db.execute('SELECT id,at,actor,action,resource,outcome FROM audit_events '
                                                           'WHERE team_id=? ORDER BY id DESC LIMIT 500',(tid,))]}
+    if parts[:1]==['proof']:
+        return proof_api.handle(db,data_dir,tid,uid,role,method,parts[1:],body,session_hash,now,zap_data)
     cases=parts[:1]==['cases']
     if cases and len(parts)==3 and parts[2]=='control-reviews':
         if method=='POST':
@@ -298,7 +337,7 @@ def _team_route(db,data_dir,tid,user,role,method,parts,body):
         if parts==['cases'] or (cases and len(parts)==3 and parts[-1] in ('imports','finding','retest')):
             if role not in WRITERS: raise ApiError(403,'forbidden')
         elif cases and len(parts)==3 and parts[-1]=='handover':
-            if role not in REVIEWERS: raise ApiError(403,'forbidden')
+            if role not in ('admin','lead_pentester'): raise ApiError(403,'forbidden')
         else: raise ApiError(404,'not_found')
     elif not permitted: raise ApiError(404,'not_found')
     result=evidence.handle(db,tid,uid,method,parts,body,data_dir=Path(data_dir))
@@ -306,7 +345,21 @@ def _team_route(db,data_dir,tid,user,role,method,parts,body):
         result['control_reviews']=review_records.handle(db,tid,uid,'GET',parts+['control-reviews'],{})['records']
     return result
 
-def dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local',now=None):
+def dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local',now=None,bearer=None):
+    args=dict(token=token,csrf=csrf,client=client,now=now,bearer=bearer)
+    result, session_token = _dispatch(data_dir,method,path,body,**args)
+    if not result.get('prepareZap'): return result,session_token
+    # No database lock is held during the loopback read. Membership, CSRF, session expiry
+    # and the expected ledger version are all checked again before committing observations.
+    from team.proof_zap import read_alerts, ZapImportError
+    try:
+        data=read_alerts(os.environ.get('AUTHZLEDGER_ZAP_ORIGIN','http://127.0.0.1:8080'),body['apiKey'])
+    except ZapImportError as exc:
+        return _dispatch(data_dir,method,path,body,zap_error=(exc.status,exc.code),**args)
+    return _dispatch(data_dir,method,path,body,zap_data=data,**args)
+
+
+def _dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local',now=None,bearer=None,zap_data=None,zap_error=None):
     """One database transaction per request. Return JSON and newly issued/deleted session token."""
     now=int(time.time()) if now is None else now
     body={} if body is None else body
@@ -315,11 +368,26 @@ def dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local
     published_token=None
     actor=tid=None
     action=method.lower()
-    resource='/'.join(parts[1:])[:240]
+    resource_parts = {'login','logout','session','me','teams','members','audit','cases','control-reviews','imports',
+                      'attachment','finding','retest','handover','verify','trust-key','trust-keys','proof','keys','rotate',
+                      'import','zap','controls','sign','export','token','proof-import'}
+    resource='/'.join(p if p in resource_parts or re.fullmatch(r'[a-f0-9]{32}|[a-f0-9]{64}',p) else 'other'
+                      for p in parts[1:])[:240]
     with closing(connect(data_dir)) as db:
         db.execute('BEGIN IMMEDIATE')
         try:
-            if parts==['api','login'] and method=='POST':
+            if parts==['api','proof-import'] and method=='POST':
+                if token is not None or csrf is not None: raise ApiError(400,'mixed_authentication')
+                binding=proof_api.burp_binding(db,bearer,now,IDLE_LIFETIME,ABSOLUTE_LIFETIME)
+                row,_=binding
+                tid,actor,action,resource=row['team_id'],row['username'],'post.import','proof/'+row['id']
+                try:
+                    result=proof_api.accept_burp(db,binding,body,now)
+                except ValueError:
+                    raise ApiError(400,'invalid_evidence') from None
+                _log(db,tid,actor,action,resource)
+            elif bearer is not None: raise ApiError(403,'invalid_token_scope')
+            elif parts==['api','login'] and method=='POST':
                 result,published_token=_login(db,body,client,now)
             else:
                 user=_authenticated(db,token,now)
@@ -363,9 +431,17 @@ def dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local
                     tid=_key()
                     db.execute('INSERT INTO teams VALUES(?,?)',(tid,name))
                     db.execute('INSERT INTO memberships VALUES(?,?,?,1)',(tid,user['id'],'admin'))
+                    if proof_api.proof_account(db,user['id']): proof_api.enable_workbench(db,tid)
                     result={'team':{'id':tid,'name':name,'role':'admin'}}
                 elif tid:
-                    result=_team_route(db,data_dir,tid,user,membership['role'],method,parts[3:],body)
+                    if parts[3:4] in (['cases'],['trust-key'],['trust-keys'],['verify']):
+                        if proof_api.proof_account(db,user['id']) or proof_api.proof_only(db,tid):
+                            raise ApiError(410,'legacy_cases_disabled')
+                    try:
+                        result=_team_route(db,data_dir,tid,user,membership['role'],method,parts[3:],body,_hash(token),now,zap_data)
+                    except ValueError:
+                        if parts[3:4]!=['proof']: raise
+                        raise ApiError(400,'invalid_evidence') from None
                 else: raise ApiError(404,'not_found')
                 if tid:
                     action=method.lower()+'.'+(parts[-1] if parts[-1] in ('teams','members','audit','cases','imports','finding','retest','handover','verify','trust-key','trust-keys') else parts[-2])
@@ -376,9 +452,15 @@ def dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local
                         resource+=' active='+str(body['active']).lower()
                     if method=='POST' and parts[-1]=='cases' and 'case' in result:
                         resource+='/'+result['case']['id']
-                    _log(db,tid,actor,action,resource)
+                    if parts[3:4]==['proof']:
+                        verb = parts[-1] if parts[-1] in ('proof','keys','rotate','import','zap','controls','retest','sign','export','token','verify') else 'run'
+                        action=method.lower()+'.'+verb
+                    if result.get('prepareZap') and zap_error:
+                        raise ApiError(*zap_error)
+                    if not result.get('prepareZap'):
+                        _log(db,tid,actor,action,resource,'invalid' if result.get('valid') is False else 'ok')
             db.commit()
-        except (ApiError,evidence.WorkflowError) as exc:
+        except (ApiError,evidence.WorkflowError,proof_api.Error) as exc:
             db.rollback()
             if actor:
                 _log(db,tid,actor,action,resource,'denied' if exc.status in (401,403,404) else 'rejected')
@@ -419,12 +501,12 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('X-Content-Type-Options','nosniff')
         self.send_header('X-Frame-Options','DENY')
         self.send_header('Referrer-Policy','no-referrer')
-        self.send_header('Content-Security-Policy',"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'")
+        self.send_header('Content-Security-Policy',"default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'")
         if self.server.tls_enabled:
             self.send_header('Strict-Transport-Security','max-age=31536000')
         if token is not None:
             value=f'{self.server.cookie_name}={token}; Path=/; HttpOnly; SameSite=Strict; Max-Age={ABSOLUTE_LIFETIME if token else 0}'
-            if self.server.tls_enabled: value+='; Secure'
+            value+='; Secure'
             self.send_header('Set-Cookie',value)
         self.end_headers()
         if self.command!='HEAD': self.wfile.write(data)
@@ -489,8 +571,14 @@ class Handler(BaseHTTPRequestHandler):
                 except CookieError: pass
                 session=cookie.get(self.server.cookie_name)
                 payload=self._payload()
+                authorization=self.headers.get_all('Authorization',[])
+                bearer=None
+                if authorization:
+                    if len(authorization)!=1 or not re.fullmatch(r'Bearer [A-Za-z0-9_-]{43}',authorization[0]):
+                        raise ApiError(401,'invalid_import_token')
+                    bearer=authorization[0][7:]
                 result,response_token=dispatch(self.server.data_dir,self.command,path,payload,
-                    token=session.value if session else None,csrf=self.headers.get('X-CSRF-Token'),client=self.client_address[0])
+                    token=session.value if session else None,csrf=self.headers.get('X-CSRF-Token'),client=self.client_address[0],bearer=bearer)
                 self._send(200,result,token=response_token)
             elif self.command in ('GET','HEAD'):
                 parts=path.strip('/').split('/') if path!='/' else ['index.html']
@@ -501,8 +589,10 @@ class Handler(BaseHTTPRequestHandler):
                 content_type='text/javascript' if item.suffix in ('.js','.mjs') else (mimetypes.guess_type(item.name)[0] or 'application/octet-stream')
                 self._send(200,item.read_bytes(),content_type)
             else: raise ApiError(405,'method_not_allowed')
-        except (ApiError,evidence.WorkflowError) as exc:
-            self._send(exc.status,{'error':exc.code if isinstance(exc,ApiError) else str(exc)})
+        except (ApiError,evidence.WorkflowError,proof_api.Error) as exc:
+            self._send(exc.status,{'error':str(exc)})
+        except keyring.KeyStoreError:
+            self._send(503,{'error':'signing_store_unavailable'})
         except sqlite3.OperationalError:
             self._send(503,{'error':'storage_unavailable'})
         except (BrokenPipeError,ConnectionResetError,TimeoutError):
@@ -572,7 +662,8 @@ def main(argv=None):
     try:
         if args.bootstrap:
             if not needs_bootstrap(args.data_dir): raise ValueError('Already initialized.')
-            name=input('Admin username [admin]: ').strip() or 'admin'
+            name=input('Admin email: ').strip()
+            name=email_identity(name)
             password=getpass('Admin password (at least 12 characters): ')
             if password!=getpass('Repeat password: '): raise ValueError('Passwords do not match.')
             bootstrap(args.data_dir,name,password)

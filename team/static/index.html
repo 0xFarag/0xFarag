@@ -3,27 +3,28 @@
 <html lang="de-CH">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#0b1d29">
+<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#071722">
 <title>AuthzLedger · Team</title>
-<link rel="icon" type="image/png" href="/logo.png"><link rel="stylesheet" href="/team.css"><script type="module" src="/team.mjs"></script>
+<link rel="icon" type="image/png" href="/logo.png"><link rel="stylesheet" href="/team.css"><link rel="stylesheet" href="/proof-studio.css"><script type="module" src="/team.mjs"></script>
 </head>
 <body>
 <a class="skip" href="#main" data-key="skip"></a>
-<header class="mast"><div class="bar"><div class="brand"><img class="brand-mark" src="/logo.png" width="36" height="36" alt=""><span>AuthzLedger <span class="edition">Team</span></span></div>
+<header class="mast"><div class="bar"><div class="brand"><img class="brand-mark" src="/logo.png" width="36" height="36" alt=""><span class="ps-lockup"><small>0xFarag</small><span>AuthzLedger <span class="edition">Team</span></span></span></div>
 <div class="toolbar"><label for="locale" data-key="language"></label><select id="locale"><option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="ar">العربية</option></select><button type="button" id="logout" class="quiet" data-key="logout" hidden></button></div></div></header>
 <main id="main" tabindex="-1">
 <noscript>JavaScript wird für die Teamoberfläche benötigt. JavaScript is required.</noscript>
 <section id="login-panel" class="login card" hidden><h1 data-key="login"></h1><form id="login-form">
-<label for="username" data-key="username"></label><input id="username" name="username" required autocomplete="username" dir="auto">
+<label for="username" data-key="loginIdentity"></label><input id="username" inputmode="email" autocapitalize="none" spellcheck="false" name="username" required autocomplete="username" dir="auto">
 <label for="password" data-key="password"></label><input id="password" name="password" type="password" required autocomplete="current-password">
 <button class="primary" type="submit" data-key="login"></button></form><p class="fine" data-key="bootstrap"></p></section>
 <p role="status" aria-live="polite" id="message"></p>
 <section id="workspace" hidden>
 <div class="workspace-head"><div><p class="overline" data-key="teamWorkspace"></p><h1 id="team-heading"></h1></div><div class="identity"><span id="account-name" dir="auto"></span><span id="account-role"></span><details class="profile"><summary data-key="account"></summary><form id="password-form"><label for="current-password" data-key="currentPassword"></label><input id="current-password" name="current_password" type="password" required autocomplete="current-password"><label for="next-password" data-key="newPassword"></label><input id="next-password" name="password" type="password" minlength="12" maxlength="256" required autocomplete="new-password"><button class="secondary" type="submit" data-key="changePassword"></button></form></details></div></div>
 <nav class="panel-nav" aria-label="Workspace" data-aria="sections"><div id="nav-buttons">
-<button type="button" data-view="cases" data-key="cases"></button><button type="button" data-view="members" data-key="members"></button><button type="button" data-view="audit" data-key="audit"></button></div>
+<button type="button" data-view="proof" data-key="proofStudio"></button><button type="button" data-view="cases" data-key="cases"></button><button type="button" data-view="members" data-key="members"></button><button type="button" data-view="audit" data-key="audit"></button></div>
 <div class="team-picker"><label for="team-select" data-key="team"></label><select id="team-select"></select></div></nav>
-<section id="view-cases">
+<section id="view-proof" hidden></section>
+<section id="view-cases" hidden>
 <div class="grid">
 <aside class="card case-list"><div class="section-heading"><h2 data-key="cases"></h2><button type="button" id="cases-reload" class="secondary slim" data-key="refresh"></button></div>
 <ul id="case-list"></ul><p id="cases-empty" class="empty" data-key="emptyCases"></p>
@@ -76,7 +77,7 @@
 <ul id="member-list" class="records"></ul>
 <details class="section"><summary data-key="addMember"></summary><form id="member-form">
 <label for="member-mode" data-key="account"></label><select id="member-mode"><option value="new" data-key="newAccount"></option><option value="existing" data-key="existingAccount"></option></select>
-<label for="member-user" data-key="username"></label><input id="member-user" name="username" autocomplete="off" required dir="auto">
+<label for="member-user" data-key="loginIdentity"></label><input id="member-user" inputmode="email" autocapitalize="none" spellcheck="false" name="username" autocomplete="off" required dir="auto">
 <div id="create-account"><label for="member-password" data-key="initialPassword"></label><input id="member-password" name="password" type="password" minlength="12" maxlength="256" autocomplete="new-password">
 <label for="member-locale" data-key="language"></label><select id="member-locale" name="locale"><option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="ar">العربية</option></select></div>
 <label for="member-role" data-key="role"></label><select id="member-role" name="role"></select><button type="submit" class="primary" data-key="addMember"></button></form></details>

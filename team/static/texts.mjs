@@ -1,6 +1,8 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
 export const languages = ["de", "en", "fr", "it", "ar"];
 export const messages = {
+  "proofStudio": ["Proof-Workbench","Proof workbench","Atelier de preuve","Atelier delle prove","مساحة الأدلة"],
+  "loginIdentity": ["E-Mail oder bestehender Benutzername","Email or existing username","E-mail ou identifiant existant","E-mail o nome utente esistente","البريد الإلكتروني أو اسم المستخدم الحالي"],
   "zapRisk": [
     "ZAP-Risiko",
     "ZAP risk",

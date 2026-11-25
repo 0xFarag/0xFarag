@@ -8,3 +8,6 @@
 # Local Python build and test caches.
 __pycache__/
 *.pyc
+
+# Browser test runtime installed by CI or a local reviewer.
+/qa/node_modules/
