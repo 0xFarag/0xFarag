@@ -1,0 +1,16 @@
+/* © Nasser Aldin Farag (0xFarag). All rights reserved. */
+@font-face{font-family:Outfit;src:url('/assets/type/Outfit.ttf') format('truetype');font-weight:100 900;font-display:swap}
+@font-face{font-family:Fraunces;src:url('/assets/type/Fraunces.ttf') format('truetype');font-weight:100 900;font-display:swap}
+body.home,body[data-page="abos"]{font-family:Outfit,system-ui,sans-serif}body.home .hero{background:#071722;border-bottom:1px solid #43d6cf}
+body.home .hero h1,body.home .section h2,body[data-page="abos"] h1{font-family:Fraunces,Georgia,serif;font-weight:600}
+.proof-nav-actions{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap}
+.proof-nav-actions a,.proof-nav-actions button{font:600 .88rem Outfit,system-ui,sans-serif;color:white;background:#071722;border:1px solid #42626a;padding:.5rem .7rem;border-radius:.25rem;cursor:pointer;text-decoration:none}
+.proof-nav-actions a{color:#e6cfab}.proof-offer-form{margin-top:2rem;max-width:48rem;padding:clamp(1rem,3vw,2rem);background:#fff;border:1px solid #bacbc9;color:#071722}
+.proof-offer-form form{display:grid;grid-template-columns:minmax(9rem,1fr) minmax(10rem,1.5fr);gap:.65rem 1rem;align-items:center}
+.proof-offer-form input{font:inherit;padding:.55rem;border:1px solid #728986;min-width:0;color:#071722;background:white}
+.proof-offer-form input[type=checkbox]{justify-self:start;width:1.25rem;height:1.25rem}
+.proof-offer-form button,.proof-offer-form a[download]{font:inherit;background:#071722;color:white;border:0;border-radius:.2rem;padding:.6rem .85rem;width:fit-content;cursor:pointer}
+.proof-offer-form button[type=submit]{grid-column:1/-1}.proof-offer-form a[download]{margin-inline-end:.6rem}.proof-offer-form [hidden]{display:none}
+@media(max-width:720px){.proof-offer-form form{grid-template-columns:1fr}.proof-nav-actions{gap:.25rem}.proof-nav-actions a,.proof-nav-actions button{font-size:.78rem;padding:.4rem}.home .head .wrap{flex-wrap:wrap}}
+
+.brand small{display:block;color:#c8a66b;font:500 .65rem Outfit,sans-serif;letter-spacing:.1em}

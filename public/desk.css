@@ -1,0 +1,20 @@
+/* © Nasser Aldin Farag (0xFarag). All rights reserved. */
+#authz-desk[hidden]{display:none}
+#authz-desk{position:static;box-sizing:border-box;width:min(38rem,calc(100% - 2rem));margin:2rem auto 2rem max(1rem,calc((100% - 72rem)/2));padding:clamp(1rem,3vw,1.9rem);color:#f3f5ee;background:#071722;border-top:2px solid #43d6cf;font:1rem/1.55 Outfit,system-ui,sans-serif;scroll-margin-top:5rem}
+#authz-desk .desk-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+#authz-desk h2{margin:0;font:2rem/1.1 Fraunces,Georgia,serif;color:#f3f5ee}
+#authz-desk p{margin:.7rem 0;color:inherit}
+#authz-desk button{font:inherit;cursor:pointer;padding:.35rem .7rem;border:1px solid #64767b;color:#eeefea;background:transparent;border-radius:.25rem}
+#authz-desk .desk-choices{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0}
+#authz-desk .desk-choices button{font-size:.88rem}
+#authz-desk label,#authz-desk .desk-history strong,#authz-desk .desk-history span{display:block}
+#authz-desk label{font-weight:600}
+#authz-desk textarea{width:100%;box-sizing:border-box;margin:.35rem 0;padding:.65rem;font:inherit;color:#f3f5ee;background:#102b39;border:1px solid #71858a;border-radius:.25rem;resize:vertical}
+#authz-desk .desk-privacy,#authz-desk small{font-size:.79rem;color:#bacbd0}
+#authz-desk button[type=submit]{font-weight:650;color:#071722;background:#43d6cf;border-color:#43d6cf}
+#authz-desk button:focus-visible,#authz-desk textarea:focus-visible{outline:2px solid #c8a66b;outline-offset:2px}
+#authz-desk .desk-history{overflow-wrap:anywhere}
+#authz-desk .desk-history p{padding-left:.65rem;border-left:1px solid #c8a66b}
+#authz-desk .desk-status:empty{display:none}
+#authz-desk[data-state=error] .desk-status{color:#f4c893}
+#authz-desk small{display:block;margin-top:1rem}

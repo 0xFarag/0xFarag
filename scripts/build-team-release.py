@@ -30,11 +30,13 @@ def digest(path):
 def members():
     fixed = [ROOT / name for name in ['LICENSE', 'NOTICE.txt', 'public/assets/authzledger-logo.png', 'team/requirements.txt',
              'scripts/build-team-release.py', 'docs/Team-Login-RBAC.md', 'docs/Key-Rotation.md', 'docs/ZAP-API-Scan-Import.md',
-             'integrations/burp/README.md']]
+             'integrations/burp/README.md', 'integrations/burp-handoff/README.md', 'docs/Proof-Studio-Betrieb.md',
+             'docs/ZAP-Ergebnisimport.md']]
     scripts = list((ROOT / 'team').glob('*.py'))
     web = [p for p in (ROOT / 'team/static').rglob('*') if p.suffix.lower() in
            {'.html', '.js', '.mjs', '.css', '.json', '.png', '.svg', '.ico', '.woff', '.woff2', '.ttf'}]
-    web.append(ROOT / 'team/static/pdf/FONT-LICENSE.txt')
+    web.extend([ROOT / 'team/static/pdf/FONT-LICENSE.txt',
+                ROOT / 'team/static/fonts/Outfit-OFL.txt', ROOT / 'team/static/fonts/Fraunces-OFL.txt'])
     packaging = [p for p in PACK.iterdir() if p.is_file()]
     for required in ['team/server.py', 'team/evidence.py', 'team/report_pdf.py', 'team/static/index.html',
                      'team/static/pdf/ReportSans.ttf', 'team/static/pdf/FONT-LICENSE.txt', 'team/static/pdf/arabic-lines.json']:
@@ -108,6 +110,9 @@ def windows(output):
         version_file.write_text(template.replace('@PARTS@', str(parts)).replace('@VERSION@', VERSION), encoding='utf-8')
         guides = src / 'docs'
         shutil.copyfile(src / 'integrations/burp/README.md', guides / 'Burp-Export.md')
+        shutil.copyfile(src / 'integrations/burp-handoff/README.md', guides / 'Burp-Handoff.md')
+        for notice in (src / 'team/static/fonts').glob('*-OFL.txt'):
+            shutil.copyfile(notice, legal / notice.name)
         shutil.copyfile(src / 'team/static/pdf/FONT-LICENSE.txt', legal / 'FONT-LICENSE.txt')
         subprocess.run([sys.executable, '-m', 'PyInstaller', '--clean', '--noconfirm', '--onefile', '--windowed',
             '--name', FILES[0][:-4], '--icon', str(src / 'packaging/team/authzledger-team.ico'),

@@ -15,3 +15,5 @@ Upstream-Projekte: [Python](https://www.python.org/psf/license/), [Tcl/Tk](https
 Die eingebettete PDF-Schrift und deren Ursprung sind in `team/static/pdf/FONT-LICENSE.txt` dokumentiert. Ihr Lizenztext wird in allen ausgelieferten Formaten mitgeführt.
 
 © Nasser Aldin Farag (0xFarag). All rights reserved.
+
+Die Studioschriften Outfit und Fraunces werden mit den unveränderten SIL Open Font License-Texten unter `team/static/fonts/` ausgeliefert.

@@ -34,10 +34,12 @@ install_file('packaging/team/THIRD-PARTY.md', 'usr/lib/authzledger-team/legal/TH
 install_file('packaging/team/THIRD-PARTY.md', 'usr/share/doc/authzledger-team/THIRD-PARTY.md')
 
 install_file('team/static/pdf/FONT-LICENSE.txt', 'usr/lib/authzledger-team/legal/FONT-LICENSE.txt')
-for name in ['Team-Login-RBAC.md', 'Key-Rotation.md', 'ZAP-API-Scan-Import.md']:
+for name in ['Proof-Studio-Betrieb.md', 'ZAP-Ergebnisimport.md', 'Team-Login-RBAC.md', 'Key-Rotation.md', 'ZAP-API-Scan-Import.md']:
     install_file('docs/' + name, 'usr/share/doc/authzledger-team/' + name)
 install_file('integrations/burp/README.md', 'usr/share/doc/authzledger-team/Burp-Export.md')
 notice = TARGET / 'usr/share/doc/authzledger-team/copyright'
 notice.write_text('© Nasser Aldin Farag (0xFarag). All rights reserved.\n\n'
                   + (ROOT / 'LICENSE').read_text(encoding='utf-8')
                   + '\n' + (ROOT / 'packaging/team/THIRD-PARTY.md').read_text(encoding='utf-8'), encoding='utf-8')
+
+install_file('integrations/burp-handoff/README.md', 'usr/share/doc/authzledger-team/Burp-Handoff.md')

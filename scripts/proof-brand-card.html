@@ -1,0 +1,23 @@
+<!doctype html>
+<!-- © Nasser Aldin Farag (0xFarag). All rights reserved. -->
+<html lang="en"><head><meta charset="utf-8"><title>AuthzLedger · From scope to proof</title><style>
+@font-face{font-family:Outfit;src:url("@@OUTFIT@@") format("truetype");font-weight:100 900}
+@font-face{font-family:Fraunces;src:url("@@FRAUNCES@@") format("truetype");font-weight:100 900}
+:root{--navy:#071722;--gold:#C8A66B;--teal:#43D6CF;--paper:#f4efe3;--mark:url("@@MARK@@")}
+*{box-sizing:border-box}body{margin:0;background:var(--navy);color:var(--paper);font:400 24px/1.2 Outfit,sans-serif}
+#source{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.mark{position:absolute;background:var(--gold);mask:var(--mark) center / contain no-repeat}
+.frame{position:absolute;inset:0;overflow:hidden}
+.brand{position:absolute;top:60px;left:70px;font-size:32px;font-weight:550;letter-spacing:-.04em;display:flex;gap:18px;align-items:center}
+.brand:before{content:"";display:inline-block;width:40px;height:2px;background:var(--teal)}
+h1{position:absolute;top:168px;left:66px;margin:0;font:550 101px/.94 Fraunces,Georgia,serif;letter-spacing:-.058em;color:var(--paper)}
+h1 span{display:block;color:var(--gold)}
+.share .mark{width:436px;height:436px;left:699px;top:61px}
+footer{position:absolute;left:70px;right:70px;bottom:48px;display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid #36505a;padding-top:25px}
+footer b{font-size:28px;font-weight:500;letter-spacing:-.022em}footer small{font-size:15px;color:#bac9c9;letter-spacing:.004em}
+.icon .frame>:not(.mark){display:none}.icon .mark{inset:0;width:100%;height:100%;mask-size:114%}
+</style></head><body class="@@MODE@@">
+<img id="source" src="@@MARK@@" alt=""><main class="frame">
+<div class="brand">0xFarag</div><h1>SHOW THE <span>PROOF.</span></h1><div class="mark" role="img" aria-label="Original 0xFarag N-shield"></div>
+<footer><b>AuthzLedger · From scope to proof</b><small>© Nasser Aldin Farag (0xFarag). All rights reserved.</small></footer>
+</main></body></html>

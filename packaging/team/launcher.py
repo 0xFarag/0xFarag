@@ -10,14 +10,40 @@ import urllib.request
 import webbrowser
 from pathlib import Path
 
-from team.server import bootstrap, make_server, needs_bootstrap
+from team.server import ApiError, bootstrap, email_identity, make_server, needs_bootstrap
+
+
+def proof_self_test(db, location):
+    """Run the new evidence workflow from the installed executable or package."""
+    from team.proof_engine import DEPENDENCIES, evaluate, lab_after_source, lab_source, make_scope, record_retest
+    from team.proof_packages import key_history, sign_package, verify_package
+
+    intended = dict.fromkeys(DEPENDENCIES, True)
+    scope = make_scope(["lab.authz.local"], "Isolated packaging fixture", 7)
+    report = evaluate(scope, [lab_source()], intended)
+    selected = [row["id"] for row in report["findings"][:3]]
+    after = lab_after_source()
+    record_retest(report, selected, after, intended)
+    workspace = db.execute("SELECT id FROM teams LIMIT 1").fetchone()[0]
+    archive = sign_package(db, location, workspace, report, "de")
+    pinned = key_history(db, location, workspace)["keys"][0]["jwk"]
+    verified = verify_package(archive, pinned, workspace)
+    if [row["status"] for row in verified["retests"]] != ["resolved_check"] * 3 + ["not_retested"]:
+        raise RuntimeError("Packaged Studio lost the source-bound selection")
+    altered = bytearray(archive)
+    altered[len(altered) // 2] ^= 1
+    try:
+        verify_package(bytes(altered), pinned, workspace)
+    except ValueError:
+        return
+    raise RuntimeError("Packaged verifier accepted a modified archive")
 
 
 def self_test():
     """Exercise the packaged app, SQLite, the bundled web UI and cryptography."""
     from contextlib import closing
     from team.evidence import signer
-    from team.server import connect
+    from team.server import connect, dispatch
     from team.report_pdf import smoke_pdf
     document = smoke_pdf()
     if not document.startswith(b'%PDF-') or b'%%EOF' not in document[-32:]:
@@ -25,9 +51,19 @@ def self_test():
     with tempfile.TemporaryDirectory() as temp:
         location = Path(temp)
         assert needs_bootstrap(location)
-        bootstrap(location, 'packaging-admin', secrets.token_urlsafe(32))
+        password = secrets.token_urlsafe(32)
+        bootstrap(location, 'packaging-admin@example.test', password)
+        account,token=dispatch(location, 'POST', '/api/login',
+                               {'email':'packaging-admin@example.test','password':password})
+        team = account['teams'][0]
+        if team.get('legacyCases') is not False: raise ValueError('Unsafe first-run workspace mode')
+        route='/api/teams/'+team['id']+'/proof'
+        auth={'token':token,'csrf':account['csrf']}
+        run=dispatch(location,'POST',route,{'mode':'lab'},**auth)[0]['run']
+        if len(run['sources'][0]['observations'])!=4: raise ValueError('Bundled proof engine failed')
         message = b'AuthzLedger packaging self-test'
         with closing(connect(location)) as db, db:
+            proof_self_test(db, location)
             key, first = signer(db, location)
             signature = key.sign(message)
         with closing(connect(location)) as db, db:
@@ -68,11 +104,11 @@ DESKTOP_TEXT = {
         "الإعداد الأولي"
     ],
     "user": [
-        "Benutzername für das erste Administratorkonto",
-        "Username for the first administrator",
-        "Nom du premier compte administrateur",
-        "Nome del primo amministratore",
-        "اسم حساب المسؤول الأول"
+        "E-Mail-Adresse für das erste Administratorkonto",
+        "Email address of the first administrator",
+        "Adresse e-mail du premier compte administrateur",
+        "Indirizzo e-mail del primo amministratore",
+        "البريد الإلكتروني لحساب المسؤول الأول"
     ],
     "pass": [
         "Neues Administratorpasswort (12–256 Zeichen)",
@@ -95,12 +131,12 @@ DESKTOP_TEXT = {
         "Le password non coincidono.",
         "كلمتا المرور غير متطابقتين."
     ],
-    "invalid_username": [
-        "Erlaubt sind Buchstaben und Ziffern sowie Punkt, Unterstrich, @, Plus und Bindestrich. Beginnen Sie mit einem Buchstaben oder einer Ziffer.",
-        "Use letters, digits, dot, underscore, @, plus or hyphen. Start with a letter or digit.",
-        "Utilisez des lettres, chiffres, points, tirets bas, @, signes plus ou traits d’union. Commencez par une lettre ou un chiffre.",
-        "Usate lettere, cifre, punti, trattini bassi, @, segni più o trattini. Iniziate con una lettera o una cifra.",
-        "استخدموا حروفاً أو أرقاماً أو النقطة أو الشرطة السفلية أو @ أو علامة الجمع أو الشرطة، وابدؤوا بحرف أو رقم."
+    "invalid_email": [
+        "Geben Sie eine gültige E-Mail-Adresse ein, etwa name@firma.ch.",
+        "Enter a valid email address, such as name@example.com.",
+        "Saisissez une adresse e-mail valide, par exemple nom@entreprise.ch.",
+        "Inserite un indirizzo e-mail valido, per esempio nome@azienda.ch.",
+        "أدخل عنوان بريد إلكتروني صالحًا مثل name@example.com."
     ],
     "invalid_password_length": [
         "Das Passwort muss zwischen 12 und 256 Zeichen enthalten.",
@@ -141,7 +177,7 @@ def legal_files():
                                 source_root / 'packaging/team/THIRD-PARTY.md') if p.is_file()}
 
 
-GUIDES = ('Team-Login-RBAC.md', 'Burp-Export.md', 'ZAP-API-Scan-Import.md', 'Key-Rotation.md')
+GUIDES = ('Proof-Studio-Betrieb.md', 'Team-Login-RBAC.md', 'Burp-Export.md', 'ZAP-API-Scan-Import.md', 'Key-Rotation.md')
 
 
 def guide_files():
@@ -185,9 +221,38 @@ def show_documents(root, files, title):
     read_file()
 
 
+def setup_admin(directory, root, language, tr):
+    """Ask locally before opening any HTTP listener. Cancel leaves the workspace unclaimed."""
+    from tkinter import messagebox, simpledialog
+    address = None
+    while address is None:
+        entry = simpledialog.askstring(tr('setup'), tr('user'), parent=root)
+        if entry is None:
+            return False
+        try:
+            address = email_identity(entry.strip())
+        except ApiError:
+            messagebox.showerror('AuthzLedger Team', tr('invalid_email'), parent=root)
+    while True:
+        password = simpledialog.askstring(tr('setup'), tr('pass'), show='*', parent=root)
+        if password is None:
+            return False
+        if not 12 <= len(password) <= 256:
+            messagebox.showerror('AuthzLedger Team', tr('invalid_password_length'), parent=root)
+            continue
+        confirm = simpledialog.askstring(tr('setup'), tr('confirm'), show='*', parent=root)
+        if confirm is None:
+            return False
+        if password != confirm:
+            messagebox.showerror('AuthzLedger Team', tr('mismatch'), parent=root)
+            continue
+        bootstrap(directory, address, password, locale=language)
+        return True
+
+
 def launch(directory, test_window=False):
     import tkinter as tk
-    from tkinter import messagebox, simpledialog, ttk
+    from tkinter import messagebox, ttk
     root = tk.Tk()
     root.title('AuthzLedger Team')
     language = (locale.getlocale()[0] or 'de').split('_')[0].lower()
@@ -195,11 +260,12 @@ def launch(directory, test_window=False):
         language = 'de'
     def tr(key):
         return DESKTOP_TEXT[key][list(LANGUAGES).index(language)]
-    root.geometry('510x260')
-    root.minsize(400, 230)
+    root.geometry('560x310')
+    root.minsize(480, 300)
     panel = ttk.Frame(root, padding=24)
     panel.pack(expand=True, fill='both')
     ttk.Label(panel, text='AuthzLedger Team', font=('TkDefaultFont', 19, 'bold')).pack(anchor='w')
+    ttk.Label(panel, text='© Nasser Aldin Farag (0xFarag). All rights reserved.').pack(side='bottom', anchor='w')
     label = ttk.Label(panel, text=tr('tagline'), wraplength=445)
     label.pack(anchor='w', pady=(8, 16))
     if not test_window:
@@ -230,25 +296,15 @@ def launch(directory, test_window=False):
         root.protocol('WM_DELETE_WINDOW', root.destroy)
         picker.destroy()
     try:
-        if needs_bootstrap(directory):
-            user = simpledialog.askstring(tr('setup'), tr('user'), parent=root)
-            if not user:
-                root.destroy()
-                return
-            password = simpledialog.askstring(tr('setup'), tr('pass'), show='*', parent=root)
-            if not password:
-                root.destroy()
-                return
-            confirm = simpledialog.askstring(tr('setup'), tr('confirm'), show='*', parent=root)
-            if password != confirm:
-                raise ValueError(tr('mismatch'))
-            bootstrap(directory, user, password, locale=language)
+        if needs_bootstrap(directory) and not setup_admin(directory, root, language, tr):
+            root.destroy()
+            return
         server = make_server(directory, host='127.0.0.1', port=0)
     except Exception as error:
         if test_window:
             root.destroy()
             raise
-        messages = {key: tr(key) for key in ('invalid_username', 'invalid_password_length')}
+        messages = {key: tr(key) for key in ('invalid_email', 'invalid_password_length')}
         messagebox.showerror('AuthzLedger Team', messages.get(str(error), str(error)), parent=root)
         root.destroy()
         return
@@ -310,7 +366,7 @@ if __name__ == '__main__':
     if args.gui_self_test:
         with tempfile.TemporaryDirectory() as temp:
             directory = Path(temp)
-            bootstrap(directory, 'packaging-admin', secrets.token_urlsafe(32))
+            bootstrap(directory, 'packaging-admin@example.test', secrets.token_urlsafe(32))
             launch(directory, test_window=True)
     elif args.self_test:
         self_test()

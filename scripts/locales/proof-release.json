@@ -1,0 +1,122 @@
+{
+  "Guided · zusätzlich CHF 2’400": [
+    "Guided · CHF 2,400 extra",
+    "Guided · supplément de CHF 2’400",
+    "Guided · supplemento CHF 2’400",
+    "Guided · إضافة ٢٬٤٠٠ فرنك"
+  ],
+  "Zwei Sitzungen à 90 Minuten und eine Ergebniswerkstatt.": [
+    "Two 90-minute sessions and one results workshop.",
+    "Deux séances de 90 minutes et un atelier de restitution.",
+    "Due sessioni di 90 minuti e un laboratorio sui risultati.",
+    "جلستان مدة كل منهما ٩٠ دقيقة وورشة لمراجعة النتائج."
+  ],
+  "CHF 1’200 werden auf Team oder Consultancy angerechnet, wenn der Abschluss innert 30 Tagen nach dokumentierter Pilotabnahme erfolgt.": [
+    "CHF 1,200 is credited towards Team or Consultancy when purchased within 30 days of documented pilot acceptance.",
+    "CHF 1’200 sont déduits de Team ou Consultancy pour une souscription dans les 30 jours suivant la réception documentée du pilote.",
+    "CHF 1’200 di credito su Team o Consultancy per un acquisto entro 30 giorni dall’accettazione documentata del pilota.",
+    "يُخصم ١٬٢٠٠ فرنك من Team أو Consultancy عند الشراء خلال ٣٠ يوماً من قبول التجربة الموثّق."
+  ],
+  "Eine Person, für interne Prüfungen.": [
+    "One user, for internal assessments.",
+    "Une personne, pour les évaluations internes.",
+    "Una persona, per verifiche interne.",
+    "مستخدم واحد للتقييمات الداخلية."
+  ],
+  "Bis fünf Personen, für interne Prüfungen.": [
+    "Up to five users, for internal assessments.",
+    "Jusqu’à cinq personnes, pour les évaluations internes.",
+    "Fino a cinque persone per verifiche interne.",
+    "حتى خمسة مستخدمين للتقييمات الداخلية."
+  ],
+  "Consultancy · CHF 9’600 / Jahr": [
+    "Consultancy · CHF 9,600 / year",
+    "Consultancy · CHF 9’600 / an",
+    "Consultancy · CHF 9’600 / anno",
+    "Consultancy · ٩٬٦٠٠ فرنك سنوياً"
+  ],
+  "Bis fünf Personen, inklusive autorisierter Kundenmandate.": [
+    "Up to five users, including authorised client engagements.",
+    "Jusqu’à cinq personnes, mandats clients autorisés inclus.",
+    "Fino a cinque persone, inclusi i mandati autorizzati dei clienti.",
+    "حتى خمسة مستخدمين، بما يشمل مهام العملاء المصرّح بها."
+  ],
+  "Angebotsbrief erstellen": [
+    "Prepare an offer letter",
+    "Préparer une lettre d’offre",
+    "Preparare la lettera di offerta",
+    "إعداد خطاب العرض"
+  ],
+  "1.5.0 holen": [
+    "Get 1.5.0",
+    "Obtenir la 1.5.0",
+    "Ottieni la 1.5.0",
+    "تنزيل 1.5.0"
+  ],
+  "Desk fragen": [
+    "Ask Desk",
+    "Demander au Desk",
+    "Chiedi al Desk",
+    "اسأل Desk"
+  ],
+  "Team-Anmeldung": [
+    "Team sign-in",
+    "Connexion équipe",
+    "Accesso team",
+    "تسجيل دخول الفريق"
+  ],
+  "Nur mit gültigen abhängigen Controls wird ein Befund bestätigt. Der Empfänger prüft das signierte Paket mit einem unabhängig bezogenen öffentlichen Schlüssel.": [
+    "Only valid dependent controls can confirm a finding. The recipient verifies the signed package with an independently obtained public key.",
+    "Seuls des contrôles dépendants valides permettent de confirmer un constat. Le destinataire vérifie le paquet signé avec une clé publique obtenue indépendamment.",
+    "Solo controlli dipendenti validi consentono di confermare un risultato. Il destinatario verifica il pacchetto firmato con una chiave pubblica ottenuta indipendentemente.",
+    "لا يتم تأكيد النتيجة إلا بوجود ضوابط مترابطة صالحة. يتحقق المستلم من الحزمة الموقّعة بمفتاح عام مستقل."
+  ],
+  "Downloads der stabilen Methode 1.5.0": [
+    "Stable method 1.5.0 downloads",
+    "Téléchargements de la méthode stable 1.5.0",
+    "Download della versione stabile 1.5.0",
+    "تنزيلات الإصدار المستقر 1.5.0"
+  ],
+  "Python ab 3.10. Prüfen Sie heruntergeladene Dateien anhand von SHA256SUMS.txt.": [
+    "Python 3.10 or later. Check downloads against SHA256SUMS.txt.",
+    "Python 3.10 ou version ultérieure. Vérifiez les fichiers avec SHA256SUMS.txt.",
+    "Python 3.10 o successivo. Verificate i file con SHA256SUMS.txt.",
+    "يلزم Python 3.10 أو أحدث. تحقّق من الملفات باستخدام SHA256SUMS.txt."
+  ],
+  "Anmeldung am Teamdienst": [
+    "Sign in to your team service",
+    "Connexion au service d’équipe",
+    "Accedi al servizio del team",
+    "تسجيل الدخول إلى خدمة الفريق"
+  ],
+  "Öffnen Sie die HTTPS-Adresse Ihrer Organisation oder starten Sie Ihre installierte Team-Workbench. Die Konten, Berichte und Schlüssel liegen auf diesem Teamdienst.": [
+    "Open your organisation’s HTTPS address or launch your installed Team Workbench. Accounts, reports and keys are held by that team service.",
+    "Ouvrez l’adresse HTTPS de votre organisation ou lancez la Workbench installée. Le service d’équipe conserve les comptes, rapports et clés.",
+    "Aprite l’indirizzo HTTPS della vostra organizzazione o avviate la Workbench installata. Account, rapporti e chiavi risiedono nel servizio del team.",
+    "افتح عنوان HTTPS لمؤسستك أو شغّل Workbench المثبتة. تبقى الحسابات والتقارير والمفاتيح على خدمة الفريق."
+  ],
+  "Fünf-Schritte-Workbench im Prüfstand": [
+    "Five-step workbench under review",
+    "Atelier en cinq étapes en cours de vérification",
+    "Workbench in cinque fasi in verifica",
+    "مساحة العمل ذات الخمس خطوات قيد المراجعة"
+  ],
+  "Das neue Proof Studio wird auf einem eigenen Teamdienst geprüft. Die bereits veröffentlichte Team-Distribution hat einen früheren Funktionsstand.": [
+    "The new Proof Studio is being verified on a separate team service. The published Team distribution contains the earlier workflow.",
+    "Le nouveau Proof Studio est vérifié sur un service d’équipe distinct. La distribution Team publiée contient le parcours antérieur.",
+    "Il nuovo Proof Studio viene verificato su un servizio di team separato. La distribuzione Team pubblicata contiene il flusso di lavoro precedente.",
+    "يُختبَر Proof Studio الجديد على خدمة مستقلة للفريق. يشمل إصدار Team المنشور سير العمل السابق."
+  ],
+  "Bedienung und Betrieb des Proof Studio (Deutsch, Markdown)": [
+    "Proof Studio user and operations guide (German, Markdown)",
+    "Guide d’utilisation et d’exploitation de Proof Studio (allemand, Markdown)",
+    "Guida all’utilizzo e alla gestione di Proof Studio (tedesco, Markdown)",
+    "دليل استخدام Proof Studio وتشغيله (بالألمانية، Markdown)"
+  ],
+  "Veröffentlichte Team-Distribution": [
+    "Published Team distribution",
+    "Distribution Team publiée",
+    "Distribuzione Team pubblicata",
+    "إصدار Team المنشور"
+  ]
+}

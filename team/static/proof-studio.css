@@ -1,0 +1,36 @@
+/* © Nasser Aldin Farag (0xFarag). All rights reserved. */
+@font-face{font-family:Outfit;src:url('/fonts/Outfit.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:swap}
+@font-face{font-family:Fraunces;src:url('/fonts/Fraunces.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:swap}
+:root{--navy:#071722;--teal:#43d6cf;--gold:#c8a66b}
+.ps-lockup{display:grid;line-height:1.16}.ps-lockup small{font:550 .71rem Outfit,sans-serif;color:var(--gold);letter-spacing:.055em}.mast{border-block-start-color:var(--teal)}
+#view-proof {font-family:Outfit,"Segoe UI",Arial,sans-serif;color:var(--navy)}
+#view-proof h2,#view-proof h3 {font-family:Fraunces,Georgia,serif;font-weight:550}
+.ps-toolbar,.ps-pickers,.ps-check {display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.ps-toolbar {justify-content:space-between;gap:1rem;margin:1.3rem 0}
+.ps-toolbar h2 {font-size:clamp(1.65rem,3vw,2.1rem);margin:0}
+.ps-pickers {align-items:end}
+.ps-field {max-width:45rem}.ps-pickers .ps-field {margin:0}
+.ps-field>span {display:block;margin-block-end:.22rem}
+.ps-nav {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:var(--navy);color:white;border-radius:.5rem;overflow:hidden}
+.ps-nav .ps-step {background:transparent;text-align:start;color:#fafafa;display:flex;align-items:center;gap:.55rem;border-radius:0;border-block-end:3px solid transparent;padding:.85rem 1rem}
+.ps-step[aria-current=step] {background:#17333b;color:var(--teal);border-color:var(--teal)}
+.ps-step:disabled {color:#a6b2b6;cursor:default}
+.ps-no {color:var(--gold);font-variant-numeric:tabular-nums}
+.ps-stage {margin-block:.8rem;padding:clamp(1.1rem,3vw,2.2rem);border-block-start:2px solid var(--teal)}
+.ps-stage h3 {font-size:clamp(1.65rem,3vw,2.15rem);line-height:1.18}
+.ps-stage h4 {margin:1.15rem 0 .45rem}
+.ps-stage>.section-heading {align-items:center;margin-block-end:.55rem;gap:1rem}
+.ps-mode {font-size:.83rem;padding:.2rem .65rem;border-radius:3rem;color:#235451;background:#e4f3f0}
+.ps-lab {color:#634d25;background:#f3eddf}
+.ps-stage .primary {background:var(--navy);border:1px solid var(--navy);margin-block:1rem .3rem;color:white}
+.ps-stage .secondary,.ps-stage .plain {margin-block:.45rem}
+.ps-stage .table-wrap {margin-block:.5rem}
+.ps-stage code,.ps-json,.ps-history {overflow-wrap:anywhere}
+.ps-stage input[type=checkbox] {width:1.1rem;height:1.1rem;accent-color:#126f70}
+.ps-check {justify-content:flex-start}.ps-check input {order:-1}
+.ps-json {white-space:pre-wrap;padding:.75rem;background:#eff4f3;border-radius:.3rem;font-size:.83rem}
+.ps-notice:not(:empty) {margin:.6rem 0;padding:.6rem 1rem;border-inline-start:3px solid var(--gold);background:#faf5e9}
+.ps-details {margin-block:.7rem;border-block-start:1px solid var(--line);padding-block:.35rem}
+.ps-details>summary {width:fit-content;cursor:pointer}
+@media(max-width:650px){.ps-nav .ps-step{align-items:baseline;flex-direction:column;font-size:.85rem;gap:.15rem;padding:.55rem .4rem}.ps-nav{grid-template-columns:repeat(5,minmax(0,1fr))}.ps-toolbar{align-items:start}.ps-mode{max-width:45%;text-align:center}.ps-pickers select{max-width:75vw}}
+.ps-coverage{background:#ecf5f4;border-inline-start:3px solid #1f7774;padding:.7rem .9rem;color:#104b4a;font-variant-numeric:tabular-nums;font-family:monospace}

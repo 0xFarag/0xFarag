@@ -21,8 +21,10 @@ ENV PATH="/opt/authzledger-venv/bin:${PATH}" PYTHONDONTWRITEBYTECODE=1 PYTHONUNB
 WORKDIR /opt/authzledger
 COPY --from=dependencies /opt/authzledger-venv /opt/authzledger-venv
 COPY --from=dependencies /build/notices /usr/share/doc/authzledger-team/third-party
-COPY LICENSE NOTICE.txt packaging/team/README.md packaging/team/THIRD-PARTY.md docs/Team-Login-RBAC.md docs/Key-Rotation.md docs/ZAP-API-Scan-Import.md /usr/share/doc/authzledger-team/
+COPY LICENSE NOTICE.txt packaging/team/README.md packaging/team/THIRD-PARTY.md docs/Team-Login-RBAC.md docs/Key-Rotation.md docs/ZAP-API-Scan-Import.md docs/Proof-Studio-Betrieb.md docs/ZAP-Ergebnisimport.md /usr/share/doc/authzledger-team/
 COPY integrations/burp/README.md /usr/share/doc/authzledger-team/Burp-Export.md
+COPY integrations/burp-handoff/README.md /usr/share/doc/authzledger-team/Burp-Handoff.md
+COPY team/static/fonts/*-OFL.txt /usr/share/doc/authzledger-team/
 COPY team/ team/
 RUN mkdir -p /data && chown 10001:10001 /data && chmod 0700 /data
 USER 10001:10001
