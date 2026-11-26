@@ -7,6 +7,7 @@ import hashlib
 import io
 import json
 import re
+from collections import Counter
 from pathlib import Path
 from zipfile import BadZipFile, ZIP_STORED, ZipFile, ZipInfo
 
@@ -133,15 +134,65 @@ def verify_bytes(data, trusted_jwk, workspace=None):
         raise ValueError("Invalid signed archive") from exc
 
 
+def _report_rows(report, field):
+    rows = report.get(field)
+    if not isinstance(rows, list) or not rows:
+        raise ValueError(f"Missing signed {field}")
+    indexed = {}
+    for row in rows:
+        if not isinstance(row, dict) or any(
+            not isinstance(row.get(key), str) or not row[key] for key in ("id", "status")
+        ):
+            raise ValueError(f"Invalid row in signed {field}")
+        if row["id"] in indexed:
+            raise ValueError(f"Duplicate ID in signed {field}")
+        indexed[row["id"]] = row["status"]
+    return indexed
+
+
+def _recipient_receipt(data, report, workspace_pinned):
+    """Project verified report claims. This does not independently replay observations."""
+    baseline = _report_rows(report, "findings")
+    retests = _report_rows(report, "retests")
+    if baseline.keys() != retests.keys():
+        raise ValueError("Signed retest IDs differ from baseline IDs")
+    counts = Counter(retests.values())
+    counts.setdefault("not_retested", 0)
+    # Canonical comparison also distinguishes integer counts from JSON booleans.
+    if canonical(report.get("coverage")) != canonical(counts):
+        raise ValueError("Signed coverage differs from per-ID retest statuses")
+    return {
+        "schema": "authzledger.proof.recipient-receipt.v1",
+        "verification": "archive_integrity_and_pinned_key_signature",
+        "archiveSha256": digest(data),
+        "keyId": report["keyId"],
+        "workspace": report["workspace"],
+        "workspacePinned": workspace_pinned,
+        "reportedCoverage": dict(counts),
+        "reportedFindings": [
+            {"id": ident, "baselineStatus": status, "retestStatus": retests[ident]}
+            for ident, status in baseline.items()
+        ],
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("archive", type=Path)
     parser.add_argument("--key", type=Path, required=True, help="Public JWK pinned independently of this package")
+    parser.add_argument("--workspace", help="Require the exact independently expected workspace ID")
+    parser.add_argument("--receipt-json", action="store_true",
+                        help="Print a JSON receipt with the archive digest and signed per-ID statuses")
     opts = parser.parse_args()
     try:
         if opts.archive.stat().st_size > MAX_BYTES or opts.key.stat().st_size > 4096:
             raise ValueError("File exceeds size limit")
-        report = verify_bytes(opts.archive.read_bytes(), json.loads(opts.key.read_bytes()))
+        data = opts.archive.read_bytes()
+        report = verify_bytes(data, json.loads(opts.key.read_bytes()), opts.workspace)
+        if opts.receipt_json:
+            receipt = _recipient_receipt(data, report, opts.workspace is not None)
+            print(json.dumps(receipt, sort_keys=True, allow_nan=False))
+            return
     except (OSError, ValueError) as exc:
         parser.exit(1, f"INVALID — {exc}\n")
     print(f"VALID — Ed25519 and all inventory bytes verified. keyId={report['keyId']}")

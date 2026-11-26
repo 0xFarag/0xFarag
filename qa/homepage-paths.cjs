@@ -9,6 +9,10 @@ async function verifySignedCockpit(page, hero) {
   const file = (name, value) => ({name, mimeType:'application/json', buffer:Buffer.from(JSON.stringify(value))});
   const keyHint = page.locator('#proof-key-hint');
   assert(await keyHint.isHidden());
+  await page.locator('#proof-package').setInputFiles({name:'handover.ZIP',mimeType:'application/zip',buffer:Buffer.from('PK')});
+  await page.locator('#proof-status').filter({hasText:'ZIP-Datei ausgewählt'}).waitFor();
+  assert(await page.locator('#proof-format-guide').evaluate(node => node.open));
+  assert(await page.locator('#proof-result').isHidden());
   await page.locator('#proof-package').setInputFiles(file('package.json',cockpitFixture.proof.handover));
   await keyHint.getByText(cockpitFixture.trustedKey.fingerprint,{exact:true}).waitFor();
   assert(await page.locator('#proof-result').isHidden());
@@ -71,6 +75,7 @@ async function verifyHomepagePaths(page, origin, width) {
   await page.goto(origin);
   const hero = page.locator('section').filter({has: page.getByRole('heading', {level: 1})}).first();
   assert.equal(await hero.locator('#cockpit, #finding-select').count(), 0);
+  assert.equal(await hero.locator('a.start-primary').getAttribute('href'), '/workbench/');
   await verifySignedCockpit(page, hero);
   for (const destination of ['/workbench/', '/downloads/#team']) {
     const action = routeLinks(hero, destination).first();

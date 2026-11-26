@@ -66,6 +66,16 @@ Einen öffentlichen JWK aus **Schlüsselhistorie** im authentifizierten Workspac
 python team/proof_verify.py uebergabe.zip --key freigegebener-jwk.json
 ```
 
+Für ein Kundenticket lässt sich ein JSON-Prüfbeleg erzeugen. Die erwartete Workspace-ID und den öffentlichen Schlüssel vorab über einen unabhängigen Kanal bestätigen. Im Beispiel die tatsächliche ID einsetzen.
+
+```sh
+python team/proof_verify.py uebergabe.zip --key freigegebener-jwk.json --workspace WORKSPACE-ID --receipt-json
+```
+
+Nur bei Exit-Code 0 die JSON-Ausgabe übernehmen. Sie enthält den SHA-256 des vollständigen ZIP, die ID des geprüften Schlüssels, den Workspace sowie die signierten Ausgangs- und Reteststatus pro ursprünglicher ID. Der Prüfer gleicht die Anzahl pro Status mit der signierten Abdeckung ab. `not_retested` hält eine im letzten Lauf ausgelassene ID sichtbar. Ohne `--workspace` steht `workspacePinned` auf `false`.
+
+Der Beleg ist eine lokal erzeugte Zusammenfassung. Die Signatur gehört zum Originalpaket. Wer den Beleg später überprüfen möchte, benötigt dieses Paket und den unabhängig bestätigten JWK. Für die Bewertung der fachlichen Aussagen dient die semantische Prüfung im nächsten Absatz.
+
 Exit-Code 0 bestätigt die Signatur des Inventars und die Dokumentbytes. Ein anderes Byte oder ein fremder Schlüssel muss den Aufruf scheitern lassen. Der eigenständige Verifier benötigt Python und `cryptography`. Für die semantische Gesamtprüfung das ZIP im zugehörigen Dossier prüfen oder die API-Funktion `team.proof_packages.verify_package(archive_bytes, trusted_jwk, workspace_id)` verwenden. Für ein bereits verifiziertes Berichts-JSON lässt sich die Beweislogik zusätzlich offline wiederholen.
 
 ```sh

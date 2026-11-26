@@ -10,6 +10,7 @@ const labels = {
   structure:'Die Kontroll-, Quellen- oder Retest-Verweise im signierten Bericht sind widersprüchlich.',
   invalid:'Signatur oder Berichtsdigest ungültig.', documentMismatch:'Das Dokument stimmt nicht mit dem signierten Nachweis überein.',
   documentNeeded:'Wählen Sie zusätzlich das unveränderte PDF oder HTML aus dem ZIP.',
+  zip:'ZIP-Datei ausgewählt. Folgen Sie der Anleitung für Ihr Paket unter «Welches Übergabeformat habe ich?».',
   profile:'Erwartet wird eine signierte Team-Übergabe oder die Datei proof.json aus dem Dokumentpaket.',
   unsupported:'Dieser Browser unterstützt die benötigte Ed25519-Prüfung nicht.',
   size:'Die Datei überschreitet die Grössenbegrenzung oder ist leer.', json:'Die Datei enthält kein eindeutiges UTF-8-JSON.',
@@ -105,8 +106,15 @@ function render() {
   el('digests').append(dl);
   renderCase();
 }
+function zipSelected() {
+  return el('package').files[0]?.name.toLowerCase().endsWith('.zip');
+}
 function invalidate() {
   generation++; originalJob++; result = null; selected = 0; status = ''; match = ''; busy = false;
+  if (zipSelected()) {
+    el('format-guide').open = true;
+    status = 'zip';
+  }
   el('original').value = ''; form.querySelector('button').disabled = false;
   render();
 }
@@ -117,7 +125,7 @@ function clearKeyHint() {
 async function showKeyHint() {
   clearKeyHint();
   const input = el('package'), file = input.files[0];
-  if (!file) return;
+  if (!file || zipSelected()) return;
   try {
     const limit = 8 * 1024 * 1024;
     const proof = readJson(await bytes(file,limit),limit);
@@ -144,6 +152,7 @@ form.addEventListener('submit',async event=>{
   event.preventDefault();
   if (busy) return;
   invalidate();
+  if (zipSelected()) return;
   const revision = generation;
   busy = true; form.querySelector('button').disabled = true; status = 'checking'; messages();
   try {
