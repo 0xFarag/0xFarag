@@ -18,3 +18,8 @@
 #authz-desk .desk-status:empty{display:none}
 #authz-desk[data-state=error] .desk-status{color:#f4c893}
 #authz-desk small{display:block;margin-top:1rem}
+
+#authz-desk details{margin-top:.75rem}
+#authz-desk details details{padding-inline-start:.75rem}
+#authz-desk summary{cursor:pointer}
+#authz-desk details a{color:#76e5dd}

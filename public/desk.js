@@ -28,6 +28,44 @@
       field:'Votre question sur le produit', send:'Envoyer', wait:'Vérification en cours …', answer:'Réponse', user:'Vous',
       invalid:'Saisissez une question de 3 à 600 caractères.'}
   };
+  const localGuides = {
+    de: {
+      title: 'Produkthilfe ohne KI', unavailable: 'Der Desk ist hier gerade nicht erreichbar.',
+      answers: ['Eine importierte Beobachtung wird erst mit passendem Scope, verfügbarem Budget, geschütztem Marker und wirksamen abhängigen Kontrollen bestätigt.',
+        'Dieser ursprünglich bestätigte Fall wurde für die aktuelle Retest-Runde nicht ausgewählt. Ob der Fix wirkt, bleibt offen.',
+        'Nessus liefert Scanergebnisse. AuthzLedger ergänzt solche Werkzeuge bei der Bewertung von Beobachtungen, beim Retest und bei der Übergabe.'],
+      resources: ['Import öffnen', 'Proof Studio öffnen', 'Stabile Downloads']
+    },
+    en: {
+      title: 'Product help without AI', unavailable: 'Desk is currently unavailable.',
+      answers: ['An imported observation needs matching scope, available budget, a protected marker and effective dependent controls before it can be confirmed.',
+        'This previously confirmed finding was not selected for this retest. Its fix is still unverified.',
+        'Nessus provides scan results. AuthzLedger complements testing tools with evidence review, retests and handover.'],
+      resources: ['Open import', 'Open Proof Studio', 'Stable downloads']
+    },
+    fr: {
+      title: 'Aide produit sans IA', unavailable: 'Le Desk est momentanément indisponible.',
+      answers: ['Pour confirmer une observation importée, il faut un périmètre correspondant, un budget disponible, un marqueur protégé et des contrôles associés efficaces.',
+        'Ce constat confirmé précédemment n’a pas été sélectionné pour ce nouveau test. La correction reste à vérifier.',
+        'Nessus fournit des résultats de scan. AuthzLedger complète les outils de test avec la revue des preuves, les nouveaux tests et la remise du dossier.'],
+      resources: ['Ouvrir l’import', 'Ouvrir Proof Studio', 'Téléchargements stables']
+    },
+    it: {
+      title: 'Guida al prodotto senza IA', unavailable: 'Il Desk è temporaneamente indisponibile.',
+      answers: ['Per confermare un’osservazione importata servono un perimetro corrispondente, budget disponibile, un marcatore protetto e controlli associati efficaci.',
+        'Questo rilievo già confermato non è stato selezionato per il retest attuale. La correzione resta da verificare.',
+        'Nessus fornisce risultati di scansione. AuthzLedger integra gli strumenti di test con la verifica delle evidenze, i retest e la consegna.'],
+      resources: ['Apri importazione', 'Apri Proof Studio', 'Download stabili']
+    },
+    ar: {
+      title: 'مساعدة المنتج دون ذكاء اصطناعي', unavailable: 'خدمة Desk غير متاحة حالياً.',
+      answers: ['يتطلب تأكيد الملاحظة المستوردة تطابق النطاق وتوفر الميزانية ووجود العلامة المحمية وفعالية الضوابط ذات الصلة.',
+        'لم تُحدّد هذه النتيجة المؤكدة سابقاً لإعادة الاختبار الحالية. لا يزال الإصلاح بحاجة إلى التحقق.',
+        'يقدم Nessus نتائج الفحص. يكمّل AuthzLedger أدوات الاختبار بمراجعة الأدلة وإعادة الاختبار وتسليم النتائج.'],
+      resources: ['فتح الاستيراد', 'فتح Proof Studio', 'تنزيل الإصدارات المستقرة']
+    }
+  };
+  const guidePaths = ['/import/', '/studio/', '/downloads/stable/'];
   function language() { return translations[document.documentElement.lang.slice(0,2).toLowerCase()] || translations.de; }
   let t=language(), statusKey='';
   const node = (tag, text) => { const el = document.createElement(tag); if (text) el.textContent = text; return el; };
@@ -56,8 +94,45 @@
     choices.append(choice); return choice;
   });
   const intro=node('p',t.intro);
+  const guide = node('details');
+  const guideHeading = node('summary');
+  guide.append(guideHeading);
+  const guideEntries = t.starters.map(() => {
+    const entry = node('details');
+    const heading = node('summary');
+    const answer = node('p');
+    entry.append(heading, answer);
+    guide.append(entry);
+    return {entry, heading, answer};
+  });
+  const guideLinks = node('ul');
+  const links = guidePaths.map(() => {
+    const link = node('a');
+    const item = node('li');
+    item.append(link);
+    guideLinks.append(item);
+    return link;
+  });
+  guide.append(guideLinks);
+  function localGuide() {
+    return localGuides[document.documentElement.lang.slice(0,2).toLowerCase()] || localGuides.de;
+  }
+  function translateGuide() {
+    const copy = localGuide();
+    guideHeading.textContent = copy.title;
+    guideEntries.forEach(({heading, answer}, i) => {
+      heading.textContent = t.starters[i];
+      answer.textContent = copy.answers[i];
+    });
+    const locale = document.documentElement.lang.slice(0,2).toLowerCase();
+    links.forEach((link, i) => {
+      link.textContent = copy.resources[i];
+      link.href = (Object.hasOwn(localGuides, locale) && locale !== 'de' ? '/' + locale : '') + guidePaths[i];
+    });
+  }
+  translateGuide();
   form.append(label, input, privacy, send);
-  panel.append(head, intro, choices, log, form, status, rights);
+  panel.append(head, intro, choices, log, form, status, guide, rights);
   const footer = document.querySelector('body > footer');
   if (footer) footer.before(panel); else document.body.append(panel);
   let opener = triggers[0];
@@ -89,7 +164,8 @@
     t=language(); intro.textContent=t.intro; privacy.textContent=t.privacy; close.textContent=t.close;
     label.textContent=t.field; send.textContent=t.send;
     starters.forEach((choice,i)=>choice.textContent=t.starters[i]);
-    if(statusKey) status.textContent=t[statusKey];
+    translateGuide();
+    if(statusKey) status.textContent=statusKey === 'unavailable' ? localGuide().unavailable : t[statusKey];
     showTurns();
   });
   form.addEventListener('submit', async event => {
@@ -100,6 +176,7 @@
       panel.dataset.state = 'error'; statusKey='invalid'; status.textContent=t.invalid; return;
     }
     panel.dataset.state = 'checking'; statusKey='wait'; status.textContent=t.wait; send.disabled = true;
+    const starterIndex = t.starters.findIndex(starter => starter === question);
     try {
       const response = await fetch('/api/desk', {method:'POST', credentials:'omit', redirect:'error',
         headers:{'Content-Type':'application/json'}, body:JSON.stringify({question,context:context.slice(-7)})});
@@ -109,7 +186,9 @@
       context = [...context,{role:'user',content:question},{role:'assistant',content:result.answer}].slice(-8);
       showTurns(); if(input.value.trim()===question) input.value=''; statusKey=''; panel.dataset.state = 'answer'; status.textContent = '';
     } catch {
-      panel.dataset.state = 'error'; statusKey=''; status.textContent = 'Der Desk ist hier gerade nicht erreichbar.';
+      panel.dataset.state = 'error'; statusKey='unavailable'; status.textContent=localGuide().unavailable;
+      guide.open = true;
+      if (starterIndex >= 0) guideEntries[starterIndex].entry.open = true;
     } finally { send.disabled = false; }
   });
 })();

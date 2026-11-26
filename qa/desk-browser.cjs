@@ -60,7 +60,25 @@ test('Desk loads quietly, asks only on submit, keeps mobile content readable and
   await page.getByRole('button',{name:'Senden'}).click();
   await page.waitForSelector('#authz-desk[data-state=error]');
   assert.equal(await page.locator('.desk-status').innerText(),UNAVAILABLE);
-  await page.getByRole('button',{name:'Schliessen'}).click();
+  const guide = page.locator('#authz-desk > details');
+  assert(await guide.evaluate(el=>el.open));
+  assert.equal(await guide.getByRole('link',{name:'Stabile Downloads'}).getAttribute('href'),'/downloads/stable/');
+  await page.getByRole('button',{name:'Was heisst not_retested?'}).click();
+  await page.getByRole('button',{name:'Senden'}).click();
+  await page.waitForFunction(()=>document.querySelector('#authz-desk details details:nth-of-type(2)').open);
+  assert.match(await guide.innerText(), /Ob der Fix wirkt, bleibt offen/);
+  const countAfterSubmit=requests;
+  for (const [lang,heading,status] of [
+    ['en','Product help without AI','Desk is currently unavailable.'],
+    ['fr','Aide produit sans IA','Le Desk est momentanément indisponible.']
+  ]) {
+    await page.evaluate(lang=>{document.documentElement.lang=lang; window.dispatchEvent(new Event('authzlanguage'));},lang);
+    assert.equal(await guide.locator(':scope > summary').innerText(),heading);
+    assert.equal(await guide.getByRole('link').last().getAttribute('href'),'/'+lang+'/downloads/stable/');
+    assert.equal(await page.locator('.desk-status').innerText(),status);
+  }
+  assert.equal(requests,countAfterSubmit);
+  await page.getByRole('button',{name:'Fermer'}).click();
   assert.equal(await page.locator('#authz-desk').isVisible(),false);
   assert.equal(await page.locator('[data-desk-open]').evaluate(el=>document.activeElement===el),true);
 });

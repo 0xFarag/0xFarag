@@ -36,7 +36,7 @@
       <h1 id="produkt-titel">Wer hat Zugriff? <em>Was wurde behoben?</em></h1>
       <p class="lead">Prüfen Sie Ihre eigenen Werkzeugexporte. Halten Sie fest, welche Kontrolle einen Befund stützt, welcher Fix nachgeprüft wurde und was für die Übergabe offen bleibt.</p>
       <div class="actions">
-        <a class="btn start-primary" href="/studio/">Team-Anmeldung</a> <a class="text-link" href="/workbench/">Workbench öffnen</a>
+        <a class="btn start-primary" href="/workbench/">Workbench öffnen</a> <a class="text-link" href="/studio/">Team-Anmeldung</a>
         <a class="btn ghost" href="/downloads/#team">Team-Workbench installieren</a>
       </div><div class="proof-quick"><a href="#werkzeuge">Prüfwerkzeug wählen</a><a href="/downloads/#burp">Burp-Erweiterung herunterladen</a><a href="#pilot">Preise und Pilot</a><a href="#investoren">Investor-One-Pager</a>
       </div>
@@ -44,7 +44,16 @@
     <form class="proof-box" id="beweis-cockpit" aria-labelledby="proof-title">
       <header><h2 id="proof-title">Beweis-Cockpit</h2><span lang="en">Ed25519</span></header>
       <div class="proof-fields"><p>Prüfen Sie eine Team-Übergabe mit dem separat bezogenen öffentlichen Schlüssel. Alle Dateien bleiben in Ihrem Browser.</p>
-        <label for="proof-package">Signierte Übergabe oder proof.json</label>
+        <details id="proof-format-guide">
+          <summary>Welches Übergabeformat habe ich?</summary>
+          <ul>
+            <li><strong>Team-JSON</strong> · <span>Wählen Sie die signierte Übergabe und den separat erhaltenen öffentlichen Schlüssel (JWK).</span></li>
+            <li><strong>ZIP mit proof.json</strong> · <span>Entpacken Sie proof.json und das mitgelieferte report.pdf oder report.html. Wählen Sie hier beide Dateien und den JWK.</span></li>
+            <li><strong>ZIP mit inventory.json</strong> · <span>Prüfen Sie das vollständige Proof-Studio-ZIP lokal mit team/proof_verify.py und dem separat bezogenen JWK.</span> <a href="https://github.com/0xFarag/0xFarag/blob/authzledger-website/docs/Proof-Studio-Betrieb.md">Anleitung für Proof Studio</a></li>
+            <li><strong>Stable 1.5.0</strong> · <span>Entpacken Sie das Paket. Prüfen Sie den Belegordner mit verify_bundle.py und dem separat bezogenen öffentlichen PEM-Schlüssel.</span> <a href="https://github.com/0xFarag/0xFarag/blob/v1.5.0/INSTALL.md">Anleitung für Stable 1.5.0</a></li>
+          </ul>
+        </details>
+        <label for="proof-package">Signierte Team-Übergabe (JSON) oder proof.json</label>
         <input id="proof-package" type="file" accept="application/json,.json" required>
         <div id="proof-key-hint" hidden role="status">
           <span>Angegebener Schlüssel-Fingerabdruck (ungeprüft)</span><code id="proof-claimed-fingerprint" dir="ltr"></code>

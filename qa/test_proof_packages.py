@@ -175,6 +175,54 @@ class ProofSigning(unittest.TestCase):
         with self.assertRaises(ValueError):
             packages.verify_package(forged, pinned)
 
+    def test_recipient_receipt_is_bound_to_archive_key_workspace_and_partial_retest(self):
+        from team.proof_engine import lab_after_source, record_retest
+        report = self.body()
+        original_ids = [row["id"] for row in report["findings"]]
+        controls = {name: value["intended"] for name, value in report["controls"].items()}
+        record_retest(report, original_ids[:3], lab_after_source(), controls)
+        data = self.sign(report=report)
+        archive = self.root / "handover.zip"
+        anchor = self.root / "key.json"
+        archive.write_bytes(data)
+        anchor.write_text(json.dumps(self.key()["jwk"]))
+        command = [sys.executable, verifier.__file__, str(archive), "--key", str(anchor), "--receipt-json"]
+
+        def run(*args):
+            return subprocess.run([*command, *args], cwd=self.root, capture_output=True)
+
+        result = run("--workspace", "alpha")
+        self.assertEqual(0, result.returncode, result.stderr)
+        receipt = json.loads(result.stdout)
+        self.assertEqual("alpha", receipt["workspace"])
+        self.assertIs(True, receipt["workspacePinned"])
+        self.assertEqual(self.key()["keyId"], receipt["keyId"])
+        self.assertEqual(hashlib.sha256(data).hexdigest(), receipt["archiveSha256"])
+        self.assertEqual({"resolved_check": 3, "not_retested": 1}, receipt["reportedCoverage"])
+        rows = receipt["reportedFindings"]
+        self.assertEqual(original_ids, [row["id"] for row in rows])
+        self.assertEqual(["confirmed"] * 4, [row["baselineStatus"] for row in rows])
+        self.assertEqual(["resolved_check"] * 3 + ["not_retested"], [row["retestStatus"] for row in rows])
+        self.assertIs(False, json.loads(run().stdout)["workspacePinned"])
+        failed = run("--workspace", "beta")
+        self.assertEqual((1, b""), (failed.returncode, failed.stdout))
+        archive.write_bytes(data + b"X")
+        failed = run()
+        self.assertEqual((1, b""), (failed.returncode, failed.stdout))
+        archive.write_bytes(data)
+        anchor.write_text(json.dumps(self.key("beta")["jwk"]))
+        failed = run()
+        self.assertEqual((1, b""), (failed.returncode, failed.stdout))
+
+    def test_receipt_rejects_duplicate_missing_or_inconsistent_signed_rows(self):
+        data = self.sign()
+        report = verifier.verify_bytes(data, self.key()["jwk"])
+        rows = report["retests"]
+        for edits in ({"retests": rows[:-1]}, {"retests": [*rows, rows[0]]},
+                      {"retests": [{}]}, {"coverage": {"not_retested": True}}):
+            with self.subTest(edits=edits), self.assertRaises(ValueError):
+                verifier._recipient_receipt(data, dict(report, **edits), False)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -298,5 +298,77 @@
     "Cette remise ne contient aucun index signé des preuves.",
     "Questa consegna non contiene un indice firmato dei riscontri.",
     "لا يتضمّن هذا التسليم فهرس أدلة موقّعاً."
+  ],
+  "Welches Übergabeformat habe ich?": [
+    "Which handover format do I have?",
+    "Quel format de remise ai-je reçu ?",
+    "Quale formato di consegna ho ricevuto?",
+    "ما صيغة التسليم التي استلمتها؟"
+  ],
+  "Team-JSON": [
+    "Team JSON",
+    "JSON Team",
+    "JSON Team",
+    "ملف JSON من Team"
+  ],
+  "Wählen Sie die signierte Übergabe und den separat erhaltenen öffentlichen Schlüssel (JWK).": [
+    "Select the signed handover and the public key (JWK) obtained separately.",
+    "Choisissez la remise signée et la clé publique (JWK) obtenue séparément.",
+    "Selezionate la consegna firmata e la chiave pubblica (JWK) ricevuta separatamente.",
+    "اختر ملف التسليم الموقّع والمفتاح العام (JWK) الذي حصلت عليه من قناة مستقلة."
+  ],
+  "ZIP mit proof.json": [
+    "ZIP containing proof.json",
+    "ZIP contenant proof.json",
+    "ZIP con proof.json",
+    "أرشيف ZIP يحتوي على proof.json"
+  ],
+  "Entpacken Sie proof.json und das mitgelieferte report.pdf oder report.html. Wählen Sie hier beide Dateien und den JWK.": [
+    "Extract proof.json and the accompanying report.pdf or report.html. Select both files and the JWK here.",
+    "Extrayez proof.json et le fichier report.pdf ou report.html fourni. Sélectionnez ici les deux fichiers et la clé JWK.",
+    "Estraete proof.json e il file report.pdf o report.html incluso. Selezionate qui entrambi i file e la chiave JWK.",
+    "استخرج proof.json والملف report.pdf أو report.html المرفق. اختر الملفين هنا مع مفتاح JWK."
+  ],
+  "ZIP mit inventory.json": [
+    "ZIP containing inventory.json",
+    "ZIP contenant inventory.json",
+    "ZIP con inventory.json",
+    "أرشيف ZIP يحتوي على inventory.json"
+  ],
+  "Prüfen Sie das vollständige Proof-Studio-ZIP lokal mit team/proof_verify.py und dem separat bezogenen JWK.": [
+    "Verify the entire Proof Studio ZIP locally with team/proof_verify.py and the JWK obtained separately.",
+    "Vérifiez localement le ZIP complet de Proof Studio avec team/proof_verify.py et la clé JWK obtenue séparément.",
+    "Verificate in locale lo ZIP completo di Proof Studio con team/proof_verify.py e la chiave JWK ottenuta separatamente.",
+    "تحقّق محليًا من أرشيف Proof Studio كاملًا باستخدام team/proof_verify.py ومفتاح JWK الذي حصلت عليه من قناة مستقلة."
+  ],
+  "Anleitung für Proof Studio": [
+    "Proof Studio instructions",
+    "Instructions pour Proof Studio",
+    "Istruzioni per Proof Studio",
+    "تعليمات Proof Studio"
+  ],
+  "Entpacken Sie das Paket. Prüfen Sie den Belegordner mit verify_bundle.py und dem separat bezogenen öffentlichen PEM-Schlüssel.": [
+    "Extract the package. Verify the evidence directory with verify_bundle.py and the public PEM key obtained separately.",
+    "Décompressez le paquet. Vérifiez le dossier de preuves avec verify_bundle.py et la clé publique PEM obtenue séparément.",
+    "Estraete il pacchetto. Verificate la cartella delle evidenze con verify_bundle.py e la chiave pubblica PEM ottenuta separatamente.",
+    "فكّ ضغط الحزمة. تحقّق من مجلد الأدلة باستخدام verify_bundle.py والمفتاح العام بصيغة PEM الذي حصلت عليه من قناة مستقلة."
+  ],
+  "Anleitung für Stable 1.5.0": [
+    "Stable 1.5.0 instructions",
+    "Instructions pour Stable 1.5.0",
+    "Istruzioni per Stable 1.5.0",
+    "تعليمات Stable 1.5.0"
+  ],
+  "Signierte Team-Übergabe (JSON) oder proof.json": [
+    "Signed Team handover (JSON) or proof.json",
+    "Remise Team signée (JSON) ou proof.json",
+    "Consegna Team firmata (JSON) o proof.json",
+    "ملف تسليم Team الموقّع (JSON) أو proof.json"
+  ],
+  "ZIP-Datei ausgewählt. Folgen Sie der Anleitung für Ihr Paket unter «Welches Übergabeformat habe ich?».": [
+    "ZIP file selected. Follow the instructions for your package under “Which handover format do I have?”.",
+    "Fichier ZIP sélectionné. Suivez les instructions pour votre paquet sous « Quel format de remise ai-je reçu ? ».",
+    "File ZIP selezionato. Seguite le istruzioni per il vostro pacchetto in «Quale formato di consegna ho ricevuto?».",
+    "اخترت ملف ZIP. اتبع التعليمات الخاصة بحزمتك في قسم «ما صيغة التسليم التي استلمتها؟»."
   ]
 }
