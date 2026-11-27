@@ -35,6 +35,6 @@ The operating target is nine paid pilot starts, seven customer acceptances and o
 
 **Seeking introductions** to teams preparing a handover with role- or tenant-dependent access decisions.
 
-[Nasser Aldin Farag · Founder & CEO](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [Pilot offer](https://authzledger.com/pilotangebot.pdf)
+[contact@authzledger.com](mailto:contact@authzledger.com) · [Nasser Aldin Farag · Founder & CEO](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [Pilot offer](https://authzledger.com/pilotangebot.pdf)
 
 © Nasser Aldin Farag (0xFarag). All rights reserved.
