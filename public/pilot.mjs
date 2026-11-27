@@ -11,7 +11,7 @@ const translations = {
 function locale(lang) { return lang?.split('-')[0] in translations ? lang.split('-')[0] : 'de'; }
 export function letter(data, lang, date) {
   const t=translations[locale(lang)];
-  return [`AuthzLedger · ${t[17]}`, `${t[18]}: ${date}`, '', `${t[1]}: ${data.organisation}`, `${t[2]}: ${data.contact}`, `${t[3]}: ${data.email}`, '', 'Pilot · CHF 2’400', t[5], t[7], ...(data.guided ? ['Guided · CHF 2’400',t[6]] : []), `${t[11]} · CHF ${data.guided ? '4’800' : '2’400'}`, t[10], t[8], '', 'Nasser Aldin Farag · 0xFarag', rights, ''].join('\n');
+  return [`AuthzLedger · ${t[17]}`, `${t[18]}: ${date}`, '', `${t[1]}: ${data.organisation}`, `${t[2]}: ${data.contact}`, `${t[3]}: ${data.email}`, '', 'Pilot · CHF 2’400', t[5], t[7], ...(data.guided ? ['Guided · CHF 2’400',t[6]] : []), `${t[11]} · CHF ${data.guided ? '4’800' : '2’400'}`, t[10], t[8], '', 'Nasser Aldin Farag · 0xFarag', 'contact@authzledger.com', rights, ''].join('\n');
 }
 export function mountPilot(root) {
   let lang=locale(document.documentElement.lang), t=translations[lang], savedLetter, statusIndex;

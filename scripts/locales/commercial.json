@@ -52,5 +52,29 @@
     "Demander un devis pour le pilote de 30 jours",
     "Richiedi un preventivo per il pilota di 30 giorni",
     "اطلب عرض سعر للمشروع التجريبي لمدة 30 يوماً"
+  ],
+  "Pilot per E-Mail anfragen": [
+    "Ask about a pilot by email",
+    "Demander un pilote par e-mail",
+    "Richiedi un progetto pilota via e-mail",
+    "استفسر عن المشروع التجريبي عبر البريد الإلكتروني"
+  ],
+  "Offerte per E-Mail anfragen": [
+    "Request a quote by email",
+    "Demander un devis par e-mail",
+    "Richiedi un preventivo via e-mail",
+    "اطلب عرض سعر عبر البريد الإلكتروني"
+  ],
+  "Frage zur Abrechnung stellen": [
+    "Ask about billing",
+    "Poser une question de facturation",
+    "Chiedi informazioni sulla fatturazione",
+    "استفسر عن الفواتير"
+  ],
+  "Fachzugang per E-Mail anfragen": [
+    "Request professional access by email",
+    "Demander un accès professionnel par e-mail",
+    "Richiedi l’accesso professionale via e-mail",
+    "اطلب وصول المختصين عبر البريد الإلكتروني"
   ]
 }

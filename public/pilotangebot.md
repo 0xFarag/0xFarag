@@ -43,7 +43,7 @@ Bei Abschluss eines Team- oder Consultancy-Jahresvertrags innert 30 Tagen nach d
 
 Für ein 20-minütiges Gespräch genügen ein anonymisierter Anwendungsfall, der gewünschte Übergabetermin und die Rolle des Reviewers. Das Pilotformular speichert die Anfrage lokal im Browser und erstellt einen Angebotsbrief. Über den Versand entscheiden Sie selbst.
 
-[Gespräch mit Nasser Aldin Farag anfragen](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [Preise und Offerte](https://authzledger.com/abos/) · [Stable 1.5.0](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0)
+[Pilotgespräch per E-Mail anfragen](mailto:contact@authzledger.com) · [Nasser Aldin Farag auf LinkedIn](https://www.linkedin.com/in/nasser-aldin-farag-974697412/) · [Preise und Offerte](https://authzledger.com/abos/) · [Stable 1.5.0](https://github.com/0xFarag/0xFarag/releases/tag/v1.5.0)
 
 Nasser Aldin Farag (0xFarag) · Founder & CEO · Schweiz
 

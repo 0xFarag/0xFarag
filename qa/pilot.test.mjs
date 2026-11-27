@@ -5,8 +5,9 @@ import {letter} from '../public/pilot.mjs';
 import workspace from '../api/workspace.js';
 test('Offer reflects explicit Guided selection and includes the acceptance and credit terms',()=>{
   const buyer={organisation:'Scope AG',contact:'A. Muster',email:'team@example.org',guided:false};
-  for(const lang of ['de','en','fr']) {
+  for(const lang of ['de','en','fr','it','ar']) {
     const basic=letter(buyer,lang,'2026-11-25');
+    assert.ok(basic.split('\n').includes('contact@authzledger.com'));
     assert.match(basic,/not_retested/);assert.match(basic,/Team.*Consultancy/);assert.match(basic,/© Nasser Aldin Farag/);assert.doesNotMatch(basic,/4’800/);
     const guided=letter({...buyer,guided:true},lang,'2026-11-25');assert.match(guided,/4’800/);assert.match(guided,/90/);
   }
