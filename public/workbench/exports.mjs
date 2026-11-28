@@ -1,8 +1,15 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
-import {statusLabels} from './model.mjs';
+import {importSources, statusLabels} from './model.mjs';
 
 const locales = ['de', 'en', 'fr', 'it', 'ar'];
 const labels = {
+  observations: ['Importierte Beobachtungen', 'Imported observations', 'Observations importées', 'Osservazioni importate', 'الملاحظات المستوردة'],
+  sourceFiles: ['Quellenregister', 'Source file register', 'Registre des fichiers sources', 'Registro dei file sorgente', 'سجل ملفات المصادر'],
+  tool: ['Werkzeug', 'Tool', 'Outil', 'Strumento', 'الأداة'],
+  workspace: ['Herkunft', 'Origin', 'Origine', 'Origine', 'المنشأ'],
+  synthetic: ['Synthetisches Beispiel', 'Synthetic example', 'Exemple synthétique', 'Esempio sintetico', 'مثال اصطناعي'],
+  localFiles: ['Eigene Quelldateien', 'User-supplied source files', 'Fichiers sources de l’utilisateur', 'File sorgente dell’utente', 'ملفات المصدر التي اختارها المستخدم'],
+  importScope: ['Mandatsumfang und Abdeckung sind ungeprüft. Die Beobachtungen stammen aus den importierten Dateien. Der Bericht ist unsigniert.', 'Engagement scope and coverage are unverified. The observations come from the imported files. This report is unsigned.', 'Le périmètre du mandat et sa couverture restent à vérifier. Les observations proviennent des fichiers importés. Ce rapport est non signé.', 'L’ambito del mandato e la copertura devono ancora essere verificati. Le osservazioni provengono dai file importati. Il rapporto non è firmato.', 'لم يتم التحقق من نطاق المهمة أو مدى التغطية. مصدر الملاحظات هو الملفات المستوردة. هذا التقرير غير موقّع.'],
   report: ['Kundenbericht', 'Client report', 'Rapport client', 'Rapporto per il cliente', 'تقرير العميل'],
   executive: ['Zusammenfassung', 'Executive summary', 'Synthèse', 'Sintesi', 'الملخص التنفيذي'],
   appendix: ['Technischer Beleganhang', 'Technical evidence appendix', 'Annexe technique des preuves', 'Allegato tecnico delle evidenze', 'ملحق الأدلة التقنية'],
@@ -88,6 +95,9 @@ function evidenceFields(model, row, t) {
   if (model.kind === 'retest') checkedDigest('current', row.details?.find(detail => detail.label === 'Aktueller Befund')?.value);
   if (row.status === 'confirmed') checkedDigest('findingHash', row.details?.find(detail => detail.label === 'Befund-Digest')?.value);
   if (row.reference) {
+    if (model.kind === 'evidence_index' && Object.hasOwn(importSources, row.reference.source)) {
+      fields.push([t('tool'), importSources[row.reference.source]]);
+    }
     if (row.reference.file_sha256 !== row.binding) checkedDigest('file', row.reference.file_sha256);
     const position = /^(Zeile|Datensatz) ([1-9][0-9]{0,6})$/u.exec(row.reference.locator);
     if (position) fields.push([t(position[1] === 'Zeile' ? 'line' : 'entry'), position[2]]);
@@ -178,6 +188,8 @@ const reportCss = `
   h1,h2,h3{line-height:1.2;color:#153765} h2{margin-top:2rem} article{border-top:1px solid #c8cfda}
   dl{display:grid;grid-template-columns:minmax(9rem,1fr) minmax(0,2fr);gap:.3rem 1rem}
   dt{font-weight:600} dd{margin:0;overflow-wrap:anywhere} ul{padding-inline-start:1.4rem}
+  .har-checks table{border-collapse:collapse;width:100%}.har-checks th,.har-checks td{text-align:start;padding:.4rem;border-bottom:1px solid #c8cfda}
+  .har-checks details{margin-block:1rem}.har-checks summary{font-weight:bold}.har-checks code{overflow-wrap:anywhere}
   @media(max-width:38rem){dl{display:block} dd{margin-bottom:.7rem}}
   @media print{body{max-width:none;padding:0;font-size:10pt} h2,h3{break-after:avoid} article{break-inside:avoid} @page{margin:16mm}}
 `;
@@ -199,8 +211,20 @@ export function makeCustomerReport(model, options = {}) {
   });
   const header = 'AuthzLedger · ' + t('report');
   const source = [[t('category'), t(model.kind)], [t('source'), model.digest]];
+  const imported = model.kind === 'evidence_index';
+  const registry = [];
+  if (imported && model.importIndex) {
+    source.push([t('workspace'), t(model.importIndex.workspace === 'example' ? 'synthetic' : 'localFiles')]);
+    for (const file of model.importIndex.sources) {
+      if (!Object.hasOwn(importSources, file.source) || !isDigest(file.sha256) || !Number.isSafeInteger(file.count) || file.count < 0) {
+        throw Error('Ungültiges Quellenregister.');
+      }
+      registry.push([importSources[file.source] + ' · ' + t('observations') + ' (' + file.count + ')', file.sha256]);
+    }
+  }
   if (isDigest(model.scope)) source.push([t('scope'), model.scope]);
-  const totals = [[t('count'), String(cases.length)], ...[...counts, ...workflows].map(([key, count]) => [t(key), String(count)])];
+  const boundaries = t(imported ? 'importScope' : 'boundaries');
+  const totals = [[t(imported ? 'observations' : 'count'), String(cases.length)], ...[...counts, ...workflows].map(([key, count]) => [t(key), String(count)])];
   const render = fields => isHtml
     ? '<dl>' + fields.map(([label,value]) => '<dt>' + html(label) + '</dt><dd><bdi>' + html(value) + '</bdi></dd>').join('') + '</dl>'
     : fields.map(([label,value]) => '- **' + label + '** · ' + value).join('\n');
@@ -210,10 +234,10 @@ export function makeCustomerReport(model, options = {}) {
       '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; base-uri \'none\'; form-action \'none\'">' +
       '<meta name="viewport" content="width=device-width,initial-scale=1"><title>' + html(header) + '</title><style>' + reportCss + '</style></head><body>' +
       '<header><h1>' + html(header) + '</h1>' + render(source) + '</header><main><h2>' + html(t('executive')) + '</h2>' + render(totals) +
-      '<p>' + html(t('boundaries')) + '</p><h2>' + html(t('appendix')) + '</h2>' +
+      '<p>' + html(boundaries) + '</p>' + (registry.length ? '<h2>' + html(t('sourceFiles')) + '</h2>' + render(registry) : '') + '<h2>' + html(t('appendix')) + '</h2>' +
       cases.map(c => '<article><h3>' + html(c.heading) + '</h3>' + render(c.fields) + '</article>').join('') + '</main><footer>' + rights + '</footer></body></html>\n';
   } else {
-    text = ['# ' + header, render(source), '## ' + t('executive'), render(totals), t('boundaries'), '## ' + t('appendix'),
+    text = ['# ' + header, render(source), '## ' + t('executive'), render(totals), boundaries, ...(registry.length ? ['## ' + t('sourceFiles'), render(registry)] : []), '## ' + t('appendix'),
       ...cases.map(c => '### ' + c.heading + '\n\n' + render(c.fields)), rights].join('\n\n') + '\n';
   }
   return {text, mime: (isHtml ? 'text/html' : 'text/markdown') + ';charset=utf-8',

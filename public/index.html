@@ -34,11 +34,11 @@
     <div class="hero-copy">
       <p class="release"><span aria-hidden="true"></span>Authorization Intelligence, built on evidence</p>
       <h1 id="produkt-titel">Wer hat Zugriff? <em>Was wurde behoben?</em></h1>
-      <p class="lead">Prüfen Sie Ihre eigenen Werkzeugexporte. Halten Sie fest, welche Kontrolle einen Befund stützt, welcher Fix nachgeprüft wurde und was für die Übergabe offen bleibt.</p>
+      <p class="lead">Öffnen Sie Ihre Werkzeugberichte gemeinsam im Browser. Vergleichen Sie Beobachtungen zum selben Host und erstellen Sie einen Bericht. Ihre Quelldateien bleiben auf Ihrem Gerät.</p>
       <div class="actions">
-        <a class="btn start-primary" href="/workbench/">Workbench öffnen</a> <a class="text-link" href="/studio/">Team-Anmeldung</a>
+        <a class="btn start-primary" href="/import/">Werkzeugportal öffnen</a> <a class="text-link" href="/workbench/">Workbench öffnen</a>
         <a class="btn ghost" href="/downloads/#team">Team-Workbench installieren</a>
-      </div><div class="proof-quick"><a href="#werkzeuge">Prüfwerkzeug wählen</a><a href="/downloads/#burp">Burp-Erweiterung herunterladen</a><a href="#pilot">Preise und Pilot</a><a href="#investoren">Investor-One-Pager</a>
+      </div><div class="proof-quick"><a href="#werkzeuge">Prüfwerkzeug wählen</a><a href="/dateipruefung/">Datei untersuchen</a><a href="/studio/">Team-Anmeldung</a><a href="/downloads/#burp">Burp-Erweiterung herunterladen</a>
       </div>
     </div>
     <form class="proof-box" id="beweis-cockpit" aria-labelledby="proof-title">
@@ -87,12 +87,12 @@
     <p class="intro">Alle vier Werkzeuge laufen ohne Anmeldung im Browser. Eigene Dateien bleiben auf Ihrem Gerät.</p>
   </div>
   <div class="task-grid">
+    <a href="/import/" class="task-card"><h3>Werkzeugberichte abgleichen</h3>
+      <p>Vergleichen Sie Beobachtungen aus verschiedenen Berichten zum selben Host. Jeder Eintrag verweist auf die Quelldatei und den Datensatz.</p><span class="task-meta">Quelldatei · Host · Bericht</span></a>
     <a href="/dateipruefung/" class="task-card"><h3>Datei untersuchen</h3>
       <p>Berechnen Sie den Fingerabdruck einer Datei und gleichen Sie ihn mit einer Hashliste oder einem vorhandenen VirusTotal-Bericht ab.</p><span class="task-meta">Datei · SHA-256</span></a>
     <a href="/rbac/" class="task-card"><h3>Berechtigung prüfen</h3>
       <p>Ermitteln Sie, ob ein Konto auf eine Kubernetes-Ressource zugreifen darf. Die Prüfung zeigt die zugehörige Rolle, Bindung und Regel.</p><span class="task-meta">Kubernetes · RBAC</span></a>
-    <a href="/import/" class="task-card"><h3>Werkzeugberichte abgleichen</h3>
-      <p>Vergleichen Sie Beobachtungen aus verschiedenen Berichten zum selben Host. Jeder Eintrag verweist auf die Quelldatei und den Datensatz.</p><span class="task-meta">Werkzeugexporte · 12 Importprofile</span></a>
     <a href="/workbench/" class="task-card"><h3>Belege beurteilen</h3>
       <p>Erfassen Sie eigene Fälle, prüfen Sie Befunde und exportieren Sie Entwicklertickets und Kundenberichte.</p><span class="task-meta">Belegindex · Befund · Retest</span></a>
   </div>
@@ -114,16 +114,18 @@
 </ol></div></section>
 <section class="section inputs" id="adapter"><div class="wrap">
   <div class="section-head"><div><p class="kicker">Belegimport</p><h2>Welche Exporte lassen sich auswerten?</h2></div>
-    <p class="intro">Der öffentliche Browser-Import unterstützt zwölf Profile. Er hält die gemeldete Beobachtung und ihre Herkunft fest. Ein bestätigter Autorisierungsbefund erfordert zusätzlich gültige Kontrollen.</p>
+    <p class="intro">Das Portal erkennt die unterstützten Exportformate am Inhalt. Jede Beobachtung bleibt mit der Quelldatei und ihrer Fundstelle verknüpft.</p>
   </div>
   <dl class="adapters">
     <div><dt>Web und API</dt><dd>Burp Suite, ZAP, HAR und OpenAPI</dd></div>
-    <div><dt>Dienste und Scannerberichte</dt><dd>Nmap XML, Nuclei JSONL, Nessus (.nessus) und Nikto</dd></div>
-    <div><dt>Gemeldete Pfade</dt><dd>ffuf, Gobuster und feroxbuster</dd></div>
-    <div><dt>Defensive Telemetrie</dt><dd>Normalisierte EDR- und SIEM-Beobachtungen zu Cobalt Strike</dd></div>
+    <div><dt>Netzwerk und Dienste</dt><dd>Nmap XML und Nessus (.nessus)</dd></div>
+    <div><dt>Scannerergebnisse</dt><dd>Nuclei JSONL, Nikto XML und sqlmap-Ergebnis-CSV</dd></div>
+    <div><dt>Gemeldete Pfade</dt><dd>DirBuster, ffuf, Gobuster und feroxbuster</dd></div>
+    <div><dt>Gruppen und Beziehungen</dt><dd>BloodHound-Gruppen und Neo4j-APOC-Inventare</dd></div>
+    <div><dt>Defensive Telemetrie</dt><dd>Falco-Ereignisse und normalisierte EDR-/SIEM-Meldungen zu Cobalt Strike</dd></div>
   </dl>
   <p class="edition-note">Die stabile Workbench 1.5.0 enthält sechs Importadapter für Burp, ZAP, HAR, OpenAPI, Nmap XML und Nuclei JSONL.</p>
-  <a class="text-link" href="/import/">Importformate ansehen</a>
+  <a class="text-link" href="/import/">Werkzeugportal öffnen</a>
 </div></section>
 
 <section id="distribution" class="section native"><div class="wrap">

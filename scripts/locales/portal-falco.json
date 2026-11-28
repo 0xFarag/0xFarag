@@ -1,0 +1,14 @@
+{
+  "Importieren Sie Falco-JSON-Ereignisse der Regel «Redirect STDOUT/STDIN to Network Connection in Container». Eine Meldung zeigt eine mögliche Reverse Shell an. Angezeigt werden Zeitpunkt und Priorität.": [
+    "Import Falco JSON events for the “Redirect STDOUT/STDIN to Network Connection in Container” rule. An alert indicates a possible reverse shell. The table shows its time and priority.",
+    "Importez les événements JSON de Falco pour la règle « Redirect STDOUT/STDIN to Network Connection in Container ». Une alerte signale un possible shell inversé. Le tableau indique l’heure et la priorité.",
+    "Importate gli eventi JSON di Falco per la regola «Redirect STDOUT/STDIN to Network Connection in Container». Un avviso indica una possibile shell inversa. La tabella mostra l’ora e la priorità.",
+    "استوردوا أحداث Falco بتنسيق JSON لقاعدة «Redirect STDOUT/STDIN to Network Connection in Container». يشير التنبيه إلى احتمال وجود اتصال صدفة عكسي. يعرض الجدول التوقيت والأولوية."
+  ],
+  "Erwartet werden JSON-Zeilen mit der unterstützten Falco-Regel, UTC-Zeitpunkt und gültiger Priorität.": [
+    "Each JSON line requires the supported Falco rule, a UTC timestamp and a valid priority.",
+    "Chaque ligne JSON doit contenir la règle Falco prise en charge, un horodatage UTC et une priorité valide.",
+    "Ogni riga JSON deve contenere la regola Falco supportata, un orario UTC e una priorità valida.",
+    "يجب أن يتضمن كل سطر JSON قاعدة Falco المدعومة وطابعاً زمنياً بتوقيت UTC وأولوية صالحة."
+  ]
+}

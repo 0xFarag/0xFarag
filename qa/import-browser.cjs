@@ -12,7 +12,10 @@ module.exports = async function verifyLocalImport(page, origin) {
   page.on('request', observe);
   try {
     const adapters = page.locator('#adapter');
-    const sources = ['nikto', 'ffuf', 'gobuster', 'nmap', 'burp', 'nessus', 'cobalt', 'zap', 'har', 'openapi', 'nuclei', 'feroxbuster'];
+    const sources = ['nikto', 'ffuf', 'gobuster', 'nmap', 'burp', 'nessus', 'cobalt', 'zap', 'har', 'openapi', 'nuclei', 'feroxbuster',
+      'dirbuster', 'sqlmap', 'bloodhound', 'neo4j', 'falco'];
+    const saveReport = page.locator('#save-report');
+    assert.equal(await saveReport.isDisabled(), true);
     const options = await adapters.locator('option').evaluateAll(nodes => nodes.map(node => node.value));
     assert.deepEqual([...options].sort(), ['auto', ...sources].sort());
     assert.equal(await adapters.inputValue(), 'auto');
@@ -33,7 +36,13 @@ module.exports = async function verifyLocalImport(page, origin) {
     await page.locator('#filter').selectOption('nessus');
     assert.equal(await page.locator('#body tr td:first-child').first().innerText(), 'Nessus');
 
+    const [sampleReport] = await Promise.all([page.waitForEvent('download'), saveReport.click()]);
+    const sampleHtml = await fs.readFile(await sampleReport.path(), 'utf8');
+    assert.match(sampleHtml, /Synthetisches Beispiel/);
+    for (const source of ['Nmap', 'DirBuster', 'sqlmap', 'Neo4j', 'BloodHound', 'Falco']) assert.ok(sampleHtml.includes(source));
     await page.locator('#real').click();
+    assert.equal(await saveReport.isDisabled(), true);
+    assert.equal(await page.locator('#report-status').innerText(), '');
     assert.equal(await page.locator('#files code').count(), 0);
     await adapters.selectOption('ffuf');
     const buffer = Buffer.from(JSON.stringify({results:[{url:'https://example.invalid/sample',status:200}]}));
@@ -63,7 +72,49 @@ module.exports = async function verifyLocalImport(page, origin) {
     const [download] = await Promise.all([page.waitForEvent('download'), asset.getByRole('button',{name:'Belegindex als JSON speichern',exact:true}).click()]);
     const exported = await fs.readFile(await download.path());
     assert.doesNotMatch(exported.toString(), /sensitive-client|example.invalid|\/relative/);
-    assert.deepEqual(requests, [], 'Opening local exports must not make network requests');
+    await page.locator('#filter').selectOption('gobuster');
+    const [clientReport] = await Promise.all([page.waitForEvent('download'), saveReport.click()]);
+    const html = await fs.readFile(await clientReport.path(), 'utf8');
+    assert.equal((html.match(/<article>/g) || []).length, 3, 'Report includes every source even when the table is filtered');
+    assert.match(html, /Quellenregister/);
+    assert.match(html, /ffuf · Importierte Beobachtungen \(1\)/);
+    assert.match(html, /Gobuster · Importierte Beobachtungen \(2\)/);
+    assert.ok(html.includes(createHash('sha256').update(exported).digest('hex')));
+    assert.ok(html.includes(digest));
+    assert.doesNotMatch(html, /sensitive-client|example.invalid|\/relative|Synthetisches Beispiel|<script|Fälle im Umfang/);
+    await page.locator('#clear').click();
+    assert.equal(await saveReport.isDisabled(), true);
+    const entries = [
+      [{name:'X-Content-Type-Options',value:'nosniff'}, {name:'Strict-Transport-Security',value:'max-age=86400'}],
+      [{name:'Content-Type',value:'text/html'}], undefined, []
+    ].map((headers, i) => ({
+      request:{method: i === 3 ? 'POST' : 'GET', url:'https://private.invalid/private-har'},
+      response:{status:200, content:{mimeType:'text/html',text:'PRIVATE-BODY'}, headers}
+    }));
+    const harBytes = Buffer.from(JSON.stringify({log:{version:'1.2',entries}}));
+    const harHash = createHash('sha256').update(harBytes).digest('hex');
+    await page.locator('#file').setInputFiles({name:'private-session.har',mimeType:'application/json',buffer:harBytes});
+    const headerChecks = page.locator('#har-checks');
+    await headerChecks.waitFor();
+    assert.deepEqual(await headerChecks.locator('tbody tr').allTextContents(),
+      ['Strict-Transport-Security111','X-Content-Type-Options111']);
+    await headerChecks.locator('summary').click();
+    const trace = await headerChecks.innerText();
+    assert.ok(trace.includes(harHash) && trace.includes('Header fehlt im Mitschnitt · Datensätze 2'));
+    assert.ok(trace.includes('Headerdaten fehlen oder sind unvollständig · Datensätze 3'));
+    assert.doesNotMatch(trace, /private-har|private.invalid|private-session|PRIVATE-BODY|max-age|Datensätze 4/);
+    const [checked] = await Promise.all([page.waitForEvent('download'), saveReport.click()]);
+    const checkedHtml = await fs.readFile(await checked.path(), 'utf8');
+    assert.ok(checkedHtml.includes('Headerprüfung im HAR-Mitschnitt') && checkedHtml.includes(harHash));
+    assert.match(checkedHtml, /Header fehlt im Mitschnitt · Datensätze 2/);
+    assert.match(checkedHtml, /<details open/);
+    assert.doesNotMatch(checkedHtml, /private-har|private.invalid|private-session|PRIVATE-BODY|max-age/);
+    await page.locator('#examples').click();
+    assert.ok(!(await headerChecks.textContent()).includes(harHash));
+    await page.locator('#real').click();
+    await page.locator('#clear').click();
+    assert.equal(await headerChecks.isVisible(), false);
+    assert.deepEqual(requests, [], 'Opening files and exporting their report must not make network requests');
     page.off('request', observe);
     await page.getByRole('link', {name:'Zur Evidence Workbench'}).click();
     const [fileChooser] = await Promise.all([page.waitForEvent('filechooser'),

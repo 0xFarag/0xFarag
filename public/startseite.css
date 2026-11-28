@@ -102,7 +102,7 @@
 .home .workflow .metrics span, .home .workflow .metrics-title { color: var(--steel); }
 .home .workflow .metrics strong, .home .workflow .metrics b { color: var(--blue-ink); }
 .home .inputs { background: white; }
-.home .adapters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.home .adapters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .home .edition-note { color: var(--steel); margin-top: 1.5rem; max-width: 80ch; }
 .home .pilot-card .text-link { color: #f4d79f; }
 .home .adapters > div { border-color: var(--brass); }

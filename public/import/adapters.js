@@ -3,7 +3,11 @@
 const AuthzImport = (() => {
   const limits = Object.freeze({bytes: 1048576, rows: 1000, files: 20, totalBytes: 5242880, totalRows: 2500});
   const utf8 = new TextEncoder();
+  const directoryProfiles = typeof AuthzDirectoryProfiles === 'undefined' ? null : AuthzDirectoryProfiles;
+  const graphProfiles = typeof AuthzGraphProfiles === 'undefined' ? null : AuthzGraphProfiles;
+  const falcoProfile = typeof AuthzFalcoProfile === 'undefined' ? null : AuthzFalcoProfile;
   const definitions = Object.freeze({
+    ...directoryProfiles?.definitions, ...graphProfiles?.definitions, ...falcoProfile?.definitions,
     nikto: {label: 'Nikto', format: 'XML · Nikto-Einträge', accept: '.xml', hint: 'UTF-8-XML mit niktoscans/niktoscan oder niktoscan als Wurzel, ohne DTD. Gelesen werden scandetails/item, Host oder IP und numerische Item-ID. Die Tabelle blendet Beschreibung, URI und Header aus.'},
     ffuf: {label: 'ffuf', format: 'JSON · ffuf-Ergebnisse', accept: '.json', hint: 'UTF-8-JSON mit results-Liste. Jeder Datensatz benötigt eine absolute HTTP(S)-Adresse in url und einen numerischen HTTP-Status in status. Eingaben, Antwortinhalte, Pfade und Query-Parameter werden ausgeblendet.'},
     feroxbuster: {label: 'feroxbuster', format: 'NDJSON · HTTP-Antworten', accept: '.json,.jsonl,.ndjson', hint: 'Ein JSON-Objekt je Zeile. Antwortzeilen liefern Methode, HTTP-Status und den Host der gemeldeten Antwort-URL. Konfiguration, Statistik und Logmeldungen zählen nicht als Beobachtungen. Mindestens eine Antwort und höchstens 4’096 Zeilen. Pfade, Weiterleitungsziele und Header bleiben ausgeblendet.'},
@@ -18,6 +22,7 @@ const AuthzImport = (() => {
     cobalt: {label: 'Cobalt-Strike-Telemetrie', format: 'JSON · normalisierte defensive Ereignisse', accept: '.json', hint: 'Nur kundenseitig normalisierte EDR-/SIEM-Ereignisse im unten gezeigten JSON-Format. Jedes Ereignis enthält genau record_id, asset, observed_at (UTC) und event_type (detection, containment oder review). Native Cobalt-Strike-Logs und Operator-Daten werden abgelehnt.'}
   });
   const samples = Object.freeze({
+    ...directoryProfiles?.samples, ...graphProfiles?.samples, ...falcoProfile?.samples,
     nikto: '<niktoscan><scandetails targethostname="training.example"><item id="000017"><description>Fixture</description></item></scandetails></niktoscan>',
     ffuf: '{"results":[{"url":"https://training.example/first","status":200},{"url":"https://training.example/second","status":403},{"url":"https://training.example/first","status":200}]}',
     feroxbuster: '{"type":"response","url":"https://training.example/profile","original_url":"https://training.example/","path":"/profile","wildcard":false,"status":200,"method":"GET","content_length":64,"line_count":1,"word_count":4,"headers":{},"extension":"","truncated":false,"timestamp":1767225600}',
@@ -26,7 +31,7 @@ const AuthzImport = (() => {
     burp: '<issues burpVersion="example"><issue><serialNumber>1001</serialNumber><type>1234</type><host>https://training.example</host><severity>Information</severity></issue></issues>',
     nessus: '<NessusClientData_v2><Report name="Example"><ReportHost name="training.example"><ReportItem pluginID="123" port="443" protocol="tcp" severity="0"/></ReportHost></Report></NessusClientData_v2>',
     zap: '{"@version":"2.15.0","site":[{"@name":"https://training.example","alerts":[{"pluginid":"10001","riskcode":"1","instances":[{"uri":"https://training.example/profile","method":"GET","param":""}]}]}]}',
-    har: '{"log":{"version":"1.2","creator":{"name":"Beispiel","version":"1"},"entries":[{"request":{"method":"GET","url":"https://training.example/profile"},"response":{"status":200}}]}}',
+    har: '{"log":{"version":"1.2","creator":{"name":"Beispiel","version":"1"},"entries":[{"request":{"method":"GET","url":"https://training.example/profile"},"response":{"status":200,"content":{"mimeType":"text/html"},"headers":[{"name":"X-Content-Type-Options","value":"nosniff"}]}}]}}',
     openapi: '{"openapi":"3.1.0","info":{"title":"Beispiel","version":"1"},"servers":[{"url":"https://training.example"}],"paths":{"/profile":{"get":{"responses":{"200":{"description":"OK"}}}}}}',
     nuclei: '{"template-id":"example-observation","info":{"severity":"info"},"type":"http","matched-at":"https://training.example/profile","matcher-status":true}',
     cobalt: '{"schema":"authzledger.defensive-telemetry.v1","source":"cobalt-strike","events":[{"record_id":"example-1","asset":"training.example","observed_at":"2026-01-15T10:00:00Z","event_type":"detection"}]}'
@@ -182,9 +187,10 @@ const AuthzImport = (() => {
       const status = entry.response?.status;
       requireThat(Number.isInteger(status) && (status === 0 || (status >= 100 && status <= 599)), 'Ungültiger HAR-Antwortstatus.');
       const detail = method + ' · ' + (status === 0 ? 'Keine HTTP-Antwort' : 'HTTP ' + status);
-      // Headers and bodies may contain credentials. They contribute to digests only.
+      // Evaluate the capture locally. Only the fixed control classifications pass to the UI.
+      const controls = typeof AuthzHarControls === 'undefined' ? null : AuthzHarControls.assess(entry);
       const identity = [request.method, request.url, request.postData ?? null];
-      add(url.hostname, detail, serialise(entry), serialise(identity));
+      add(url.hostname, detail, serialise(entry), serialise(identity), undefined, controls);
     }
   }
   function openapiServer(servers) {
@@ -289,12 +295,16 @@ const AuthzImport = (() => {
   function parseRecords(source, input) {
     let position = 0;
     const records = [];
-    function add(asset, detail, raw, identity, locator) {
+    function add(asset, detail, raw, identity, locator, controls) {
       position++;
       requireThat(position <= limits.rows, 'Mehr als 1’000 Datensätze. Teile den Export lokal auf.');
-      records.push({asset, detail, raw, identity, locator: locator || 'Datensatz ' + position});
+      records.push({asset, detail, raw, identity, locator: locator || 'Datensatz ' + position, controls});
     }
-    if (Object.hasOwn(jsonProfiles, source)) {
+    if (directoryProfiles && Object.hasOwn(directoryProfiles.definitions, source)) {
+      directoryProfiles.parse(source, input, add, {requireThat});
+    } else if (source === 'falco' && falcoProfile) {
+      falcoProfile.parse(input, add, {json, requireThat, object});
+    } else if (Object.hasOwn(jsonProfiles, source)) {
       jsonProfiles[source](input, add);
     } else if (source === 'ffuf') {
       const report = json(input);
@@ -362,7 +372,8 @@ const AuthzImport = (() => {
   }
   function detectSource(input) {
     const text = input.trimStart();
-    const feroxTypes = ['response','configuration','statistics','log'];
+    const directoryFormat = directoryProfiles?.detect(text);
+    if (directoryFormat) return directoryFormat;
     if (text.startsWith('<')) {
       const body = safeXmlBody(text, ['nmaprun', 'issues']);
       const root = /^<([\w.-]+)(?=[\s/>])/.exec(body)?.[1];
@@ -371,19 +382,22 @@ const AuthzImport = (() => {
       if (xmlFormats.has(root)) return xmlFormats.get(root);
     } else if (text.startsWith('{')) {
       let envelope;
+      let multiline = false;
       try { envelope = JSON.parse(text); } catch {
-        const firstLine = text.split(/\r?\n/, 1)[0];
-        try { envelope = JSON.parse(firstLine); } catch { throw new ImportError('Ungültiges JSON oder JSONL.'); }
-        if (typeof envelope?.['template-id'] === 'string') return 'nuclei';
-        if (feroxTypes.includes(envelope?.type)) return 'feroxbuster';
-        throw new ImportError('Unbekanntes JSONL-Profil.');
+        envelope = json(text.split(/\r?\n/, 1)[0]);
+        multiline = true;
       }
       const markers = [['results','ffuf'], ['site','zap'], ['log','har'], ['openapi','openapi'],
         ['template-id','nuclei'], ['events','cobalt']];
-      const matches = markers.filter(([key]) => Object.hasOwn(envelope, key));
-      if (feroxTypes.includes(envelope.type)) matches.push(['type','feroxbuster']);
-      if (matches.length === 1) return matches[0][1];
+      const matches = markers.filter(([key]) => Object.hasOwn(envelope, key)).map(([,source]) => source);
+      if (['response','configuration','statistics','log'].includes(envelope.type)) matches.push('feroxbuster');
+      for (const profile of [graphProfiles, falcoProfile]) {
+        const match = profile?.detect(envelope);
+        if (match) matches.push(match);
+      }
       if (matches.length > 1) throw new ImportError('Das JSON enthält Kennzeichen mehrerer Formate. Wähle das Quellformat ausdrücklich.');
+      if (matches.length && (!multiline || ['nuclei','feroxbuster','neo4j','falco'].includes(matches[0]))) return matches[0];
+      if (multiline) throw new ImportError('Unbekanntes JSONL-Profil.');
     } else if (/^\S+[^\S\r\n]+\(Status:\s*\d{3}\)/i.test(text)) {
       return 'gobuster';
     }
@@ -397,14 +411,23 @@ const AuthzImport = (() => {
     try { input = new TextDecoder('utf-8',{fatal:true}).decode(buffer); } catch { throw new ImportError('Ungültiger UTF-8-Text.'); }
     requireThat(!input.includes('\0'), 'Binärdateien werden abgelehnt.');
     if (source === 'auto') source = detectSource(input);
-    const records = parseRecords(source,input);
+    const fileDigest = await digest(buffer);
+    const records = graphProfiles && Object.hasOwn(graphProfiles.definitions, source)
+      ? await graphProfiles.records(source, input, {fileDigest, digest, ImportError})
+      : parseRecords(source, input);
     const assetHashes = new Map();
-    const normalised = await Promise.all(records.map(async ({asset,detail,raw,identity,locator}) => {
+    const normalised = await Promise.all(records.map(async ({asset,detail,raw,identity,locator,controls}) => {
       const key = asset.toLowerCase();
       if (key && !assetHashes.has(key)) assetHashes.set(key,digest(key));
-      return {identity: identity ? await digest(JSON.stringify([source,key,identity])) : null, asset: key ? (await assetHashes.get(key)).slice(0,16) : '', detail, locator, fingerprint: await digest(JSON.stringify([source,key,raw]))};
+      const row = {
+        identity: identity ? await digest(JSON.stringify([source,key,identity])) : null,
+        asset: key ? (await assetHashes.get(key)).slice(0,16) : '',
+        detail, locator, fingerprint: await digest(JSON.stringify([source,key,raw]))
+      };
+      if (controls?.length) row.controls = controls;
+      return row;
     }));
-    return {source, bytes:buffer.byteLength, digest:await digest(buffer), rows:normalised};
+    return {source, bytes:buffer.byteLength, digest:fileDigest, rows:normalised};
   }
   return Object.freeze({limits,definitions,samples,parse,digest,ImportError});
 })();

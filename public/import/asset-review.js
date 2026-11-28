@@ -131,8 +131,12 @@ const AuthzAssets = (() => {
     update();
   }
 
+  function serializeIndex(index) {
+    return JSON.stringify(index, null, 2) + '\n';
+  }
+
   function saveIndex(index) {
-    const contents = new Blob([JSON.stringify(index, null, 2) + '\n'], {type: 'application/json'});
+    const contents = new Blob([serializeIndex(index)], {type: 'application/json'});
     const url = URL.createObjectURL(contents);
     const link = element('a');
     link.href = url;
@@ -198,5 +202,5 @@ const AuthzAssets = (() => {
     container.append(element('p', 'Der unsignierte Index enthält Werkzeugnamen, Hashwerte, Asset-IDs und Quellenpositionen. Bewahre ihn zusammen mit den Originalexporten auf.'));
   }
 
-  return Object.freeze({createIndex, groupIndex, render});
+  return Object.freeze({createIndex, groupIndex, serializeIndex, render});
 })();

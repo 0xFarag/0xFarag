@@ -295,9 +295,10 @@ function exactFields(record, names) {
     'Das Datenobjekt enthält unbekannte oder fehlende Felder.');
 }
 
-const importSources = Object.freeze({
+export const importSources = Object.freeze({
   nikto: 'Nikto', ffuf: 'ffuf', gobuster: 'Gobuster', feroxbuster: 'feroxbuster', nmap: 'Nmap', burp: 'Burp Suite', nessus: 'Nessus',
-  cobalt: 'Cobalt-Strike-Telemetrie (EDR/SIEM)', zap: 'OWASP ZAP', har: 'HAR', openapi: 'OpenAPI', nuclei: 'Nuclei'
+  cobalt: 'Cobalt-Strike-Telemetrie (EDR/SIEM)', zap: 'OWASP ZAP', har: 'HAR', openapi: 'OpenAPI', nuclei: 'Nuclei',
+  neo4j: 'Neo4j', bloodhound: 'BloodHound', sqlmap: 'sqlmap', dirbuster: 'DirBuster', falco: 'Falco'
 });
 
 function evidenceIndexProjection(input) {

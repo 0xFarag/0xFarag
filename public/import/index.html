@@ -5,23 +5,28 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src data:; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
 <meta name="referrer" content="no-referrer"><meta name="theme-color" content="#071722">
-<title>Lokaler Belegimport | AuthzLedger</title>
+<title>Werkzeugportal | AuthzLedger</title>
 <link rel="stylesheet" href="./styles.css">
-<script src="../i18n/tool-copy.js" defer></script><script src="./adapters.js" defer></script><script src="./compare.js" defer></script><script src="./asset-review.js" defer></script><script src="./app.js" defer></script>
+<script src="../i18n/tool-copy.js" defer></script><script src="./directory-profiles.js" defer></script><script src="./graph-profiles.js" defer></script><script src="./alert-profile.js" defer></script><script src="./har-controls.js" defer></script><script src="./adapters.js" defer></script><script src="./compare.js" defer></script><script src="./asset-review.js" defer></script><script type="module" src="./app.js"></script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt</a>
 <header><div class="bar"><!-- Embedded product icon keeps image loads offline. -->
-<a class="brand" href="/"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAgVBMVEUIFy0PHC8ADCp5Z0gcJDHhsV/otmCJc0v2wWQtMTbquWEmKzSfgk/5w2T5w2VAPjryvmPot2C4lFWUek1UTD7LolrtuWFoWkKwj1UUHS/Wql3vvGP8xWWafk+dgU/esF41NjftumJ/bEnDnVmmh1FbT0D/1GtJRDxuX0X1wGNcUkCUOV2xAAABkklEQVRIx+1U0XKCMBAsp43hMJjEQhGQQsFS/f8P7CVhqq2gYaYPfXCfmHDL3t5teHp64D8jCOaVw2IBsyjLZ7acJbDifDVDAkJEZBH4E9aCsdhfAjZSzZIAzYnAxNZPIoAXwVARRflKJFIpmSKLtz6EAF5jpniWGB+hD2OXS8QiWpQ0qP19AoUipsoKlm8pYuohQYXKFDri/t6gKBRUJyqq85OAiKErc70R9Y7AVlgHQ3PErW8yIKQabGrTeQDvpevuhg2TOkWRcNjlzoXDaH1NK0Cpq7VFlTfImnZvn7vDCAU6bjzzWFjEDcpCitIg/hiJIvQmDuwMTJM2SVqL/PNaAbIjCfABhUn4zV8B9OYaYNYZZJ1uyDFrB+jkWgH0USnRDUOBgCzTBMpyyoMT4Jvh3G6auuoqh+4EVwKcMZ6dj00MGT/AxB6sgOL99wubQyUTs/RRy1rS9/TFhyiI5p6eRgcVQE8jZRcCNomU16KdGKoWaSr0T9EIZZqWh3GJ2uD3Dzg0h9HE2kYnMZnTB/4WX6jMHmAsD0h8AAAAAElFTkSuQmCC" width="40" height="40" alt="">AuthzLedger</a><nav aria-label="Hauptnavigation"><a href="/#werkzeuge">Arbeitsbereich</a><a href="/downloads/">Downloads</a><a href="/fachzugang/">Fachzugang</a></nav></div></header>
+<a class="brand" href="/"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAgVBMVEUIFy0PHC8ADCp5Z0gcJDHhsV/otmCJc0v2wWQtMTbquWEmKzSfgk/5w2T5w2VAPjryvmPot2C4lFWUek1UTD7LolrtuWFoWkKwj1UUHS/Wql3vvGP8xWWafk+dgU/esF41NjftumJ/bEnDnVmmh1FbT0D/1GtJRDxuX0X1wGNcUkCUOV2xAAABkklEQVRIx+1U0XKCMBAsp43hMJjEQhGQQsFS/f8P7CVhqq2gYaYPfXCfmHDL3t5teHp64D8jCOaVw2IBsyjLZ7acJbDifDVDAkJEZBH4E9aCsdhfAjZSzZIAzYnAxNZPIoAXwVARRflKJFIpmSKLtz6EAF5jpniWGB+hD2OXS8QiWpQ0qP19AoUipsoKlm8pYuohQYXKFDri/t6gKBRUJyqq85OAiKErc70R9Y7AVlgHQ3PErW8yIKQabGrTeQDvpevuhg2TOkWRcNjlzoXDaH1NK0Cpq7VFlTfImnZvn7vDCAU6bjzzWFjEDcpCitIg/hiJIvQmDuwMTJM2SVqL/PNaAbIjCfABhUn4zV8B9OYaYNYZZJ1uyDFrB+jkWgH0USnRDUOBgCzTBMpyyoMT4Jvh3G6auuoqh+4EVwKcMZ6dj00MGT/AxB6sgOL99wubQyUTs/RRy1rS9/TFhyiI5p6eRgcVQE8jZRcCNomU16KdGKoWaSr0T9EIZZqWh3GJ2uD3Dzg0h9HE2kYnMZnTB/4WX6jMHmAsD0h8AAAAAElFTkSuQmCC" width="40" height="40" alt="">AuthzLedger</a><nav aria-label="Hauptnavigation"><a href="/#werkzeuge">Arbeitsbereich</a><a href="/dateipruefung/">Dateiprüfung</a><a href="/downloads/">Downloads</a><a href="/fachzugang/">Fachzugang</a></nav></div></header>
 <main id="inhalt">
-<h1>Lokaler Belegimport</h1>
-<p class="lead">Vergleichen Sie Werkzeugberichte aus einem Mandat und verfolgen Sie jede Beobachtung bis zum Quelldatensatz. Welche Systeme zum Mandat gehören und welche Kontrollen greifen, beurteilen Sie anschliessend.</p>
+<h1>Werkzeugportal</h1>
+<p class="lead">Öffnen Sie die Werkzeugberichte eines Mandats gemeinsam im Browser. Vergleichen Sie Beobachtungen zum selben System und erstellen Sie einen Kundenbericht. Ihre Quelldateien bleiben in diesem Tab.</p>
 <section class="panel ingest" aria-labelledby="input-heading">
 <div class="row between"><h2 id="input-heading">Quelldateien</h2><div class="switch" aria-label="Arbeitsbereich"><button id="real" aria-pressed="true">Eigene Dateien</button><button id="examples" aria-pressed="false">Beispiele</button></div></div>
 <p id="context"></p>
 <div class="row controls"><label for="adapter">Quellformat<select id="adapter"></select></label><div class="row buttons"><input id="file" type="file" multiple hidden><button class="primary" id="add">Dateien auswählen</button><button id="follow" hidden>Folgebeispiel hinzufügen</button></div></div>
 <p id="hint"></p><details id="sample-detail"><summary>Synthetisches Formatbeispiel ansehen</summary><pre id="sample"></pre></details>
 <p class="status" id="status" role="status" aria-live="polite"></p>
+</section>
+<section id="har-checks" class="panel" hidden></section>
+<section class="panel" aria-labelledby="report-heading">
+<div class="row between"><div><h2 id="report-heading">Kundenbericht</h2><p>Der druckbare HTML-Bericht enthält alle importierten Quellen mit Prüfsummen und Beobachtungszahlen.</p></div><button id="save-report" disabled>Bericht als HTML speichern</button></div>
+<p class="status" id="report-status" role="status"></p>
 </section>
 <section class="panel" aria-labelledby="review-heading">
 <div class="row between"><h2 id="review-heading">Beobachtungen</h2><button id="clear" disabled>Arbeitsbereich leeren</button></div>
