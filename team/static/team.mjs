@@ -520,7 +520,11 @@ $('login-form').addEventListener('submit',run(async () => {
   try { await signedIn(await request('/api/login','POST',formData('login-form'))); }
   finally { $('password').value = ''; authenticating = false; }
 }));
-$('logout').addEventListener('click',run(async () => { await request('/api/logout','POST',{}); signedOut(); }));
+$('logout').addEventListener('click',run(async () => {
+  reputation.resetInputs();
+  await request('/api/logout','POST',{});
+  signedOut();
+}));
 $('locale').addEventListener('change',run(async () => {
   const selected = $('locale').value;
   if (session) {

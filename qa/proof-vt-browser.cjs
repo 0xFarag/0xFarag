@@ -85,6 +85,17 @@ test('file hashes and imported reports stay local until explicit hash-only looku
   await output.getByText(/Treffer vorhanden/).waitFor();
   await page.locator('#locale').selectOption('fr');
   await output.getByText(/Détections signalées/).waitFor();
+  await page.locator('[data-view=members]').click();
+  await page.locator('details:has(> #team-form) > summary').click();
+  await page.locator('#team-name').fill('Independent workspace');
+  await page.locator('#team-form button').click();
+  await page.getByRole('heading',{name:'Independent workspace',exact:true}).waitFor();
+  await page.locator('[data-view=reputation]').click();
+  assert.equal(await hash.inputValue(),'');
+  assert.equal(await output.textContent(),'');
+  await hash.fill(sha);
+  await importLocal({suspicious:1});
+  await output.getByText(/Détections signalées/).waitFor();
   await page.locator('#logout').click();
   await page.locator('#login-panel').waitFor({state:'visible'});
   assert.equal(await hash.inputValue(),'');

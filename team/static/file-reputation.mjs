@@ -134,5 +134,5 @@ export function createFileReputation({request,t,download,onUnauthorized}) {
     if (version===accessRevision) render();
   }
   function clear() { ++accessRevision; path=null; access=null; reset(); }
-  return {render,open,clear};
+  return {render,open,clear,resetInputs:reset};
 }
