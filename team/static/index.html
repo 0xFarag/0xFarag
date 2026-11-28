@@ -21,9 +21,25 @@
 <section id="workspace" hidden>
 <div class="workspace-head"><div><p class="overline" data-key="teamWorkspace"></p><h1 id="team-heading"></h1></div><div class="identity"><span id="account-name" dir="auto"></span><span id="account-role"></span><details class="profile"><summary data-key="account"></summary><form id="password-form"><label for="current-password" data-key="currentPassword"></label><input id="current-password" name="current_password" type="password" required autocomplete="current-password"><label for="next-password" data-key="newPassword"></label><input id="next-password" name="password" type="password" minlength="12" maxlength="256" required autocomplete="new-password"><button class="secondary" type="submit" data-key="changePassword"></button></form></details></div></div>
 <nav class="panel-nav" aria-label="Workspace" data-aria="sections"><div id="nav-buttons">
-<button type="button" data-view="proof" data-key="proofStudio"></button><button type="button" data-view="cases" data-key="cases"></button><button type="button" data-view="members" data-key="members"></button><button type="button" data-view="audit" data-key="audit"></button></div>
+<button type="button" data-view="proof" data-key="proofStudio"></button><button type="button" data-view="reputation" data-key="fileInspection"></button><button type="button" data-view="cases" data-key="cases"></button><button type="button" data-view="members" data-key="members"></button><button type="button" data-view="audit" data-key="audit"></button></div>
 <div class="team-picker"><label for="team-select" data-key="team"></label><select id="team-select"></select></div></nav>
 <section id="view-proof" hidden></section>
+<section id="view-reputation" class="card" hidden aria-labelledby="reputation-heading">
+<h2 id="reputation-heading" data-key="fileInspection"></h2>
+<div class="pair">
+<div><label for="rep-file" data-key="repFile"></label><input type="file" id="rep-file"></div>
+<div><label for="rep-hash" data-key="repHash"></label><input id="rep-hash" type="text" dir="ltr" maxlength="512" spellcheck="false" autocomplete="off" placeholder="SHA-256"></div>
+</div>
+<p id="rep-local" role="status"></p>
+<section class="section"><h3 data-key="repReputation"></h3>
+<label for="rep-json" data-key="repJson"></label><input type="file" id="rep-json" accept=".json,application/json" disabled>
+<p id="rep-access"></p><p class="fine" data-key="repPrivacy"></p>
+<button type="button" class="primary" id="rep-lookup" data-key="repLookup" disabled></button>
+<button type="button" class="secondary" id="rep-export" data-key="repExport" disabled></button>
+<button type="button" class="secondary" id="rep-clear" data-key="repClear" disabled></button>
+</section>
+<section class="section" id="rep-result" aria-live="polite" aria-atomic="true"></section>
+</section>
 <section id="view-cases" hidden>
 <div class="grid">
 <aside class="card case-list"><div class="section-heading"><h2 data-key="cases"></h2><button type="button" id="cases-reload" class="secondary slim" data-key="refresh"></button></div>

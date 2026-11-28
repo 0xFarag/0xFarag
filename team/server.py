@@ -28,7 +28,7 @@ from urllib.parse import urlsplit
 
 if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from team import evidence, keyring, review_records, proof_api
+from team import evidence, keyring, review_records, proof_api, file_reputation
 
 ROLES = ('admin', 'lead_pentester', 'pentester', 'reviewer', 'read_only')
 WRITERS = frozenset(ROLES[:3])
@@ -168,6 +168,7 @@ def initialize(data_dir):
     with closing(connect(directory)) as db:
         db.execute('PRAGMA journal_mode=WAL')
         db.executescript(SCHEMA)
+        db.executescript(file_reputation.SCHEMA)
         evidence.init_db(db)
         proof_api.init_db(db)
 
@@ -348,6 +349,17 @@ def _team_route(db,data_dir,tid,user,role,method,parts,body,session_hash=None,no
 def dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local',now=None,bearer=None):
     args=dict(token=token,csrf=csrf,client=client,now=now,bearer=bearer)
     result, session_token = _dispatch(data_dir,method,path,body,**args)
+    if result.get('prepareReputation'):
+        try:
+            summary = file_reputation.read_report(result['sha256'])
+            completion = (result['prepareReputation'], summary, None)
+        except file_reputation.Error as exc:
+            completion = (result['prepareReputation'], None, exc)
+        # Run the same session, membership, role and CSRF checks again after the network call.
+        result, session_token = _dispatch(data_dir,method,path,body,reputation_completion=completion,**args)
+        if 'reputationError' in result:
+            raise file_reputation.Error(*result['reputationError'])
+        return result,session_token
     if not result.get('prepareZap'): return result,session_token
     # No database lock is held during the loopback read. Membership, CSRF, session expiry
     # and the expected ledger version are all checked again before committing observations.
@@ -359,7 +371,7 @@ def dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local
     return _dispatch(data_dir,method,path,body,zap_data=data,**args)
 
 
-def _dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local',now=None,bearer=None,zap_data=None,zap_error=None):
+def _dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='local',now=None,bearer=None,zap_data=None,zap_error=None,reputation_completion=None):
     """One database transaction per request. Return JSON and newly issued/deleted session token."""
     now=int(time.time()) if now is None else now
     body={} if body is None else body
@@ -370,7 +382,7 @@ def _dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='loca
     action=method.lower()
     resource_parts = {'login','logout','session','me','teams','members','audit','cases','control-reviews','imports',
                       'attachment','finding','retest','handover','verify','trust-key','trust-keys','proof','keys','rotate',
-                      'import','zap','controls','sign','export','token','proof-import','management-report'}
+                      'import','zap','controls','sign','export','token','proof-import','management-report','file-reputation','lookup','status'}
     resource='/'.join(p if p in resource_parts or re.fullmatch(r'[a-f0-9]{32}|[a-f0-9]{64}',p) else 'other'
                       for p in parts[1:])[:240]
     with closing(connect(data_dir)) as db:
@@ -433,6 +445,9 @@ def _dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='loca
                     db.execute('INSERT INTO memberships VALUES(?,?,?,1)',(tid,user['id'],'admin'))
                     if proof_api.proof_account(db,user['id']): proof_api.enable_workbench(db,tid)
                     result={'team':{'id':tid,'name':name,'role':'admin'}}
+                elif tid and parts[3:4]==['file-reputation']:
+                    action = 'file-reputation'
+                    result = file_reputation.handle(db,tid,membership['role'] in WRITERS,method,parts[4:],body,now,reputation_completion)
                 elif tid:
                     if parts[3:4] in (['cases'],['trust-key'],['trust-keys'],['verify']):
                         if proof_api.proof_account(db,user['id']) or proof_api.proof_only(db,tid):
@@ -460,10 +475,11 @@ def _dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='loca
                         action=method.lower()+'.'+verb
                     if result.get('prepareZap') and zap_error:
                         raise ApiError(*zap_error)
-                    if not result.get('prepareZap'):
-                        _log(db,tid,actor,action,resource,'invalid' if result.get('valid') is False else 'ok')
+                    if not result.get('prepareZap') and not result.get('prepareReputation'):
+                        outcome = 'rejected' if 'reputationError' in result else ('invalid' if result.get('valid') is False else 'ok')
+                        _log(db,tid,actor,action,resource,outcome)
             db.commit()
-        except (ApiError,evidence.WorkflowError,proof_api.Error) as exc:
+        except (ApiError,evidence.WorkflowError,proof_api.Error,file_reputation.Error) as exc:
             db.rollback()
             if actor:
                 _log(db,tid,actor,action,resource,'denied' if exc.status in (401,403,404) else 'rejected')
@@ -587,12 +603,16 @@ class Handler(BaseHTTPRequestHandler):
                 parts=path.strip('/').split('/') if path!='/' else ['index.html']
                 if any(not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]*',p) or p in ('.','..') for p in parts):
                     raise ApiError(404,'not_found')
-                item=STATIC.joinpath(*parts).resolve()
-                if not item.is_relative_to(STATIC.resolve()) or not item.is_file(): raise ApiError(404,'not_found')
+                directory=STATIC
+                if parts==['file-inspection.mjs']:
+                    directory=STATIC.parents[1]/'public'/'dateipruefung'
+                    parts=['model.mjs']
+                item=directory.joinpath(*parts).resolve()
+                if not item.is_relative_to(directory.resolve()) or not item.is_file(): raise ApiError(404,'not_found')
                 content_type='text/javascript' if item.suffix in ('.js','.mjs') else (mimetypes.guess_type(item.name)[0] or 'application/octet-stream')
                 self._send(200,item.read_bytes(),content_type)
             else: raise ApiError(405,'method_not_allowed')
-        except (ApiError,evidence.WorkflowError,proof_api.Error) as exc:
+        except (ApiError,evidence.WorkflowError,proof_api.Error,file_reputation.Error) as exc:
             self._send(exc.status,{'error':str(exc)})
         except keyring.KeyStoreError:
             self._send(503,{'error':'signing_store_unavailable'})

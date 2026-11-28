@@ -28,7 +28,8 @@ def digest(path):
 
 
 def members():
-    fixed = [ROOT / name for name in ['LICENSE', 'NOTICE.txt', 'public/assets/authzledger-logo.png', 'team/requirements.txt',
+    fixed = [ROOT / name for name in ['LICENSE', 'NOTICE.txt', 'public/assets/authzledger-logo.png',
+             'public/dateipruefung/model.mjs', 'team/requirements.txt',
              'scripts/build-team-release.py', 'docs/Team-Login-RBAC.md', 'docs/Key-Rotation.md', 'docs/ZAP-API-Scan-Import.md',
              'integrations/burp/README.md', 'integrations/burp-handoff/README.md', 'docs/Proof-Studio-Betrieb.md',
              'docs/ZAP-Ergebnisimport.md']]
@@ -117,7 +118,8 @@ def windows(output):
         subprocess.run([sys.executable, '-m', 'PyInstaller', '--clean', '--noconfirm', '--onefile', '--windowed',
             '--name', FILES[0][:-4], '--icon', str(src / 'packaging/team/authzledger-team.ico'),
             '--version-file', str(version_file), '--collect-submodules', 'reportlab.pdfbase',
-            '--paths', str(src), '--add-data', f'{src / "team/static"};team/static', '--add-data', f'{legal};legal',
+            '--paths', str(src), '--add-data', f'{src / "team/static"};team/static',
+            '--add-data', f'{src / "public/dateipruefung/model.mjs"};public/dateipruefung', '--add-data', f'{legal};legal',
             '--add-data', f'{guides};docs', '--workpath', str(directory / 'work'), '--specpath', str(directory / 'spec'),
             '--distpath', str(output), str(src / 'packaging/team/launcher.py')], check=True)
     for flag in ['--self-test', '--gui-self-test']:

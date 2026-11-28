@@ -68,6 +68,18 @@ Für Burp im kommerziellen Dossier einen Übergabetoken erzeugen. Im Plugin die 
 
 Der ZAP-Import liest vorhandene Alerts einer administrativ definierten lokalen Instanz. Standard ist `http://127.0.0.1:8080` aus Sicht des Teamdienstes. Eine andere Loopback-Adresse vor dem Start als `AUTHZLEDGER_ZAP_ORIGIN` festlegen. Den API-Key nur ins Importfeld eingeben. Die GUI meldet fehlende Berechtigungen, leere Ergebnisse und Verbindungsfehler. Der Import behält Beobachtungen ausserhalb des Scopes als `out_of_scope`. [ZAP-Anleitung](ZAP-Ergebnisimport.md)
 
+## Dateien und VirusTotal im Team prüfen
+
+In der **Dateiprüfung** eine Datei bis 16 MiB auswählen oder ihren SHA-256 eingeben. Der Browser berechnet den Hash und untersucht bei einer gewählten Datei die Formatkennung und auffällige Dateinamen. Ein passender exportierter VirusTotal-v3-Dateibericht lässt sich offline auswerten. Die Hashbindung prüft den Dateibezug. Die Herkunft des importierten JSON muss der Prüfer separat beurteilen.
+
+Für den optionalen Live-Abruf hinterlegt der Betreiber einen für diese kommerzielle Nutzung lizenzierten API-Schlüssel als `AUTHZLEDGER_VT_PREMIUM_API_KEY` in der Serverumgebung und startet den Teamdienst mit dieser Konfiguration. Der Schlüssel gehört in den Secret-Speicher des Betreibers. Die Public API ist für kommerzielle Produkte ausgeschlossen. [VirusTotal-Nutzungsbedingungen für Public und Premium API](https://docs.virustotal.com/reference/public-vs-premium-api)
+
+Ein schreibberechtigtes Teammitglied löst die Abfrage selbst aus. Der Dienst übermittelt den SHA-256 über HTTPS an den fest hinterlegten VirusTotal-Dateibericht-Endpunkt. Bereits der Hash kann VirusTotal die Identifikation einer bekannten Datei ermöglichen. Dateiname, Dateibytes, Sitzungsdaten und Mandatskontext werden in der Anfrage ausgelassen. [VirusTotal-Dateibericht-API](https://docs.virustotal.com/reference/file-info)
+
+Der Dateibeleg lässt sich als unsigniertes JSON exportieren. Er unterscheidet lokale Prüfung, importierte JSON-Daten, eine Anbieterantwort und deren wiederverwendete Fassung. Für Integrationen liefert `GET /api/teams/{teamId}/file-reputation/status` die Verfügbarkeit. Die bewusste Abfrage erfolgt per `POST /api/teams/{teamId}/file-reputation/lookup` mit `{"sha256":"…","consent":true}`, Sitzung und CSRF-Token. Bei einem wiederholten Abruf desselben Hashs kann der Dienst das Ergebnis im selben Team bis zu fünf Minuten wiederverwenden.
+
+Für die Beurteilung die Zahl der meldenden Engines, das letzte Analysedatum und die Herkunft des Berichts zusammen lesen. Bei einem unbekannten Hash ist die Datei unbewertet. Null Erkennungen können auch bei neuer Schadsoftware vorkommen.
+
 ## Verifikation und Rotation
 
 Einen öffentlichen JWK aus **Schlüsselhistorie** im authentifizierten Workspace als JSON-Objekt sichern. Der Prüfer erhält den passenden JWK oder dessen vorab vereinbarten Fingerabdruck über einen unabhängigen Vertrauenskanal. Für die Prüfung denselben öffentlich gepinnten JWK verwenden, auch wenn eine Rotation bereits einen neuen aktiven Schlüssel erzeugt hat.

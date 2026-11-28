@@ -90,6 +90,16 @@ export async function inspectFile(input, name = '') {
     entropy: entropy(bytes), signals: nameSignals(name,id,bytes), signed:false};
 }
 
+// Workflow guidance based on local observations. Engine reputation is a separate data source.
+export function reviewFile(model) {
+  if (model.signals.length) return {action:'review', reason:'name_signals'};
+  const id = model.format.id;
+  if (['pe','elf','wasm'].includes(id)) return {action:'review', reason:'executable_format'};
+  if (['zip','gzip'].includes(id)) return {action:'review', reason:'container_format'};
+  if (id === 'unknown') return {action:'identify', reason:'unrecognized_format'};
+  return {action:'compare', reason:'recognized_format'};
+}
+
 export function parseHashList(text) {
   ensure(typeof text === 'string' && text.length <= MAX_HASH_LIST_BYTES &&
     new TextEncoder().encode(text).byteLength <= MAX_HASH_LIST_BYTES, 'Die Hashliste darf höchstens 1 MiB gross sein.');
@@ -123,7 +133,10 @@ export function checkVirusTotalReport(model, input) {
   if (Object.hasOwn(attributes,'sha256'))
     ensure(typeof attributes.sha256 === 'string' && sha256Pattern.test(attributes.sha256) && attributes.sha256.toLowerCase() === expected,
       'Der SHA-256 im Attribut widerspricht der gewählten Datei.');
-  if (Object.hasOwn(attributes,'size')) ensure(attributes.size === model.size, 'Die gemeldete Dateigrösse widerspricht der gewählten Datei.');
+  if (Object.hasOwn(attributes,'size')) {
+    ensure(Number.isSafeInteger(attributes.size) && attributes.size >= 0, 'Die gemeldete Dateigrösse ist ungültig.');
+    if (model.size != null) ensure(attributes.size === model.size, 'Die gemeldete Dateigrösse widerspricht der gewählten Datei.');
+  }
   const incoming = attributes.last_analysis_stats;
   ensure(object(incoming) && Object.keys(incoming).length === statNames.length &&
     statNames.every(key => Object.hasOwn(incoming,key)), 'Die acht dokumentierten Analysezähler fehlen oder enthalten zusätzliche Kategorien.');

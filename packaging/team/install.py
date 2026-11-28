@@ -20,6 +20,7 @@ for item in sorted((ROOT / 'team').rglob('*')):
     if item.is_file() and not item.is_symlink() and '__pycache__' not in item.parts and not item.name.endswith(('.pyc','.pyo')):
         install_file(item, Path('usr/lib/authzledger-team') / item.relative_to(ROOT))
 install_file('packaging/team/launcher.py', 'usr/lib/authzledger-team/launcher.py')
+install_file('public/dateipruefung/model.mjs', 'usr/lib/authzledger-team/public/dateipruefung/model.mjs')
 for name in ['authzledger-team','authzledger-team-desktop']:
     install_file('packaging/team/' + name, 'usr/bin/' + name, 0o755)
 install_file('packaging/team/authzledger-team.desktop', 'usr/share/applications/authzledger-team.desktop')
