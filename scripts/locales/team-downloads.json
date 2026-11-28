@@ -5,11 +5,23 @@
     "Workbench di team per i propri casi",
     "مساحة عمل الفريق لحالاتكم"
   ],
-  "Installieren Sie den Teamdienst lokal oder auf einem eigenen Server. Er enthält die Anmeldung, fünf Teamrollen, den Belegimport und die signierte Übergabe. Die Anleitung beschreibt den ersten Admin-Zugang und TLS für den Teamzugriff.": [
-    "Install the team service locally or on your own server. It includes sign-in, five team roles, evidence import and signed handover. The guide covers first administrator sign-in and TLS for team access.",
-    "Installez le service en local ou sur votre serveur. Il comprend la connexion, cinq rôles, l’import de pièces et la remise signée. Le guide explique le premier accès administrateur et la configuration TLS pour l’équipe.",
-    "Installate il servizio in locale o su un vostro server. Include accesso, cinque ruoli, importazione delle evidenze e consegna firmata. La guida spiega il primo accesso amministrativo e la configurazione TLS per il team.",
-    "ثبّتوا خدمة الفريق محلياً أو على خادمكم. تشمل تسجيل الدخول وخمسة أدوار واستيراد الأدلة والتسليم الموقّع. يشرح الدليل إعداد حساب المسؤول الأول وتفعيل TLS لوصول الفريق."
+  "Installieren Sie AuthzLedger Team lokal oder auf Ihrem Server und melden Sie sich mit Ihrem Teamkonto an. Fünf Rollen regeln den Zugriff auf Fälle und signierte Übergaben.": [
+    "Install AuthzLedger Team locally or on your own server and sign in with your team account. Five roles control access to cases and signed handovers.",
+    "Installez AuthzLedger Team en local ou sur votre serveur et connectez-vous avec votre compte d’équipe. Cinq rôles régissent l’accès aux dossiers et aux remises signées.",
+    "Installate AuthzLedger Team in locale o sul vostro server e accedete con il vostro account di team. Cinque ruoli regolano l’accesso ai casi e alle consegne firmate.",
+    "ثبّتوا AuthzLedger Team محلياً أو على خادمكم وسجّلوا الدخول بحساب الفريق. تنظّم خمسة أدوار صلاحيات الوصول إلى الحالات وعمليات التسليم الموقّعة."
+  ],
+  "Importieren Sie Exporte von Neo4j, BloodHound, Nessus, Burp Suite, OWASP ZAP, Nuclei, Nikto und sqlmap in ein Dossier. Für jede gespeicherte Version steht automatisch ein Managementbericht als HTML und JSON bereit.": [
+    "Import exports from Neo4j, BloodHound, Nessus, Burp Suite, OWASP ZAP, Nuclei, Nikto and sqlmap into one dossier. Each saved version automatically includes a management report in HTML and JSON.",
+    "Réunissez les exports de Neo4j, BloodHound, Nessus, Burp Suite, OWASP ZAP, Nuclei, Nikto et sqlmap dans un même dossier. Chaque version enregistrée comprend automatiquement un rapport de synthèse aux formats HTML et JSON.",
+    "Riunite in un unico dossier i file esportati da Neo4j, BloodHound, Nessus, Burp Suite, OWASP ZAP, Nuclei, Nikto e sqlmap. Per ogni versione salvata viene generato automaticamente un rapporto per la direzione in HTML e JSON.",
+    "اجمعوا الملفات المُصدَّرة من Neo4j وBloodHound وNessus وBurp Suite وOWASP ZAP وNuclei وNikto وsqlmap في ملف حالة واحد. يتوفّر تلقائياً لكل نسخة محفوظة تقرير إداري بصيغتي HTML وJSON."
+  ],
+  "Ersten Bericht erstellen": [
+    "Create your first report (German guide)",
+    "Créer votre premier rapport (guide en allemand)",
+    "Creare il primo rapporto (guida in tedesco)",
+    "إنشاء تقريركم الأول (دليل بالألمانية)"
   ],
   "Installationsanleitung": [
     "Installation guide",
