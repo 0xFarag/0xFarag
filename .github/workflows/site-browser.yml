@@ -36,7 +36,7 @@ jobs:
         if: runner.os == 'Windows'
         run: node qa/node_modules/playwright/cli.js install chromium
       - name: Check source-bound observation comparisons
-        run: node --test qa/import-formats.cjs qa/format-extensions.cjs qa/asset-review.cjs qa/ferox-format.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
+        run: node --test qa/import-formats.cjs qa/portal-alert.test.cjs qa/portal-controls.test.cjs qa/portal-directory.test.cjs qa/portal-graph.test.cjs qa/portal-reference.test.cjs qa/format-extensions.cjs qa/asset-review.cjs qa/ferox-format.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
       - name: Check evidence workbench projections and comparisons
         run: node --test qa/board-blue.test.mjs qa/board-compare.test.mjs qa/board-model.test.mjs qa/board-index.test.mjs qa/board-exports.test.mjs qa/proof-cockpit.test.mjs
       - name: Verify native policy permissions, retests, file triage and vetted access

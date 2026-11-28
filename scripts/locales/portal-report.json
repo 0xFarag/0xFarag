@@ -1,0 +1,158 @@
+{
+  "Werkzeugportal": [
+    "Tool portal",
+    "Portail d’outils",
+    "Portale strumenti",
+    "بوابة الأدوات"
+  ],
+  "Werkzeugportal | AuthzLedger": [
+    "Tool portal | AuthzLedger",
+    "Portail d’outils | AuthzLedger",
+    "Portale strumenti | AuthzLedger",
+    "بوابة الأدوات | AuthzLedger"
+  ],
+  "Öffnen Sie die Werkzeugberichte eines Mandats gemeinsam im Browser. Vergleichen Sie Beobachtungen zum selben System und erstellen Sie einen Kundenbericht. Ihre Quelldateien bleiben in diesem Tab.": [
+    "Open tool reports from the same engagement together in your browser. Compare observations about the same system and create a client report. Your source files stay in this tab.",
+    "Ouvrez dans votre navigateur les rapports d’outils d’un même mandat. Comparez les observations sur un même système et créez un rapport client. Vos fichiers sources restent dans cet onglet.",
+    "Apri insieme nel browser i rapporti degli strumenti usati per lo stesso incarico. Confronta le osservazioni sullo stesso sistema e crea un rapporto per il cliente. I file sorgente rimangono in questa scheda.",
+    "افتح تقارير الأدوات الخاصة بالمهمة نفسها معاً في متصفحك. قارن الملاحظات المتعلقة بالنظام نفسه وأنشئ تقريراً للعميل. تبقى ملفات المصدر في علامة التبويب هذه."
+  ],
+  "Der druckbare HTML-Bericht enthält alle importierten Quellen mit Prüfsummen und Beobachtungszahlen.": [
+    "The printable HTML report lists all imported sources with their checksums and observation counts.",
+    "Le rapport HTML imprimable répertorie toutes les sources importées, leur somme de contrôle et le nombre d’observations.",
+    "Il rapporto HTML stampabile elenca tutte le fonti importate, le rispettive somme di controllo e il numero di osservazioni.",
+    "يسرد تقرير HTML القابل للطباعة جميع المصادر المستوردة مع بصمة كل ملف وعدد ملاحظاته."
+  ],
+  "Bericht als HTML speichern": [
+    "Save HTML report",
+    "Enregistrer le rapport HTML",
+    "Salva il rapporto HTML",
+    "حفظ التقرير بصيغة HTML"
+  ],
+  "Beispielbericht als HTML speichern": [
+    "Save sample HTML report",
+    "Enregistrer le rapport d’exemple en HTML",
+    "Salva il rapporto di esempio in HTML",
+    "حفظ تقرير المثال بصيغة HTML"
+  ],
+  "Der HTML-Bericht ist zum Speichern bereit.": [
+    "The HTML report is ready to save.",
+    "Le rapport HTML est prêt à être enregistré.",
+    "Il rapporto HTML è pronto per il salvataggio.",
+    "تقرير HTML جاهز للحفظ."
+  ],
+  "Der Bericht konnte aus diesen Quelldateien nicht erstellt werden.": [
+    "The report could not be created from these source files.",
+    "Impossible de créer le rapport à partir de ces fichiers sources.",
+    "Impossibile creare il rapporto da questi file sorgente.",
+    "تعذّر إنشاء التقرير من ملفات المصدر هذه."
+  ],
+  "Kundenbericht": [
+    "Client report",
+    "Rapport client",
+    "Rapporto per il cliente",
+    "تقرير العميل"
+  ],
+  "Dateiprüfung": [
+    "File check",
+    "Vérification de fichier",
+    "Verifica file",
+    "فحص الملفات"
+  ],
+  "Headerprüfung im HAR-Mitschnitt": [
+    "Header checks in the HAR capture",
+    "Contrôles des en-têtes de la capture HAR",
+    "Verifica delle intestazioni nella cattura HAR",
+    "فحص ترويسات استجابات HTTP في تسجيل HAR"
+  ],
+  "Prüfung": [
+    "Check",
+    "Contrôle",
+    "Controllo",
+    "الفحص"
+  ],
+  "Erfüllt": [
+    "Met",
+    "Respecté",
+    "Soddisfatto",
+    "مستوفى"
+  ],
+  "Abweichung": [
+    "Deviation",
+    "Écart",
+    "Scostamento",
+    "مخالفة"
+  ],
+  "Unbestimmt": [
+    "Undetermined",
+    "Indéterminé",
+    "Indeterminato",
+    "غير محدّد"
+  ],
+  "Quellstellen je Prüfung": [
+    "Source records for each check",
+    "Enregistrements sources par contrôle",
+    "Record sorgente per ciascun controllo",
+    "سجلات المصدر لكل فحص"
+  ],
+  "Keine Antwort dieser Datei erfüllt das Prüfprofil.": [
+    "No response in this file matches the check profile.",
+    "Aucune réponse de ce fichier ne correspond au profil de contrôle.",
+    "Nessuna risposta in questo file corrisponde al profilo di controllo.",
+    "لا توجد استجابة في هذا الملف تنطبق عليها شروط الفحص."
+  ],
+  "Datensätze {positions}": [
+    "Records {positions}",
+    "Enregistrements {positions}",
+    "Record {positions}",
+    "السجلات {positions}"
+  ],
+  "Vorgabe erfüllt": [
+    "Requirement met",
+    "Exigence respectée",
+    "Requisito soddisfatto",
+    "المتطلب مستوفى"
+  ],
+  "Header fehlt im Mitschnitt": [
+    "Header absent from the capture",
+    "En-tête absent de la capture",
+    "Intestazione assente nella cattura",
+    "الترويسة غائبة عن التسجيل"
+  ],
+  "Headerwert entspricht der Vorgabe nicht": [
+    "Header value differs from the requirement",
+    "Valeur de l’en-tête non conforme à l’exigence",
+    "Il valore dell’intestazione non rispetta il requisito",
+    "قيمة الترويسة لا تستوفي المتطلب"
+  ],
+  "HSTS ist deaktiviert": [
+    "HSTS is disabled",
+    "HSTS est désactivé",
+    "HSTS è disattivato",
+    "ميزة HSTS معطّلة"
+  ],
+  "Headerdaten fehlen oder sind unvollständig": [
+    "Header data is missing or incomplete",
+    "Données d’en-tête absentes ou incomplètes",
+    "I dati delle intestazioni sono assenti o incompleti",
+    "بيانات الترويسات غائبة أو غير مكتملة"
+  ],
+  "Headerangaben sind mehrdeutig": [
+    "Header information is ambiguous",
+    "Informations d’en-tête ambiguës",
+    "Informazioni dell’intestazione ambigue",
+    "بيانات الترويسات ملتبسة"
+  ],
+  "Host ist eine IP-Adresse": [
+    "Host is an IP address",
+    "L’hôte est une adresse IP",
+    "L’host è un indirizzo IP",
+    "المضيف عنوان IP"
+  ],
+  "Geprüft werden aufgezeichnete HTML-Antworten auf HTTPS-GET-Anfragen mit Status 2xx. Einträge mit Weiterleitungsziel, widersprüchlichem Inhaltstyp oder Status 204, 205 und 206 bleiben ausgenommen. Die Zahlen gelten für diesen Mitschnitt.": [
+    "Checks cover recorded HTML responses to HTTPS GET requests with a 2xx status. Entries with a redirect target, a conflicting content type or status 204, 205 or 206 are excluded. Counts apply to this capture.",
+    "Les contrôles portent sur les réponses HTML enregistrées aux requêtes GET en HTTPS avec un statut 2xx. Les entrées présentant une destination de redirection, un type de contenu contradictoire ou un statut 204, 205 ou 206 sont exclues. Les chiffres concernent cette capture.",
+    "I controlli riguardano le risposte HTML registrate per le richieste GET su HTTPS con stato 2xx. Sono escluse le voci con destinazione di reindirizzamento, tipo di contenuto discordante o stato 204, 205 o 206. I conteggi si riferiscono a questa cattura.",
+    "يشمل الفحص استجابات HTML المسجّلة لطلبات GET عبر HTTPS التي تحمل رمز حالة من فئة 2xx. تُستبعد السجلات التي تتضمن وجهة إعادة توجيه أو نوع محتوى متعارضاً أو رمز الحالة 204 أو 205 أو 206. الأعداد تخص هذا التسجيل."
+  ]
+}

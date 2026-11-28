@@ -1,5 +1,8 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
-'use strict';
+import {parseProjection} from '../workbench/model.mjs';
+import {makeCustomerReport} from '../workbench/exports.mjs';
+import {saveFile} from '../workbench/delivery.mjs';
+import {renderHarChecks, withHarChecks} from './control-summary.mjs';
 (() => {
   const {limits, definitions, samples, parse, ImportError} = AuthzImport;
   const {t, write} = AuthzToolCopy;
@@ -7,6 +10,12 @@
   const element = (tag, value) => {const e = document.createElement(tag); e.textContent = value; return e;};
   const stores = {real: [], examples: []};
   let mode = 'real', page = 0, busy = false, sequence = 0;
+  let reportVersion = 0, preparingReport = false;
+  function invalidateReport() {
+    reportVersion++;
+    preparingReport = false;
+    $('report-status').replaceChildren();
+  }
   for (const [key, info] of Object.entries(definitions)) {
     for (const id of ['adapter','filter']) {
       const option = new Option('',key); write(option, info.label); $(id).add(option);
@@ -48,6 +57,8 @@
     write($('context'), example ? 'Beispieldaten mit frei erfundenen Datensätzen. Ihre eigenen Dateien liegen im separaten Arbeitsbereich.' : 'Wählen Sie Dateien aus demselben Mandat. Alle Importe bleiben lokal in diesem Tab.');
     write($('add'), example ? 'Beispiel hinzufügen' : 'Dateien auswählen');
     $('clear').disabled = busy || !files.length;
+    $('save-report').disabled = $('clear').disabled || preparingReport;
+    write($('save-report'), example ? 'Beispielbericht als HTML speichern' : 'Bericht als HTML speichern');
     $('add').disabled = $('adapter').disabled = $('real').disabled = $('examples').disabled = $('follow').disabled = busy;
     $('prev').disabled = !page; $('next').disabled = page+1 >= pages;
     write($('totals'), '{files} Dateien · {observations} Beobachtungen in der Auswahl', {files:files.length, observations:selected.length});
@@ -60,7 +71,7 @@
       const host = tr.insertCell();
       if (r.asset) host.textContent = r.asset;
       else write(host, 'Kein Hostbezug');
-      tr.insertCell().textContent = r.detail;
+      write(tr.insertCell(), r.detail);
       write(tr.insertCell(), prior ? 'Duplikat zu {prior} · ungeprüft' : 'Scope und Controls ungeprüft', {prior});
       $('body').append(tr);
     }
@@ -78,6 +89,7 @@
     updateHint();
     if (typeof AuthzCompare !== 'undefined') AuthzCompare.render($('comparison'), files);
     AuthzAssets.render($('asset-review'), files);
+    renderHarChecks($('har-checks'), files, t);
   }
   function fileList() { return [...stores.real, ...stores.examples]; }
   function errorText(error) {
@@ -88,7 +100,7 @@
   async function add(inputs) {
     if (busy) return;
     const source = $('adapter').value;
-    busy = true; refresh(); write($('status'), 'Dateien werden lokal geprüft …');
+    busy = true; invalidateReport(); refresh(); write($('status'), 'Dateien werden lokal geprüft …');
     const messages = [];
     try {
       if (inputs.length > limits.files) { messages.push(() => t('Pro Auswahl sind höchstens 20 Dateien zulässig.')); return; }
@@ -109,6 +121,31 @@
       busy=false; $('file').value=''; write($('status'), () => messages.map(render => render()).join('\n')); refresh();
     }
   }
+  async function saveReport() {
+    if (busy || preparingReport || !stores[mode].length) return;
+    const version = reportVersion;
+    preparingReport = true;
+    $('save-report').disabled = true;
+    try {
+      const index = AuthzAssets.createIndex(stores[mode]);
+      const data = new TextEncoder().encode(AuthzAssets.serializeIndex(index));
+      const model = await parseProjection(data);
+      if (version !== reportVersion) return;
+      const language = window.AuthzI18n?.lang || document.documentElement.lang.split('-')[0];
+      saveFile(withHarChecks(makeCustomerReport(model, {language}), stores[mode], t));
+      write($('report-status'), 'Der HTML-Bericht ist zum Speichern bereit.');
+    } catch {
+      if (version !== reportVersion) return;
+      write($('report-status'), 'Der Bericht konnte aus diesen Quelldateien nicht erstellt werden.');
+    } finally {
+      if (version === reportVersion) {
+        preparingReport = false;
+        $('save-report').disabled = busy || !stores[mode].length;
+      }
+    }
+  }
+  $('save-report').onclick = saveReport;
+  window.addEventListener('authzlanguage', () => renderHarChecks($('har-checks'), stores[mode], t));
   function switchMode(next) {
     if (busy || mode === next) return;
     mode = next;
@@ -117,6 +154,7 @@
     page = 0;
     $('filter').value = '';
     $('status').textContent = '';
+    invalidateReport();
     refresh();
   }
   $('real').onclick=()=>switchMode('real'); $('examples').onclick=()=>switchMode('examples');
@@ -124,7 +162,7 @@
   $('file').onchange=()=>add(Array.from($('file').files));
   $('add').onclick=()=> mode==='examples' ? add([new Blob([samples[$('adapter').value]])]) : $('file').click();
   $('follow').onclick=()=>add([new Blob(['{"results":[{"url":"https://training.example/first","status":403},{"url":"https://training.example/third","status":200}]}'])]);
-  $('clear').onclick=()=>{if(busy)return;stores[mode]=[]; page=0; write($('status'), 'Arbeitsbereich geleert.');refresh();};
+  $('clear').onclick=()=>{if(busy)return;stores[mode]=[]; page=0; invalidateReport(); write($('status'), 'Arbeitsbereich geleert.');refresh();};
   $('prev').onclick=()=>{if(page>0)page--;refresh();}; $('next').onclick=()=>{page++;refresh();};
   refresh();
 })();

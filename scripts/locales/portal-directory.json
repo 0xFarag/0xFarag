@@ -1,0 +1,25 @@
+{
+  "DirBuster": ["DirBuster", "DirBuster", "DirBuster", "DirBuster"],
+  "sqlmap": ["sqlmap", "sqlmap", "sqlmap", "sqlmap"],
+  "DirBuster 1.0-RC1 · CSV / TXT": ["DirBuster 1.0-RC1 · CSV / TXT", "DirBuster 1.0-RC1 · CSV / TXT", "DirBuster 1.0-RC1 · CSV / TXT", "DirBuster 1.0-RC1 · CSV / TXT"],
+  "sqlmap · CSV": ["sqlmap · CSV", "sqlmap · CSV", "sqlmap · CSV", "sqlmap · CSV"],
+  "DirBuster 1.0-RC1 als CSV oder vollständiger Textbericht. Die Tabelle zeigt den HTTP-Status. Der Volltext enthält zusätzlich Host und Ergebnistyp. Pfade und Fehlermeldungen bleiben verborgen.": [
+    "Choose a DirBuster 1.0-RC1 CSV or full text report. The table shows the HTTP status. The full text format also includes the host and result type. Paths and error messages remain hidden.",
+    "Choisissez un rapport DirBuster 1.0-RC1 au format CSV ou texte intégral. Le tableau affiche le statut HTTP. Le texte intégral contient aussi l’hôte et le type de résultat. Les chemins et les messages d’erreur restent masqués.",
+    "Scegli un rapporto DirBuster 1.0-RC1 in formato CSV o testo completo. La tabella mostra lo stato HTTP. Il testo completo include anche l’host e il tipo di risultato. Percorsi e messaggi di errore restano nascosti.",
+    "اختر تقرير DirBuster 1.0-RC1 بصيغة CSV أو بصيغة النص الكامل. يعرض الجدول حالة HTTP. يتضمّن النص الكامل أيضاً المضيف ونوع النتيجة. تبقى المسارات ورسائل الخطأ مخفية."
+  ],
+  "Mehrziel-Ergebnisdatei mit den fünf Standardspalten ab Target URL. Angezeigt werden der pseudonymisierte Host und die Einstufung des Werkzeugs. Parameter, Pfade und Notizen bleiben verborgen.": [
+    "Choose a multi-target results file with the five standard columns starting with Target URL. The table shows the pseudonymous host and the tool’s assessment. Parameters, paths and notes remain hidden.",
+    "Choisissez un fichier de résultats multicibles avec les cinq colonnes standard à partir de Target URL. Le tableau affiche l’hôte pseudonymisé et l’évaluation de l’outil. Les paramètres, chemins et notes restent masqués.",
+    "Scegli un file di risultati per più destinazioni con le cinque colonne standard a partire da Target URL. La tabella mostra l’host pseudonimizzato e la valutazione dello strumento. Parametri, percorsi e note restano nascosti.",
+    "اختر ملف نتائج لعدة أهداف يحتوي على الأعمدة الخمسة القياسية بدءاً من Target URL. يعرض الجدول معرّفاً مستعاراً للمضيف وتقييم الأداة. تبقى المعاملات والمسارات والملاحظات مخفية."
+  ],
+  "Ungültiger CSV-Datensatz.": ["Invalid CSV record.", "Enregistrement CSV invalide.", "Record CSV non valido.", "سجل CSV غير صالح."],
+  "Ungültiger DirBuster-Bericht.": ["Invalid DirBuster report.", "Rapport DirBuster invalide.", "Rapporto DirBuster non valido.", "تقرير DirBuster غير صالح."],
+  "Ungültiger sqlmap-Ergebnisbericht.": ["Invalid sqlmap results report.", "Rapport de résultats sqlmap invalide.", "Rapporto dei risultati sqlmap non valido.", "تقرير نتائج sqlmap غير صالح."],
+  "Der Bericht benötigt eine gültige HTTP(S)-Adresse ohne Zugangsdaten.": ["The report requires a valid HTTP(S) address without credentials.", "Le rapport exige une adresse HTTP(S) valide sans identifiants.", "Il rapporto richiede un indirizzo HTTP(S) valido senza credenziali.", "يتطلب التقرير عنوان HTTP(S) صالحاً خالياً من بيانات الدخول."],
+  "Vom Werkzeug gemeldeter Hinweis": ["Signal reported by the tool", "Signal signalé par l’outil", "Segnalazione dello strumento", "مؤشر أبلغت عنه الأداة"],
+  "Vom Werkzeug angezweifelter Hinweis": ["Signal disputed by the tool", "Signal mis en doute par l’outil", "Segnalazione contestata dallo strumento", "مؤشر تشكّك فيه الأداة"],
+  "Keine Technik gemeldet": ["No technique reported", "Aucune technique signalée", "Nessuna tecnica segnalata", "لم تُبلَّغ أي تقنية"]
+}

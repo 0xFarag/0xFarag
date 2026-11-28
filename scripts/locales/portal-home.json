@@ -1,0 +1,74 @@
+{
+  "Öffnen Sie Ihre Werkzeugberichte gemeinsam im Browser. Vergleichen Sie Beobachtungen zum selben Host und erstellen Sie einen Bericht. Ihre Quelldateien bleiben auf Ihrem Gerät.": [
+    "Open your tool exports together in the browser. Compare observations for the same host and create a report. Your source files stay on your device.",
+    "Ouvrez les exports de vos outils dans le navigateur. Comparez les observations concernant un même hôte et créez un rapport. Vos fichiers sources restent sur votre appareil.",
+    "Aprite insieme nel browser i file esportati dai vostri strumenti. Confrontate le osservazioni relative allo stesso host e create un rapporto. I file sorgente rimangono sul vostro dispositivo.",
+    "افتحوا تقارير أدواتكم معاً في المتصفح. قارنوا الملاحظات المرتبطة بالمضيف نفسه وأنشئوا تقريراً. تبقى ملفات المصدر على جهازكم."
+  ],
+  "Werkzeugportal öffnen": [
+    "Open the tool portal",
+    "Ouvrir le portail d’outils",
+    "Aprire il portale degli strumenti",
+    "فتح بوابة الأدوات"
+  ],
+  "Quelldatei · Host · Bericht": [
+    "Source file · Host · Report",
+    "Fichier source · Hôte · Rapport",
+    "File sorgente · Host · Rapporto",
+    "ملف المصدر · المضيف · التقرير"
+  ],
+  "Das Portal erkennt die unterstützten Exportformate am Inhalt. Jede Beobachtung bleibt mit der Quelldatei und ihrer Fundstelle verknüpft.": [
+    "The portal recognises supported export formats from their contents. Each observation links back to the source file and its location in that file.",
+    "Le portail reconnaît les formats d’export pris en charge d’après leur contenu. Chaque observation reste associée au fichier source et à sa position dans ce fichier.",
+    "Il portale riconosce i formati di esportazione supportati in base al contenuto. Ogni osservazione resta associata al file sorgente e alla sua posizione nel file.",
+    "تتعرّف البوابة على صيغ التصدير المدعومة من محتوى الملفات. تظل كل ملاحظة مرتبطة بملف المصدر وموضعها فيه."
+  ],
+  "Netzwerk und Dienste": [
+    "Network and services",
+    "Réseau et services",
+    "Rete e servizi",
+    "الشبكة والخدمات"
+  ],
+  "Nmap XML und Nessus (.nessus)": [
+    "Nmap XML and Nessus (.nessus)",
+    "Nmap XML et Nessus (.nessus)",
+    "Nmap XML e Nessus (.nessus)",
+    "ملفات Nmap XML وNessus (.nessus)"
+  ],
+  "Scannerergebnisse": [
+    "Scanner results",
+    "Résultats des scanners",
+    "Risultati degli scanner",
+    "نتائج أدوات الفحص"
+  ],
+  "Nuclei JSONL, Nikto XML und sqlmap-Ergebnis-CSV": [
+    "Nuclei JSONL, Nikto XML and sqlmap result CSV",
+    "Nuclei JSONL, Nikto XML et résultats sqlmap au format CSV",
+    "Nuclei JSONL, Nikto XML e risultati sqlmap in CSV",
+    "ملفات Nuclei JSONL وNikto XML ونتائج sqlmap بصيغة CSV"
+  ],
+  "DirBuster, ffuf, Gobuster und feroxbuster": [
+    "DirBuster, ffuf, Gobuster and feroxbuster",
+    "DirBuster, ffuf, Gobuster et feroxbuster",
+    "DirBuster, ffuf, Gobuster e feroxbuster",
+    "DirBuster وffuf وGobuster وferoxbuster"
+  ],
+  "Gruppen und Beziehungen": [
+    "Groups and relationships",
+    "Groupes et relations",
+    "Gruppi e relazioni",
+    "المجموعات والعلاقات"
+  ],
+  "BloodHound-Gruppen und Neo4j-APOC-Inventare": [
+    "BloodHound groups and Neo4j APOC inventories",
+    "Groupes BloodHound et inventaires APOC de Neo4j",
+    "Gruppi BloodHound e inventari APOC di Neo4j",
+    "مجموعات BloodHound وقوائم جرد Neo4j APOC"
+  ],
+  "Falco-Ereignisse und normalisierte EDR-/SIEM-Meldungen zu Cobalt Strike": [
+    "Falco events and normalised EDR/SIEM events relating to Cobalt Strike",
+    "Événements Falco et événements EDR/SIEM normalisés relatifs à Cobalt Strike",
+    "Eventi Falco ed eventi EDR/SIEM normalizzati relativi a Cobalt Strike",
+    "أحداث Falco وأحداث EDR وSIEM الموحّدة المرتبطة بـ Cobalt Strike"
+  ]
+}

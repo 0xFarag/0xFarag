@@ -10,3 +10,6 @@
 .review-next{margin:0 0 1.25rem}
 .skip { position:absolute; z-index:1; top:-8rem; left:1rem; padding:.65rem .9rem; background:var(--bg); }
 .skip:focus { top:.5rem; }
+
+#har-checks table{min-width:0}#har-checks th,#har-checks td{text-align:start;overflow-wrap:anywhere;padding:.5rem}
+#har-checks details{margin-block-start:1rem}#har-checks code{overflow-wrap:anywhere}#har-checks ul{padding-inline-start:1.4rem}

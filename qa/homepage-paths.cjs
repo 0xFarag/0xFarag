@@ -75,9 +75,9 @@ async function verifyHomepagePaths(page, origin, width) {
   await page.goto(origin);
   const hero = page.locator('section').filter({has: page.getByRole('heading', {level: 1})}).first();
   assert.equal(await hero.locator('#cockpit, #finding-select').count(), 0);
-  assert.equal(await hero.locator('a.start-primary').getAttribute('href'), '/workbench/');
+  assert.equal(await hero.locator('a.start-primary').getAttribute('href'), '/import/');
   await verifySignedCockpit(page, hero);
-  for (const destination of ['/workbench/', '/downloads/#team']) {
+  for (const destination of ['/import/', '/workbench/', '/downloads/#team']) {
     const action = routeLinks(hero, destination).first();
     await checkFits(page, action, destination);
     await action.click();
