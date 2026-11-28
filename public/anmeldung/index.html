@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- © Nasser Aldin Farag (0xFarag). All rights reserved. -->
+<html lang="de-CH"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer"><meta name="theme-color" content="#0a1b24">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'none'; form-action 'none'">
+<title>Anmeldung · AuthzLedger</title><meta name="description" content="Melden Sie sich mit Ihrem Passkey bei AuthzLedger an oder richten Sie ein Website-Konto ein.">
+<link rel="icon" href="/assets/authzledger-icon.png"><link rel="stylesheet" href="/anmeldung/portal.css"><script type="module" src="/anmeldung/portal.mjs"></script>
+</head><body>
+<a class="skip" href="#inhalt">Zum Inhalt</a>
+<header class="mast"><div class="frame bar">
+<a class="brand" href="/"><img src="/assets/authzledger-logo.png" width="40" height="40" alt=""><span>AuthzLedger <small>0xFarag</small></span></a>
+<nav aria-label="Hauptnavigation"><a href="/import/">Werkzeugportal</a><a href="/studio/">Teamdienst</a></nav>
+</div></header>
+<main id="inhalt" class="frame">
+<section class="card" aria-labelledby="heading">
+<div class="card-heading"><h1 id="heading" tabindex="-1">Anmeldung</h1></div>
+<p id="status" role="status" aria-live="polite" aria-atomic="true">Zugang wird geprüft …</p>
+<noscript><p>Aktivieren Sie JavaScript, um einen Passkey zu verwenden.</p></noscript>
+<div id="anonymous" hidden>
+<p>Öffnen Sie Ihr Website-Konto mit dem Passkey auf Ihrem Gerät oder in Ihrem Passwortmanager.</p>
+<div class="actions"><button type="button" id="login" class="primary">Mit Passkey anmelden</button><button type="button" id="register">Passkey einrichten</button></div>
+<details><summary>Zum ersten Mal hier?</summary><p>Mit «Passkey einrichten» erstellen Sie Ihr Konto. Bewahren Sie den Passkey in einem synchronisierten Passwortmanager auf, damit Sie ihn bei einem Gerätewechsel weiterverwenden können. Geht der einzige Passkey verloren, verlieren Sie den Zugang.</p></details>
+</div>
+<div id="account" hidden>
+<dl class="facts"><div><dt>Kontokennung</dt><dd><code dir="ltr" id="account-id"></code></dd></div><div><dt>Erstellt am</dt><dd id="account-created"></dd></div></dl>
+<nav class="tool-links" aria-label="Werkzeuge"><a href="/import/">Werkzeugportal</a><a href="/workbench/">Evidence Workbench</a><a href="/dateipruefung/">Dateiprüfung</a></nav>
+<p class="muted">Eine neue Anmeldung mit diesem Konto beendet die bisherige Sitzung.</p>
+<div class="actions"><button type="button" id="logout" class="primary">Abmelden</button><button type="button" id="delete-open" class="text-button">Konto löschen</button></div>
+<button type="button" id="reauth" hidden>Passkey erneut bestätigen</button>
+<div id="confirm-delete" class="confirmation" hidden><p>Ihr Website-Konto und sein Zugang werden dauerhaft gelöscht. Entfernen Sie den Passkey anschliessend aus Ihrem Passwortmanager.</p><div class="actions"><button type="button" id="delete-cancel">Abbrechen</button><button type="button" id="delete-confirm" class="danger">Konto endgültig löschen</button></div></div>
+</div>
+<button type="button" id="retry" hidden>Erneut prüfen</button>
+</section>
+<aside><h2>Weitere Zugänge</h2>
+<a class="aux-link" href="/studio/"><strong>Teamdienst</strong><span>Team-Workbench Ihrer Organisation öffnen</span></a>
+<a class="aux-link" href="/konto/"><strong>Abrechnung</strong><span>Abonnement und Rechnungen verwalten</span></a>
+</aside>
+</main>
+<footer class="frame"><span>© Nasser Aldin Farag (0xFarag). All rights reserved.</span><a href="mailto:contact@authzledger.com">contact@authzledger.com</a></footer>
+</body></html>

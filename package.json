@@ -1,0 +1,16 @@
+{
+  "name": "authzledger-site",
+  "private": true,
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@simplewebauthn/server": "13.3.3",
+    "@vercel/blob": "2.9.0"
+  },
+  "overrides": {
+    "@vercel/cli-config": {
+      "zod": "4.6.7"
+    }
+  }
+}
