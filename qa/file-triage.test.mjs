@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {inspectFile, matchKnownHash, parseHashList, checkVirusTotalReport, MAX_FILE_BYTES, MAX_HASH_LIST_BYTES} from '../public/dateipruefung/model.mjs';
+import {inspectFile, reviewFile, matchKnownHash, parseHashList, checkVirusTotalReport, MAX_FILE_BYTES, MAX_HASH_LIST_BYTES} from '../public/dateipruefung/model.mjs';
 
 const ac = new TextEncoder();
 const h = (alg,data) => createHash(alg).update(data).digest('hex');
@@ -60,6 +60,16 @@ test('filename anomalies and whole-file byte entropy stay descriptive and omit p
   assert.equal((await inspectFile(Uint8Array.of(1,1,1))).entropy,0);
 });
 
+test('local triage gives actions based on the observed format and naming indicators', async () => {
+  for (const [bytes,name,action,reason] of [
+    [pe(),'invoice.pdf','review','name_signals'], [pe(),'program.exe','review','executable_format'],
+    [magic(30,[0x50,0x4b,3,4]),'data.zip','review','container_format'],
+    [ac.encode('unknown'),'','identify','unrecognized_format'], [ac.encode('%PDF-1.7\n'),'','compare','recognized_format']
+  ]) {
+    assert.deepEqual(reviewFile(await inspectFile(bytes,name)),{action,reason});
+  }
+});
+
 test('bounded hash list matches SHA-256 exactly; comments and case normalization are supported', async () => {
   const original = await inspectFile(ac.encode('analyst fixture'));
   const list = parseHashList('# tested locally\n' + original.sha256.toUpperCase() + '\r\n' + original.sha256 + '\n');
@@ -97,5 +107,15 @@ test('rejects mismatched object hashes, wrong size or type, inconsistent counts 
     r=>r.data.attributes.last_analysis_stats['type-unsupported']='0', r=>r.data.attributes.last_analysis_date=1704067200000]) {
     const report=vtReport(target); mutate(report);
     assert.throws(()=>checkVirusTotalReport(target,report));
+  }
+});
+
+test('hash-only comparisons accept an optional valid source size without a fictitious local measurement',async () => {
+  const pinned=await inspectFile(ac.encode('pinned'));
+  const input=vtReport(pinned);
+  assert.equal(checkVirusTotalReport({sha256:pinned.sha256},input).total,18);
+  for (const invalid of [-1,1.5,'6',Number.MAX_SAFE_INTEGER+1]) {
+    input.data.attributes.size=invalid;
+    assert.throws(()=>checkVirusTotalReport({sha256:pinned.sha256},input));
   }
 });

@@ -26,6 +26,8 @@
 .ps-stage .secondary,.ps-stage .plain {margin-block:.45rem}
 .ps-stage .table-wrap {margin-block:.5rem}
 .ps-stage code,.ps-json,.ps-history {overflow-wrap:anywhere}
+.ps-observation small {display:block;overflow-wrap:anywhere}
+.ps-observation:focus,.ps-observation:target {outline:2px solid #126f70;outline-offset:2px}
 .ps-stage input[type=checkbox] {width:1.1rem;height:1.1rem;accent-color:#126f70}
 .ps-check {justify-content:flex-start}.ps-check input {order:-1}
 .ps-json {white-space:pre-wrap;padding:.75rem;background:#eff4f3;border-radius:.3rem;font-size:.83rem}

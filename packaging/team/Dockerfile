@@ -26,6 +26,7 @@ COPY integrations/burp/README.md /usr/share/doc/authzledger-team/Burp-Export.md
 COPY integrations/burp-handoff/README.md /usr/share/doc/authzledger-team/Burp-Handoff.md
 COPY team/static/fonts/*-OFL.txt /usr/share/doc/authzledger-team/
 COPY team/ team/
+COPY public/dateipruefung/model.mjs public/dateipruefung/model.mjs
 RUN mkdir -p /data && chown 10001:10001 /data && chmod 0700 /data
 USER 10001:10001
 VOLUME ["/data"]

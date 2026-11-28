@@ -1,9 +1,12 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
 import {proofText} from './proof-texts.mjs';
+import {managementHtml} from './management-report.mjs';
+import {scannerPriorities} from './scanner-priority.mjs';
 
 const steps = ['scope','import','proof','retest','package'];
 const controlIds = ['token','identity','owner','denial'];
-const formats = {burp:'Burp',zap:'ZAP',har:'HAR',openapi:'OpenAPI',nmap:'Nmap XML',nuclei:'Nuclei JSONL'};
+const formats = {burp:'Burp',zap:'ZAP',har:'HAR',openapi:'OpenAPI',nmap:'Nmap XML',
+  nuclei:'Nuclei HTTP JSONL',nessus:'Nessus (.nessus)',nikto:'Nikto XML',cobalt:'Cobalt Strike · EDR/SIEM JSON'};
 const writerRoles = new Set(['admin','lead_pentester','pentester']);
 const allowedLanguages = new Set(['de','en','fr']);
 
@@ -232,6 +235,7 @@ export function createProofStudio(root,{request,encodeFile,fileBytes,saveBlob,on
       }
       draw(); say('refreshNotice');
     }),'plain slim'));
+    if (active) controls.append(managementButton('html'),managementButton('json'));
     top.append(controls);
     const message=element('p',null,'ps-notice');
     message.setAttribute('role','status'); message.setAttribute('aria-live','polite');
@@ -257,9 +261,27 @@ export function createProofStudio(root,{request,encodeFile,fileBytes,saveBlob,on
     for (const item of history) {
       const row=element('li');
       const text=typeof item==='string' ? item : [new Date(item.at*1000).toLocaleString(root.lang),item.action || item.event,item.version!=null?'v'+item.version:null].filter(Boolean).join(' · ');
-      row.append(text || disclosureValue(item)); list.append(row);
+      row.append(text || disclosureValue(item));
+      if (item.version >= active.managementReportFrom && item.version < active.version) {
+        row.append(' ',managementButton('html',item.version));
+      }
+      list.append(row);
     }
     return list;
+  }
+  function managementButton(format,revision) {
+    const label = txt(format === 'html' ? 'managementHtml' : 'managementJson');
+    return button(revision ? label+' · v'+revision : label, perform(async stamp => {
+      const url = runPath()+'/management-report'+(revision ? '/'+revision : '');
+      const {report,filename} = await get(url);
+      if (stamp !== generation) return;
+      if (format === 'html') {
+        const html = managementHtml(report,lang);
+        saveBlob(new Blob([html],{type:'text/html;charset=utf-8'}),filename.replace(/\.json$/,'.html'));
+      } else {
+        saveBlob(new Blob([JSON.stringify(report,null,2)+'\n'],{type:'application/json'}),filename);
+      }
+    }),'secondary slim');
   }
   function form(parent, handler, label) {
     const node=element('form',null,'ps-form');
@@ -312,14 +334,17 @@ export function createProofStudio(root,{request,encodeFile,fileBytes,saveBlob,on
     return list.childElementCount?list:note('noFiles');
   }
   function pickFile(label) {
-    const file=element('input'); file.type='file'; file.accept='.json,.xml,.har,.jsonl,.ndjson,.txt,application/json,application/xml,text/plain';
+    const file=element('input'); file.type='file'; file.accept='.json,.xml,.nessus,.har,.jsonl,.ndjson,.txt,application/json,application/xml,text/plain';
     const format=selectOptions(Object.entries(formats),'har');
     const group=element('div',null,'pair');
-    group.append(field(txt('format'),format),field(txt(label),file));
+    const hint=note('cobaltFormat');
+    hint.hidden=true;
+    format.addEventListener('change',()=>{hint.hidden=format.value!=='cobalt';});
+    group.append(field(txt('format'),format),field(txt(label),file),hint);
     return {group,file,format};
   }
   async function readSource(input) {
-    return {format:input.format.value,content_b64:encodeFile(await fileBytes(input.file.files[0],2*1024*1024))};
+    return {format:input.format.value,content_b64:encodeFile(await fileBytes(input.file.files[0],1024*1024))};
   }
   function importPanel(panel) {
     const lab=active.mode==='lab';
@@ -368,10 +393,32 @@ export function createProofStudio(root,{request,encodeFile,fileBytes,saveBlob,on
   function resultsTable() {
     return table([txt('observed'),'HTTP',txt('marker'),txt('results')],baselineRows().map(row=>{
       const obs=row.observation;
-      return [routeRef(obs),obs.status,yesNo(obs.marker),element('code',row.status)];
+      const reference=element('div',null,'ps-observation');
+      reference.id='ps-observation-'+active.id+'-'+row.id;
+      reference.tabIndex=-1;
+      reference.append(routeRef(obs),element('small',[obs.source,obs.rule,row.id].join(' · ')));
+      return [reference,obs.status,yesNo(obs.marker),element('code',row.status)];
     }));
   }
+  function showPriorities(panel) {
+    const priorities=scannerPriorities(active.report);
+    if (!priorities.length) return;
+    const section=element('section');
+    const title=element('h4',txt('priorityTitle'));
+    title.id='ps-priority-title';
+    section.setAttribute('aria-labelledby',title.id);
+    const rows=priorities.map(({id,status,observation})=>{
+      const link=element('a',[observation.host,observation.rule].join(' · '));
+      link.href='#ps-observation-'+active.id+'-'+id;
+      link.setAttribute('aria-label',[link.textContent,id].join(' · '));
+      return [txt(observation.severity==='critical'?'severityCritical':'severityHigh'),observation.source,link,
+        status==='inconclusive' ? txt('priorityUnverified') : status==='budget_blocked' ? txt('baselineBudget') : status];
+    });
+    section.append(title,table([txt('prioritySeverity'),txt('prioritySource'),txt('observed'),txt('results')],rows));
+    panel.append(section);
+  }
   function proofPanel(panel) {
+    showPriorities(panel);
     panel.append(note('controlsHint'));
     const readOnly=!writer() || active.locked;
     const controls=controlTable(active.controls || {},readOnly);

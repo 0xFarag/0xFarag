@@ -4,6 +4,8 @@ import hashlib
 from html.parser import HTMLParser
 from pathlib import Path
 import runpy
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -22,6 +24,16 @@ class DownloadLinks(HTMLParser):
 
 
 class TeamRelease(unittest.TestCase):
+    def test_shared_file_inspection_model_survives_staging_and_installation(self):
+        model = Path('public/dateipruefung/model.mjs')
+        expected = (ROOT / model).read_bytes()
+        with tempfile.TemporaryDirectory() as temp:
+            stage, installed = Path(temp)/'stage', Path(temp)/'installed'
+            release['stage'](stage)
+            self.assertEqual((stage / model).read_bytes(), expected)
+            subprocess.run([sys.executable, str(stage/'packaging/team/install.py'), str(installed)], check=True)
+            self.assertEqual((installed/'usr/lib/authzledger-team'/model).read_bytes(), expected)
+
     def test_download_page_matches_tagged_release_inventory(self):
         page = DownloadLinks()
         page.feed((ROOT / 'public/downloads/index.html').read_text(encoding='utf-8'))
