@@ -45,12 +45,22 @@ Der Server leitet die Person aus ihrer Sitzung ab und ordnet Dossiers, Importe, 
 ## Einen Prüflauf in der GUI abschliessen
 
 1. **Scope.** In der angemeldeten Workbench ein Dossier anlegen. Für ein Mandat die genehmigten Hosts, die Rules of Engagement und das Budget eingeben. Die Namen müssen den importierten Hosts entsprechen. Das Budget wird auf die Prüfung importierter Beobachtungen angerechnet. Ein ausgeschöpftes Budget bleibt mit `budget_blocked` sichtbar. Im Modus Lab verwendet das Studio die reservierte Quelle `lab.authz.local` mit vier definierten Invoice-Beobachtungen. Dieses Dossier bleibt vom kommerziellen Import getrennt.
-2. **Import.** Quellformat auswählen und eine gespeicherte Datei übernehmen. Unterstützt sind Burp, ZAP, HAR, OpenAPI, Nmap XML und Nuclei JSONL. Dateiquellen sind auf 1 MiB begrenzt. Die Ausgangsbasis eines Prüflaufs nimmt höchstens 512 Beobachtungen auf. Unsichere XML-Deklarationen und ungültige Formate werden abgelehnt. Der Server speichert die bereinigten Beweisfelder und einen Quell-Hash. Querydaten, Header, Cookies und Roh-Bodies sind keine Felder des Dossiers. Rules of Engagement und Identifikatoren frei von Zugangsdaten halten.
+2. **Import.** Quellformat auswählen und eine gespeicherte Datei übernehmen. Unterstützt sind Burp, ZAP, HAR, OpenAPI, Nmap XML, Nuclei HTTP JSONL, Nessus v2 XML (`.nessus`), Nikto XML und normalisierte EDR-/SIEM-Ereignisse zu Cobalt Strike. Dateiquellen sind auf 1 MiB begrenzt. Die Ausgangsbasis eines Prüflaufs nimmt höchstens 512 Beobachtungen auf. Unsichere XML-Deklarationen und ungültige Formate werden abgelehnt. Der Server speichert die bereinigten Beweisfelder und einen Quell-Hash. Querydaten, Header, Cookies und Roh-Bodies sind keine Felder des Dossiers. Rules of Engagement und Identifikatoren frei von Zugangsdaten halten.
 3. **Beweis.** Für `token`, `identity`, `owner` und `denial` die tatsächlich geprüften Controls angeben und auswerten. `identity` benötigt `token`. Sowohl `owner` als auch `denial` benötigen `identity`. Die GUI zeigt die wirksame Kette, den Quellbezug und das Ergebnis. Für `confirmed` müssen zusätzlich Scope, Budget und geschützter Marker tragen. Ein einzelner HTTP-Status oder ZAP-Alert reicht dafür nicht aus.
 4. **Retest.** Die zu prüfenden Fälle ausdrücklich auswählen, die Nachher-Beobachtung übernehmen und die Controls für den Retest angeben. Im Lab sind die Fälle 1042, 1043 und 1044 ausgewählt. Mit den vier wirksamen Controls, der synthetischen Nachher-Quelle und ausreichendem Budget ergeben sich drei `resolved_check` und für 1048 einmal `not_retested`. Ein kommerzieller Retest benötigt eine passende neue Beobachtung aus derselben Art von Quelle. Ohne vergleichbaren Nachweis bleibt er `inconclusive`. Nicht bestätigte Ausgangsfälle bleiben `not_applicable`. Nach dem ersten gespeicherten Retest oder der ersten Signatur ist die Ausgangsbasis eingefroren. Weitere Retest-Runden ergänzen deren Historie.
 5. **Paket.** Berichtsprache auswählen, Paket signieren und anschliessend das gespeicherte ZIP herunterladen. Die Oberfläche zeigt `keyId`, JWK und Fingerabdruck. JSON, HTML und PDF stammen aus demselben Berichtsstand. Bei der Prüfung im Dossier validiert der Dienst die Archivbytes, die Workspace-Schlüsselhistorie, die quellgebundene Semantik und den Bezug zum Evidence-Root. Die Signatur belegt die inventarisierten Bytes. Aussagen über die tatsächliche Ausführung am Ziel hängen von der Herkunft der Beobachtungen ab.
 
 Im Audit erscheinen unter anderem Anmeldung und Abmeldung, Mitglieder- und Rollenänderungen, Import, Control-Änderung, Retest, Signatur, Export und Rotation. Die Dossierhistorie enthält Version, Zeitpunkt, ausführende User-ID und Beweisbezug. Bei gleichzeitigem Bearbeiten weist `version_conflict` auf einen inzwischen gespeicherten Stand hin. Das Dossier erneut laden, die Änderung prüfen und mit der aktuellen Version erneut entscheiden.
+
+### Automatischer Managementbericht
+
+Für jedes neu angelegte Dossier speichert SQLite den Bericht gemeinsam mit der jeweiligen Dossierversion. Nach Import, Änderung der Controls, Retest oder Signatur entsteht eine weitere Fassung. Alle aktiven Teammitglieder können den Bericht öffnen. Die Druckansicht eignet sich für Besprechungen, der JSON-Export für die Weiterverarbeitung.
+
+Die Übersicht zählt die Hosts im vereinbarten Scope, die in den Quellen beobachteten Hosts, die Beobachtungen je Prüfergebnis und den letzten Retest. Eine Beobachtung zu einem Host belegt nur, dass er in den importierten Daten vorkommt. Eine Aussage zur vollständigen Prüfung dieses Hosts lässt sich daraus nicht ableiten.
+
+Nessus und Nuclei können für Beobachtungen im Scope einen Hersteller-Schweregrad liefern. Ein kritisches Signal erscheint in der Priorisierung, auch wenn der Berechtigungsbefund noch offen ist. Fehlende Schweregrade erscheinen als `unknown`. Nikto-Einträge und Cobalt-Strike-bezogene Ereignisse zählen zu den importierten Beobachtungen. Der Cobalt-Import erwartet kundenseitig normalisierte EDR-/SIEM-Daten im Format `authzledger.defensive-telemetry.v1`.
+
+Jeder Managementbericht trägt seine Version und den Status `unsigned`. Für eine signierte Kundenübergabe das ZIP im Schritt **Übergabe** erzeugen. Bei vorhandenen Installationen ist der letzte vor dem Upgrade gespeicherte Dossierstand abrufbar. Historische Versionen mit fehlendem Bericht liefern HTTP 404.
 
 ### Burp und ZAP
 
@@ -134,6 +144,8 @@ Die Team-API liegt auf demselben Origin wie die authentifizierte GUI. Die Pfade 
 |---|---|
 | `GET /` und `POST /` | Liste lesen oder mit `mode, hosts, roe, budget` anlegen. Im Lab genügt `{"mode":"lab"}`. |
 | `GET /{id}` | Dossier mit Version, Quellen, Controls, Ergebnissen, Historie und signierten Paketen. |
+| `GET /{id}/management-report` | Aktuelle aggregierte Fassung als `{filename, report}`. |
+| `GET /{id}/management-report/{revision}` | Gespeicherte Fassung anhand der positiven Dossierversionsnummer abrufen. |
 | `POST /{id}/import` | `version, format, content_b64` übergeben. Der Server persistiert die normalisierte Projektion. |
 | `POST /{id}/controls` | `version, controls`. Alle vier Entscheidungen müssen boolesch sein. |
 | `POST /{id}/retest` | `version, selected, controls`. Optional gemeinsam `format, content_b64`, im Lab alternativ `labAfter:true`. |

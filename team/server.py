@@ -370,7 +370,7 @@ def _dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='loca
     action=method.lower()
     resource_parts = {'login','logout','session','me','teams','members','audit','cases','control-reviews','imports',
                       'attachment','finding','retest','handover','verify','trust-key','trust-keys','proof','keys','rotate',
-                      'import','zap','controls','sign','export','token','proof-import'}
+                      'import','zap','controls','sign','export','token','proof-import','management-report'}
     resource='/'.join(p if p in resource_parts or re.fullmatch(r'[a-f0-9]{32}|[a-f0-9]{64}',p) else 'other'
                       for p in parts[1:])[:240]
     with closing(connect(data_dir)) as db:
@@ -454,6 +454,9 @@ def _dispatch(data_dir,method,path,body=None,*,token=None,csrf=None,client='loca
                         resource+='/'+result['case']['id']
                     if parts[3:4]==['proof']:
                         verb = parts[-1] if parts[-1] in ('proof','keys','rotate','import','zap','controls','retest','sign','export','token','verify') else 'run'
+                        if parts[5:6] == ['management-report']:
+                            verb = 'management-report'
+                            resource = f"teams/{tid}/proof/{parts[4]}/{verb}/{result['report']['revision']}"
                         action=method.lower()+'.'+verb
                     if result.get('prepareZap') and zap_error:
                         raise ApiError(*zap_error)

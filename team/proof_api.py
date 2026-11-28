@@ -10,6 +10,7 @@ from pathlib import Path
 
 from . import proof_engine as engine
 from . import proof_packages as packages
+from . import management_report
 
 RIGHTS = '© Nasser Aldin Farag (0xFarag). All rights reserved.'
 WRITERS = frozenset(('admin', 'lead_pentester', 'pentester'))
@@ -62,6 +63,7 @@ class Error(Exception):
 
 def init_db(db):
     db.executescript(SCHEMA)
+    db.executescript(management_report.SCHEMA)
     if 'details' not in {r[1] for r in db.execute('PRAGMA table_info(proof_history)')}:
         db.execute("ALTER TABLE proof_history ADD COLUMN details TEXT NOT NULL DEFAULT '{}'")
     packages.init_db(db)
@@ -116,6 +118,8 @@ def _run(db, tid, rid):
 
 def _save(db, state, uid, action, now):
     version = state['version'] + 1
+    if state['version']:
+        management_report.capture_pre_upgrade(db, state['id'], state['version'])
     stored = {k: v for k, v in state.items() if k not in ('id', 'version', 'mode')}
     db.execute('UPDATE proof_runs SET version=?,document=? WHERE id=? AND version=?',
                (version, _dump(stored), state['id'], state['version']))
@@ -135,6 +139,7 @@ def _save(db, state, uid, action, now):
     db.execute('INSERT INTO proof_history(run_id,actor,action,at,version,details) VALUES(?,?,?,?,?,?)',
                (state['id'], uid, action, now, version, _dump(detail)))
     state['version'] = version
+    management_report.capture(db, state)
 
 
 def _view(db, state):
@@ -144,7 +149,24 @@ def _view(db, state):
         'SELECT id,key_id AS keyId,language FROM proof_archives WHERE run_id=? ORDER BY rowid DESC',
         (state['id'],))]
     report = state['report']
-    return {'run': state | {'signed': signed, 'history': history, 'retests': report['retests'] if report else []}}
+    first = db.execute('SELECT min(revision) FROM proof_management_reports WHERE run_id=?', (state['id'],)).fetchone()[0]
+    return {'run': state | {'signed': signed, 'history': history, 'retests': report['retests'] if report else [],
+                            'managementReportFrom': first or state['version']}}
+
+
+def _management_download(db, tid, rid, requested):
+    run = db.execute('SELECT version FROM proof_runs WHERE team_id=? AND id=?', (tid, rid)).fetchone()
+    _check(run is not None, 'not_found', 404)
+    revision = run['version'] if requested is None else int(requested)
+    frozen = db.execute('SELECT summary FROM proof_management_reports WHERE run_id=? AND revision=?',
+                        (rid, revision)).fetchone()
+    if frozen:
+        report = json.loads(frozen['summary'])
+    else:
+        # An existing workspace may have no snapshots until its next mutation.
+        _check(revision == run['version'], 'not_found', 404)
+        report = management_report.summarize(db, _run(db, tid, rid))
+    return {'filename': f'AuthzLedger-Management-{rid}-v{revision}.json', 'report': report}
 
 
 def _refresh_report(state):
@@ -302,6 +324,10 @@ def handle(db, directory, tid, uid, role, method, parts, body, session_hash, now
             return packages.key_history(db, directory, tid)
         if len(parts) == 1 and ID.fullmatch(parts[0]):
             return _view(db, _run(db, tid, parts[0]))
+        if len(parts) in (2, 3) and ID.fullmatch(parts[0]) and parts[1] == 'management-report':
+            requested = parts[2] if len(parts) == 3 else None
+            _check(requested is None or re.fullmatch(r'[1-9][0-9]{0,15}', requested), 'not_found', 404)
+            return _management_download(db, tid, parts[0], requested)
         raise Error(404, 'not_found')
     _check(method == 'POST', 'method_not_allowed', 405)
     if parts == ['rotate']:

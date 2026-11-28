@@ -2,19 +2,22 @@
 """Strict, offline projection of source files into explicitly bounded evidence."""
 import ipaddress
 import re
+from datetime import datetime
 from urllib.parse import unquote, urlsplit
 from xml.etree.ElementTree import ParseError
 
 from .evidence_formats import MAX_FILE, MAX_ROWS, canonical, host, read_json, sha, xml_document
 
 SOURCES = {"burp": "Burp", "zap": "ZAP", "har": "HAR", "openapi": "OpenAPI",
-           "nmap": "Nmap", "nuclei": "Nuclei"}
+           "nmap": "Nmap", "nuclei": "Nuclei", "nessus": "Nessus", "nikto": "Nikto",
+           "cobalt": "Cobalt Strike telemetry"}
 METHODS = {"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "TRACE", "CONNECT"}
 ROUTES = set(("api v1 v2 v3 users user accounts account invoices invoice orders order items item objects object "
               "projects project organizations teams profile status health public private auth login logout session me "
               "control admin").split())
 IDENTIFIER = re.compile(r"[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,95}\Z")
-FIELDS = {"id", "host", "method", "path", "status", "marker", "rule", "source"}
+FIELDS = {"id", "host", "method", "path", "status", "marker", "rule", "source", "severity"}
+SEVERITY_LEVELS = ("info", "low", "medium", "high", "critical", "unknown")
 # Refuse common credential structures before an operator-supplied label can be retained.
 # Opaque business identifiers still require review by the operator.
 CREDENTIAL = re.compile(
@@ -65,7 +68,8 @@ def endpoint(value):
 
 
 def normalize(row, label):
-    _require(isinstance(row, dict) and set(row) <= FIELDS and FIELDS - {"marker"} <= set(row), "invalid observation fields")
+    _require(isinstance(row, dict) and set(row) <= FIELDS and FIELDS - {"marker", "severity"} <= set(row),
+             "invalid observation fields")
     _require(row["source"] == label, "unexpected source")
     for field in ("id", "rule"):
         _require(isinstance(row[field], str) and IDENTIFIER.fullmatch(row[field])
@@ -73,14 +77,21 @@ def normalize(row, label):
     method = row["method"]
     status = row["status"]
     marker = row.get("marker", False)
-    _require(isinstance(method, str) and (method in METHODS or (method == "SERVICE" and label == "Nmap")
-             or (method == "UNKNOWN" and label in ("Burp", "ZAP", "Nuclei"))), "invalid method")
+    _require(isinstance(method, str) and (method in METHODS or (method == "SERVICE" and label in ("Nmap", "Nessus"))
+             or (method == "UNKNOWN" and label in ("Burp", "ZAP", "Nuclei", "Nikto", "Cobalt Strike telemetry"))),
+             "invalid method")
     _require(status is None or type(status) is int and 100 <= status <= 599, "invalid HTTP status")
     _require(type(marker) is bool, "invalid marker")
     if label in ("Nmap", "Nuclei", "OpenAPI"):
         _require(not marker, "inventory or scanner assertions cannot assert a protected marker")
-    return {"id": row["id"], "host": safe_host(row["host"]), "method": method, "path": safe_path(row["path"]),
-            "status": status, "marker": marker, "rule": row["rule"], "source": label}
+    if label in ("Nessus", "Nikto", "Cobalt Strike telemetry"):
+        _require(status is None and not marker, "scanner records cannot attest HTTP controls")
+    result = {"id": row["id"], "host": safe_host(row["host"]), "method": method, "path": safe_path(row["path"]),
+              "status": status, "marker": marker, "rule": row["rule"], "source": label}
+    if "severity" in row:
+        _require(label in ("Nessus", "Nuclei") and row["severity"] in SEVERITY_LEVELS, "invalid source severity")
+        result["severity"] = row["severity"]
+    return result
 
 
 def source_object(fmt, digest, rows, observed_absent=None):
@@ -106,6 +117,59 @@ def _array(value):
     return value
 
 
+def _number(value, maximum):
+    _require(isinstance(value, str) and re.fullmatch(r"[0-9]{1,12}", value) and int(value) <= maximum,
+             "invalid numeric report field")
+    return int(value)
+
+
+def _read_scanner_xml(fmt, text, add):
+    _require(not re.search(r"<!\s*(?:DOCTYPE|ENTITY)\b", text, re.I), "DTD is prohibited")
+    root = xml_document(text)
+    if fmt == "nessus":
+        _require(root.tag == "NessusClientData_v2", "invalid Nessus report")
+        for target in root.iterfind("Report/ReportHost"):
+            hostname = safe_host(target.get("name"))
+            for item in target.iterfind("ReportItem"):
+                plugin = _number(item.get("pluginID"), 999999999999)
+                port = _number(item.get("port"), 65535)
+                severity = _number(item.get("severity"), 4)
+                protocol = item.get("protocol")
+                _require(protocol in ("tcp", "udp", "icmp", "ip", "sctp"), "invalid Nessus protocol")
+                add(hostname, "SERVICE", "/", rule=f"plugin-{plugin}-{protocol}-{port}", severity=SEVERITY_LEVELS[severity])
+        return
+
+    _require(root.tag in ("niktoscan", "niktoscans"), "invalid Nikto report")
+    path = "niktoscan/scandetails" if root.tag == "niktoscans" else "scandetails"
+    for scan in root.iterfind(path):
+        hostname = safe_host(scan.get("targethostname") or scan.get("targetip"))
+        port = scan.get("targetport")
+        port_label = f"-port-{_number(port, 65535)}" if port is not None else ""
+        for item in scan.iterfind("item"):
+            item_id = _number(item.get("id"), 999999999999)
+            route = safe_path(item.findtext("uri") or "/")
+            add(hostname, item.get("method") or "UNKNOWN", route, rule=f"item-{item_id}{port_label}")
+
+
+def _read_telemetry(data, add):
+    _require(isinstance(data, dict) and set(data) == {"schema", "source", "events"}
+             and data["schema"] == "authzledger.defensive-telemetry.v1" and data["source"] == "cobalt-strike",
+             "invalid defensive telemetry envelope")
+    record_ids = set()
+    for event in _array(data["events"]):
+        _require(isinstance(event, dict) and set(event) == {"record_id", "asset", "observed_at", "event_type"},
+                 "invalid defensive telemetry fields")
+        ident, timestamp, kind = event["record_id"], event["observed_at"], event["event_type"]
+        _require(isinstance(ident, str) and re.fullmatch(r"[^\x00-\x20\x7f]{1,255}", ident) and ident not in record_ids,
+                 "invalid or duplicate telemetry record id")
+        record_ids.add(ident)
+        _require(kind in ("detection", "containment", "review"), "invalid defensive event type")
+        _require(isinstance(timestamp, str) and re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{3})?Z", timestamp),
+                 "invalid UTC timestamp")
+        datetime.fromisoformat(timestamp[:-1])
+        add(safe_host(event["asset"]), "UNKNOWN", "/", rule=kind, locator=[ident, timestamp])
+
+
 def import_source(fmt, raw):
     """The returned object is safe to persist. Raw input and request metadata are discarded."""
     _require(isinstance(fmt, str) and fmt.lower() in SOURCES, "unknown import format")
@@ -123,14 +187,23 @@ def _read(fmt, text):
     label = SOURCES[fmt]
     rows = []
 
-    def add(hostname, method, path, status=None, rule="protected-marker", locator=None):
+    def add(hostname, method, path, status=None, rule="protected-marker", locator=None, severity=None):
         _require(len(rows) < MAX_ROWS, "too many observations")
         # Source-local deterministic key. Non-evidence fields do not influence the identity.
         key = [fmt, len(rows) + 1, hostname, method, path, rule, locator]
-        rows.append({"id": fmt + "-" + sha(canonical(key))[:24], "host": hostname, "method": method,
-                     "path": path, "status": status, "marker": False, "rule": rule, "source": label})
+        record = {"id": fmt + "-" + sha(canonical(key))[:24], "host": hostname, "method": method,
+                  "path": path, "status": status, "marker": False, "rule": rule, "source": label}
+        if severity is not None:
+            record["severity"] = severity
+        rows.append(record)
 
     content = text.lstrip()
+    if fmt in ("nessus", "nikto"):
+        _read_scanner_xml(fmt, text, add)
+        return rows, None
+    if fmt == "cobalt":
+        _read_telemetry(read_json(text), add)
+        return rows, None
     if content.startswith(("{", "[")) and fmt != "nuclei":
         data = read_json(text)
         if isinstance(data, list) or isinstance(data, dict) and "observations" in data:
@@ -184,8 +257,13 @@ def _read(fmt, text):
             item = read_json(line)
             _require(item["type"] == "http" and type(item["matcher-status"]) is bool
                      and isinstance(item["template-id"], str) and IDENTIFIER.fullmatch(item["template-id"]), "invalid HTTP match")
+            if not item["matcher-status"]:
+                continue
             hostname, path = endpoint(item["matched-at"])
-            add(hostname, "UNKNOWN", path, rule=item["template-id"])
+            info = item.get("info", {})
+            _require(isinstance(info, dict) and ("severity" not in info or info["severity"] in SEVERITY_LEVELS),
+                     "invalid Nuclei severity")
+            add(hostname, "UNKNOWN", path, rule=item["template-id"], severity=info.get("severity"))
     elif fmt in ("burp", "nmap"):
         if fmt == "burp":
             _require(not re.search(r"<!\s*(?:DOCTYPE|ENTITY)\b", text, re.I), "DTD is prohibited")
