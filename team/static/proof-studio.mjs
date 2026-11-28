@@ -1,6 +1,7 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
 import {proofText} from './proof-texts.mjs';
 import {managementHtml} from './management-report.mjs';
+import {scannerPriorities} from './scanner-priority.mjs';
 
 const steps = ['scope','import','proof','retest','package'];
 const controlIds = ['token','identity','owner','denial'];
@@ -392,10 +393,32 @@ export function createProofStudio(root,{request,encodeFile,fileBytes,saveBlob,on
   function resultsTable() {
     return table([txt('observed'),'HTTP',txt('marker'),txt('results')],baselineRows().map(row=>{
       const obs=row.observation;
-      return [routeRef(obs),obs.status,yesNo(obs.marker),element('code',row.status)];
+      const reference=element('div',null,'ps-observation');
+      reference.id='ps-observation-'+active.id+'-'+row.id;
+      reference.tabIndex=-1;
+      reference.append(routeRef(obs),element('small',[obs.source,obs.rule,row.id].join(' · ')));
+      return [reference,obs.status,yesNo(obs.marker),element('code',row.status)];
     }));
   }
+  function showPriorities(panel) {
+    const priorities=scannerPriorities(active.report);
+    if (!priorities.length) return;
+    const section=element('section');
+    const title=element('h4',txt('priorityTitle'));
+    title.id='ps-priority-title';
+    section.setAttribute('aria-labelledby',title.id);
+    const rows=priorities.map(({id,status,observation})=>{
+      const link=element('a',[observation.host,observation.rule].join(' · '));
+      link.href='#ps-observation-'+active.id+'-'+id;
+      link.setAttribute('aria-label',[link.textContent,id].join(' · '));
+      return [txt(observation.severity==='critical'?'severityCritical':'severityHigh'),observation.source,link,
+        status==='inconclusive' ? txt('priorityUnverified') : status==='budget_blocked' ? txt('baselineBudget') : status];
+    });
+    section.append(title,table([txt('prioritySeverity'),txt('prioritySource'),txt('observed'),txt('results')],rows));
+    panel.append(section);
+  }
   function proofPanel(panel) {
+    showPriorities(panel);
     panel.append(note('controlsHint'));
     const readOnly=!writer() || active.locked;
     const controls=controlTable(active.controls || {},readOnly);

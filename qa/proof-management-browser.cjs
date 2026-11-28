@@ -54,14 +54,35 @@ test('scanner imports and versioned management reports in the signed-in Team UI'
   for (const [id,filename] of fixtures) {
     await formats.selectOption(id);
     if (id==='cobalt') await studio.getByText(/authzledger\.defensive-telemetry\.v1/).waitFor();
-    await file.setInputFiles(path.join(__dirname,'fixtures',filename));
+    const source=path.join(__dirname,'fixtures',filename);
+    if (id==='nessus') {
+      const input=await readFile(source,'utf8');
+      const critical='<ReportItem pluginID="124" port="443" protocol="tcp" severity="4"/>';
+      const outside='<ReportHost name="outside.example">'+critical+'</ReportHost>';
+      const raw=input.replace('severity="0"','severity="3"').replace('</ReportHost>',critical+'</ReportHost>'+outside);
+      await file.setInputFiles({name:filename,mimeType:'application/xml',buffer:Buffer.from(raw)});
+    } else await file.setInputFiles(source);
     await studio.getByRole('button',{name:'Beobachtungen importieren'}).click();
     await studio.getByRole('heading',{name:'Beweis',exact:true}).waitFor();
+    if (id==='nessus') {
+      const queue=studio.getByRole('region',{name:'Scannerhinweise mit Prüfpriorität'});
+      assert.equal(await queue.getByRole('link').count(),2);
+      assert.deepEqual(await queue.locator('tbody tr td:first-child').allTextContents(),['Kritisch','Hoch']);
+      assert.equal(await queue.getByText('Nessus',{exact:true}).count(),2);
+      assert.equal(await queue.getByText('Unbestätigt',{exact:true}).count(),2);
+      const first=queue.getByRole('link').first();
+      await first.focus(); await first.press('Enter');
+      const target=studio.locator(await first.getAttribute('href'));
+      assert.match(await target.innerText(),/plugin-124-tcp-443/);
+      assert.equal(await target.evaluate(node=>node===document.activeElement),true);
+    }
     await studio.locator('.ps-step').nth(1).click();
   }
   const snapshot=JSON.parse((await download('Berichtsdaten (JSON)')).text);
   assert.equal(snapshot.revision,initial.revision+fixtures.length);
   assert.equal(snapshot.baseline.byStatus.confirmed,0);
+  assert.equal(snapshot.scannerSignals.bySeverity.critical,1);
+  assert.equal(snapshot.scannerSignals.bySeverity.high,1);
   assert.deepEqual(snapshot.sources.byFormat,{nessus:1,nikto:1,cobalt:1});
   await studio.locator('.ps-step').nth(3).click();
   for (const [id] of fixtures) assert.equal(await formats.locator('option[value="'+id+'"]').count(),1);
