@@ -2,11 +2,11 @@
 import {proofText} from './proof-texts.mjs';
 import {managementHtml} from './management-report.mjs';
 import {scannerPriorities} from './scanner-priority.mjs';
+import {detectProofFile} from './detect-proof-format.mjs';
+import {sourceNames} from './proof-sources.mjs';
 
 const steps = ['scope','import','proof','retest','package'];
 const controlIds = ['token','identity','owner','denial'];
-const formats = {burp:'Burp',zap:'ZAP',har:'HAR',openapi:'OpenAPI',nmap:'Nmap XML',
-  nuclei:'Nuclei HTTP JSONL',nessus:'Nessus (.nessus)',nikto:'Nikto XML',cobalt:'Cobalt Strike · EDR/SIEM JSON'};
 const writerRoles = new Set(['admin','lead_pentester','pentester']);
 const allowedLanguages = new Set(['de','en','fr']);
 
@@ -100,7 +100,7 @@ export function createProofStudio(root,{request,encodeFile,fileBytes,saveBlob,on
     const reason = {
       version_conflict:'reloadConflict',already_imported:'problemDuplicate',baseline_frozen:'problemLocked',
       closed_for_import:'problemLocked',badFile:'problemSize',invalid_size:'problemSize',
-      'invalid or unsupported source document':'problemSource',forbidden:'noPermission'
+      'invalid or unsupported source document':'problemSource',invalid_evidence:'problemSource',choose_format:'chooseFormat',forbidden:'noPermission'
     }[info];
     if (reason) say(reason); else say('requestFailed',info);
   }
@@ -327,24 +327,54 @@ export function createProofStudio(root,{request,encodeFile,fileBytes,saveBlob,on
     const list=element('ul',null,'records');
     for (const file of src) {
       const li=element('li');
-      li.append(element('strong',file.format),element('small',file.sha256 || ''));
+      li.append(element('strong',sourceNames[file.format] || file.format),element('small',file.sha256 || ''));
       if (Array.isArray(file.observations)) li.append(table([txt('observed'),'HTTP',txt('marker')],file.observations.map(obs=>[routeRef(obs),obs.status,yesNo(obs.marker)])));
       list.append(li);
     }
     return list.childElementCount?list:note('noFiles');
   }
   function pickFile(label) {
-    const file=element('input'); file.type='file'; file.accept='.json,.xml,.nessus,.har,.jsonl,.ndjson,.txt,application/json,application/xml,text/plain';
-    const format=selectOptions(Object.entries(formats),'har');
-    const group=element('div',null,'pair');
-    const hint=note('cobaltFormat');
-    hint.hidden=true;
-    format.addEventListener('change',()=>{hint.hidden=format.value!=='cobalt';});
-    group.append(field(txt('format'),format),field(txt(label),file),hint);
-    return {group,file,format};
+    const file=element('input'); file.type='file';
+    file.accept='.json,.xml,.nessus,.har,.jsonl,.ndjson,.csv,.txt,application/json,application/xml,text/plain';
+    const format=selectOptions([['',txt('chooseFormat')],...Object.entries(sourceNames)],'');
+    const group=element('div',null,'ps-file-picker');
+    const inputs=element('div',null,'pair');
+    const hint=element('p',null,'fine'), detection=element('p',null,'fine');
+    hint.id='ps-source-help'; detection.setAttribute('role','status');
+    format.setAttribute('aria-describedby',hint.id); file.setAttribute('aria-describedby',hint.id);
+    let manual=false, detected=null, selection=0, pending=Promise.resolve();
+    function showHint() {
+      const id=format.value;
+      const key=id==='cobalt'?'cobaltFormat':'format_'+id;
+      hint.textContent=(id ? txt(key)+' ' : '')+txt('sourceLimit');
+      detection.textContent=detected && detected!==id ? txt('detectedFormat')+' '+sourceNames[detected] :
+        detected && !manual ? txt('detectedFormat')+' '+sourceNames[detected] : '';
+    }
+    format.addEventListener('change',()=>{manual=Boolean(format.value);showHint();});
+    file.addEventListener('change',()=>{
+      const version=++selection, selected=file.files[0];
+      detected=null;
+      if (!manual) format.value='';
+      showHint();
+      if (!selected) { pending=Promise.resolve(); return; }
+      pending=detectProofFile(selected).catch(()=>null).then(id=>{
+        if (version!==selection || file.files[0]!==selected || !file.isConnected) return;
+        detected=Object.hasOwn(sourceNames,id) ? id : null;
+        if (!manual && detected) format.value=detected;
+        showHint();
+        if (!manual && !detected) detection.textContent=txt('unknownFormat');
+      });
+    });
+    showHint();
+    inputs.append(field(txt('format'),format),field(txt(label),file));
+    group.append(inputs,hint,detection);
+    return {group,file,format,ready:()=>pending};
   }
   async function readSource(input) {
-    return {format:input.format.value,content_b64:encodeFile(await fileBytes(input.file.files[0],1024*1024))};
+    const file=input.file.files[0];
+    await input.ready();
+    if (input.file.files[0]!==file || !input.format.value) throw new Error('choose_format');
+    return {format:input.format.value,content_b64:encodeFile(await fileBytes(file,1024*1024))};
   }
   function importPanel(panel) {
     const lab=active.mode==='lab';
@@ -417,8 +447,57 @@ export function createProofStudio(root,{request,encodeFile,fileBytes,saveBlob,on
     section.append(title,table([txt('prioritySeverity'),txt('prioritySource'),txt('observed'),txt('results')],rows));
     panel.append(section);
   }
+  function showSourceCoverage(panel) {
+    const scoped=new Set(active.scope.hosts), hosts=new Map();
+    for (const source of active.sources) {
+      const label=sourceNames[source.format] || source.format;
+      for (const obs of source.observations) {
+        if (!scoped.has(obs.host)) continue;
+        if (!hosts.has(obs.host)) hosts.set(obs.host,new Map());
+        const counts=hosts.get(obs.host);
+        counts.set(label,(counts.get(label) || 0)+1);
+      }
+    }
+    const rows=[];
+    for (const [host,counts] of hosts) {
+      if (counts.size>1) rows.push([host,[...counts].map(([name,n])=>name+' ('+n+')').join(' · ')]);
+    }
+    if (rows.length) panel.append(details(txt('sharedHosts'),table([txt('scopeHost'),txt('sourceCounts')],rows)));
+  }
+  function showInventory(panel) {
+    const scoped=new Set(active.scope.hosts);
+    const groups=[];
+    for (const source of active.sources) {
+      if (!['bloodhound','neo4j'].includes(source.format)) continue;
+      const observations=source.observations.filter(obs=>obs.inventory && scoped.has(obs.host));
+      if (!observations.length) continue;
+      const nodes=new Map(observations.filter(obs=>obs.inventory.kind==='node').map(obs=>[obs.inventory.node,obs.inventory]));
+      const rows=observations.filter(obs=>obs.inventory.kind==='edge');
+      const title=sourceNames[source.format]+' · '+source.sha256.slice(0,12);
+      const nodeLabel=id=>{
+        const node=nodes.get(id);
+        return element('code',(node?node.nodeType+' · ':'')+id);
+      };
+      const group=details(title,element('p',source.sha256,'fingerprint'));
+      if (rows.length) group.append(table([txt('scopeHost'),txt('inventoryFrom'),txt('inventoryRelation'),txt('inventoryTo')],
+        rows.map(({host,inventory})=>[host,nodeLabel(inventory.from),inventory.relation,nodeLabel(inventory.to)])));
+      const inventoryNodes=observations.filter(obs=>obs.inventory.kind==='node');
+      if (inventoryNodes.length) group.append(details(txt('inventoryNodes')+' · '+inventoryNodes.length,
+        table([txt('scopeHost'),txt('inventoryNode'),txt('inventoryBasis')],inventoryNodes.map(({host,inventory})=>[
+          host,nodeLabel(inventory.node),txt(inventory.referenceOnly?'referenceOnly':'declaredNode')]))));
+      groups.push(group);
+    }
+    if (!groups.length) return;
+    const block=element('section'), heading=element('h4',txt('inventoryHeading'));
+    heading.id='ps-inventory-title'; block.setAttribute('aria-labelledby',heading.id);
+    block.append(heading,note('inventoryHint'),...groups); panel.append(block);
+  }
   function proofPanel(panel) {
     showPriorities(panel);
+    showSourceCoverage(panel);
+    showInventory(panel);
+    if (writer() && active.mode==='commercial' && !active.locked)
+      panel.append(button(txt('anotherSource'),()=>toStage(1),'secondary'));
     panel.append(note('controlsHint'));
     const readOnly=!writer() || active.locked;
     const controls=controlTable(active.controls || {},readOnly);

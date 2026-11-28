@@ -1,0 +1,3 @@
+{"type":"node","id":"17","labels":["Base","User"],"properties":{"domain":"corp.example","name":"private-user"}}
+{"type":"node","id":"19","labels":["Group"],"properties":{"domain":"corp.example","displayName":"private-group"}}
+{"id":"2","type":"relationship","label":"MemberOf","start":{"id":"17","labels":["Base","User"]},"end":{"id":"19","labels":["Group"]},"properties":{}}

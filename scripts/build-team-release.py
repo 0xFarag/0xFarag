@@ -16,10 +16,17 @@ PACK = ROOT / 'packaging' / 'team'
 VERSION = (PACK / 'VERSION').read_text().strip()
 NAME = 'authzledger-team'
 STEM = NAME + '-' + VERSION
-FILES = [f'AuthzLedger-Team-{VERSION}-Windows-x64.exe', f'{NAME}_{VERSION}-1_all.deb',
-         STEM + '-1-any.pkg.tar.zst', 'PKGBUILD', STEM + '.tar.gz',
-         STEM + '-linux-amd64.docker.tar.gz', STEM + '-linux-amd64.oci.tar',
-         f'AuthzLedger-Burp-Export-{VERSION}.jar']
+
+
+def asset_names(version):
+    stem = f'{NAME}-{version}'
+    return [f'AuthzLedger-Team-{version}-Windows-x64.exe', f'{NAME}_{version}-1_all.deb',
+            stem + '-1-any.pkg.tar.zst', 'PKGBUILD', stem + '.tar.gz',
+            stem + '-linux-amd64.docker.tar.gz', stem + '-linux-amd64.oci.tar',
+            f'AuthzLedger-Burp-Export-{version}.jar']
+
+
+FILES = asset_names(VERSION)
 
 
 def digest(path):

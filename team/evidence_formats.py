@@ -71,18 +71,23 @@ def xml_document(text):
         raise ValueError("unsupported XML")
     prefix = re.match(r'\s*(?:<\?xml\s[^?]*\?>\s*)?(?:(?:<!--.*?-->|<\?xml-stylesheet\s[^?]*\?>)\s*)*', text, re.S)
     body = text[prefix.end():]
+    declared_root = None
     if body.startswith("<!DOCTYPE"):
-        decl = re.match(r"<!DOCTYPE\s+(?:issues|nmaprun|items)\s*(?:\[([\s\S]{0,32768}?)\]\s*)?>", body)
+        decl = re.match(r"<!DOCTYPE\s+(issues|nmaprun|items)\s*(?:\[([\s\S]{0,32768}?)\]\s*)?>", body)
         if not decl:
             raise ValueError("unsupported XML declaration")
-        subset = decl.group(1) or ""
+        declared_root = decl.group(1)
+        subset = decl.group(2) or ""
         allowed = r"\s*(?:<!(?:ELEMENT|ATTLIST)\s+[A-Za-z][A-Za-z0-9_.:#|(),?*+=\s\x22\x27-]*>\s*)*"
         if not re.fullmatch(allowed, subset):
             raise ValueError("unsupported XML subset")
         body = re.sub(r"^\s*(?:<\?xml-stylesheet\s[^?]*\?>\s*)*", "", body[decl.end():])
     if re.search(r"<!\s*(?:DOCTYPE|ENTITY)\b|<\?", body, re.I):
         raise ValueError("unsupported XML declaration")
-    return ET.fromstring(body)
+    root = ET.fromstring(body)
+    if declared_root and root.tag != declared_root:
+        raise ValueError("XML declaration does not match root")
+    return root
 
 
 def parse_records(fmt, raw):

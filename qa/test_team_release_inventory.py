@@ -1,7 +1,8 @@
 # © Nasser Aldin Farag (0xFarag). All rights reserved.
-"""The release manifest and the public download page must describe the same build."""
+"""Check staged packages and links to the published Team release."""
 import hashlib
 from html.parser import HTMLParser
+import json
 from pathlib import Path
 import runpy
 import subprocess
@@ -35,12 +36,20 @@ class TeamRelease(unittest.TestCase):
             self.assertEqual((installed/'usr/lib/authzledger-team'/model).read_bytes(), expected)
 
     def test_download_page_matches_tagged_release_inventory(self):
+        published = json.loads((ROOT / 'scripts/download-releases.json').read_text(encoding='utf-8'))['publishedTeamVersion']
+        self.assertRegex(published, r'^\d+\.\d+\.\d+\.\d+$')
+        html = (ROOT / 'public/downloads/index.html').read_text(encoding='utf-8')
+        self.assertIn(f'AuthzLedger Team · {published}<', html)
         page = DownloadLinks()
-        page.feed((ROOT / 'public/downloads/index.html').read_text(encoding='utf-8'))
+        page.feed(html)
         base = 'https://github.com/0xFarag/0xFarag/releases/download/team-'
         links = [url for url in page.urls if url.startswith(base)]
-        expected = [f'{base}{release["VERSION"]}/{name}' for name in [*release['FILES'], 'SHA256SUMS']]
+        expected = [f'{base}{published}/{name}' for name in [*release['asset_names'](published), 'SHA256SUMS']]
         self.assertCountEqual(links, expected)
+        guides = 'https://github.com/0xFarag/0xFarag/blob/team-'
+        for url in page.urls:
+            if url.startswith(guides):
+                self.assertTrue(url.startswith(f'{guides}{published}/'), url)
 
     def test_burp_extension_is_required_and_checksummed(self):
         jar = f'AuthzLedger-Burp-Export-{release["VERSION"]}.jar'
