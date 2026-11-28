@@ -21,6 +21,11 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Install pinned website runtime dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Materialize checksum-pinned download files
         run: node scripts/build-downloads.mjs
       - name: Check the complete offline download inventory
@@ -35,6 +40,8 @@ jobs:
       - name: Install Chromium on Windows
         if: runner.os == 'Windows'
         run: node qa/node_modules/playwright/cli.js install chromium
+      - name: Verify passkey registration, private sessions and logout
+        run: node --test qa/passkeys.test.cjs qa/account-store.test.cjs qa/account-browser.cjs
       - name: Check source-bound observation comparisons
         run: node --test qa/import-formats.cjs qa/portal-alert.test.cjs qa/portal-controls.test.cjs qa/portal-directory.test.cjs qa/portal-graph.test.cjs qa/portal-reference.test.cjs qa/format-extensions.cjs qa/asset-review.cjs qa/ferox-format.cjs qa/import-compare.cjs qa/import-compare-browser.cjs
       - name: Check evidence workbench projections and comparisons

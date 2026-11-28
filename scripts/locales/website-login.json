@@ -1,0 +1,272 @@
+{
+  "Anmeldung · AuthzLedger": [
+    "Sign in · AuthzLedger",
+    "Connexion · AuthzLedger",
+    "Accesso · AuthzLedger",
+    "تسجيل الدخول · AuthzLedger"
+  ],
+  "Melden Sie sich mit Ihrem Passkey bei AuthzLedger an oder richten Sie ein Website-Konto ein.": [
+    "Sign in to AuthzLedger with your passkey or create a website account.",
+    "Connectez-vous à AuthzLedger avec votre clé d’accès ou créez un compte sur le site.",
+    "Accedete ad AuthzLedger con la vostra passkey o create un account sul sito.",
+    "سجّلوا الدخول إلى AuthzLedger بمفتاح المرور أو أنشئوا حساباً على الموقع."
+  ],
+  "Anmeldung": [
+    "Sign in",
+    "Connexion",
+    "Accesso",
+    "تسجيل الدخول"
+  ],
+  "Teamdienst": [
+    "Team service",
+    "Service d’équipe",
+    "Servizio del team",
+    "خدمة الفريق"
+  ],
+  "Zugang wird geprüft …": [
+    "Checking access…",
+    "Vérification de l’accès…",
+    "Verifica dell’accesso…",
+    "جارٍ التحقق من إمكانية الوصول…"
+  ],
+  "Aktivieren Sie JavaScript, um einen Passkey zu verwenden.": [
+    "Enable JavaScript to use a passkey.",
+    "Activez JavaScript pour utiliser une clé d’accès.",
+    "Abilitate JavaScript per usare una passkey.",
+    "فعّلوا JavaScript لاستخدام مفتاح المرور."
+  ],
+  "Öffnen Sie Ihr Website-Konto mit dem Passkey auf Ihrem Gerät oder in Ihrem Passwortmanager.": [
+    "Open your website account with the passkey on your device or in your password manager.",
+    "Ouvrez votre compte sur le site avec la clé d’accès de votre appareil ou de votre gestionnaire de mots de passe.",
+    "Accedete al vostro account sul sito con la passkey del dispositivo o del gestore di password.",
+    "افتحوا حسابكم على الموقع باستخدام مفتاح المرور المحفوظ على جهازكم أو في مدير كلمات المرور."
+  ],
+  "Mit Passkey anmelden": [
+    "Sign in with a passkey",
+    "Se connecter avec une clé d’accès",
+    "Accedi con una passkey",
+    "تسجيل الدخول بمفتاح مرور"
+  ],
+  "Passkey einrichten": [
+    "Set up a passkey",
+    "Créer une clé d’accès",
+    "Configura una passkey",
+    "إعداد مفتاح مرور"
+  ],
+  "Zum ersten Mal hier?": [
+    "First visit?",
+    "Première visite ?",
+    "È la prima visita?",
+    "هل هذه زيارتكم الأولى؟"
+  ],
+  "Mit «Passkey einrichten» erstellen Sie Ihr Konto. Bewahren Sie den Passkey in einem synchronisierten Passwortmanager auf, damit Sie ihn bei einem Gerätewechsel weiterverwenden können. Geht der einzige Passkey verloren, verlieren Sie den Zugang.": [
+    "Choose “Set up a passkey” to create your account. Keep it in a synced password manager to use it on a new device. Losing your only passkey means losing access.",
+    "Choisissez « Créer une clé d’accès » pour créer votre compte. Conservez cette clé dans un gestionnaire de mots de passe synchronisé pour l’utiliser sur un nouvel appareil. Si vous perdez votre unique clé, vous perdez l’accès au compte.",
+    "Scegliete «Configura una passkey» per creare un account. Conservate la passkey in un gestore di password sincronizzato per usarla su un nuovo dispositivo. Se perdete l’unica passkey, perderete l’accesso.",
+    "اختاروا «إعداد مفتاح مرور» لإنشاء الحساب. احفظوا المفتاح في مدير كلمات مرور متزامن لتتمكنوا من استخدامه على جهاز جديد. إذا فقدتم مفتاحكم الوحيد، ستفقدون الوصول إلى الحساب."
+  ],
+  "Kontokennung": [
+    "Account ID",
+    "Identifiant du compte",
+    "ID account",
+    "معرّف الحساب"
+  ],
+  "Erstellt am": [
+    "Created on",
+    "Date de création",
+    "Data di creazione",
+    "تاريخ الإنشاء"
+  ],
+  "Werkzeuge": [
+    "Tools",
+    "Outils",
+    "Strumenti",
+    "الأدوات"
+  ],
+  "Eine neue Anmeldung mit diesem Konto beendet die bisherige Sitzung.": [
+    "Signing in again ends the previous session for this account.",
+    "Une nouvelle connexion à ce compte met fin à la session précédente.",
+    "Un nuovo accesso con questo account termina la sessione precedente.",
+    "يؤدي تسجيل الدخول من جديد إلى إنهاء الجلسة السابقة لهذا الحساب."
+  ],
+  "Abmelden": [
+    "Sign out",
+    "Se déconnecter",
+    "Esci",
+    "تسجيل الخروج"
+  ],
+  "Konto löschen": [
+    "Delete account",
+    "Supprimer le compte",
+    "Elimina account",
+    "حذف الحساب"
+  ],
+  "Ihr Website-Konto und sein Zugang werden dauerhaft gelöscht. Entfernen Sie den Passkey anschliessend aus Ihrem Passwortmanager.": [
+    "Your website account and its access will be permanently deleted. Then remove the passkey from your password manager.",
+    "Votre compte sur le site et son accès seront définitivement supprimés. Retirez ensuite la clé d’accès de votre gestionnaire de mots de passe.",
+    "Il vostro account sul sito e il relativo accesso saranno eliminati definitivamente. Poi rimuovete la passkey dal gestore di password.",
+    "سيُحذف حساب الموقع وإمكانية الوصول إليه نهائياً. احذفوا مفتاح المرور من مدير كلمات المرور بعد ذلك."
+  ],
+  "Abbrechen": [
+    "Cancel",
+    "Annuler",
+    "Annulla",
+    "إلغاء"
+  ],
+  "Konto endgültig löschen": [
+    "Permanently delete account",
+    "Supprimer définitivement le compte",
+    "Elimina definitivamente l’account",
+    "حذف الحساب نهائياً"
+  ],
+  "Erneut prüfen": [
+    "Check again",
+    "Vérifier à nouveau",
+    "Verifica di nuovo",
+    "إعادة التحقق"
+  ],
+  "Weitere Zugänge": [
+    "Other accounts",
+    "Autres accès",
+    "Altri accessi",
+    "خيارات وصول أخرى"
+  ],
+  "Team-Workbench Ihrer Organisation öffnen": [
+    "Open your organisation’s Team Workbench",
+    "Ouvrir la Workbench de votre organisation",
+    "Apri la Workbench del team della tua organizzazione",
+    "فتح مساحة عمل فريق مؤسستكم"
+  ],
+  "Abrechnung": [
+    "Billing",
+    "Facturation",
+    "Fatturazione",
+    "الفوترة"
+  ],
+  "Abonnement und Rechnungen verwalten": [
+    "Manage your subscription and invoices",
+    "Gérer votre abonnement et vos factures",
+    "Gestisci l’abbonamento e le fatture",
+    "إدارة الاشتراك والفواتير"
+  ],
+  "Website-Anmeldung": [
+    "Website sign-in",
+    "Connexion au site",
+    "Accesso al sito",
+    "الدخول إلى الموقع"
+  ],
+  "Persönliches Website-Konto": [
+    "Personal website account",
+    "Compte personnel sur le site",
+    "Account personale sul sito",
+    "الحساب الشخصي على الموقع"
+  ],
+  "Mit Passkey auf der Website anmelden": [
+    "Sign in to the website with a passkey",
+    "Se connecter au site avec une clé d’accès",
+    "Accedi al sito con una passkey",
+    "تسجيل الدخول إلى الموقع بمفتاح مرور"
+  ],
+  "Der Kontodienst ist gerade nicht erreichbar. Versuchen Sie es erneut.": [
+    "The account service is currently unavailable. Please try again.",
+    "Le service de compte est momentanément indisponible. Veuillez réessayer.",
+    "Il servizio account non è al momento disponibile. Riprovate.",
+    "خدمة الحساب غير متاحة حالياً. حاولوا مرة أخرى."
+  ],
+  "Dieser Browser unterstützt hier keine Passkeys. Öffnen Sie die Seite in einem aktuellen Browser über HTTPS.": [
+    "This browser cannot use passkeys here. Open the page over HTTPS in a current browser.",
+    "Ce navigateur ne peut pas utiliser les clés d’accès ici. Ouvrez la page en HTTPS dans un navigateur à jour.",
+    "Qui il browser non può usare le passkey. Aprite la pagina tramite HTTPS in un browser aggiornato.",
+    "لا يدعم هذا المتصفح مفاتيح المرور هنا. افتحوا الصفحة عبر HTTPS في متصفح حديث."
+  ],
+  "Die Passkey-Abfrage wurde abgebrochen oder ist abgelaufen. Sie können es erneut versuchen.": [
+    "The passkey prompt was cancelled or timed out. You can try again.",
+    "La demande de clé d’accès a été annulée ou a expiré. Vous pouvez réessayer.",
+    "La richiesta della passkey è stata annullata o è scaduta. Potete riprovare.",
+    "أُلغي طلب مفتاح المرور أو انتهت مهلته. يمكنكم المحاولة من جديد."
+  ],
+  "Die Anfrage ist abgelaufen. Starten Sie die Anmeldung oder Einrichtung erneut.": [
+    "The request expired. Start sign-in or setup again.",
+    "La demande a expiré. Recommencez la connexion ou la configuration.",
+    "La richiesta è scaduta. Ricominciate l’accesso o la configurazione.",
+    "انتهت صلاحية الطلب. ابدؤوا تسجيل الدخول أو الإعداد من جديد."
+  ],
+  "Der Passkey konnte nicht bestätigt werden. Wählen Sie den zu diesem Konto gehörenden Passkey.": [
+    "The passkey could not be verified. Select the passkey for this account.",
+    "La clé d’accès n’a pas pu être vérifiée. Choisissez la clé de ce compte.",
+    "Non è stato possibile verificare la passkey. Scegliete quella associata a questo account.",
+    "تعذّر التحقق من مفتاح المرور. اختاروا المفتاح المرتبط بهذا الحساب."
+  ],
+  "Die Anfrage konnte nicht abgeschlossen werden. Prüfen Sie Ihren Kontostatus erneut.": [
+    "The request could not be completed. Check your account status again.",
+    "La demande n’a pas abouti. Vérifiez à nouveau l’état de votre compte.",
+    "La richiesta non è stata completata. Verificate di nuovo lo stato dell’account.",
+    "تعذّر إكمال الطلب. تحققوا من حالة الحساب مجدداً."
+  ],
+  "Zu viele Anfragen. Versuchen Sie es später erneut.": [
+    "Too many requests. Try again later.",
+    "Trop de demandes. Réessayez plus tard.",
+    "Troppe richieste. Riprovate più tardi.",
+    "الطلبات كثيرة جداً. حاولوا لاحقاً."
+  ],
+  "Öffnen Sie die Anmeldung direkt auf authzledger.com.": [
+    "Open the sign-in page directly on authzledger.com.",
+    "Ouvrez directement la page de connexion sur authzledger.com.",
+    "Aprite la pagina di accesso direttamente su authzledger.com.",
+    "افتحوا صفحة تسجيل الدخول مباشرةً على authzledger.com."
+  ],
+  "Ihre Sitzung ist abgelaufen. Melden Sie sich erneut an.": [
+    "Your session has expired. Sign in again.",
+    "Votre session a expiré. Reconnectez-vous.",
+    "La sessione è scaduta. Accedete di nuovo.",
+    "انتهت صلاحية جلستكم. سجّلوا الدخول مجدداً."
+  ],
+  "Mein Website-Konto": [
+    "My website account",
+    "Mon compte sur le site",
+    "Il mio account sul sito",
+    "حسابي على الموقع"
+  ],
+  "Bestätigen Sie die Anfrage auf Ihrem Gerät.": [
+    "Confirm the request on your device.",
+    "Confirmez la demande sur votre appareil.",
+    "Confermate la richiesta sul dispositivo.",
+    "أكّدوا الطلب على جهازكم."
+  ],
+  "Ihr Konto ist eingerichtet.": [
+    "Your account is ready.",
+    "Votre compte est prêt.",
+    "Il vostro account è pronto.",
+    "حسابكم جاهز."
+  ],
+  "Sie sind angemeldet.": [
+    "You are signed in.",
+    "Vous êtes connecté.",
+    "Avete effettuato l’accesso.",
+    "تم تسجيل الدخول."
+  ],
+  "Sie sind abgemeldet.": [
+    "You are signed out.",
+    "Vous êtes déconnecté.",
+    "Avete effettuato la disconnessione.",
+    "تم تسجيل الخروج."
+  ],
+  "Ihr Website-Konto wurde gelöscht.": [
+    "Your website account was deleted.",
+    "Votre compte sur le site a été supprimé.",
+    "Il vostro account sul sito è stato eliminato.",
+    "حُذف حسابكم على الموقع."
+  ],
+  "Bestätigen Sie Ihren Passkey erneut und wählen Sie dann nochmals «Konto löschen».": [
+    "Confirm your passkey again, then choose “Delete account” again.",
+    "Confirmez à nouveau votre clé d’accès, puis sélectionnez de nouveau « Supprimer le compte ».",
+    "Confermate nuovamente la passkey, poi selezionate ancora «Elimina account».",
+    "أكّدوا مفتاح المرور مجدداً، ثم اختاروا «حذف الحساب» مرة أخرى."
+  ],
+  "Passkey erneut bestätigen": [
+    "Confirm passkey again",
+    "Confirmer à nouveau la clé d’accès",
+    "Conferma di nuovo la passkey",
+    "تأكيد مفتاح المرور مجدداً"
+  ]
+}
