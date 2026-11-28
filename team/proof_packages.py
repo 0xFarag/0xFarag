@@ -37,6 +37,11 @@ CAPTIONS = {
     "findings": ("Beobachtungen und Ergebnisse", "Observations and results", "Observations et résultats"),
     "controls": ("Controls und Abhängigkeiten", "Controls and dependencies", "Contrôles et dépendances"),
     "retests": ("Quellgebundene Retests", "Source-bound retests", "Recontrôles liés aux sources"),
+    "inventory_node": ("Deklariertes Objekt", "Declared object", "Objet déclaré"),
+    "inventory_reference": ("Objektverweis", "Object reference", "Référence à un objet"),
+    "scanner-signal": ("Vom Werkzeug gemeldeter Hinweis", "Tool-reported signal", "Signalement de l’outil"),
+    "tool-disputed": ("Vom Werkzeug als fraglich markiert", "Disputed by the tool", "Résultat mis en doute par l’outil"),
+    "no-technique-reported": ("Ohne gemeldete Technik", "No technique reported", "Aucune technique signalée"),
     "coverage": ("Retest-Abdeckung", "Retest coverage", "Couverture des recontrôles"),
     "roots": ("Gebundene Quellen", "Bound sources", "Sources liées"),
     "attachment": ("Der vollständige Bericht liegt als eingebettete report.json im PDF vor.",
@@ -194,9 +199,20 @@ def _sections(report):
     for finding in report["findings"]:
         seen = finding["observation"]
         retest = latest[finding["id"]]
-        status = "?" if seen["status"] is None else str(seen["status"])
-        findings.append((f"{seen['method']} {seen['host']}{seen['path']}",
-                         f"{finding['id']} / {seen['source']} / HTTP {status} / {finding['status']} / "
+        title = f"{seen['method']} {seen['host']}{seen['path']}"
+        detail = "HTTP " + ("?" if seen["status"] is None else str(seen["status"]))
+        if seen["source"] == "sqlmap":
+            title, detail = seen["host"], _label(report, seen["rule"])
+        elif "inventory" in seen:
+            item = seen["inventory"]
+            title = seen["host"]
+            if item["kind"] == "node":
+                label = _label(report, "inventory_reference" if item["referenceOnly"] else "inventory_node")
+                detail = f"{label} · {item['nodeType']} · {item['node']}"
+            else:
+                detail = f"{item['from']} / {item['relation']} / {item['to']}"
+        findings.append((title,
+                         f"{finding['id']} / {seen['source']} / {detail} / {finding['status']} / "
                          f"{retest['status']} ({retest['reason']})"))
     roots = [("contractRoot", report["contractRoot"]), ("evidenceRoot", report["evidenceRoot"])]
     roots.extend((source["format"], source["sha256"]) for source in report["source"])

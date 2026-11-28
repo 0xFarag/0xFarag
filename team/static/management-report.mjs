@@ -1,5 +1,6 @@
 // © Nasser Aldin Farag (0xFarag). All rights reserved.
 import {proofText} from './proof-texts.mjs';
+import {sourceNames} from './proof-sources.mjs';
 
 const baselineLabels = {
   confirmed:'baselineConfirmed', inconclusive:'baselineInconclusive', no_marker:'baselineNoMarker',
@@ -14,9 +15,6 @@ const severityLabels = {
   critical:'severityCritical', high:'severityHigh', medium:'severityMedium', low:'severityLow',
   info:'severityInfo', unknown:'severityUnknown'
 };
-const sourceNames = {har:'HAR', zap:'ZAP', burp:'Burp', openapi:'OpenAPI', nmap:'Nmap', nuclei:'Nuclei',
-  nessus:'Nessus', nikto:'Nikto', cobalt:'Cobalt Strike · EDR/SIEM'};
-
 export function managementHtml(report,locale) {
   const lang = ['de','en','fr'].includes(locale) ? locale : 'en';
   const t = key => proofText(key,lang);
@@ -74,6 +72,17 @@ export function managementHtml(report,locale) {
     section(t('baselineVerdicts'),statusRows(report.baseline.byStatus,baselineLabels));
     const severities=report.scannerSignals?.bySeverity || {};
     if (Object.values(severities).some(n=>n>0)) section(t('scannerSeverities'),statusRows(severities,severityLabels));
+    for (const [format,counts] of Object.entries(report.graphInventory?.byFormat || {})) {
+      section(sourceNames[format]+' · '+t('mgmtGraphTitle'), [
+        [t('mgmtDeclaredNodes'),counts.observedNodes],[t('mgmtReferencedNodes'),counts.referencedNodes],
+        [t('mgmtRelationships'),counts.relationships]
+      ]);
+    }
+    if (report.sqlmapResults) {
+      section(t('mgmtSqlmapTitle'),statusRows(report.sqlmapResults,{
+        reported:'mgmtSqlmapReported',disputed:'mgmtSqlmapDisputed',noTechniqueReported:'mgmtSqlmapNoTechnique'
+      }));
+    }
     section(t('latestRetest'),[[t('retestRuns'),report.retests.runs],...statusRows(report.retests.latestByStatus,retestLabels)]);
     section(t('sources'),Object.entries(report.sources.byFormat).map(([key,n])=>[sourceNames[key] || t(key),n]));
   }

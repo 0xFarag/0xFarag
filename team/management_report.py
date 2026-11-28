@@ -15,6 +15,40 @@ CREATE TRIGGER IF NOT EXISTS proof_management_reports_immutable_delete BEFORE DE
 """
 
 
+GRAPH_SOURCES = {'BloodHound': 'bloodhound', 'Neo4j': 'neo4j'}
+SQLMAP_RESULTS = {'scanner-signal': 'reported', 'tool-disputed': 'disputed',
+                  'no-technique-reported': 'noTechniqueReported'}
+
+
+def inventory_counts(findings, formats, scoped_hosts):
+    graphs = {fmt: {'observedNodes': 0, 'referencedNodes': 0, 'relationships': 0}
+              for fmt in GRAPH_SOURCES.values() if fmt in formats}
+    sqlmap = dict.fromkeys(SQLMAP_RESULTS.values(), 0)
+    for finding in findings:
+        row = finding['observation']
+        if finding['status'] == 'out_of_scope' or row['host'] not in scoped_hosts:
+            continue
+        if row['source'] == 'sqlmap':
+            sqlmap[SQLMAP_RESULTS[row['rule']]] += 1
+        elif row['source'] in GRAPH_SOURCES:
+            inventory = row['inventory']
+            counts = graphs[GRAPH_SOURCES[row['source']]]
+            if inventory['kind'] == 'edge':
+                counts['relationships'] += 1
+            elif inventory['referenceOnly']:
+                counts['referencedNodes'] += 1
+            else:
+                counts['observedNodes'] += 1
+
+    # Each export has its own object namespace. Totals count records per source format.
+    metrics = {}
+    if graphs:
+        metrics['graphInventory'] = {'byFormat': graphs}
+    if 'sqlmap' in formats:
+        metrics['sqlmapResults'] = sqlmap
+    return metrics
+
+
 def summarize(db, state):
     """Only labelled counts leave the workspace. Commit time comes from the revision history."""
     rid, revision = state['id'], state['version']
@@ -47,6 +81,7 @@ def summarize(db, state):
         'scannerSignals': {'total': sum(severity.values()), 'bySeverity': severity},
         'retests': {'runs': len(retests), 'latestByStatus': dict(latest)},
         'budget': {'limit': scope['budget'], 'spent': spent, 'remaining': scope['budget'] - spent},
+        **inventory_counts(findings, files, set(scope['hosts'])),
     }
 
 

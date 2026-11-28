@@ -13,7 +13,7 @@ FROM ${PYTHON_BASE} AS runtime
 LABEL org.opencontainers.image.title="AuthzLedger Team" \
     org.opencontainers.image.url="https://authzledger.com" \
     org.opencontainers.image.source="https://github.com/0xFarag/0xFarag" \
-    org.opencontainers.image.version="1.5.0.5" \
+    org.opencontainers.image.version="1.5.0.6" \
     org.opencontainers.image.authors="Nasser Aldin Farag (0xFarag)" \
     org.opencontainers.image.licenses="LicenseRef-AuthzLedger" \
     org.authzledger.copyright="© Nasser Aldin Farag (0xFarag). All rights reserved."

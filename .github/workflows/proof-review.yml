@@ -38,8 +38,8 @@ jobs:
           node scripts/build-downloads.mjs --check
           node scripts/build-locales.mjs
           node --test qa/desk.cjs qa/pilot.test.mjs qa/desk-browser.cjs qa/desk-pilot-browser.cjs
-          node --test --test-concurrency=1 qa/proof-studio-browser.cjs qa/proof-management-browser.cjs qa/proof-vt-browser.cjs qa/proof-studio-brand.cjs qa/team-ui.cjs
-          node --test qa/board-*.test.mjs qa/proof-cockpit.test.mjs qa/scanner-priority.test.mjs qa/rbac-*.test.mjs qa/file-triage.test.mjs
+          node --test --test-concurrency=1 qa/proof-studio-browser.cjs qa/proof-management-browser.cjs qa/proof-unified-browser.cjs qa/proof-vt-browser.cjs qa/proof-studio-brand.cjs qa/team-ui.cjs
+          node --test qa/board-*.test.mjs qa/proof-cockpit.test.mjs qa/detect-proof-format.test.mjs qa/scanner-priority.test.mjs qa/rbac-*.test.mjs qa/file-triage.test.mjs
           node --test qa/asset-review.cjs qa/import-formats.cjs qa/import-compare.cjs qa/format-extensions.cjs
       - name: Compile metadata-only Burp extension and test its local endpoint
         run: |

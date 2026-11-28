@@ -1,16 +1,19 @@
 # © Nasser Aldin Farag (0xFarag). All rights reserved.
 """Strict, offline projection of source files into explicitly bounded evidence."""
+import csv
+import io
 import ipaddress
 import re
 from datetime import datetime
 from urllib.parse import unquote, urlsplit
 from xml.etree.ElementTree import ParseError
 
+from . import graph_imports
 from .evidence_formats import MAX_FILE, MAX_ROWS, canonical, host, read_json, sha, xml_document
 
 SOURCES = {"burp": "Burp", "zap": "ZAP", "har": "HAR", "openapi": "OpenAPI",
            "nmap": "Nmap", "nuclei": "Nuclei", "nessus": "Nessus", "nikto": "Nikto",
-           "cobalt": "Cobalt Strike telemetry"}
+           "sqlmap": "sqlmap", "cobalt": "Cobalt Strike telemetry", **graph_imports.LABELS}
 METHODS = {"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "TRACE", "CONNECT"}
 ROUTES = set(("api v1 v2 v3 users user accounts account invoices invoice orders order items item objects object "
               "projects project organizations teams profile status health public private auth login logout session me "
@@ -18,6 +21,8 @@ ROUTES = set(("api v1 v2 v3 users user accounts account invoices invoice orders 
 IDENTIFIER = re.compile(r"[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,95}\Z")
 FIELDS = {"id", "host", "method", "path", "status", "marker", "rule", "source", "severity"}
 SEVERITY_LEVELS = ("info", "low", "medium", "high", "critical", "unknown")
+SQLMAP_HEADER = ["Target URL", "Place", "Parameter", "Technique(s)", "Note(s)"]
+SQLMAP_RULES = ("scanner-signal", "tool-disputed", "no-technique-reported")
 # Refuse common credential structures before an operator-supplied label can be retained.
 # Opaque business identifiers still require review by the operator.
 CREDENTIAL = re.compile(
@@ -78,12 +83,15 @@ def normalize(row, label):
     status = row["status"]
     marker = row.get("marker", False)
     _require(isinstance(method, str) and (method in METHODS or (method == "SERVICE" and label in ("Nmap", "Nessus"))
-             or (method == "UNKNOWN" and label in ("Burp", "ZAP", "Nuclei", "Nikto", "Cobalt Strike telemetry"))),
+             or (method == "UNKNOWN" and label in ("Burp", "ZAP", "Nuclei", "Nikto", "sqlmap", "Cobalt Strike telemetry"))),
              "invalid method")
     _require(status is None or type(status) is int and 100 <= status <= 599, "invalid HTTP status")
     _require(type(marker) is bool, "invalid marker")
     if label in ("Nmap", "Nuclei", "OpenAPI"):
         _require(not marker, "inventory or scanner assertions cannot assert a protected marker")
+    if label == "sqlmap":
+        _require(method == "UNKNOWN" and row["path"] == "/" and status is None and not marker
+                 and row["rule"] in SQLMAP_RULES, "invalid sqlmap observation")
     if label in ("Nessus", "Nikto", "Cobalt Strike telemetry"):
         _require(status is None and not marker, "scanner records cannot attest HTTP controls")
     result = {"id": row["id"], "host": safe_host(row["host"]), "method": method, "path": safe_path(row["path"]),
@@ -99,7 +107,11 @@ def source_object(fmt, digest, rows, observed_absent=None):
              "invalid source identity")
     _require(isinstance(rows, list) and 1 <= len(rows) <= MAX_ROWS, "invalid observation count")
     label = SOURCES.get(fmt, "Lab")
-    result = [normalize(row, label) for row in rows]
+    if fmt in graph_imports.LABELS:
+        _require(observed_absent is None, "inventory cannot attest marker absence")
+        result = graph_imports.validate_rows(fmt, digest, rows, safe_host)
+    else:
+        result = [normalize(row, label) for row in rows]
     _require(len({r["id"] for r in result}) == len(result), "duplicate observation identifier")
     source = {"format": fmt, "sha256": digest, "observations": result}
     if observed_absent is not None:
@@ -151,6 +163,28 @@ def _read_scanner_xml(fmt, text, add):
             add(hostname, item.get("method") or "UNKNOWN", route, rule=f"item-{item_id}{port_label}")
 
 
+def _read_sqlmap_csv(text, digest, add):
+    reader = csv.reader(io.StringIO(text, newline=""), strict=True)
+    _require(next(reader, None) == SQLMAP_HEADER, "invalid sqlmap CSV header")
+    for row in reader:
+        _require(len(row) == len(SQLMAP_HEADER), "invalid sqlmap CSV row")
+        url, place, parameter, techniques, notes = row
+        _require(len(url) <= 8192 and not re.search(r"[\x00-\x20\x7f\\]", url), "invalid report URL")
+        target = urlsplit(url)
+        _require(target.scheme in ("http", "https") and target.hostname and target.port != 0
+                 and target.username is None and target.password is None, "invalid target host")
+        hostname = safe_host(target.hostname)
+        if techniques:
+            _require(place and parameter and re.fullmatch(r"[BEUSTQ]+", techniques), "invalid report techniques")
+            # Upstream includes its marked false positives in the same CSV as its other results.
+            annotations = {note.strip().lower() for note in notes.split(";")}
+            rule = "tool-disputed" if "false positive or unexploitable" in annotations else "scanner-signal"
+        else:
+            _require(not (place or parameter or notes), "ambiguous blank result")
+            rule = "no-technique-reported"
+        add(hostname, "UNKNOWN", "/", rule=rule, locator=digest)
+
+
 def _read_telemetry(data, add):
     _require(isinstance(data, dict) and set(data) == {"schema", "source", "events"}
              and data["schema"] == "authzledger.defensive-telemetry.v1" and data["source"] == "cobalt-strike",
@@ -177,13 +211,17 @@ def import_source(fmt, raw):
     _require(type(raw) is bytes and 0 < len(raw) <= MAX_FILE, "source exceeds size limit or is empty")
     try:
         text = raw.decode("utf-8-sig")
-        rows, absent = _read(fmt, text)
-        return source_object(fmt, sha(raw), rows, absent)
-    except (ValueError, TypeError, KeyError, AttributeError, IndexError, OverflowError, ParseError, RecursionError):
+        digest = sha(raw)
+        if fmt in graph_imports.LABELS:
+            rows = graph_imports.import_graph(fmt, digest, text, safe_host)
+            return source_object(fmt, digest, rows)
+        rows, absent = _read(fmt, text, digest)
+        return source_object(fmt, digest, rows, absent)
+    except (ValueError, TypeError, KeyError, AttributeError, IndexError, OverflowError, ParseError, RecursionError, csv.Error):
         raise ValueError("invalid or unsupported source document") from None
 
 
-def _read(fmt, text):
+def _read(fmt, text, digest):
     label = SOURCES[fmt]
     rows = []
 
@@ -200,6 +238,9 @@ def _read(fmt, text):
     content = text.lstrip()
     if fmt in ("nessus", "nikto"):
         _read_scanner_xml(fmt, text, add)
+        return rows, None
+    if fmt == "sqlmap":
+        _read_sqlmap_csv(text, digest, add)
         return rows, None
     if fmt == "cobalt":
         _read_telemetry(read_json(text), add)
@@ -265,8 +306,6 @@ def _read(fmt, text):
                      "invalid Nuclei severity")
             add(hostname, "UNKNOWN", path, rule=item["template-id"], severity=info.get("severity"))
     elif fmt in ("burp", "nmap"):
-        if fmt == "burp":
-            _require(not re.search(r"<!\s*(?:DOCTYPE|ENTITY)\b", text, re.I), "DTD is prohibited")
         root = xml_document(text)
         if fmt == "burp":
             _require(root.tag in ("items","issues"), "invalid Burp document")

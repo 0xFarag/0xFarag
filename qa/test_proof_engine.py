@@ -202,6 +202,23 @@ class Review(unittest.TestCase):
 
 
 class Formats(unittest.TestCase):
+    def test_native_burp_doctype_is_stripped_and_must_match_the_document(self):
+        native = (Path(__file__).parent / "fixtures/burp.xml").read_bytes()
+        parsed = import_source("burp", native)
+        observation, = parsed["observations"]
+        self.assertEqual(observation["host"], "app.example")
+        self.assertFalse(observation["marker"])
+        self.assertNotIn(b"PRIVATE_PAYLOAD", canonical(parsed))
+        history = (b'<!DOCTYPE items [<!ELEMENT items (item*)><!ATTLIST items burpVersion CDATA "">]>'
+                   b'<items><item><url>https://app.example/orders</url><method>GET</method>'
+                   b'<status>200</status></item></items>')
+        self.assertEqual(import_source("burp", history)["observations"][0]["status"], 200)
+        for declaration in (b'<!DOCTYPE nmaprun>', b'<!DOCTYPE issues>', b'<!DOCTYPE items SYSTEM "report.dtd">',
+                            b'<!DOCTYPE items [<!ENTITY external SYSTEM "report.dtd">]>',
+                            b'<!DOCTYPE items [<!ELEMENT items (%external;)>]>'):
+            with self.subTest(declaration=declaration), self.assertRaises(ValueError):
+                import_source("burp", declaration + history.split(b"]>", 1)[1])
+
     def test_native_formats_are_passive(self):
         samples = {
             "burp": b"<items><item><url>https://example.test/invoices/1042</url><method>GET</method><status>403</status></item></items>",
